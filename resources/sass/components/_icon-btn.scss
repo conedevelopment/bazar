@@ -1,0 +1,51 @@
+.icon-btn {
+    padding: 0;
+    border: none;
+    border-radius: map-get($settings, 'border-radius');
+    width: 1.4rem;
+    height: 1.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.15s ease;
+    position: relative;
+
+    &[aria-label] {
+        &::before {
+            display: none;
+            content: attr(aria-label);
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, calc(-100% - 0.5rem));
+            background-color: rgba(map-get($colors, 'black'), 0.9);
+            color: #fff;
+            font-size: 0.6375rem;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+            padding: 0.6em;
+            border-radius: map-get($settings, 'border-radius');
+        }
+
+        &:hover,
+        &:focus {
+            &::before {
+                display: inline-block;
+            }
+        }
+    }
+
+    .icon {
+        width: 1rem;
+        height: 1rem;
+        color: #fff;
+    }
+}
+
+@each $color, $value in $theme-colors {
+    .icon-btn-#{$color} {
+      @include button-variant($value, $value);
+    }
+}

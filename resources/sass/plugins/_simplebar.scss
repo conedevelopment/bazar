@@ -1,0 +1,17 @@
+@import "~simplebar/dist/simplebar.css";
+
+.simplebar-track.simplebar-vertical {
+    width: 6px;
+    border-radius: 4px;
+}
+
+.simplebar-scrollbar:before {
+    position: absolute;
+    content: '';
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+    left: 0px;
+    right: 0px;
+    opacity: 0;
+    transition: opacity .2s linear;
+}

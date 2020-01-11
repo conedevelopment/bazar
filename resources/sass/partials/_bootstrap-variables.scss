@@ -1,0 +1,65 @@
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1260px
+);
+
+$spacer: 1rem;
+
+$spacers : (    
+    0: 0,
+    1: ($spacer * .25),
+    2: ($spacer * .5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 2),
+    6: ($spacer * 3),
+    7: ($spacer * 4),
+    8: ($spacer * 5)
+);
+
+$columns: (
+    1: 100%,
+    2: 50%,
+    3: 33.33%,
+    4: 25%,
+    5: 20%,
+    6: 16.66%,
+    7: 14.28%,
+    8: 12.5%,
+    9: 11.11%
+);
+
+$columns__margin: 3.8%;
+
+$btn-font-weight: 600;
+
+$primary:       map-get($colors, 'primary');
+$secondary:     map-get($colors, 'secondary');
+$success:       map-get($colors, 'success');
+$info:          map-get($colors, 'info');
+$warning:       map-get($colors, 'warning');
+$danger:        map-get($colors, 'danger');
+$light:         map-get($colors, 'light-gray');
+$dark:          map-get($colors, 'medium-gray');
+
+$grid-gutter-width: 2rem;
+
+$input-padding-y: 0.6rem;
+
+$dropdown-border-radius: map-get($settings, 'border-radius');
+
+$table-head-bg: map-get($colors, 'light-gray');
+$table-border-color: map-get($colors, 'light-gray');
+$table-hover-bg: map-get($colors, 'light-gray');
+
+$table-bg-level: -10;
+$table-border-level: -8;
+
+$form-text-margin-top: 0.5rem;
+$input-font-size: 0.9375rem;
+$input-border-color: map-get($colors, 'border');
+
+$btn-font-size: 0.9375rem;
+$form-grid-gutter-width: 1rem;

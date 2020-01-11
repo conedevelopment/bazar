@@ -1,0 +1,58 @@
+
+// -------------------------
+// # Imports
+// -------------------------
+
+@import "partials/base";
+
+
+
+// -------------------------
+// # Defaults
+// -------------------------
+
+*,
+::before,
+::after {
+    box-sizing: inherit;
+}
+
+::selection {
+    background: map-get($colors, 'primary');
+    color: #fff;
+}
+
+a {
+    color: map-get($colors, 'primary');
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: darken(map-get($colors, 'primary'), 10%);
+    }
+}
+
+body {
+    font-family: map-get($fonts, 'primary');
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: map-get($colors, 'body');
+    background-color: map-get($colors, 'light-gray');
+    background: linear-gradient(45deg, map-get($colors, 'light-gray'), #fff);
+    background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: map-get($colors, 'black');
+}
+
+[v-cloak] {
+    display: none;
+}

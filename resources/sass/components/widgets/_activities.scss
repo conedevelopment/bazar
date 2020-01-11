@@ -1,0 +1,78 @@
+.activities-scroll-helper {
+    max-height: 18rem;
+    overflow-y: auto;
+}
+
+.activities {
+    > .activity:not(:last-child)  {
+        padding-bottom: 2rem;
+    }
+
+    > .activity:last-child {
+        .activity__icon-helper::before {
+            display: none;
+        }
+    }
+}
+
+.activity {
+    display: flex;
+    align-items: stretch;
+
+    &__icon-helper {
+        margin-right: 1rem;
+        position: relative;
+        z-index: 1;
+
+        &::before {
+            content: '';
+            width: 1px;
+            background-color: lighten(map-get($colors, 'primary'), 43%);
+            position: absolute;
+            top: 0;
+            bottom: -2rem;
+            left: calc(50% - 1px);
+            z-index: -1;
+        }
+    }
+
+    &__icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        color: map-get($colors, 'primary');
+        background-color: lighten(map-get($colors, 'primary'), 43%);
+        border-radius: map-get($settings, 'border-radius');
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+    }
+
+    &__content {
+        width: calc(100% - 3.5rem);
+    }
+
+        &__title {
+            color: map-get($colors, 'dark-gray');
+            margin: 0 0 0.3rem;
+            font-size: 1rem;
+
+            a {
+                color: map-get($colors, 'black');
+            }
+        }
+
+        &__description {
+            color: map-get($colors, 'text');
+            margin: 0 0 0.3rem;
+        }
+
+        &__meta {
+            color: map-get($colors, 'medium-gray');
+            font-size: 0.8rem;
+        }
+}

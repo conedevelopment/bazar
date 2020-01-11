@@ -1,0 +1,70 @@
+.form {
+    &__body {
+        position: relative;
+        z-index: 5;
+    }
+
+    &__sidebar {
+        position: relative;
+        z-index: 10;
+    }
+}
+
+
+.form-group-wrapper,
+.form-group-wrapper > div:not([class]) {
+    > * {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    > * + * {
+        margin-top: 1rem;
+    }
+}
+
+.tag-control {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: $input-height;
+    width: 100%;
+    padding: $input-padding-y $input-padding-x;
+    padding: 0.3rem;
+    font-family: $input-font-family;
+    @include font-size($input-font-size);
+    font-weight: $input-font-weight;
+    line-height: $input-line-height;
+    color: $input-color;
+    background-color: $input-bg;
+    background-clip: padding-box;
+    border: $input-border-width solid $input-border-color;
+    @include border-radius($input-border-radius, 0);
+
+    .tag {
+        margin: 0.25rem;
+    }
+
+    .form-control-plaintext {
+        padding: 0;
+        height: 1.75rem;
+        margin: 0.25rem;
+    }
+}
+
+.input-group-append {
+    svg.icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #fff;
+        position: relative;
+        top: -0.1rem;
+    }
+}
+
+.form-option-list {
+    > * + * {
+        margin-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        padding-top: 1.5rem;
+    }
+}

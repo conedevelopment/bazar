@@ -1,0 +1,39 @@
+.tag {
+    display: inline-flex;
+    align-items: stretch;
+    background-color: map-get($colors, 'secondary');
+    border-radius: map-get($settings, 'border-radius');
+    font-size: 0.875rem;
+
+    &.is-small {
+        font-size: 0.775rem;
+    }
+
+    &__label {
+        display: inline-block;
+        font-weight: 700;
+        color: #fff;
+        padding: 0.45em 0.75em;
+        margin: 0;
+        line-height: 1.35;
+    }
+
+    &__remove {
+        background-color: darken(map-get($colors, 'secondary'), 10%);
+        color: #fff;
+        padding: 0 0.5em;
+        display: flex;
+        align-items: center;
+        border-radius: 0 map-get($settings, 'border-radius') map-get($settings, 'border-radius') 0;
+        border: none;
+
+        &:hover {
+            background-color: darken(map-get($colors, 'secondary'), 15%);
+        }
+
+        svg {
+            width: 1.1em;
+            height: 1.1em;
+        }
+    }
+}

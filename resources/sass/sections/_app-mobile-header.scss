@@ -1,0 +1,36 @@
+.app-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
+    @include media-breakpoint-up(lg) {
+        display: none;
+    }
+
+    &__logo {
+        display: inline-block;
+        display: flex;
+        align-items: center;
+
+        img {
+            height: 20px;
+            width: auto;
+        }
+    }
+
+    &__menu-toggle {
+        border: none;
+        padding: 0;
+        background-color: map-get($colors, 'primary');
+        border-radius: map-get($settings, 'border-radius');
+        height: 2.5rem;
+        width: 2.5rem;
+        color: #fff;
+
+        .icon {
+            height: 1.5rem;
+            width: 1.5rem;
+        }
+    }
+}

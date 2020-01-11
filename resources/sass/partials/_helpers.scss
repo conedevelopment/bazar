@@ -1,0 +1,11 @@
+
+@import "~bootstrap/scss/mixins/image";
+
+.img-fluid {
+    @include img-fluid();
+}
+
+.sticky-helper {
+    position: sticky;
+    top: 2rem;
+}

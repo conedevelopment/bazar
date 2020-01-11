@@ -1,0 +1,50 @@
+{
+    "name": "thepinecode/bazar",
+    "description": "A simple store package for Laravel.",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cone Development",
+            "email": "hello@conedevelopment.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Bazar\\": "src/"
+        },
+        "classmap": [
+            "database/seeds"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Bazar\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.3",
+        "laravel/framework": "^7.0 || ^8.0"
+    },
+    "require-dev": {
+        "facade/ignition": "^2.0",
+        "fzaninotto/faker": "^1.9.1",
+        "mockery/mockery": "^1.3.1",
+        "nunomaduro/collision": "^4.1",
+        "phpunit/phpunit": "^9.0",
+        "laravel/laravel": "dev-master",
+        "laravel/ui": "^2.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bazar\\BazarServiceProvider"
+            ]
+        },
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
