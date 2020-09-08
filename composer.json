@@ -45,5 +45,8 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "check:sqlite": "@php tests/check-sqlite-version.php"
+    }
 }

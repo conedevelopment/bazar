@@ -28,6 +28,9 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Check SQLite version
+        run: composer run-script check:sqlite
+
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
