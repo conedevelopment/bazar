@@ -2,10 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\TransactionFactory;
 use Bazar\Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -16,9 +16,9 @@ class OrderTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = factory(Order::class)->create();
+        $this->order = OrderFactory::new()->create();
 
-        $this->products = factory(Product::class, 3)->create()->mapWithKeys(function ($product) {
+        $this->products = ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['quantity' => mt_rand(1, 5), 'tax' => 0, 'price' => $product->price]];
         });
 
@@ -41,7 +41,7 @@ class OrderTest extends TestCase
     public function an_order_has_transactions()
     {
         $transactions = $this->order->transactions()->saveMany(
-            factory(Transaction::class, 3)->make()
+            TransactionFactory::new()->count(3)->make()
         );
 
         $this->assertSame(
@@ -53,7 +53,7 @@ class OrderTest extends TestCase
     public function a_order_has_address()
     {
         $address = $this->order->address()->save(
-            factory(Address::class)->make()
+            AddressFactory::new()->make()
         );
 
         $this->assertSame($address->id, $this->order->address->id);
@@ -62,7 +62,7 @@ class OrderTest extends TestCase
     /** @test */
     public function an_order_has_products()
     {
-        $product = factory(Product::class)->create();
+        $product = ProductFactory::new()->create();
 
         $this->order->products()->attach($product, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
 

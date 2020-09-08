@@ -2,8 +2,8 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Product;
-use Bazar\Models\Variation;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\VariationFactory;
 use Bazar\Tests\TestCase;
 
 class VariationTest extends TestCase
@@ -14,9 +14,9 @@ class VariationTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = factory(Product::class)->create();
+        $this->product = ProductFactory::new()->create();
 
-        $this->variation = factory(Variation::class)->make();
+        $this->variation = VariationFactory::new()->make();
         $this->variation->product()->associate($this->product);
         $this->variation->save();
     }

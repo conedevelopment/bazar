@@ -2,13 +2,14 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
 use Bazar\Gateway\TransferDriver;
 use Bazar\Models\Order;
-use Bazar\Models\Product;
 use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
 
@@ -20,8 +21,8 @@ class GatewayDriverTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = factory(Order::class)->create();
-        $products = factory(Product::class, 3)->create()->mapWithKeys(function ($product) {
+        $this->order = OrderFactory::new()->create();
+        $products = ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['quantity' => mt_rand(1, 5), 'tax' => 0, 'price' => $product->price]];
         });
         $this->order->products()->attach($products->all());

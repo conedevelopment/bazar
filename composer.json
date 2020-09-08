@@ -1,6 +1,6 @@
 {
     "name": "thepinecode/bazar",
-    "description": "A simple store package for Laravel.",
+    "description": "Bazar is a drop-in package for e-commerce Laravel applications.",
     "type": "project",
     "license": "MIT",
     "authors": [
@@ -12,28 +12,27 @@
     "autoload": {
         "psr-4": {
             "Bazar\\": "src/"
-        },
-        "classmap": [
-            "database/seeds"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bazar\\Tests\\": "tests/"
+            "Bazar\\Tests\\": "tests/",
+            "Bazar\\Database\\Seeders\\": "database/seeders/",
+            "Bazar\\Database\\Factories\\": "database/factories/"
         }
     },
     "require": {
         "php": "^7.3",
-        "laravel/framework": "^7.0 || ^8.0"
+        "laravel/framework": "^8.0"
     },
     "require-dev": {
-        "facade/ignition": "^2.0",
+        "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.9.1",
         "mockery/mockery": "^1.3.1",
-        "nunomaduro/collision": "^4.1",
+        "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.0",
         "laravel/laravel": "dev-master",
-        "laravel/ui": "^2.0"
+        "laravel/ui": "^2.2"
     },
     "extra": {
         "laravel": {

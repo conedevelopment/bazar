@@ -2,7 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\CartFactory;
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Shipping;
@@ -14,7 +17,7 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_belongs_to_a_customer()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
         $address->addressable()->associate($this->user)->save();
 
@@ -27,9 +30,9 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_belongs_to_a_cart()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
-        $cart = factory(Cart::class)->create();
+        $cart = CartFactory::new()->create();
 
         $address->addressable()->associate($cart)->save();
 
@@ -42,9 +45,9 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_belongs_to_an_order()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
-        $order = factory(Order::class)->create();
+        $order = OrderFactory::new()->create();
 
         $address->addressable()->associate($order)->save();
 
@@ -57,11 +60,12 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_belongs_to_an_sihpping()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
-        $order = factory(Order::class)->create();
+        $order = OrderFactory::new()->create();
+
         $shipping = $order->shipping()->save(
-            factory(Shipping::class)->make()
+            ShippingFactory::new()->make()
         );
 
         $address->addressable()->associate($shipping)->save();
@@ -75,7 +79,7 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_has_name_attribute()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
         $this->assertSame(
             sprintf('%s %s', $address->first_name, $address->last_name),
@@ -86,7 +90,7 @@ class AddressTest extends TestCase
     /** @test */
     public function an_address_has_country_name_attribute()
     {
-        $address = factory(Address::class)->make();
+        $address = AddressFactory::new()->make();
 
         $this->assertSame(
             Countries::name($address->country), $address->countryName

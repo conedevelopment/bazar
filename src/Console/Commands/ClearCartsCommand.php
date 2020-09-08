@@ -7,7 +7,7 @@ use Bazar\Models\Item;
 use Bazar\Models\Shipping;
 use Illuminate\Console\Command;
 
-class ClearCarts extends Command
+class ClearCartsCommand extends Command
 {
     /**
      * The name and signature of the console command.

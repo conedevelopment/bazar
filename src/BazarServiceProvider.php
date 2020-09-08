@@ -37,7 +37,6 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Gateway\Manager::class => Gateway\Manager::class,
         Contracts\Shipping\Manager::class => Shipping\Manager::class,
         Contracts\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
-        Contracts\Repositories\AssetRepository::class => Repositories\AssetRepository::class,
         Contracts\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
         Contracts\Repositories\ConversionRepository::class => Repositories\ConversionRepository::class,
     ];
@@ -100,7 +99,6 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerLoadings(): void
     {
-        $this->loadFactoriesFrom(__DIR__.'/../database/factories');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
         $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
 
@@ -137,10 +135,10 @@ class BazarServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\Commands\Install::class,
-                Console\Commands\Publish::class,
-                Console\Commands\ClearCarts::class,
-                Console\Commands\ClearFileChunks::class,
+                Console\Commands\InstallCommand::class,
+                Console\Commands\PublishCommand::class,
+                Console\Commands\ClearCartsCommand::class,
+                Console\Commands\ClearFileChunksCommand::class,
             ]);
         }
     }

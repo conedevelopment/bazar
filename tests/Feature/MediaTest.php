@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Database\Factories\MediumFactory;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
 use Bazar\Models\Medium;
@@ -24,7 +25,7 @@ class MediaTest extends TestCase
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
 
-        $this->medium = factory(Medium::class)->create();
+        $this->medium = MediumFactory::new()->create();
 
         Storage::disk($this->medium->disk)->put($this->medium->path(), 'fake content');
     }

@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Models\Address;
+use Bazar\Database\Factories\AddressFactory;
 use Bazar\Tests\TestCase;
 
 class AddressesTest extends TestCase
@@ -13,7 +13,7 @@ class AddressesTest extends TestCase
     {
         parent::setUp();
 
-        $this->address = $this->user->addresses()->save(factory(Address::class)->make());
+        $this->address = $this->user->addresses()->save(AddressFactory::new()->make());
     }
 
     /** @test */
@@ -57,7 +57,7 @@ class AddressesTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             route('bazar.users.addresses.store', $this->user),
-            factory(Address::class)->make(['first_name' => 'Test'])->toArray()
+            AddressFactory::new()->make(['first_name' => 'Test'])->toArray()
         )->assertRedirect(route('bazar.users.addresses.show', [
             $this->user,
             $this->user->fresh()->addresses->reverse()->first()

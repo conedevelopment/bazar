@@ -2,10 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Product;
-use Bazar\Models\Variation;
+use Bazar\Database\Factories\CategoryFactory;
+use Bazar\Database\Factories\MediumFactory;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\VariationFactory;
 use Bazar\Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -16,7 +16,7 @@ class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = factory(Product::class)->create([
+        $this->product = ProductFactory::new()->create([
             'options' => ['size' => ['XS', 'S', 'M', 'L'], 'material' => ['Gold', 'Silver']],
         ]);
     }
@@ -24,7 +24,7 @@ class ProductTest extends TestCase
     /** @test */
     public function a_product_belongs_to_categories()
     {
-        $category = factory(Category::class)->create();
+        $category = CategoryFactory::new()->create();
 
         $this->product->categories()->attach($category);
 
@@ -36,7 +36,7 @@ class ProductTest extends TestCase
     /** @test */
     public function a_product_has_media()
     {
-        $medium = factory(Medium::class)->create();
+        $medium = MediumFactory::new()->create();
 
         $this->product->media()->attach($medium);
 
@@ -47,7 +47,7 @@ class ProductTest extends TestCase
     public function a_product_has_variations()
     {
         $variation = $this->product->variations()->save(
-            factory(Variation::class)->make([
+            VariationFactory::new()->make([
                 'option' => ['size' => 'S', 'material' => 'Gold'],
             ])
         );

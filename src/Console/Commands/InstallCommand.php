@@ -2,9 +2,10 @@
 
 namespace Bazar\Console\Commands;
 
+use Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
 
-class Install extends Command
+class InstallCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -27,11 +28,13 @@ class Install extends Command
      */
     public function handle(): int
     {
-        $status = $this->call('migrate');
+        $status = $this->call('publish');
 
         if ($this->option('seed')) {
-            $status = $this->call('db:seed', ['--class' => 'BazarSeeder']);
+            $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
+
+        $status = $this->call('bazar:publish');
 
         return $status;
     }

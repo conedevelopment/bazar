@@ -2,10 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\CartFactory;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Tests\TestCase;
 
 class CartTest extends TestCase
@@ -16,9 +16,9 @@ class CartTest extends TestCase
     {
         parent::setUp();
 
-        $this->cart = factory(Cart::class)->create();
+        $this->cart = CartFactory::new()->create();
 
-        $this->products = factory(Product::class, 3)->create()->mapWithKeys(function ($product) {
+        $this->products = ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
             [$quantity, $tax, $price] = [mt_rand(1, 5), 0, $product->price];
 
             return [$product->id => compact('price', 'tax', 'quantity')];
@@ -42,7 +42,7 @@ class CartTest extends TestCase
     /** @test */
     public function a_cart_has_a_shipping()
     {
-        $shipping = $this->cart->shipping()->save(factory(Shipping::class)->make());
+        $shipping = $this->cart->shipping()->save(ShippingFactory::new()->make());
 
         $this->assertSame($shipping->id, $this->cart->shipping->id);
     }
@@ -51,7 +51,7 @@ class CartTest extends TestCase
     public function a_cart_has_address()
     {
         $address = $this->cart->address()->save(
-            factory(Address::class)->make()
+            AddressFactory::new()->make()
         );
 
         $this->assertSame($address->id, $this->cart->address->id);
@@ -60,7 +60,7 @@ class CartTest extends TestCase
     /** @test */
     public function a_cart_has_products()
     {
-        $product = factory(Product::class)->create();
+        $product = ProductFactory::new()->create();
 
         $this->cart->products()->attach($product, [
             'price' => 100, 'tax' => 0, 'quantity' => 3,

@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests;
 
+use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -32,8 +33,8 @@ abstract class TestCase extends BaseTestCase
 
         $this->withoutMix();
 
-        $this->admin = factory(User::class)->create(['email' => 'admin@bazar.test']);
-        $this->user = factory(User::class)->create();
+        $this->admin = UserFactory::new()->create(['email' => 'admin@bazar.test']);
+        $this->user = UserFactory::new()->create();
     }
 
     protected function registerMacros(): void

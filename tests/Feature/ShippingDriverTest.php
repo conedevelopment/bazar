@@ -4,7 +4,7 @@ namespace Bazar\Tests\Feature;
 
 use Bazar\Contracts\Shippable;
 use Bazar\Contracts\Shipping\Manager;
-use Bazar\Models\Order;
+use Bazar\Database\Factories\OrderFactory;
 use Bazar\Shipping\Driver;
 use Bazar\Shipping\LocalPickupDriver;
 use Bazar\Shipping\WeightBasedShippingDriver;
@@ -18,7 +18,7 @@ class ShippingDriverTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = factory(Order::class)->create();
+        $this->order = OrderFactory::new()->create();
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {

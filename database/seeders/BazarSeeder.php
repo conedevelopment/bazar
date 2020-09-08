@@ -1,13 +1,17 @@
 <?php
 
+namespace Bazar\Database\Seeders;
+
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\CategoryFactory;
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
-use Bazar\Models\Address;
 use Bazar\Models\Category;
 use Bazar\Models\Medium;
-use Bazar\Models\Order;
 use Bazar\Models\Product;
-use Bazar\Models\Shipping;
 use Bazar\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -64,7 +68,7 @@ class BazarSeeder extends Seeder
         $categories = ['Software', 'Sport', 'Cars', 'Food'];
 
         foreach ($categories as $name) {
-            factory(Category::class)->create(compact('name'));
+            CategoryFactory::new()->create(compact('name'));
         }
     }
 
@@ -75,7 +79,7 @@ class BazarSeeder extends Seeder
      */
     protected function seedProducts()
     {
-        factory(Product::class, 4)->create()->each(function ($product) {
+        ProductFactory::new()->count(4)->create()->each(function ($product) {
             $product->categories()->attach(Category::inRandomOrder()->take(2)->get());
             $product->media()->attach(Medium::inRandomOrder()->first());
         });
@@ -88,7 +92,7 @@ class BazarSeeder extends Seeder
      */
     public function seedOrders()
     {
-        $orders = factory(Order::class, 15)->make();
+        $orders = OrderFactory::new()->count(15)->make();
 
         $orders->each(function ($order) {
             $order->created_at = Carbon::now()->subDays(mt_rand(0, 20));
@@ -101,14 +105,12 @@ class BazarSeeder extends Seeder
                     'price' => $product->price,
                     'tax' => $product->price * 0.27,
                 ]];
-            })->all();
+            });
 
             $order->products()->attach($data);
-
-            $order->address()->save(factory(Address::class)->make());
-
-            $order->shipping()->save(factory(Shipping::class)->make());
-            $order->shipping->address()->save(factory(Address::class)->make());
+            $order->address()->save(AddressFactory::new()->make());
+            $order->shipping()->save(ShippingFactory::new()->make());
+            $order->shipping->address()->save(AddressFactory::new()->make());
 
             $order->transactions()->create([
                 'driver' => 'cash',

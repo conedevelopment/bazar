@@ -2,7 +2,9 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Models\Address;
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
@@ -15,12 +17,12 @@ class OrdersTest extends TestCase
     {
         parent::setUp();
 
-        factory(Product::class)->create();
+        ProductFactory::new()->create();
 
-        $this->order = $this->admin->orders()->save(factory(Order::class)->make());
-        $this->order->address()->save(factory(Address::class)->make());
+        $this->order = $this->admin->orders()->save(OrderFactory::new()->make());
+        $this->order->address()->save(AddressFactory::new()->make());
         $this->order->shipping->save();
-        $this->order->shipping->address()->save( factory(Address::class)->make());
+        $this->order->shipping->address()->save(AddressFactory::new()->make());
     }
 
     /** @test */
@@ -67,9 +69,9 @@ class OrdersTest extends TestCase
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
-        $order = factory(Order::class)->make();
-        $order->setRelation('address', factory(Address::class)->make());
-        $order->shipping->setRelation('address', factory(Address::class)->make());
+        $order = OrderFactory::new()->make();
+        $order->setRelation('address', AddressFactory::new()->make());
+        $order->shipping->setRelation('address', AddressFactory::new()->make());
 
         $this->actingAs($this->admin)->post(
             route('bazar.orders.store'),

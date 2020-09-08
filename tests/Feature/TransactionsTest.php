@@ -2,9 +2,9 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
+use Bazar\Database\Factories\OrderFactory;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\TransactionFactory;
 use Bazar\Tests\TestCase;
 
 class TransactionsTest extends TestCase
@@ -21,9 +21,9 @@ class TransactionsTest extends TestCase
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
 
-        $this->order = $this->admin->orders()->save(factory(Order::class)->make());
+        $this->order = $this->admin->orders()->save(OrderFactory::new()->make());
 
-        $this->transaction = $this->order->transactions()->save(factory(Transaction::class)->make([
+        $this->transaction = $this->order->transactions()->save(TransactionFactory::new()->make([
             'amount' => 0,
             'type' => 'payment',
         ]));
@@ -33,7 +33,7 @@ class TransactionsTest extends TestCase
     public function an_admin_can_store_transaction()
     {
         $this->order->products()->attach(
-            $product = factory(Product::class)->create(),
+            $product = ProductFactory::new()->create(),
             ['quantity' => 1, 'tax' => 0, 'price' => $product->price],
         );
 
@@ -47,7 +47,7 @@ class TransactionsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             route('bazar.orders.transactions.store', $this->order),
-            $t = factory(Transaction::class)->make([
+            $t = TransactionFactory::new()->make([
                 'type' => 'payment',
                 'driver' => 'manual',
                 'amount' => $this->order->totalPayable(),

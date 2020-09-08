@@ -2,9 +2,9 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Product;
+use Bazar\Database\Factories\CategoryFactory;
+use Bazar\Database\Factories\MediumFactory;
+use Bazar\Database\Factories\ProductFactory;
 use Bazar\Tests\TestCase;
 
 class CategoryTest extends TestCase
@@ -15,13 +15,13 @@ class CategoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->category = factory(Category::class)->create();
+        $this->category = CategoryFactory::new()->create();
     }
 
     /** @test */
     public function a_category_belongs_to_products()
     {
-        $product = factory(Product::class)->create();
+        $product = ProductFactory::new()->create();
 
         $this->category->products()->attach($product);
 
@@ -33,7 +33,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function a_category_has_media()
     {
-        $media = factory(Medium::class)->create();
+        $media = MediumFactory::new()->create();
 
         $this->category->media()->attach($media);
 

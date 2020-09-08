@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\User;
 use Bazar\Tests\TestCase;
 
@@ -52,7 +53,7 @@ class UsersTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             route('bazar.users.store'),
-            factory(User::class)->make(['name' => 'Test'])->toArray()
+            UserFactory::new()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(route('bazar.users.show', User::find(3)));
 
         $this->assertDatabaseHas('users', ['name' => 'Test']);

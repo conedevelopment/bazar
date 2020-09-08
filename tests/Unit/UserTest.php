@@ -2,9 +2,9 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
+use Bazar\Database\Factories\AddressFactory;
+use Bazar\Database\Factories\CartFactory;
+use Bazar\Database\Factories\OrderFactory;
 use Bazar\Tests\TestCase;
 
 class UserTest extends TestCase
@@ -15,7 +15,7 @@ class UserTest extends TestCase
         $this->assertNull($this->user->cart);
 
         $cart = $this->user->cart()->save(
-            factory(Cart::class)->make()
+            CartFactory::new()->make()
         );
 
         $this->user->refresh();
@@ -27,7 +27,7 @@ class UserTest extends TestCase
     public function a_user_has_orders()
     {
         $orders = $this->user->orders()->saveMany(
-            factory(Order::class, 3)->make()
+            OrderFactory::new()->count(3)->make()
         );
 
         $this->assertSame(
@@ -39,7 +39,7 @@ class UserTest extends TestCase
     public function a_user_has_addresses()
     {
         $addresses = $this->user->addresses()->saveMany(
-            factory(Address::class, 3)->make()
+            AddressFactory::new()->count(3)->make()
         );
 
         $this->assertSame(

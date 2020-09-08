@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Medium;
+use Bazar\Database\Factories\MediumFactory;
 use Bazar\Tests\TestCase;
 
 class MediumTest extends TestCase
@@ -13,7 +13,7 @@ class MediumTest extends TestCase
     {
         parent::setUp();
 
-        $this->medium = factory(Medium::class)->create();
+        $this->medium = MediumFactory::new()->create();
     }
 
     /** @test */

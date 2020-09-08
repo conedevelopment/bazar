@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Models\Medium;
+use Bazar\Database\Factories\MediumFactory;
 use Bazar\Services\Image;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ class ImageTest extends TestCase
     {
         parent::setUp();
 
-        $this->medium = factory(Medium::class)->create(['file_name' => 'test.jpg']);
+        $this->medium = MediumFactory::new()->create(['file_name' => 'test.jpg']);
 
         Storage::disk('public')->makeDirectory($this->medium->id);
 

@@ -3,10 +3,9 @@
 namespace Bazar\Console\Commands;
 
 use Bazar\BazarServiceProvider;
-use Bazar\Models\Cart;
 use Illuminate\Console\Command;
 
-class Publish extends Command
+class PublishCommand extends Command
 {
     /**
      * The name and signature of the console command.

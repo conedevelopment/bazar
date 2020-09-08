@@ -1,26 +1,40 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Bazar\Database\Factories;
 
 use Bazar\Models\Address;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Address::class, function (Faker $faker) {
-    return [
-        'first_name' => $faker->firstName,
-        'last_name' => $faker->lastName,
-        'country' => $faker->countryCode,
-        'city' => $faker->city,
-        'address' => $faker->streetAddress,
-        'address_secondary' => null,
-        'postcode' => $faker->postcode,
-        'company' => $faker->company,
-        'state' => $faker->state,
-        'phone' => $faker->phoneNumber,
-        'email' => $faker->email,
-        'alias' => null,
-        'custom' => [
-            'vat' => null,
-        ],
-    ];
-});
+class AddressFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Address::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'first_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
+            'country' => $this->faker->countryCode,
+            'city' => $this->faker->city,
+            'address' => $this->faker->streetAddress,
+            'address_secondary' => null,
+            'postcode' => $this->faker->postcode,
+            'company' => $this->faker->company,
+            'state' => $this->faker->state,
+            'phone' => $this->faker->phoneNumber,
+            'email' => $this->faker->email,
+            'alias' => null,
+            'custom' => ['vat' => null],
+        ];
+    }
+}

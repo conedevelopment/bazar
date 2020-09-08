@@ -4,8 +4,8 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Tax as Contract;
 use Bazar\Contracts\Taxable;
-use Bazar\Models\Cart;
-use Bazar\Models\Product;
+use Bazar\Database\Factories\CartFactory;
+use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Tax;
 use Bazar\Tests\TestCase;
@@ -18,11 +18,11 @@ class TaxRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $products = factory(Product::class, 2)->create()->mapWithKeys(function ($product) {
+        $products = ProductFactory::new()->count(2)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['price' => $product->price, 'tax' => 0, 'quantity' => 1]];
         })->toArray();
 
-        $this->cart = factory(Cart::class)->create();
+        $this->cart = CartFactory::new()->create();
         $this->cart->products()->attach($products);
 
         Tax::register('custom-30', 30);

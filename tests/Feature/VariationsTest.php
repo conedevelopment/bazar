@@ -2,7 +2,8 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Models\Product;
+use Bazar\Database\Factories\ProductFactory;
+use Bazar\Database\Factories\VariationFactory;
 use Bazar\Models\Variation;
 use Bazar\Tests\TestCase;
 
@@ -14,8 +15,8 @@ class VariationsTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = factory(Product::class)->create();
-        $this->variation = $this->product->variations()->save(factory(Variation::class)->make());
+        $this->product = ProductFactory::new()->create();
+        $this->variation = $this->product->variations()->save(VariationFactory::new()->make());
     }
 
     /** @test */
@@ -67,7 +68,7 @@ class VariationsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             route('bazar.products.variations.store', $this->product),
-            factory(Variation::class)->make(['option' => ['Size' => 'M']])->toArray()
+            VariationFactory::new()->make(['option' => ['Size' => 'M']])->toArray()
         )->assertRedirect(route('bazar.products.variations.show', [$this->product, Variation::find(2)]));
 
         $this->assertDatabaseHas('variations', ['option->Size' => 'M']);
