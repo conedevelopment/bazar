@@ -18,6 +18,6 @@ class PlaceOrder
     {
         OrderPlaced::dispatch($event->order);
 
-        Cart::empty();
+//        Cart::empty();
     }
 }

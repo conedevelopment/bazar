@@ -62,7 +62,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the local pickup driver.
      *
-     * @return \Bazar\Models\Shipping\LocalPickupDriver
+     * @return \Bazar\Shipping\LocalPickupDriver
      */
     public function createLocalPickupDriver(): LocalPickupDriver
     {
@@ -74,7 +74,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the weight based shipping driver.
      *
-     * @return \Bazar\Models\Shipping\WeightBasedShippingDriver
+     * @return \Bazar\Shipping\WeightBasedShippingDriver
      */
     public function createWeightBasedShippingDriver(): WeightBasedShippingDriver
     {

@@ -1,0 +1,11 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method Bazar\\\\BazarServiceProvider\\:\\:header\\(\\)\\.$#"
+			count: 1
+			path: src/BazarServiceProvider.php
+
+		-
+			message: "#^Call to an undefined method Bazar\\\\BazarServiceProvider\\:\\:getModel\\(\\)\\.$#"
+			count: 1
+			path: src/BazarServiceProvider.php

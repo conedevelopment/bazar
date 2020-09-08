@@ -45,7 +45,7 @@ class Checkout
     /**
      * Create a new checkout instance.
      *
-     * @param  \Bazar\Models\Cart  $order
+     * @param  \Bazar\Models\Cart  $cart
      * @return void
      */
     public function __construct(Cart $cart)

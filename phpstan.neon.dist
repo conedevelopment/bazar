@@ -1,4 +1,8 @@
+#$ composer require --dev nunomaduro/larastan orchestra/testbench
+#$ ln -s -f database/migrations vendor/orchestra/testbench-core/laravel/database/migrations
+
 includes:
+    - phpstan-baseline.neon
     - vendor/nunomaduro/larastan/extension.neon
 parameters:
     level: 5
@@ -9,4 +13,5 @@ parameters:
         - database/
         - routes/
     ignoreErrors:
+        # TODO Consider making static things final.
         - '#^Unsafe usage of new static#'

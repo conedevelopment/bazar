@@ -245,7 +245,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     /**
      * Get the breadcrumb label.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     public function getBreadcrumbLabel(Request $request): string

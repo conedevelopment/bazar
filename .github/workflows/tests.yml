@@ -33,3 +33,37 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit --verbose
+
+  phpstan:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [7.4]
+        stability: [prefer-stable]
+
+    name: Larastan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+      - name: Install Larastan
+        run: |
+          composer require --dev nunomaduro/larastan orchestra/testbench
+          ln -s -f database/migrations vendor/orchestra/testbench-core/laravel/database/migrations
+
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse --level=1

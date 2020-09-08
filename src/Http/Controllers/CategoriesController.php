@@ -37,7 +37,7 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $reqzest
+     * @param  \Illuminate\Http\Request  $request
      * @return \Bazar\Http\Response
      */
     public function index(Request $request): Response

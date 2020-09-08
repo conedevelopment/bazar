@@ -16,6 +16,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $name
+ * @property string $email
+ */
 class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
 {
     use BazarRoutable, Notifiable, SoftDeletes;
@@ -147,7 +151,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     /**
      * Get the breadcrumb label.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     public function getBreadcrumbLabel(Request $request): string

@@ -38,7 +38,7 @@ class Response implements Responsable
      * Create a new response instance.
      *
      * @param  string  $component
-     * @param  array|\Arrayable  $props
+     * @param  array|\Illuminate\Contracts\Support\Arrayable  $props
      * @return void
      */
     public function __construct(string $component, $props)

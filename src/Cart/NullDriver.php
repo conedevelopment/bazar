@@ -24,7 +24,7 @@ class NullDriver extends Driver
      * Add the product with the given properties to the cart.
      *
      * @param  \Bazar\Models\Product  $product
-     * @param  int  $quantity
+     * @param  float  $quantity
      * @param  array  $properties
      * @return void
      */
