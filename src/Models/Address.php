@@ -34,7 +34,6 @@ class Address extends Model implements Breadcrumbable
         'phone' => null,
         'email' => null,
         'alias' => null,
-        'custom' => null,
         'custom' => '[]',
         'country' => null,
         'default' => false,

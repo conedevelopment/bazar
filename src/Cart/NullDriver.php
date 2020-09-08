@@ -28,7 +28,7 @@ class NullDriver extends Driver
      * @param  array  $properties
      * @return void
      */
-    public function add(Product $product, int $quantity = 1, array $properties = []): void
+    public function add(Product $product, float $quantity = 1, array $properties = []): void
     {
         //
     }
@@ -48,10 +48,9 @@ class NullDriver extends Driver
      * Update the cart items and shipping.
      *
      * @param  array  $items
-     * @param  string|null  $shipping
      * @return void
      */
-    public function update(array $items, string $shipping = null): void
+    public function update(array $items = []): void
     {
         //
     }
