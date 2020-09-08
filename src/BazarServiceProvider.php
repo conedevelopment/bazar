@@ -159,12 +159,10 @@ class BazarServiceProvider extends ServiceProvider
         });
 
         Request::macro('bazar', function () {
-            /** @var \Illuminate\Support\Facades\Request $this */
             return boolval($this->header('X-Bazar-Api'));
         });
 
         Builder::macro('filter', function ($request, Filters\Filters $filters) {
-            /** @var \Illuminate\Database\Eloquent\Builder $this */
             Event::dispatch('bazar.filtering: '.get_class($this->getModel()), $filters);
 
             return $filters->apply($this, $request);
