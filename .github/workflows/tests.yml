@@ -28,8 +28,5 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
-
-      - name: Execute tests
-        run: vendor/bin/phpunit --verbose
+      - name: SQLite ver.
+        run: php -r 'echo SQLite3::version()["versionString"];'
