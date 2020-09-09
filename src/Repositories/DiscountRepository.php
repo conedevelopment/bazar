@@ -83,9 +83,13 @@ class DiscountRepository extends Repository implements Contract
     {
         if (is_numeric($discount)) {
             return $discount;
-        } elseif ($discount instanceof Closure) {
+        }
+
+        if ($discount instanceof Closure) {
             return call_user_func_array($discount, [$model]);
-        } elseif ((is_string($discount) || is_object($discount)) && in_array(Discount::class, class_implements($discount))) {
+        }
+
+        if ((is_string($discount) || is_object($discount)) && in_array(Discount::class, class_implements($discount))) {
             return call_user_func_array(
                 [is_string($discount) ? new $discount : $discount, 'calculate'], [$model]
             );
