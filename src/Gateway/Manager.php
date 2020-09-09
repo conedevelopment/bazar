@@ -62,7 +62,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the transfer driver.
      *
-     * @return \Bazar\Models\Shipping\TransferDriver
+     * @return \Bazar\Gateway\TransferDriver
      */
     public function createTransferDriver(): TransferDriver
     {
@@ -74,7 +74,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the cash driver.
      *
-     * @return \Bazar\Models\Shipping\CashDriver
+     * @return \Bazar\Gateway\CashDriver
      */
     public function createCashDriver(): CashDriver
     {
@@ -86,7 +86,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the manual driver.
      *
-     * @return \Bazar\Models\Shipping\ManualDriver
+     * @return \Bazar\Gateway\ManualDriver
      */
     public function createManualDriver(): ManualDriver
     {
