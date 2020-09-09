@@ -64,8 +64,8 @@ jobs:
         run: |
           composer require --dev nunomaduro/larastan orchestra/testbench
           sed -i -e '/Cart::empty/d' src/Listeners/PlaceOrder.php
-          rm -f -r vendor/orchestra/testbench-core/laravel/database/migrations
-          ln -s ../../../../../database/migrations vendor/orchestra/testbench-core/laravel/database/migrations
+          # https://github.com/nunomaduro/larastan/issues/655#issuecomment-689160382
+          cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
 
       - name: Run static analysis
         run: vendor/bin/phpstan analyse --level=1
