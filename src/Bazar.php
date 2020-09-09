@@ -20,11 +20,13 @@ abstract class Bazar
     /**
      * Get the asset version.
      *
-     * @return string
+     * @return string|null
      */
-    public static function assetVersion(): string
+    public static function assetVersion(): ?string
     {
-        return md5_file(__DIR__.'/../public/mix-manifest.json');
+        return is_file(public_path('mix-manifest.json'))
+            ? md5_file(public_path('mix-manifest.json'))
+            : null;
     }
 
     /**

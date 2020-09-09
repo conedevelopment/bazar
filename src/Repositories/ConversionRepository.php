@@ -18,18 +18,6 @@ class ConversionRepository extends Repository implements Contract
      */
     public function register(string $name, Closure $callback): void
     {
-        $this->add($name, $callback);
-    }
-
-    /**
-     * Add a new conversion.
-     *
-     * @param  string  $name
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public function add(string $name, Closure $callback): void
-    {
         $this->items->put($name, $callback);
     }
 

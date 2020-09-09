@@ -5,6 +5,13 @@ namespace Bazar\Support\Facades;
 use Bazar\Contracts\Repositories\ConversionRepository;
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static void register(string $name, \Closure $callback)
+ * @method static void remove(string $name)
+ * @method static \Bazar\Models\Medium perform(\Bazar\Models\Medium $medium)
+ *
+ * @see \Bazar\Contracts\Repositories\ConversionRepository
+ */
 class Conversion extends Facade
 {
     /**
