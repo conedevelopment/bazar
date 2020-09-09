@@ -4,7 +4,6 @@ namespace Bazar\Console\Commands;
 
 use Bazar\Support\Scaffold;
 use Illuminate\Console\Command;
-use Throwable;
 
 class ScaffoldCommand extends Command
 {
@@ -20,7 +19,7 @@ class ScaffoldCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Applying the Bazar scaffolding';
+    protected $description = 'Install the Bazar scaffolding';
 
     /**
      * Execute the console command.
@@ -29,17 +28,9 @@ class ScaffoldCommand extends Command
      */
     public function handle(): int
     {
-        $this->warn('Applying the Bazar scaffolding.');
+        Scaffold::install();
 
-        try {
-            Scaffold::install();
-
-            $this->info('Bazar scaffolding has been applied.');
-
-            $this->warn('Please run "npm install && npm run dev".');
-        } catch (Throwable $e) {
-            $this->error('Bazar scaffolding has been failed.');
-        }
+        $this->info('Bazar scaffolding has been installed.');
 
         return 0;
     }

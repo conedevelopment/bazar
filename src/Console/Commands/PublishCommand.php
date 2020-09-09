@@ -12,7 +12,8 @@ class PublishCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'bazar:publish {--force : Overwrite existing files}';
+    protected $signature = 'bazar:publish {--force : Overwrite any existing files}
+                    {--tag=* : One or many tags that have assets you want to publish}';
 
     /**
      * The console command description.
@@ -28,8 +29,10 @@ class PublishCommand extends Command
      */
     public function handle(): int
     {
-        return $this->call('vendor:publish', [
-            '--provider' => BazarServiceProvider::class,
-        ]);
+        return $this->call('vendor:publish', array_merge(
+            ['--provider' => BazarServiceProvider::class],
+            $this->option('force') ? ['--force' => true] : [],
+            ['--tag' => $this->option('tag') ?: ['assets', 'config']]
+        ));
     }
 }

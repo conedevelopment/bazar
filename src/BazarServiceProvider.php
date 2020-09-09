@@ -116,11 +116,17 @@ class BazarServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/bazar.php' => config_path('bazar.php'),
+            ], 'config');
+
+            $this->publishes([
                 __DIR__.'/../resources/img' => public_path('vendor/bazar/img'),
                 __DIR__.'/../resources/js' => resource_path('js/vendor/bazar'),
                 __DIR__.'/../resources/sass' => resource_path('sass/vendor/bazar'),
-                // __DIR__.'/../resources/views' => resource_path('views/vendor/bazar'),
-            ]);
+            ], 'assets');
+
+            $this->publishes([
+                __DIR__.'/../resources/views' => resource_path('views/vendor/bazar'),
+            ], 'views');
         }
     }
 

@@ -3,8 +3,9 @@
 namespace Bazar\Support;
 
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 
-class Scaffold
+abstract class Scaffold
 {
     /**
      * Install the scaffold.
@@ -88,12 +89,11 @@ class Scaffold
      */
     protected static function updateMixFile(): void
     {
-        if (is_file(base_path('webpack.mix.js'))) {
-            file_put_contents(
-                base_path('webpack.mix.js'),
-                file_get_contents(__DIR__.'/../../stubs/webpack.mix.js.stub'),
-                FILE_APPEND
-            );
+        $stub = file_get_contents(__DIR__.'/../../stubs/webpack.mix.js.stub');
+
+        if (is_file(base_path('webpack.mix.js'))
+            && ! Str::contains(file_get_contents(base_path('webpack.mix.js')), $stub)) {
+            file_put_contents(base_path('webpack.mix.js'), $stub, FILE_APPEND);
         }
     }
 }
