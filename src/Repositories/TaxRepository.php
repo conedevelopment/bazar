@@ -83,9 +83,11 @@ class TaxRepository extends Repository implements Contract
     {
         if (is_numeric($tax)) {
             return $tax;
-        } elseif ($tax instanceof Closure) {
+        }
+        if ($tax instanceof Closure) {
             return call_user_func_array($tax, [$model]);
-        } elseif ((is_string($tax) || is_object($tax)) && in_array(Tax::class, class_implements($tax))) {
+        }
+        if ((is_string($tax) || is_object($tax)) && in_array(Tax::class, class_implements($tax))) {
             return call_user_func_array(
                 [is_string($tax) ? new $tax : $tax, 'calculate'], [$model]
             );
