@@ -35,7 +35,7 @@ class MediaController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Resources\Json\ResourceCollection
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request): JsonResponse
     {
