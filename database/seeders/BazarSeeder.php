@@ -15,7 +15,6 @@ use Bazar\Models\Product;
 use Bazar\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 
 class BazarSeeder extends Seeder
@@ -27,13 +26,11 @@ class BazarSeeder extends Seeder
      */
     public function run(): void
     {
-        if (App::environment('local')) {
-            $this->seedUsers();
-            $this->seedCategories();
-            $this->seedMedia();
-            $this->seedProducts();
-            $this->seedOrders();
-        }
+        $this->seedUsers();
+        $this->seedCategories();
+        $this->seedMedia();
+        $this->seedProducts();
+        $this->seedOrders();
     }
 
     /**
@@ -105,7 +102,7 @@ class BazarSeeder extends Seeder
                     'price' => $product->price,
                     'tax' => $product->price * 0.27,
                 ]];
-            });
+            })->all();
 
             $order->products()->attach($data);
             $order->address()->save(AddressFactory::new()->make());

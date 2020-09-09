@@ -34,4 +34,3 @@
     @include ('bazar::partials.svg-icons')
 </body>
 </html>
-
