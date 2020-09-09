@@ -191,7 +191,7 @@ trait Itemable
     public function netTotal(): float
     {
         $value = $this->taxables->reduce(function (float $value, Taxable $item) {
-            return $value + $item->netTotal;
+            return $value + $item->netTotal();
         }, -$this->discount);
 
         return round($value < 0 ? 0 : $value, 2);
