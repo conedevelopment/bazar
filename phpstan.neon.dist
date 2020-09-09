@@ -1,5 +1,6 @@
+# Installation
 #$ composer require --dev nunomaduro/larastan orchestra/testbench
-#$ ln -s -f database/migrations vendor/orchestra/testbench-core/laravel/database/migrations
+#$ cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
 
 includes:
     - phpstan-baseline.neon
