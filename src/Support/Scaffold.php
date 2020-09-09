@@ -36,8 +36,7 @@ abstract class Scaffold
         $packages = json_decode(file_get_contents(base_path('package.json')), true);
 
         $packages[$configurationKey] = static::updatePackageArray(
-            array_key_exists($configurationKey, $packages) ? $packages[$configurationKey] : [],
-            $configurationKey
+            array_key_exists($configurationKey, $packages) ? $packages[$configurationKey] : []
         );
 
         ksort($packages[$configurationKey]);
