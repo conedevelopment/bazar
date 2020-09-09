@@ -16,10 +16,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @property string $name
- * @property string $email
- */
 class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
 {
     use BazarRoutable, Notifiable, SoftDeletes;
