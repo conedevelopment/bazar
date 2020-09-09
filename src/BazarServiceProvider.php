@@ -100,7 +100,6 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerLoadings(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
-        $this->loadJsonTranslationsFrom(__DIR__.'/../resources/lang');
 
         if ($this->app->runningInConsole()) {
             $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
@@ -116,12 +115,11 @@ class BazarServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/bazar'),
                 __DIR__.'/../config/bazar.php' => config_path('bazar.php'),
+                __DIR__.'/../resources/img' => public_path('vendor/bazar/img'),
                 __DIR__.'/../resources/js' => resource_path('js/vendor/bazar'),
                 __DIR__.'/../resources/sass' => resource_path('sass/vendor/bazar'),
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/bazar'),
-                __DIR__.'/../resources/views' => resource_path('views/vendor/bazar'),
+                // __DIR__.'/../resources/views' => resource_path('views/vendor/bazar'),
             ]);
         }
     }
@@ -137,6 +135,7 @@ class BazarServiceProvider extends ServiceProvider
             $this->commands([
                 Console\Commands\InstallCommand::class,
                 Console\Commands\PublishCommand::class,
+                Console\Commands\ScaffoldCommand::class,
                 Console\Commands\ClearCartsCommand::class,
                 Console\Commands\ClearFileChunksCommand::class,
             ]);

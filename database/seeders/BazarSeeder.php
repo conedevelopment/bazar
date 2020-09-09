@@ -25,7 +25,7 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         if (App::environment('local')) {
             $this->seedUsers();
@@ -41,7 +41,7 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    protected function seedUsers()
+    protected function seedUsers(): void
     {
         User::create([
             'name' => 'Bazar Admin',
@@ -63,7 +63,7 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    protected function seedCategories()
+    protected function seedCategories(): void
     {
         $categories = ['Software', 'Sport', 'Cars', 'Food'];
 
@@ -77,7 +77,7 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    protected function seedProducts()
+    protected function seedProducts(): void
     {
         ProductFactory::new()->count(4)->create()->each(function ($product) {
             $product->categories()->attach(Category::inRandomOrder()->take(2)->get());
@@ -90,7 +90,7 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    public function seedOrders()
+    protected function seedOrders(): void
     {
         $orders = OrderFactory::new()->count(15)->make();
 
@@ -125,10 +125,10 @@ class BazarSeeder extends Seeder
      *
      * @return void
      */
-    public function seedMedia()
+    protected function seedMedia(): void
     {
         foreach (range(1, 4) as $key) {
-            $path = __DIR__."/../../resources/img/photo-0{$key}.jpg";
+            $path = __DIR__."/../../stubs/photo-0{$key}.jpg";
 
             $medium = Medium::createFrom($path);
 

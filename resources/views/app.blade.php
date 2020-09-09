@@ -14,11 +14,11 @@
 
     {{-- Styles --}}
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
-    <link href="{{ asset(mix('app.css', 'vendor/bazar')) }}" rel="stylesheet">
+    <link href="{{ asset(mix('vendor/bazar/app.css')) }}" rel="stylesheet">
 
     {{-- Scripts --}}
     <script>window.translations = {!! json_encode($translations) !!};</script>
-    <script src="{{ asset(mix('app.js', 'vendor/bazar')) }}" defer></script>
+    <script src="{{ asset(mix('vendor/bazar/app.js')) }}" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             Bazar.boot();

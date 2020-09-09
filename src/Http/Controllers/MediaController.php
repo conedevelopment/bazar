@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
@@ -44,7 +45,7 @@ class MediaController extends Controller
             Filters::make(Medium::class, [Type::make()])->searchIn('name')
         )->paginate($request->input('per_page', 25));
 
-        return response()->json($media);
+        return Response::json($media);
     }
 
     /**
@@ -62,7 +63,7 @@ class MediaController extends Controller
         File::append($path, $file->get());
 
         if ($request->has('is_last') && ! $request->boolean('is_last')) {
-            return response()->json(['uploaded' => true]);
+            return Response::json(['uploaded' => true]);
         }
 
         $medium = Medium::createFrom($path);
@@ -71,7 +72,7 @@ class MediaController extends Controller
             $medium->isImage ? [new PerformConversions($medium)] : []
         )->dispatch($medium, $path);
 
-        return response()->json($medium);
+        return Response::json($medium);
     }
 
     /**
@@ -82,7 +83,7 @@ class MediaController extends Controller
      */
     public function show(Medium $medium): JsonResponse
     {
-        return response()->json($medium);
+        return Response::json($medium);
     }
 
     /**
@@ -96,7 +97,7 @@ class MediaController extends Controller
     {
         $medium->update($request->validated());
 
-        return response()->json(['updated' => true]);
+        return Response::json(['updated' => true]);
     }
 
     /**
@@ -111,6 +112,6 @@ class MediaController extends Controller
 
         $medium->delete();
 
-        return response()->json(['deleted' => true]);
+        return Response::json(['deleted' => true]);
     }
 }

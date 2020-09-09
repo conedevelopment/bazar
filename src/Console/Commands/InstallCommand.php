@@ -28,13 +28,15 @@ class InstallCommand extends Command
      */
     public function handle(): int
     {
-        $status = $this->call('publish');
+        $status = $this->call('migrate');
 
         if ($this->option('seed')) {
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
 
         $status = $this->call('bazar:publish');
+
+        $status = $this->call('bazar:scaffold');
 
         return $status;
     }

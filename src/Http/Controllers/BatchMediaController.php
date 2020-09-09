@@ -5,6 +5,7 @@ namespace Bazar\Http\Controllers;
 use Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class BatchMediaController extends Controller
@@ -25,6 +26,6 @@ class BatchMediaController extends Controller
 
         $media->delete();
 
-        return response()->json(['deleted' => true]);
+        return Response::json(['deleted' => true]);
     }
 }

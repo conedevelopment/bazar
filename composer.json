@@ -11,14 +11,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Bazar\\": "src/"
+            "Bazar\\": "src/",
+            "Bazar\\Database\\Seeders\\": "database/seeders/",
+            "Bazar\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bazar\\Tests\\": "tests/",
-            "Bazar\\Database\\Seeders\\": "database/seeders/",
-            "Bazar\\Database\\Factories\\": "database/factories/"
+            "Bazar\\Tests\\": "tests/"
         }
     },
     "require": {

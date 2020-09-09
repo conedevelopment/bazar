@@ -6,6 +6,7 @@ use Bazar\Http\Controllers\Controller;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Response as ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 
 class DownloadController extends Controller
@@ -21,7 +22,7 @@ class DownloadController extends Controller
         try {
             $url = Crypt::decryptString($request->input('url'));
 
-            return response()->streamDownload(function () use ($url) {
+            return ResponseFactory::streamDownload(function () use ($url) {
                 echo file_get_contents(
                     $url, false, stream_context_create(['ssl' => ['verify_peer' => false]])
                 );

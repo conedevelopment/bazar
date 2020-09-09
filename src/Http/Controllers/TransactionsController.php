@@ -9,6 +9,7 @@ use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Throwable;
 
 class TransactionsController extends Controller
@@ -42,10 +43,10 @@ class TransactionsController extends Controller
                 [$order, $request->amount ? (float) $request->amount : null]
             );
         } catch (Throwable $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return Response::json(['message' => $e->getMessage()], 400);
         }
 
-        return response()->json($transaction);
+        return Response::json($transaction);
     }
 
     /**
@@ -64,7 +65,7 @@ class TransactionsController extends Controller
             $transaction->markAsCompleted();
         }
 
-        return response()->json(['updated' => true]);
+        return Response::json(['updated' => true]);
     }
 
     /**
@@ -78,6 +79,6 @@ class TransactionsController extends Controller
     {
         $transaction->delete();
 
-        return response()->json(['deleted' => true]);
+        return Response::json(['deleted' => true]);
     }
 }
