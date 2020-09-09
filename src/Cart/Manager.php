@@ -20,7 +20,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the cookie driver.
      *
-     * @return \Bazar\Models\Cart\CookieDriver
+     * @return \Bazar\Cart\CookieDriver
      */
     public function createCookieDriver(): CookieDriver
     {
@@ -32,7 +32,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the "null" driver.
      *
-     * @return \Bazar\Models\Cart\NullDriver
+     * @return \Bazar\Cart\NullDriver
      */
     public function createNullDriver(): NullDriver
     {

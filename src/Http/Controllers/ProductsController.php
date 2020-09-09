@@ -81,7 +81,7 @@ class ProductsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Bazar\Http\Requests\ProductStoreRequest  $request
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
     {
