@@ -100,7 +100,7 @@ class Variation extends Model implements Breadcrumbable
     /**
      * Get the breadcrumb label.
      *
-     * @param  \Illuminate\Http\Request
+     * @param  \Illuminate\Http\Request  $request
      * @return string
      */
     public function getBreadcrumbLabel(Request $request): string

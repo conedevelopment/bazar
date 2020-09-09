@@ -9,7 +9,7 @@ interface TaxRepository
     /**
      * Register a new tax.
      *
-     * @param  mixed  $name
+     * @param  string  $name
      * @param  int|callable  $tax
      * @return void
      */

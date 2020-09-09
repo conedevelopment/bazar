@@ -53,7 +53,7 @@ class ResponseFactory implements Contract
      * Render the response.
      *
      * @param  string  $component
-     * @param  array|\Arrayable  $props
+     * @param  array|\Illuminate\Contracts\Support\Arrayable  $props
      * @return \Bazar\Http\Response
      */
     public function render(string $component, $props = []): Response

@@ -5,6 +5,12 @@ namespace Bazar\Support\Facades;
 use Bazar\Contracts\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static array methods()
+ * @method static bool has(string $method)
+ *
+ * @see \Bazar\Contracts\Shipping\Manager
+ */
 class Shipping extends Facade
 {
     /**

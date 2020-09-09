@@ -9,7 +9,7 @@ interface DiscountRepository
     /**
      * Register a new discount.
      *
-     * @param  mixed  $name
+     * @param  string  $name
      * @param  int|callable  $discount
      * @return void
      */

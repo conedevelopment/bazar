@@ -2,22 +2,18 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Filters\Exclude;
 use Bazar\Filters\Filters;
-use Bazar\Filters\Search;
-use Bazar\Filters\Sort;
-use Bazar\Filters\State;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
+use Bazar\Http\Response;
 use Bazar\Models\Category;
+use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use Bazar\Support\Facades\Component;
-use Bazar\Http\Response;
 
 class CategoriesController extends Controller
 {
@@ -37,7 +33,7 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $reqzest
+     * @param  \Illuminate\Http\Request  $request
      * @return \Bazar\Http\Response
      */
     public function index(Request $request): Response
