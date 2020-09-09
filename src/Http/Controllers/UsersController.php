@@ -88,7 +88,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Contracts\User  $user
+     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Illuminate\Contracts\Support\Responsable
      */
     public function show(User $user): Responsable
