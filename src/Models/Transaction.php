@@ -75,7 +75,7 @@ class Transaction extends Model
     public function getUrlAttribute(): ?string
     {
         try {
-            return Gateway::driver($this->method)->transactionUrl($this);
+            return Gateway::driver($this->driver)->transactionUrl($this);
         } catch (Throwable $e) {
             return null;
         }
