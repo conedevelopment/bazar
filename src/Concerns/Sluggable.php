@@ -2,9 +2,11 @@
 
 namespace Bazar\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
+/**
+ * @template ModelT of \Illuminate\Database\Eloquent\Model
+ */
 trait Sluggable
 {
     /**
@@ -14,8 +16,13 @@ trait Sluggable
      */
     protected static function booted(): void
     {
-        static::saving(function (Model $model) {
-            $model->slug = $model->slug ?: Str::slug($model->name);
-        });
+        static::saving(
+            /**
+             * @param ModelT $model
+             */
+            function ($model) {
+                $model->slug = $model->slug ?: Str::slug($model->name);
+            }
+        );
     }
 }
