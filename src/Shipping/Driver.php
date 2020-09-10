@@ -39,7 +39,7 @@ abstract class Driver
      */
     public function id(): string
     {
-        return array_search($this, Shipping::methods());
+        return array_search($this, Shipping::all());
     }
 
     /**

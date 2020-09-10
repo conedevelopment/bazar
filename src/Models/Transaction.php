@@ -133,6 +133,19 @@ class Transaction extends Model
     }
 
     /**
+     * Set the driver.
+     *
+     * @param  string  $driver
+     * @return $this
+     */
+    public function driver(string $driver): Transaction
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
+    /**
      * Scope the query to only include payments.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

@@ -5,17 +5,31 @@ namespace Bazar\Contracts\Gateway;
 interface Manager
 {
     /**
-     * Get all the payment gateways.
+     * Get all drivers.
      *
      * @return array
      */
-    public function methods(): array;
+    public function all(): array;
 
     /**
-     * Determine if the given method exists.
+     * Get the enabled drivers.
      *
-     * @param  string  $method
+     * @return array
+     */
+    public function enabled(): array;
+
+    /**
+     * Get the disabled drivers.
+     *
+     * @return array
+     */
+    public function disabled(): array;
+
+    /**
+     * Determine if the given driver exists.
+     *
+     * @param  string  $driver
      * @return bool
      */
-    public function has(string $method): bool;
+    public function has(string $driver): bool;
 }

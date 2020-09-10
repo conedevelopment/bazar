@@ -92,10 +92,8 @@ class Checkout
      */
     public function shipping(string $driver, array $details = []): Checkout
     {
-        $this->cart->shipping->driver = $driver;
-
-        $this->cart->shipping->address->fill(
-            array_replace($this->cart->address->toArray(), $details)
+        $this->cart->shipping->driver($driver)->address->fill(
+            array_replace_recursive($this->cart->address->toArray(), $details)
         )->save();
 
         return $this;

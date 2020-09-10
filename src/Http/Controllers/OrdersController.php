@@ -8,11 +8,13 @@ use Bazar\Filters\Status;
 use Bazar\Filters\User as UserFilter;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
+use Bazar\Http\Response;
 use Bazar\Models\Address;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\User;
 use Bazar\Support\Countries;
+use Bazar\Support\Facades\Component;
 use Bazar\Support\Facades\Discount;
 use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
@@ -21,8 +23,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use Bazar\Support\Facades\Component;
-use Bazar\Http\Response;
 
 class OrdersController extends Controller
 {
@@ -88,7 +88,7 @@ class OrdersController extends Controller
             'statuses' => Order::statuses(),
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.orders.store'),
-            'drivers' => collect(Shipping::methods())->map->name(),
+            'drivers' => collect(Shipping::enabled())->map->name(),
         ]);
     }
 

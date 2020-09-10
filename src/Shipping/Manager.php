@@ -33,30 +33,52 @@ class Manager extends BaseManager implements Contract
     }
 
     /**
-     * Get all the shipping methods.
+     * Get all drivers.
      *
      * @return array
      */
-    public function methods(): array
+    public function all(): array
     {
-        $drivers = array_reduce(array_keys($this->customCreators), function ($drivers, $driver) {
-            return array_merge($drivers, [$driver => $this->callCustomCreator($driver)]);
-        }, []);
+        foreach (array_keys(array_diff_key($this->customCreators, $this->drivers)) as $key) {
+            $this->drivers[$key] = $this->callCustomCreator($key);
+        }
 
-        return array_filter(array_replace($this->getDrivers(), $drivers), function ($driver) {
+        return $this->getDrivers();
+    }
+
+    /**
+     * Get the enabled drivers.
+     *
+     * @return array
+     */
+    public function enabled(): array
+    {
+        return array_filter($this->all(), function (Driver $driver) {
             return $driver->enabled();
         });
     }
 
     /**
-     * Determine if the given method exists.
+     * Get the disabled drivers.
      *
-     * @param  string  $method
+     * @return array
+     */
+    public function disabled(): array
+    {
+        return array_filter($this->all(), function (Driver $driver) {
+            return $driver->disabled();
+        });
+    }
+
+    /**
+     * Determine if the given driver exists.
+     *
+     * @param  string  $driver
      * @return bool
      */
-    public function has(string $method): bool
+    public function has(string $driver): bool
     {
-        return isset($this->drivers[$method]) || isset($this->customCreators[$method]);
+        return isset($this->drivers[$driver]) || isset($this->customCreators[$driver]);
     }
 
     /**

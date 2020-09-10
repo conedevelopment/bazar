@@ -30,10 +30,12 @@ class ShippingDriverTest extends TestCase
     public function it_can_list_enabled_drivers()
     {
         $this->manager->driver('local-pickup')->disable();
-        $this->assertEquals(['weight-based-shipping', 'custom-driver'], array_keys($this->manager->methods()));
+        $this->assertEquals(['weight-based-shipping', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['local-pickup'], array_keys($this->manager->disabled()));
 
         $this->manager->driver('local-pickup')->enable();
-        $this->assertEquals(['local-pickup', 'weight-based-shipping', 'custom-driver'], array_keys($this->manager->methods()));
+        $this->assertEquals(['local-pickup', 'weight-based-shipping', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEmpty(array_keys($this->manager->disabled()));
     }
 
     /** @test */

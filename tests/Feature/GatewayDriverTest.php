@@ -37,10 +37,12 @@ class GatewayDriverTest extends TestCase
     public function it_can_list_enabled_drivers()
     {
         $this->manager->driver('cash')->disable();
-        $this->assertEquals(['transfer', 'custom-driver'], array_keys($this->manager->methods()));
+        $this->assertEquals(['transfer', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['cash'], array_keys($this->manager->disabled()));
 
         $this->manager->driver('cash')->enable();
-        $this->assertEquals(['cash', 'transfer', 'custom-driver'], array_keys($this->manager->methods()));
+        $this->assertEquals(['cash', 'transfer', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEmpty(array_keys($this->manager->disabled()));
     }
 
     /** @test */
