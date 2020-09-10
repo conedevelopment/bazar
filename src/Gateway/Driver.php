@@ -133,7 +133,7 @@ abstract class Driver
             throw new TransactionFailedException("The order #{$order->id} is fully paid.");
         }
 
-        if  ($type === 'refund' && $order->refunded()) {
+        if ($type === 'refund' && $order->refunded()) {
             throw new TransactionFailedException("The order #{$order->id} is fully refunded.");
         }
 
