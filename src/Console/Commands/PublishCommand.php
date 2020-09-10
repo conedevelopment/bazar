@@ -32,7 +32,7 @@ class PublishCommand extends Command
         return $this->call('vendor:publish', array_merge(
             ['--provider' => BazarServiceProvider::class],
             $this->option('force') ? ['--force' => true] : [],
-            ['--tag' => $this->option('tag') ?: ['assets', 'config']]
+            ['--tag' => $this->option('tag') ?: ['bazar-assets', 'bazar-config']]
         ));
     }
 }
