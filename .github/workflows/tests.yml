@@ -28,13 +28,13 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Install dependencies
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
       # https://github.com/laravel/framework/pull/34245
       - name: Fix the framework
         run: |
-          sed -i -e 's#^\s*.links. => \$this->linkCollection(),$#             "links" => $this->linkCollection()->toArray(),#' src/Illuminate/Pagination/LengthAwarePaginator.php
-
-      - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+          sed -i -e 's#^\s*.links. => \$this->linkCollection(),$#             "links" => $this->linkCollection()->toArray(),#' vendor/laravel/framework/src/Illuminate/Pagination/LengthAwarePaginator.php
 
       - name: Execute tests
         run: vendor/bin/phpunit --verbose
