@@ -44,13 +44,14 @@ class Search extends Filter
 
                 if (! is_array($group)) {
                     $query->{$first ? 'where' : 'orWhere'}($group, 'like', "%{$value}%");
-                } else {
-                    $query->{$first ? 'whereHas' : 'orWhereHas'}($key, function ($query) use ($group, $value) {
-                        foreach ($group as $index => $column) {
-                            $query->{$index === 0 ? 'where' : 'orWhere'}($column, 'like', "%{$value}%");
-                        }
-                    });
+                    continue;
                 }
+
+                $query->{$first ? 'whereHas' : 'orWhereHas'}($key, function ($query) use ($group, $value) {
+                    foreach ($group as $index => $column) {
+                        $query->{$index === 0 ? 'where' : 'orWhere'}($column, 'like', "%{$value}%");
+                    }
+                });
             }
         });
     }
