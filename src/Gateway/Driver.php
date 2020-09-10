@@ -127,9 +127,13 @@ abstract class Driver
     {
         if (! in_array($type, ['payment', 'refund'])) {
             throw new InvalidArgumentException('The transaction type must be "payment" or "refund".');
-        } elseif ($type === 'payment' && $order->paid()) {
+        }
+
+        if ($type === 'payment' && $order->paid()) {
             throw new TransactionFailedException("The order #{$order->id} is fully paid.");
-        } elseif  ($type === 'refund' && $order->refunded()) {
+        }
+
+        if  ($type === 'refund' && $order->refunded()) {
             throw new TransactionFailedException("The order #{$order->id} is fully refunded.");
         }
 
