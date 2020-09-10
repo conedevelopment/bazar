@@ -111,7 +111,9 @@ class Filters
      */
     public function searchIn($columns): Filters
     {
-        if ($filter = $this->get('search')) {
+        /** @var \Bazar\Filters\Search|null  $filter */
+        $filter = $this->get('search');
+        if ($filter) {
             $filter->add($columns);
         }
 
