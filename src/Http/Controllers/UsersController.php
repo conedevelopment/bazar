@@ -6,6 +6,7 @@ use Bazar\Contracts\Models\User as User;
 use Bazar\Filters\Filters;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
+use Bazar\Support\Facades\Component;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
-use Bazar\Support\Facades\Component;
 
 class UsersController extends Controller
 {

@@ -3,8 +3,8 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Support\Facades\Component;
 use Bazar\Http\Response;
+use Bazar\Support\Facades\Component;
 
 class PagesController extends Controller
 {

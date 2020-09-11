@@ -6,16 +6,16 @@ use Bazar\Bazar;
 use Bazar\Filters\Filters;
 use Bazar\Http\Requests\VariationStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariationUpdateRequest as UpdateRequest;
+use Bazar\Http\Response;
 use Bazar\Models\Product;
 use Bazar\Models\Variation;
+use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use Bazar\Support\Facades\Component;
-use Bazar\Http\Response;
 
 class VariationsController extends Controller
 {

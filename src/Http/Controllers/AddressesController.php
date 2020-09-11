@@ -6,15 +6,15 @@ use Bazar\Contracts\Models\User;
 use Bazar\Filters\Filters;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
+use Bazar\Http\Response;
 use Bazar\Models\Address;
 use Bazar\Support\Countries;
+use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
-use Bazar\Support\Facades\Component;
-use Bazar\Http\Response;
 
 class AddressesController extends Controller
 {
