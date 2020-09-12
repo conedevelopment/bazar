@@ -32,7 +32,7 @@
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.0",
         "laravel/laravel": "dev-master",
-        "laravel/ui": "^2.2"
+        "laravel/ui": "^3.0"
     },
     "extra": {
         "laravel": {
