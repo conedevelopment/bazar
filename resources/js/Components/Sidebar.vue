@@ -1,7 +1,7 @@
 <script>
     export default {
         mounted() {
-            const path = window.location.pathname;
+            const path = window.location.pathname.replace(/\/$/, '');
 
             this.$el.querySelectorAll(`.app-sidebar__inside a[href$="${path}"]`).forEach(el => {
                 el.classList.add('is-active');

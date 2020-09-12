@@ -28,7 +28,7 @@
                         :id="`filter-${key}`"
                         :disabled="$parent.busy"
                     >
-                        <option :value="null">--------</option>
+                        <option :value="null">{{ __('Any') }}</option>
                         <option v-for="(label, value) in filters" :key="value" :value="value">
                             {{ label }}
                         </option>

@@ -180,7 +180,7 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerComposers(): void
     {
         View::composer('bazar::app', function ($view) {
-            $view->with('translations', $this->app['translator']->getLoader()->load(
+            $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
         });
