@@ -36,6 +36,8 @@ jobs:
 
       - name: Send coverage to Coveralls
         if: matrix.php == '7.3'
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          wget -nv -P build/ https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
-          php build/php-coveralls.phar -v
+          composer global require twinh/php-coveralls
+          php-coveralls -v
