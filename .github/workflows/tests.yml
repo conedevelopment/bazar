@@ -26,10 +26,16 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
           tools: composer:v2
-          coverage: none
+          coverage: pcov
 
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
         run: vendor/bin/phpunit --verbose
+
+      - name: Send coverage to Coveralls
+        if: matrix.php == '7.4'
+        run: |
+          composer require --dev satooshi/php-coveralls
+          vendor/bin/coveralls -v
