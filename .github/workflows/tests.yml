@@ -35,7 +35,7 @@ jobs:
         run: vendor/bin/phpunit --verbose
 
       - name: Send coverage to Coveralls
-        if: matrix.php == '7.4'
+        if: matrix.php == '7.3'
         run: |
-          composer require --dev satooshi/php-coveralls
-          vendor/bin/coveralls -v
+          wget -P build/ https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
+          php php-coveralls.phar -v
