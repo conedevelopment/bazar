@@ -83,6 +83,10 @@ class BazarServiceProvider extends ServiceProvider
             Bazar::routes(function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
+
+            Route::get('bazar/download', Http\Controllers\DownloadController::class)
+                ->middleware('signed')
+                ->name('bazar.download');
         }
 
         Route::bind('user', function (string $value, $route) {

@@ -9,7 +9,6 @@ use Bazar\Http\Controllers\BatchProductsController;
 use Bazar\Http\Controllers\BatchUsersController;
 use Bazar\Http\Controllers\BatchVariationsController;
 use Bazar\Http\Controllers\CategoriesController;
-use Bazar\Http\Controllers\DownloadController;
 use Bazar\Http\Controllers\MediaController;
 use Bazar\Http\Controllers\OrdersController;
 use Bazar\Http\Controllers\PagesController;
@@ -79,6 +78,3 @@ Route::apiResource('media', MediaController::class);
 Route::get('widgets/sales', [WidgetsController::class, 'sales'])->name('widgets.sales');
 Route::get('widgets/metrics', [WidgetsController::class, 'metrics'])->name('widgets.metrics');
 Route::get('widgets/activities', [WidgetsController::class, 'activities'])->name('widgets.activities');
-
-// Download
-Route::get('download', DownloadController::class)->withoutMiddleware('auth')->middleware('signed')->name('download');

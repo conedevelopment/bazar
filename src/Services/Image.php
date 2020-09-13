@@ -224,7 +224,7 @@ class Image
      */
     protected function create() //: resource
     {
-        if (! file_exists($this->medium->fullPath())) {
+        if (! is_file($this->medium->fullPath())) {
             throw new FileNotFoundException("The file located at [{$this->medium->fullPath()}] is not found.");
         }
 

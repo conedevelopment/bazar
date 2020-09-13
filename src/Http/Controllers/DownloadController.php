@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Response as ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class DownloadController extends Controller
 {
@@ -28,7 +29,7 @@ class DownloadController extends Controller
                 );
             }, basename($url));
         } catch (DecryptException $e) {
-            return response(__('Invalid URL'), 403);
+            return ResponseFactory::make(__('Not found.'), 404);
         }
     }
 }
