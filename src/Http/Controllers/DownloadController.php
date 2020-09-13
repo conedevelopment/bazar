@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Response as ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DownloadController extends Controller
 {
@@ -17,6 +17,8 @@ class DownloadController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function __invoke(Request $request): Response
     {
@@ -29,7 +31,7 @@ class DownloadController extends Controller
                 );
             }, basename($url));
         } catch (DecryptException $e) {
-            return ResponseFactory::make(__('Not found.'), 404);
+            throw new NotFoundHttpException(__('Not found.'));
         }
     }
 }
