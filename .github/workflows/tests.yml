@@ -37,5 +37,5 @@ jobs:
       - name: Send coverage to Coveralls
         if: matrix.php == '7.3'
         run: |
-          wget -P build/ https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
-          php php-coveralls.phar -v
+          wget -nv -P build/ https://github.com/php-coveralls/php-coveralls/releases/download/v2.2.0/php-coveralls.phar
+          php build/php-coveralls.phar -v
