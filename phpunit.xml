@@ -8,10 +8,10 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <report>
+            <clover outputFile="build/cov/coverage.cov"/>
+        </report>
     </coverage>
-    <logging>
-         <log type="coverage-php" target="build/cov/coverage.cov"/>
-    </logging>
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
