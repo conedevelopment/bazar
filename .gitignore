@@ -1,4 +1,5 @@
 /vendor
+/public
 /.idea
 /.vscode
 /node_modules
