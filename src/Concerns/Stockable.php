@@ -4,6 +4,7 @@ namespace Bazar\Concerns;
 
 use Bazar\Bazar;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 
 trait Stockable
@@ -70,7 +71,7 @@ trait Stockable
             return null;
         }
 
-        return sprintf('%s %s', implode($glue, $dimensions), config('bazar.dimension_unit'));
+        return sprintf('%s %s', implode($glue, $dimensions), Config::get('bazar.dimension_unit'));
     }
 
     /**
@@ -84,7 +85,7 @@ trait Stockable
             return null;
         }
 
-        return sprintf('%s %s', $weight, config('bazar.weight_unit'));
+        return sprintf('%s %s', $weight, Config::get('bazar.weight_unit'));
     }
 
     /**

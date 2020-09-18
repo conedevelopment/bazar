@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
@@ -131,7 +133,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function getAvatarAttribute(): string
     {
-        return asset('vendor/bazar/img/avatar-placeholder.svg');
+        return URL::asset('vendor/bazar/img/avatar-placeholder.svg');
     }
 
     /**
@@ -141,7 +143,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function isAdmin(): bool
     {
-        return in_array($this->email, config('bazar.admins', []));
+        return in_array($this->email, Config::get('bazar.admins', []));
     }
 
     /**

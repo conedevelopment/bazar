@@ -3,6 +3,7 @@
 namespace Bazar\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use SplFileInfo;
 
@@ -34,7 +35,7 @@ class ClearFileChunksCommand extends Command
         foreach (Storage::disk('local')->allFiles('chunks') as $file) {
             $info = new SplFileInfo(Storage::disk('local')->path($file));
 
-            if ($now - $info->getMTime() >= config('bazar.media.chunk_expiration')) {
+            if ($now - $info->getMTime() >= Config::get('bazar.media.chunk_expiration')) {
                 Storage::disk('local')->delete($file);
             }
         }

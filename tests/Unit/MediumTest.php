@@ -30,7 +30,7 @@ class MediumTest extends TestCase
     public function a_medium_has_urls()
     {
         $this->assertEquals(
-            $this->medium->isImage ? ['full', 'thumb', 'medium'] : ['full'],
+            $this->medium->isImage ? ['original', 'thumb', 'medium'] : ['original'],
             array_keys($this->medium->urls)
         );
 

@@ -6,6 +6,7 @@ use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Http\Middleware\ComponentMiddleware;
 use Bazar\Http\Middleware\ShareComponentData;
 use Closure;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
 abstract class Bazar
@@ -18,15 +19,26 @@ abstract class Bazar
     public const VERSION = '0.1.0';
 
     /**
+     * Get the version.
+     *
+     * @return string
+     */
+    public static function version(): string
+    {
+        return static::VERSION;
+    }
+
+    /**
      * Get the asset version.
      *
+     * @param  string|null  $path
      * @return string|null
      */
-    public static function assetVersion(): ?string
+    public static function assetVersion(string $path = null): ?string
     {
-        return is_file(public_path('mix-manifest.json'))
-            ? md5_file(public_path('mix-manifest.json'))
-            : null;
+        $path = $path ?: public_path('mix-manifest.json');
+
+        return is_file($path) ? md5_file($path) : null;
     }
 
     /**
@@ -36,7 +48,7 @@ abstract class Bazar
      */
     public static function currencies(): array
     {
-        return config('bazar.currencies.available', []);
+        return Config::get('bazar.currencies.available', []);
     }
 
     /**
@@ -50,14 +62,14 @@ abstract class Bazar
     public static function currency(string $currency = null): string
     {
         if (is_null($currency)) {
-            return config('bazar.currencies.default', 'usd');
+            return Config::get('bazar.currencies.default', 'usd');
         }
 
         if (! in_array($currency, array_keys(static::currencies()))) {
             throw new InvalidCurrencyException("The [{$currency}] currency is not available.");
         }
 
-        config()->set('bazar.currencies.default', $currency);
+        Config::set('bazar.currencies.default', $currency);
 
         return $currency;
     }

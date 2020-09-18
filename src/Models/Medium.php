@@ -4,7 +4,9 @@ namespace Bazar\Models;
 
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class Medium extends Model
@@ -72,7 +74,7 @@ class Medium extends Model
             'mime_type' => $type,
             'width' => $width ?? null,
             'height' => $height ?? null,
-            'disk' => config('bazar.media.disk'),
+            'disk' => Config::get('bazar.media.disk'),
             'size' => round(filesize($path) / 1024),
             'name' => pathinfo($name, PATHINFO_FILENAME),
         ]);
@@ -97,7 +99,7 @@ class Medium extends Model
     {
         return Conversion::keys()->reduce(function ($urls, $name) {
             return $this->isImage ? array_merge($urls, [$name => $this->url($name)]) : $urls;
-        }, ['full' => $this->url()]);
+        }, ['original' => $this->url()]);
     }
 
     /**
@@ -148,6 +150,6 @@ class Medium extends Model
      */
     public function url(string $conversion = null): string
     {
-        return url(Storage::disk($this->disk)->url($this->path($conversion)));
+        return URL::to(Storage::disk($this->disk)->url($this->path($conversion)));
     }
 }

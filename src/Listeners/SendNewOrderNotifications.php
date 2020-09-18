@@ -8,6 +8,7 @@ use Bazar\Models\User;
 use Bazar\Notifications\NewOrderNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
@@ -23,7 +24,7 @@ class SendNewOrderNotifications implements ShouldQueue
      */
     public function handle(OrderPlaced $event): void
     {
-        if ($users = User::whereIn('email', config('bazar.admins', []))->get()) {
+        if ($users = User::whereIn('email', Config::get('bazar.admins', []))->get()) {
             Notification::send($users, new NewOrderNotification($event->order));
         }
 
