@@ -8,6 +8,9 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+        </report>
     </coverage>
     <testsuites>
         <testsuite name="Unit">

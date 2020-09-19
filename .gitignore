@@ -8,3 +8,4 @@ composer.lock
 package-lock.json
 Thumbs.db
 .phpunit.result.cache
+/build/
