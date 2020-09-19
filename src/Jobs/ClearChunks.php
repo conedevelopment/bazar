@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Artisan;
 
-class ClearFileChunks implements ShouldQueue
+class ClearChunks implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 

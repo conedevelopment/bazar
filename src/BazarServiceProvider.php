@@ -147,7 +147,7 @@ class BazarServiceProvider extends ServiceProvider
                 Console\Commands\PublishCommand::class,
                 Console\Commands\ScaffoldCommand::class,
                 Console\Commands\ClearCartsCommand::class,
-                Console\Commands\ClearFileChunksCommand::class,
+                Console\Commands\ClearChunksCommand::class,
             ]);
         }
     }
