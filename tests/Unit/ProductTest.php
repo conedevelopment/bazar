@@ -7,6 +7,7 @@ use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Str;
 
 class ProductTest extends TestCase
 {
@@ -22,7 +23,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function a_product_belongs_to_categories()
+    public function it_belongs_to_categories()
     {
         $category = CategoryFactory::new()->create();
 
@@ -34,7 +35,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function a_product_has_media()
+    public function it_has_media()
     {
         $medium = MediumFactory::new()->create();
 
@@ -44,7 +45,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function a_product_has_variations()
+    public function it_has_variations()
     {
         $variation = $this->product->variations()->save(
             VariationFactory::new()->make([
@@ -53,5 +54,34 @@ class ProductTest extends TestCase
         );
 
         $this->assertTrue($this->product->variations->pluck('id')->contains($variation->id));
+    }
+
+    /** @test */
+    public function it_is_stockable()
+    {
+        $this->assertSame($this->product->price, $this->product->price());
+        $this->assertSame($this->product->formattedPrice, $this->product->formattedPrice());
+        $this->assertSame($this->product->prices['usd']['normal'], $this->product->price('normal', 'usd'));
+        $this->assertSame(
+            Str::currency($this->product->prices['usd']['normal'], 'usd'),
+            $this->product->formattedPrice('normal', 'usd')
+        );
+        $this->assertFalse($this->product->free());
+        $this->assertTrue($this->product->onSale());
+
+        $this->assertSame(
+            sprintf('%s mm', implode('x', $this->product->inventory('dimensions'))),
+            $this->product->formattedDimensions('x')
+        );
+        $this->assertSame(sprintf('%s g', $this->product->inventory('weight')), $this->product->formattedWeight('x'));
+
+        $this->assertTrue($this->product->tracksQuantity());
+        $this->assertTrue($this->product->available());
+        $this->assertFalse($this->product->available(600));
+        $this->assertSame(20, $this->product->inventory('quantity'));
+        $this->product->incrementQuantity(10);
+        $this->assertSame(30, $this->product->inventory('quantity'));
+        $this->product->decrementQuantity(6);
+        $this->assertSame(24, $this->product->inventory('quantity'));
     }
 }

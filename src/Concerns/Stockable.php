@@ -129,7 +129,7 @@ trait Stockable
      */
     public function tracksQuantity(): bool
     {
-        return ! is_null($this->inventory['quantity']);
+        return ! is_null($this->inventory('quantity'));
     }
 
     /**
@@ -140,7 +140,7 @@ trait Stockable
      */
     public function available(float $quantity = 1): bool
     {
-        $stock = $this->inventory['quantity'];
+        $stock = $this->inventory('quantity');
 
         return ! $this->tracksQuantity() || (min($stock, $quantity) > 0 && $stock >= $quantity);
     }

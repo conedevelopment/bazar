@@ -15,7 +15,7 @@ use Bazar\Tests\TestCase;
 class AddressTest extends TestCase
 {
     /** @test */
-    public function it_belongs_to_a_customer()
+    public function it_belongs_to_user()
     {
         $address = AddressFactory::new()->make();
 
@@ -28,7 +28,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_a_cart()
+    public function it_belongs_to_cart()
     {
         $address = AddressFactory::new()->make();
 
@@ -43,7 +43,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_an_order()
+    public function it_belongs_to_order()
     {
         $address = AddressFactory::new()->make();
 
@@ -58,7 +58,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_an_sihpping()
+    public function it_belongs_to_shipping()
     {
         $address = AddressFactory::new()->make();
 

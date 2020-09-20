@@ -43,7 +43,7 @@ class FilterTest extends TestCase
           ->whereHas('categories', function ($query) {
               return $query->where('categories.id', 1);
           })
-          ->whereIn('status', [1])
+          ->whereIn('status', ['in_progress'])
           ->whereHas('user', function ($query) {
               return $query->where('users.id', 1);
           });
