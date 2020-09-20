@@ -10,6 +10,7 @@ use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
 use Bazar\Models\Shipping;
 use Bazar\Services\Checkout;
+use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 
@@ -33,7 +34,19 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_resolved_via_cookie_driver()
+    public function it_can_be_resolved_via_facade()
+    {
+        $this->mock(Manager::class, function ($mock) {
+            return $mock->shouldReceive('model')
+                ->once()
+                ->andReturn('Fake Cart');
+        });
+
+        $this->assertSame('Fake Cart', CartFacade::model());
+    }
+
+    /** @test */
+    public function it_can_be_retrieved_via_cookie_driver()
     {
         $this->assertInstanceOf(CookieDriver::class, $this->cart->driver('cookie'));
         $this->assertInstanceOf(Cart::class, $this->cart->driver('cookie')->model());

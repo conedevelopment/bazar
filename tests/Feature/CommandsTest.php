@@ -3,6 +3,7 @@
 namespace Bazar\Tests\Feature;
 
 use Bazar\Tests\TestCase;
+use Illuminate\Console\Command;
 
 class CommandsTest extends TestCase
 {
@@ -11,11 +12,11 @@ class CommandsTest extends TestCase
     {
         $this->artisan('bazar:clear-carts', ['--all' => true])
             ->expectsOutput('All carts have been deleted.')
-            ->assertExitCode(0);
+            ->assertExitCode(Command::SUCCESS);
 
         $this->artisan('bazar:clear-carts')
             ->expectsOutput('Expired carts have been deleted.')
-            ->assertExitCode(0);
+            ->assertExitCode(Command::SUCCESS);
     }
 
     /** @test */
@@ -23,7 +24,7 @@ class CommandsTest extends TestCase
     {
         $this->artisan('bazar:clear-chunks')
             ->expectsOutput('File chunks are cleared!')
-            ->assertExitCode(0);
+            ->assertExitCode(Command::SUCCESS);
     }
 
     /** @test */
