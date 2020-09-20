@@ -9,6 +9,7 @@ use Bazar\Database\Factories\VariationFactory;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
 use Bazar\Models\Shipping;
+use Bazar\Services\Checkout;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 
@@ -32,14 +33,14 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_can_be_resolved_via_cookie_driver()
+    public function it_can_be_resolved_via_cookie_driver()
     {
         $this->assertInstanceOf(CookieDriver::class, $this->cart->driver('cookie'));
         $this->assertInstanceOf(Cart::class, $this->cart->driver('cookie')->model());
     }
 
     /** @test */
-    public function a_product_can_be_added_to_cart()
+    public function it_can_add_products()
     {
         Event::fake(CartTouched::class);
 
@@ -47,6 +48,7 @@ class CartDriverTest extends TestCase
 
         $this->assertEquals(5, $this->cart->count());
         $this->assertEquals(2, $this->cart->items()->count());
+        $this->assertEquals(2, $this->cart->products()->count());
 
         $product = $this->cart->item($this->product, ['option' => ['Size' => 'L']]);
         $this->assertEquals(100, $product->price);
@@ -62,7 +64,7 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function an_item_can_be_removed_from_cart()
+    public function it_can_remove_items()
     {
         $item = $this->cart->item($this->product, ['option' => ['Size' => 'L']]);
         $this->cart->remove($item);
@@ -72,7 +74,7 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_can_be_updated()
+    public function it_can_be_updated()
     {
         $item = $this->cart->item($this->product, ['option' => ['Size' => 'L']]);
         $this->cart->update([$item->id => ['quantity' => 10]]);
@@ -82,7 +84,7 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_can_be_emptied()
+    public function it_can_be_emptied()
     {
         $this->assertTrue($this->cart->isNotEmpty());
         $this->cart->empty();
@@ -90,13 +92,13 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_shipping()
+    public function it_has_shipping()
     {
         $this->assertInstanceOf(Shipping::class, $this->cart->shipping());
     }
 
     /** @test */
-    public function a_cart_has_total()
+    public function it_has_total()
     {
         $this->assertEquals(
             $this->cart->model()->total, $this->cart->total()
@@ -104,7 +106,7 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_tax()
+    public function it_has_tax()
     {
         $this->assertEquals(
             $this->cart->model()->tax, $this->cart->tax()
@@ -112,10 +114,18 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_discount()
+    public function it_has_discount()
     {
         $this->assertEquals(
             $this->cart->model()->discount, $this->cart->discount()
+        );
+    }
+
+    /** @test */
+    public function it_can_checkout()
+    {
+        $this->assertInstanceOf(
+            Checkout::class, $this->cart->checkout()
         );
     }
 }

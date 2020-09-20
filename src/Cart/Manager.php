@@ -28,16 +28,4 @@ class Manager extends BaseManager implements Contract
             $this->config->get('bazar.cart.drivers.cookie', [])
         );
     }
-
-    /**
-     * Create the "null" driver.
-     *
-     * @return \Bazar\Cart\NullDriver
-     */
-    public function createNullDriver(): NullDriver
-    {
-        return new NullDriver(
-            $this->config->get('bazar.cart.drivers.null', [])
-        );
-    }
 }

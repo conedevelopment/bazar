@@ -44,7 +44,7 @@ return [
     | In this section, you can specify the cart driver that you want to use
     | to resolve the cart instance, that is used by the cart facade.
     |
-    | Supported drivers: "cookie", "null"
+    | Supported drivers: "cookie"
     |
     */
 
@@ -52,7 +52,6 @@ return [
         'default' => 'cookie',
         'drivers' => [
             'cookie' => [],
-            'null' => [],
         ],
     ],
 
