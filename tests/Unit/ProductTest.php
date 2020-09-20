@@ -59,13 +59,13 @@ class ProductTest extends TestCase
     /** @test */
     public function it_is_stockable()
     {
-        $this->assertSame($this->product->price, $this->product->price());
-        $this->assertSame($this->product->formattedPrice, $this->product->formattedPrice());
-        $this->assertSame($this->product->prices['usd']['normal'], $this->product->price('normal', 'usd'));
+        $this->assertEquals($this->product->prices['usd']['normal'], $this->product->price('normal', 'usd'));
+        $this->assertSame($this->product->price(), $this->product->price);
         $this->assertSame(
             Str::currency($this->product->prices['usd']['normal'], 'usd'),
             $this->product->formattedPrice('normal', 'usd')
         );
+        $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());
         $this->assertTrue($this->product->onSale());
 

@@ -42,6 +42,6 @@ class ClearChunksCommand extends Command
 
         $this->info('File chunks are cleared!');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

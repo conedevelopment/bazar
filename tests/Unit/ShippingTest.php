@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Taxable;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\OrderFactory;
@@ -9,6 +10,7 @@ use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Str;
 
 class ShippingTest extends TestCase
 {
@@ -50,5 +52,17 @@ class ShippingTest extends TestCase
         );
 
         $this->assertSame($address->id, $shipping->address->id);
+    }
+
+    /** @test */
+    public function it_is_taxable()
+    {
+        $cart = CartFactory::new()->create();
+        $shipping = ShippingFactory::new()->make();
+        $shipping->shippable()->associate($cart)->save();
+
+        $this->assertInstanceOf(Taxable::class, $shipping);
+        $this->assertSame(Str::currency($shipping->tax, $cart->currency), $shipping->formattedTax());
+        $this->assertSame($shipping->formattedTax(), $shipping->formattedTax);
     }
 }

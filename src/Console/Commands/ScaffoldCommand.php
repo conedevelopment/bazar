@@ -32,6 +32,6 @@ class ScaffoldCommand extends Command
 
         $this->info('Bazar scaffolding has been installed.');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

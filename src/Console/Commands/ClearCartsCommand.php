@@ -52,6 +52,6 @@ class ClearCartsCommand extends Command
             $this->info('Expired carts have been deleted.');
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

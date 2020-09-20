@@ -2,6 +2,9 @@
 
 namespace Bazar\Concerns;
 
+use Bazar\Bazar;
+use Bazar\Models\Item;
+use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Tax;
 use Illuminate\Support\Str;
 
@@ -24,9 +27,15 @@ trait InteractsWithTaxes
      */
     public function formattedTax(): string
     {
-        $currency = $this->pivotParent
-            ? $this->pivotParent->currency
-            : $this->shippable->currency;
+        $currency = Bazar::currency();
+
+        if ($this instanceof Item) {
+            $currency = $this->pivotParent->currency;
+        }
+
+        if ($this instanceof Shipping) {
+            $currency = $this->shippable->currency;
+        }
 
         return Str::currency($this->tax, $currency);
     }
