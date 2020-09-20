@@ -26,18 +26,4 @@ class Type extends Filter
                 return $query;
         }
     }
-
-    /**
-     * Get filter options.
-     *
-     * @return array
-     */
-    public function options(): array
-    {
-        return [
-            'all' => __('All'),
-            'image' => __('Image'),
-            'file' => __('File'),
-        ];
-    }
 }
