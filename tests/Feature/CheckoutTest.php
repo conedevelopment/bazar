@@ -12,7 +12,6 @@ use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
 use Bazar\Services\Checkout;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Facades\Event;
 
 class CheckoutTest extends TestCase
 {
@@ -36,7 +35,7 @@ class CheckoutTest extends TestCase
     /** @test */
     public function it_can_process_checkout()
     {
-        Event::fake([
+        $this->expectsEvents([
             CartTouched::class,
             CheckoutProcessed::class,
             CheckoutProcessing::class,
@@ -52,25 +51,13 @@ class CheckoutTest extends TestCase
             //
         })->process();
 
-        Event::assertDispatched(CartTouched::class, function ($event) {
-            return $event->cart->id === $this->cart->id;
-        });
-
-        Event::assertDispatched(CheckoutProcessing::class, function ($event) {
-            return $this->cart->total() === $event->order->total();
-        });
-
-        Event::assertDispatched(CheckoutProcessed::class, function ($event) {
-            return $this->cart->total() === $event->order->total();
-        });
-
         $this->assertEquals('Success', $response);
     }
 
     /** @test */
-    public function it_cannot_process_checkout()
+    public function it_handles_failed_checkout()
     {
-        Event::fake([
+        $this->expectsEvents([
             CartTouched::class,
             CheckoutFailed::class,
             CheckoutFailing::class,
@@ -85,18 +72,6 @@ class CheckoutTest extends TestCase
         })->onFailure(function ($e, $order) {
             return 'Failure';
         })->process();
-
-        Event::assertDispatched(CartTouched::class, function ($event) {
-            return $event->cart->id === $this->cart->id;
-        });
-
-        Event::assertDispatched(CheckoutFailing::class, function ($event) {
-            return $this->cart->total() === $event->order->total();
-        });
-
-        Event::assertDispatched(CheckoutFailed::class, function ($event) {
-            return $this->cart->total() === $event->order->total();
-        });
 
         $this->assertEquals('Failure', $response);
     }
