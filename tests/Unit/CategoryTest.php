@@ -20,7 +20,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function a_category_belongs_to_products()
+    public function it_belongs_to_products()
     {
         $product = ProductFactory::new()->create();
 
@@ -32,7 +32,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function a_category_has_media()
+    public function it_has_media()
     {
         $media = MediumFactory::new()->create();
 

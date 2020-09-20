@@ -27,7 +27,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function an_order_can_belong_to_a_customer()
+    public function it_can_belong_to_a_customer()
     {
         $this->assertNull($this->order->user);
 
@@ -39,7 +39,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function an_order_has_transactions()
+    public function it_has_transactions()
     {
         $transactions = $this->order->transactions()->saveMany(
             TransactionFactory::new()->count(3)->make()
@@ -61,7 +61,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function an_order_has_products()
+    public function it_has_products()
     {
         $product = ProductFactory::new()->create();
 
@@ -73,7 +73,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function an_order_has_total_attribute()
+    public function it_has_total_attribute()
     {
         $total = $this->products->sum(function ($product) {
             return ($product['price'] + $product['tax']) * $product['quantity'];
@@ -85,7 +85,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function an_order_has_net_total_attribute()
+    public function it_has_net_total_attribute()
     {
         $total = $this->products->sum(function ($product) {
             return $product['price'] * $product['quantity'];

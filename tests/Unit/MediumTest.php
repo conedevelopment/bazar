@@ -17,7 +17,7 @@ class MediumTest extends TestCase
     }
 
     /** @test */
-    public function a_medium_can_determine_if_image()
+    public function it_can_determine_if_image()
     {
         $this->medium->update(['mime_type' => 'image/jpg']);
         $this->assertTrue($this->medium->isImage);
@@ -27,7 +27,7 @@ class MediumTest extends TestCase
     }
 
     /** @test */
-    public function a_medium_has_urls()
+    public function it_has_urls()
     {
         $this->assertEquals(
             $this->medium->isImage ? ['original', 'thumb', 'medium'] : ['original'],

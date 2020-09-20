@@ -28,7 +28,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_can_belong_to_a_customer()
+    public function it_can_belong_to_a_customer()
     {
         $this->assertNull($this->cart->user);
 
@@ -40,7 +40,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_a_shipping()
+    public function it_has_a_shipping()
     {
         $shipping = $this->cart->shipping()->save(ShippingFactory::new()->make());
 
@@ -48,7 +48,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_address()
+    public function it_has_address()
     {
         $address = $this->cart->address()->save(
             AddressFactory::new()->make()
@@ -58,7 +58,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_products()
+    public function it_has_products()
     {
         $product = ProductFactory::new()->create();
 
@@ -72,7 +72,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_total_attribute()
+    public function it_has_total_attribute()
     {
         $total = $this->products->sum(function ($product) {
             return ($product['price'] + $product['tax']) * $product['quantity'];
@@ -84,7 +84,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function a_cart_has_net_total_attribute()
+    public function it_has_net_total_attribute()
     {
         $total = $this->products->sum(function ($product) {
             return $product['price'] * $product['quantity'];

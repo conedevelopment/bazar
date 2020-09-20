@@ -112,6 +112,17 @@ class AddressTest extends TestCase
         $this->assertSame("#{$address->id}", $address->alias);
     }
 
+    /** @test */
+    public function it_has_custom_attribute()
+    {
+        $address = AddressFactory::new()->make(['custom' => [
+            'key' => 'value',
+        ]]);
+
+        $this->assertSame('value', $address->custom('key'));
+        $this->assertNull($address->custom('null'));
+        $this->assertSame('default', $address->custom('null', 'default'));
+    }
 
     /** @test */
     public function it_is_breadcrumbable()
