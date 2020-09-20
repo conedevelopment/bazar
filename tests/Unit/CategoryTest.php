@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\ProductFactory;
@@ -38,5 +39,12 @@ class CategoryTest extends TestCase
         $this->category->media()->attach($media);
 
         $this->assertTrue($this->category->media->pluck('id')->contains($media->id));
+    }
+
+    /** @test */
+    public function it_is_breadcrumbable()
+    {
+        $this->assertInstanceOf(Breadcrumbable::class, $this->category);
+        $this->assertSame($this->category->name, $this->category->getBreadcrumbLabel($this->app['request']));
     }
 }

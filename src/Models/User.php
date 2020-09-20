@@ -121,9 +121,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function getAddressAttribute(): ?Address
     {
-        return $this->addresses->firstWhere(function (Address $address) {
-            return $address->default;
-        }) ?: $this->addresses->first();
+        return $this->addresses->firstWhere('default', true) ?: $this->addresses->first();
     }
 
     /**

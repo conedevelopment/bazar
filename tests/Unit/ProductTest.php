@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\ProductFactory;
@@ -83,5 +84,12 @@ class ProductTest extends TestCase
         $this->assertSame(30, $this->product->inventory('quantity'));
         $this->product->decrementQuantity(6);
         $this->assertSame(24, $this->product->inventory('quantity'));
+    }
+
+    /** @test */
+    public function it_is_breadcrumbable()
+    {
+        $this->assertInstanceOf(Breadcrumbable::class, $this->product);
+        $this->assertSame($this->product->name, $this->product->getBreadcrumbLabel($this->app['request']));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
@@ -93,5 +94,21 @@ class OrderTest extends TestCase
         $total -= $this->order->discount;
 
         $this->assertEquals($total, $this->order->netTotal);
+    }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $this->assertSame(
+            $this->order->newQuery()->status(['pending'])->toSql(),
+            $this->order->newQuery()->whereIn('status', ['pending'])->toSql(),
+        );
+    }
+
+    /** @test */
+    public function it_is_breadcrumbable()
+    {
+        $this->assertInstanceOf(Breadcrumbable::class, $this->order);
+        $this->assertSame("#{$this->order->id}", $this->order->getBreadcrumbLabel($this->app['request']));
     }
 }

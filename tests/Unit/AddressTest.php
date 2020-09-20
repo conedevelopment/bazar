@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\OrderFactory;
@@ -109,5 +110,15 @@ class AddressTest extends TestCase
         $address->save();
 
         $this->assertSame("#{$address->id}", $address->alias);
+    }
+
+
+    /** @test */
+    public function it_is_breadcrumbable()
+    {
+        $address = $this->user->addresses()->save(AddressFactory::new()->make());
+
+        $this->assertInstanceOf(Breadcrumbable::class, $address);
+        $this->assertSame($address->alias, $address->getBreadcrumbLabel($this->app['request']));
     }
 }
