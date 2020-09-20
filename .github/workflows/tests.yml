@@ -32,7 +32,7 @@ jobs:
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests
-        run: vendor/bin/phpunit --verbose
+        run: vendor/bin/phpunit --verbose --coverage-text
 
       - name: Send coverage to Coveralls
         if: matrix.php == '7.3'
