@@ -22,8 +22,22 @@ class VariationTest extends TestCase
     }
 
     /** @test */
-    public function a_variation_belongs_to_a_product()
+    public function it_belongs_to_a_product()
     {
         $this->assertEquals($this->product->id, $this->variation->product_id);
+    }
+
+    /** @test */
+    public function it_has_alias_attribute()
+    {
+        $variation = VariationFactory::new()->make(['alias' => 'Fake']);
+
+        $this->assertSame('Fake', $variation->alias);
+
+        $variation->alias = null;
+        $variation->product()->associate($this->product);
+        $variation->save();
+
+        $this->assertSame("#{$variation->id}", $variation->alias);
     }
 }

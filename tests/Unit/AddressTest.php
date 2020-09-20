@@ -15,7 +15,7 @@ use Bazar\Tests\TestCase;
 class AddressTest extends TestCase
 {
     /** @test */
-    public function an_address_belongs_to_a_customer()
+    public function it_belongs_to_a_customer()
     {
         $address = AddressFactory::new()->make();
 
@@ -28,7 +28,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function an_address_belongs_to_a_cart()
+    public function it_belongs_to_a_cart()
     {
         $address = AddressFactory::new()->make();
 
@@ -43,7 +43,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function an_address_belongs_to_an_order()
+    public function it_belongs_to_an_order()
     {
         $address = AddressFactory::new()->make();
 
@@ -58,7 +58,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function an_address_belongs_to_an_sihpping()
+    public function it_belongs_to_an_sihpping()
     {
         $address = AddressFactory::new()->make();
 
@@ -77,7 +77,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function an_address_has_name_attribute()
+    public function it_has_name_attribute()
     {
         $address = AddressFactory::new()->make();
 
@@ -88,12 +88,26 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function an_address_has_country_name_attribute()
+    public function it_has_country_name_attribute()
     {
         $address = AddressFactory::new()->make();
 
         $this->assertSame(
             Countries::name($address->country), $address->countryName
         );
+    }
+
+    /** @test */
+    public function it_has_alias_attribute()
+    {
+        $address = AddressFactory::new()->make(['alias' => 'Fake']);
+
+        $this->assertSame('Fake', $address->alias);
+
+        $address->alias = null;
+        $address->addressable()->associate($this->user);
+        $address->save();
+
+        $this->assertSame("#{$address->id}", $address->alias);
     }
 }
