@@ -4,6 +4,8 @@ namespace Bazar\Tests\Feature;
 
 use Bazar\Tests\TestCase;
 use Illuminate\Console\Command;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class CommandsTest extends TestCase
 {
@@ -22,6 +24,11 @@ class CommandsTest extends TestCase
     /** @test */
     public function it_can_clear_chunks()
     {
+        Storage::disk('local')->put(
+            'chunks/test.chunk',
+            UploadedFile::fake()->create('test.chunk')
+        );
+
         $this->artisan('bazar:clear-chunks')
             ->expectsOutput('File chunks are cleared!')
             ->assertExitCode(Command::SUCCESS);
@@ -30,18 +37,22 @@ class CommandsTest extends TestCase
     /** @test */
     public function it_can_install_bazar()
     {
-        $this->assertTrue(true);
-    }
-
-    /** @test */
-    public function it_can_publish_assets()
-    {
-        $this->assertTrue(true);
+        $this->artisan('bazar:install')
+            ->assertExitCode(Command::SUCCESS);
     }
 
     /** @test */
     public function it_can_install_scaffolding()
     {
-        $this->assertTrue(true);
+        $this->artisan('bazar:scaffold')
+            ->expectsOutput('Bazar scaffolding has been installed.')
+            ->assertExitCode(Command::SUCCESS);
+    }
+
+    /** @test */
+    public function it_can_publish_assets()
+    {
+        $this->artisan('bazar:publish')
+            ->assertExitCode(Command::SUCCESS);
     }
 }

@@ -10,6 +10,7 @@ use Bazar\Events\CheckoutFailed;
 use Bazar\Events\CheckoutFailing;
 use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
+use Bazar\Events\OrderPlaced;
 use Bazar\Services\Checkout;
 use Bazar\Tests\TestCase;
 
