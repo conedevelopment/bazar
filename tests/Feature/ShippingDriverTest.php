@@ -51,6 +51,8 @@ class ShippingDriverTest extends TestCase
     {
         $driver = $this->manager->driver('local-pickup');
         $this->assertInstanceOf(LocalPickupDriver::class, $driver);
+        $this->assertSame('Local Pickup', $driver->name());
+        $this->assertSame('local-pickup', $driver->id());
 
         $this->assertEquals(0, $driver->calculate($this->order));
     }
@@ -60,6 +62,8 @@ class ShippingDriverTest extends TestCase
     {
         $driver = $this->manager->driver('weight-based-shipping');
         $this->assertInstanceOf(WeightBasedShippingDriver::class, $driver);
+        $this->assertSame('Weight Based Shipping', $driver->name());
+        $this->assertSame('weight-based-shipping', $driver->id());
 
         $this->assertEquals(0, $driver->calculate($this->order));
     }

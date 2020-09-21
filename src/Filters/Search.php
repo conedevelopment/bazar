@@ -82,6 +82,16 @@ class Search extends Filter
     }
 
     /**
+     * Get the columns.
+     *
+     * @return array
+     */
+    public function columns(): array
+    {
+        return $this->columns;
+    }
+
+    /**
      * Clear the columns.
      *
      * @return $this
