@@ -27,7 +27,7 @@
                             <tr>
                                 <th>GitHub:</th>
                                 <td>
-                                    <a href="https://github.com/thepinecode/bazar">https://github.com/thepinecode/bazar</a>
+                                    <a href="https://github.com/conedevelopment/bazar">https://github.com/conedevelopment/bazar</a>
                                 </td>
                             </tr>
                             <tr>

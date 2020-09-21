@@ -7,6 +7,6 @@ mix.setPublicPath('./public')
     .sourceMaps();
 
 // Symlinking...
-// ln -s /.../packages/thepinecode/bazar/public/app.js /.../public/vendor/bazar/app.js
-// ln -s /.../packages/thepinecode/bazar/public/app.css /.../public/vendor/bazar/app.css
-// ln -s /.../packages/thepinecode/bazar/resources/img /.../public/vendor/bazar/
+// ln -s /.../packages/conedevelopment/bazar/public/app.js /.../public/vendor/bazar/app.js
+// ln -s /.../packages/conedevelopment/bazar/public/app.css /.../public/vendor/bazar/app.css
+// ln -s /.../packages/conedevelopment/bazar/resources/img /.../public/vendor/bazar/
