@@ -33,7 +33,7 @@
                             <tr>
                                 <th>Docs:</th>
                                 <td>
-                                    <a href="#">https://bazar.condevelopment.com</a>
+                                    <a href="https://bazar.condevelopment.com">https://bazar.condevelopment.com</a>
                                 </td>
                             </tr>
                         </table>

@@ -28,7 +28,7 @@ class PagesController extends Controller
     public function support(): Response
     {
         return Component::render('Support', [
-            'version' => Bazar::VERSION,
+            'version' => Bazar::version(),
         ]);
     }
 }
