@@ -25,6 +25,8 @@ class MediaTest extends TestCase
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
 
+        Queue::fake();
+
         $this->medium = MediumFactory::new()->create();
 
         Storage::disk($this->medium->disk)->put($this->medium->path(), 'fake content');

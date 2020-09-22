@@ -11,8 +11,12 @@ use Bazar\Events\CheckoutFailing;
 use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
 use Bazar\Events\OrderPlaced;
+use Bazar\Mail\NewOrderMail;
+use Bazar\Notifications\NewOrderNotification;
 use Bazar\Services\Checkout;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class CheckoutTest extends TestCase
 {
@@ -36,6 +40,9 @@ class CheckoutTest extends TestCase
     /** @test */
     public function it_can_process_checkout()
     {
+        Mail::fake();
+        Notification::fake();
+
         $response = (new Checkout($this->cart))->shipping(
             'local-pickup', AddressFactory::new()->make()->toArray()
         )->billing(
@@ -45,6 +52,11 @@ class CheckoutTest extends TestCase
         })->onFailure(function ($e, $order) {
             //
         })->process();
+
+        Mail::assertQueued(NewOrderMail::class, function ($mailable) {
+            return $mailable->order->address->email === $this->cart->address->email;
+        });
+        Notification::assertSentTo($this->admin, NewOrderNotification::class);
 
         $this->assertEquals('Success', $response);
     }

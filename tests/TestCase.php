@@ -7,7 +7,6 @@ use Bazar\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
@@ -27,7 +26,6 @@ abstract class TestCase extends BaseTestCase
         $this->app['config']->set('auth.providers.users.model', User::class);
         $this->app['config']->set('bazar.admins', ['admin@bazar.test']);
 
-        Queue::fake();
         Storage::fake('local');
         Storage::fake('public');
 
