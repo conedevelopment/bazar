@@ -19,6 +19,13 @@ abstract class Bazar
     public const VERSION = '0.1.0';
 
     /**
+     * The default currency.
+     *
+     * @var string|null
+     */
+    protected static $currency = null;
+
+    /**
      * Get the version.
      *
      * @return string
@@ -62,16 +69,14 @@ abstract class Bazar
     public static function currency(string $currency = null): string
     {
         if (is_null($currency)) {
-            return Config::get('bazar.currencies.default', 'usd');
+            $currency = static::$currency ?: Config::get('bazar.currencies.default', 'usd');
         }
 
         if (! in_array($currency, array_keys(static::currencies()))) {
-            throw new InvalidCurrencyException("The [{$currency}] currency is not available.");
+            throw new InvalidCurrencyException("The [{$currency}] currency is not registered.");
         }
 
-        Config::set('bazar.currencies.default', $currency);
-
-        return $currency;
+        return static::$currency = $currency;
     }
 
     /**
