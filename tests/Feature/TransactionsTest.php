@@ -47,15 +47,26 @@ class TransactionsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             route('bazar.orders.transactions.store', $this->order),
-            $t = TransactionFactory::new()->make([
+            $payment = TransactionFactory::new()->make([
                 'type' => 'payment',
                 'driver' => 'manual',
-                'amount' => $this->order->totalPayable(),
+                'amount' => $this->order->fresh()->totalPayable(),
             ])->toArray()
         )->assertOk()
-         ->assertJson($t);
+         ->assertJson($payment);
 
-        $this->assertDatabaseHas('transactions', ['amount' => $t['amount'], 'type' => $t['type']]);
+         $this->actingAs($this->admin)->post(
+            route('bazar.orders.transactions.store', $this->order),
+            $refund = TransactionFactory::new()->make([
+                'type' => 'refund',
+                'driver' => 'manual',
+                'amount' => $this->order->totalRefundable(),
+            ])->toArray()
+        )->assertOk()
+         ->assertJson($refund);
+
+        $this->assertDatabaseHas('transactions', ['amount' => $payment['amount'], 'type' => $payment['type']]);
+        $this->assertDatabaseHas('transactions', ['amount' => $refund['amount'], 'type' => $refund['type']]);
     }
 
     /** @test */

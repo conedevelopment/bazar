@@ -36,12 +36,6 @@ class CheckoutTest extends TestCase
     /** @test */
     public function it_can_process_checkout()
     {
-        $this->expectsEvents([
-            CartTouched::class,
-            CheckoutProcessed::class,
-            CheckoutProcessing::class,
-        ]);
-
         $response = (new Checkout($this->cart))->shipping(
             'local-pickup', AddressFactory::new()->make()->toArray()
         )->billing(
@@ -58,12 +52,6 @@ class CheckoutTest extends TestCase
     /** @test */
     public function it_handles_failed_checkout()
     {
-        $this->expectsEvents([
-            CartTouched::class,
-            CheckoutFailed::class,
-            CheckoutFailing::class,
-        ]);
-
         $response = (new Checkout($this->cart))->shipping(
             'local-pickup', AddressFactory::new()->make()->toArray()
         )->billing(
