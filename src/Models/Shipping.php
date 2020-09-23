@@ -2,12 +2,11 @@
 
 namespace Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Casts\Driver;
 use Bazar\Concerns\Addressable;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Taxable;
 use Bazar\Support\Facades\Shipping as Manager;
+use Bazar\Support\Facades\Shipping as ShippingFacade;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
@@ -46,7 +45,6 @@ class Shipping extends Model implements Taxable
     protected $casts = [
         'tax' => 'float',
         'cost' => 'float',
-        'driver' => Driver::class,
     ];
 
     /**
@@ -79,9 +77,20 @@ class Shipping extends Model implements Taxable
      */
     public function shippable(): MorphTo
     {
-        return $this->morphTo()->withDefault([
-            'currency' => Bazar::currency(),
-        ]);
+        return $this->morphTo()->withDefault(function () {
+            return new Cart;
+        });
+    }
+
+    /**
+     * Get the driver attribute.
+     *
+     * @param  string|null  $value
+     * @return string
+     */
+    public function getDriverAttribute(string $value = null): string
+    {
+        return $value ?: ShippingFacade::getDefaultDriver();
     }
 
     /**
