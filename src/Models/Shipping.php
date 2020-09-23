@@ -44,6 +44,8 @@ class Shipping extends Model implements Taxable
      * @var array
      */
     protected $casts = [
+        'tax' => 'float',
+        'cost' => 'float',
         'driver' => Driver::class,
     ];
 

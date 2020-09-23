@@ -3,7 +3,6 @@
 namespace Bazar\Models;
 
 use Bazar\Bazar;
-use Bazar\Casts\Currency;
 use Bazar\Concerns\Addressable;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Itemable;
@@ -54,7 +53,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      * @var array
      */
     protected $casts = [
-        'currency' => Currency::class,
+        'discount' => 'float',
     ];
 
     /**
@@ -92,9 +91,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      */
     public static function createFrom(Cart $cart): Order
     {
-        $order = static::make($cart->toArray())->fill([
-            'currency' => Bazar::currency(),
-        ]);
+        $order = static::make($cart->toArray());
 
         $order->user()->associate($cart->user)->save();
 
@@ -135,6 +132,21 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * Get the currency attribute.
+     *
+     * @param  string|null  $value
+     * @return string
+     */
+    public function getCurrencyAttribute(string $value = null): string
+    {
+        if (! is_null($value) && in_array($value, array_keys(Bazar::currencies()))) {
+            return $value;
+        }
+
+        return Bazar::currency();
     }
 
     /**

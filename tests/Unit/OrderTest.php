@@ -51,7 +51,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function a_order_has_address()
+    public function it_has_address()
     {
         $address = $this->order->address()->save(
             AddressFactory::new()->make()

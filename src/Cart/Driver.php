@@ -69,23 +69,33 @@ abstract class Driver
      * @param  \Bazar\Models\Product  $product
      * @param  float  $quantity
      * @param  array  $properties
-     * @return void
+     * @return \Bazar\Models\Item
      */
-    public function add(Product $product, float $quantity = 1, array $properties = []): void
+    public function add(Product $product, float $quantity = 1, array $properties = []): Item
     {
         if ($item = $this->item($product, $properties)) {
-            $item->setRelation('product', $product)->update(compact('properties') + [
+            $item->setRelation('product', $product);
+
+            $item->pivotParent = $this->cart;
+
+            $item->update(compact('properties') + [
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            Item::make(compact('quantity', 'properties'))->forceFill([
+            $item = Item::make(compact('quantity', 'properties'))->forceFill([
                 'product_id' => $product->id,
                 'itemable_type' => Cart::class,
                 'itemable_id' => $this->cart->id,
-            ])->setRelation('product', $product)->save();
+            ])->setRelation('product', $product);
+
+            $item->pivotParent = $this->cart;
+
+            $item->save();
         }
 
         CartTouched::dispatch($this->cart);
+
+        return $item;
     }
 
     /**
