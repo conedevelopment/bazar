@@ -70,8 +70,8 @@ abstract class Scaffold
     protected static function updatePackageArray(array $packages): array
     {
         return [
-            '@inertiajs/inertia' => '^0.2.3',
-            '@inertiajs/inertia-vue' => '^0.2.3',
+            '@inertiajs/inertia' => '^0.3.0',
+            '@inertiajs/inertia-vue' => '^0.3.0',
             'bootstrap' => '^4.5.2',
             'chart.js' => '^2.9.3',
             'quill' => '^1.3.7',

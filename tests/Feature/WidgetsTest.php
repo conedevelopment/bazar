@@ -14,15 +14,10 @@ class WidgetsTest extends TestCase
             ->get(route('bazar.widgets.activities'))
             ->assertForbidden();
 
-        Cache::shouldReceive('remember')
-            ->withSomeOfArgs('bazar.activities', 3600)
-            ->once()
-            ->andReturn(['key' => 'value']);
-
         $this->actingAs($this->admin)
             ->get(route('bazar.widgets.activities'))
             ->assertOk()
-            ->assertJson(['key' => 'value']);
+            ->assertJson(json_decode(json_encode(Cache::get('bazar.activities')), true));
     }
 
     /** @test */
@@ -32,15 +27,10 @@ class WidgetsTest extends TestCase
             ->get(route('bazar.widgets.metrics'))
             ->assertForbidden();
 
-        Cache::shouldReceive('remember')
-            ->withSomeOfArgs('bazar.metrics', 3600)
-            ->once()
-            ->andReturn(['key' => 'value']);
-
         $this->actingAs($this->admin)
             ->get(route('bazar.widgets.metrics'))
             ->assertOk()
-            ->assertJson(['key' => 'value']);
+            ->assertJson((array) Cache::get('bazar.activities'));
     }
 
     /** @test */
@@ -50,14 +40,9 @@ class WidgetsTest extends TestCase
             ->get(route('bazar.widgets.sales'))
             ->assertForbidden();
 
-        Cache::shouldReceive('remember')
-            ->withSomeOfArgs('bazar.sales', 3600)
-            ->once()
-            ->andReturn(['key' => 'value']);
-
         $this->actingAs($this->admin)
             ->get(route('bazar.widgets.sales'))
             ->assertOk()
-            ->assertJson(['key' => 'value']);
+            ->assertJson((array) Cache::get('bazar.activities'));
     }
 }
