@@ -56,6 +56,18 @@ class Medium extends Model
     ];
 
     /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (Medium $medium) {
+            Storage::disk($medium->disk)->deleteDirectory($medium->id);
+        });
+    }
+
+    /**
      * Create a new medium from the given path.
      *
      * @param  string  $path

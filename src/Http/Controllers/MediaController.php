@@ -108,8 +108,6 @@ class MediaController extends Controller
      */
     public function destroy(Medium $medium): JsonResponse
     {
-        Storage::disk($medium->disk)->deleteDirectory($medium->id);
-
         $medium->delete();
 
         return Response::json(['deleted' => true]);
