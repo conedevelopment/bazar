@@ -9,6 +9,7 @@ use Bazar\Tests\TestCase;
 
 class VariationsTest extends TestCase
 {
+    protected $product;
     protected $variation;
 
     public function setUp(): void
