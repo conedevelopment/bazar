@@ -103,6 +103,11 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
+            ->delete(route('bazar.users.destroy', $this->admin))
+            ->assertStatus(302)
+            ->assertSessionHas('message', 'The authenticated user cannot be deleted.');
+
+        $this->actingAs($this->admin)
             ->delete(route('bazar.users.destroy', $this->user))
             ->assertStatus(302);
 
