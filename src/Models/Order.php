@@ -276,8 +276,8 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->whereHas('address', function (Builder $query) use ($value) {
-            $query->where('addresses.first_name', 'like', "{$value}%")
-            ->orWhere('addresses.last_name', 'like', "{$value}%");
+            return $query->where('addresses.first_name', 'like', "{$value}%")
+                        ->orWhere('addresses.last_name', 'like', "{$value}%");
         });
     }
 
