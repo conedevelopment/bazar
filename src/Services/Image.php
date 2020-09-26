@@ -21,7 +21,7 @@ class Image
     /**
      * The original file type.
      *
-     * @var string
+     * @var int
      */
     protected $type;
 
