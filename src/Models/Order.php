@@ -87,7 +87,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      * Create a new order from the given cart.
      *
      * @param  \Bazar\Models\Cart  $cart
-     * @return static
+     * @return self
      */
     public static function createFrom(Cart $cart): Order
     {
