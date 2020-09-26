@@ -1,3 +1,3 @@
-# Code of Conduct
+# Contributing
 
 See the documentation.

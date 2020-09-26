@@ -5,6 +5,7 @@ namespace Bazar\Models;
 use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
 use Bazar\Concerns\BazarRoutable;
+use Bazar\Concerns\Filterable;
 use Bazar\Concerns\Itemable;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
@@ -18,7 +19,7 @@ use Illuminate\Support\Collection;
 
 class Order extends Model implements Breadcrumbable, Discountable, Shippable
 {
-    use Addressable, BazarRoutable, Itemable, SoftDeletes;
+    use Addressable, BazarRoutable, Filterable, Itemable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -266,6 +267,21 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     }
 
     /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->whereHas('address', function (Builder $query) use ($value) {
+            $query->where('addresses.first_name', 'like', "{$value}%")
+            ->orWhere('addresses.last_name', 'like', "{$value}%");
+        });
+    }
+
+    /**
      * Scope a query to only include orders with the given status.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -275,5 +291,19 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     public function scopeStatus(Builder $query, $status): Builder
     {
         return $query->whereIn('status', (array) $status);
+    }
+
+    /**
+     * Scope the query to the given user.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUser(Builder $query, int $value): Builder
+    {
+        return $query->whereHas('user', function (Builder $query) use ($value) {
+            return $query->where('users.id', $value);
+        });
     }
 }

@@ -3,7 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Filters\Filters;
 use Bazar\Http\Requests\VariationStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariationUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
@@ -41,10 +40,9 @@ class VariationsController extends Controller
      */
     public function index(Request $request, Product $product): Response
     {
-        $variations = $product->variations()->with('media')->filter(
-            $request,
-            $filters = Filters::make(Variation::class)->searchIn('alias')
-        )->latest()->paginate($request->input('per_page'));
+        $variations = $product->variations()->with('media')->filter($request)->latest()->paginate(
+            $request->input('per_page')
+        );
 
         $variations->getCollection()->each(function (Variation $variation) use ($product) {
             $variation->setRelation(
@@ -54,7 +52,6 @@ class VariationsController extends Controller
 
         return Component::render('Variations/Index', [
             'results' => $variations,
-            'filters' => $filters->options(),
         ]);
     }
 

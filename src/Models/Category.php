@@ -3,9 +3,11 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\BazarRoutable;
+use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Breadcrumbable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +15,7 @@ use Illuminate\Http\Request;
 
 class Category extends Model implements Breadcrumbable
 {
-    use BazarRoutable, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -54,5 +56,17 @@ class Category extends Model implements Breadcrumbable
     public function getBreadcrumbLabel(Request $request): string
     {
         return $this->name;
+    }
+
+    /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->where('name', 'like', "{$value}%");
     }
 }

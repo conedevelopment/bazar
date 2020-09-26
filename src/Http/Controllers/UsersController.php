@@ -3,7 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\User as User;
-use Bazar\Filters\Filters;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
 use Bazar\Support\Facades\Component;
@@ -40,14 +39,12 @@ class UsersController extends Controller
      */
     public function index(Request $request, User $user)// : Responsable
     {
-        $users = $user->newQuery()->with('addresses')->filter(
-            $request,
-            $filters = Filters::make(get_class($user))->searchIn(['name', 'email'])
-        )->latest()->paginate($request->input('per_page'));
+        $users = $user->newQuery()->with('addresses')->filter($request)->latest()->paginate(
+            $request->input('per_page')
+        );
 
         return ! $request->bazar() ? Component::render('Users/Index', [
             'results' => $users,
-            'filters' => $filters->options(),
         ]) : Response::json($users);
     }
 

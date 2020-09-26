@@ -2,7 +2,9 @@
 
 namespace Bazar\Models;
 
+use Bazar\Concerns\Filterable;
 use Bazar\Support\Facades\Conversion;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -11,6 +13,8 @@ use Illuminate\Support\Str;
 
 class Medium extends Model
 {
+    use Filterable;
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -163,5 +167,36 @@ class Medium extends Model
     public function url(string $conversion = null): string
     {
         return URL::to(Storage::disk($this->disk)->url($this->path($conversion)));
+    }
+
+    /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->where('name', 'like', "{$value}%");
+    }
+
+    /**
+     * Scope the query only to the given type.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeType(Builder $query, string $value): Builder
+    {
+        switch ($value) {
+            case 'image':
+                return $query->where('mime_type', 'like', 'image%');
+            case 'file':
+                return $query->where('mime_type', 'not like', 'image%');
+            default:
+                return $query;
+        }
     }
 }

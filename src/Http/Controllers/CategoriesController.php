@@ -2,7 +2,6 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Filters\Filters;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
@@ -38,14 +37,12 @@ class CategoriesController extends Controller
      */
     public function index(Request $request): Response
     {
-        $categories = Category::query()->with('media')->filter(
-            $request,
-            $filters = Filters::make(Category::class)->searchIn('name')
-        )->latest()->paginate($request->input('per_page'));
+        $categories = Category::query()->with('media')->filter($request)->latest()->paginate(
+            $request->input('per_page')
+        );
 
         return Component::render('Categories/Index', [
             'results' => $categories,
-            'filters' => $filters->options(),
         ]);
     }
 

@@ -2,69 +2,167 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Filters\Category;
-use Bazar\Filters\Filters;
-use Bazar\Filters\Status;
-use Bazar\Filters\Type;
-use Bazar\Filters\User;
-use Bazar\Models\Category as CategoryModel;
-use Bazar\Models\User as UserModel;
+use Bazar\Models\Address;
+use Bazar\Models\Category;
+use Bazar\Models\Medium;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
+use Bazar\Models\User;
+use Bazar\Models\Variation;
 use Bazar\Tests\TestCase;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
 class FilterTest extends TestCase
 {
     /** @test */
-    public function a_builder_can_be_filtered()
+    public function a_product_query_can_be_filtered()
     {
-        $filters = Filters::make(FilterableModel::class, [
-            Type::make(), Category::make(), Status::make(), User::make(),
-        ])->searchIn('name');
-
         $request = Request::create('/', 'GET', [
             'search' => 'test',
             'state' => 'all',
             'exclude' => [1, 2],
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
-            'type' => 'image',
             'category' => 1,
+        ]);
+
+        $query = Product::where(function ($query) {
+            $query->where('name', 'like', 'test%')
+                ->orWhere('inventory->sku', 'like', 'test%');
+        })->withTrashed()
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc')
+          ->whereHas('categories', function ($query) {
+              return $query->where('categories.id', 1);
+          });
+
+        $this->assertSame(
+            Product::filter($request)->toSql(), $query->toSql()
+        );
+    }
+
+    /** @test */
+    public function an_order_query_can_be_filtered()
+    {
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'state' => 'all',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
             'status' => 'in_progress',
             'user' => 1,
         ]);
 
-        $query = FilterableModel::where(function ($query) {
-            $query->where('name', 'like', '%test%');
+        $query = Order::whereHas('address', function ($query) {
+            $query->where('addresses.first_name', 'like', 'test%')
+                ->orWhere('addresses.last_name', 'like', 'test%');
         })->withTrashed()
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc')
-          ->where('mime_type', 'like', 'image%')
-          ->whereHas('categories', function ($query) {
-              return $query->where('categories.id', 1);
-          })
           ->whereIn('status', ['in_progress'])
           ->whereHas('user', function ($query) {
               return $query->where('users.id', 1);
           });
 
         $this->assertSame(
-            FilterableModel::filter($request, $filters)->toSql(), $query->toSql()
+            Order::filter($request)->toSql(), $query->toSql()
         );
     }
-}
 
-class FilterableModel extends Model
-{
-    use SoftDeletes;
-
-    public function categories()
+    /** @test */
+    public function a_medium_query_can_be_filtered()
     {
-        return $this->belongsToMany(CategoryModel::class);
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
+            'type' => 'image',
+        ]);
+
+        $query = Medium::where('name', 'like', 'test%')
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc')
+          ->where('mime_type', 'like', 'image%');
+
+        $this->assertSame(
+            Medium::filter($request)->toSql(), $query->toSql()
+        );
     }
 
-    public function user()
+    /** @test */
+    public function an_address_query_can_be_filtered()
     {
-        return $this->belongsTo(UserModel::class);
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
+        ]);
+
+        $query = Address::where('alias', 'like', 'test%')
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc');
+
+        $this->assertSame(
+            Address::filter($request)->toSql(), $query->toSql()
+        );
+    }
+
+    /** @test */
+    public function a_category_query_can_be_filtered()
+    {
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
+        ]);
+
+        $query = Category::where('name', 'like', 'test%')
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc');
+
+        $this->assertSame(
+            Category::filter($request)->toSql(), $query->toSql()
+        );
+    }
+
+    /** @test */
+    public function a_user_query_can_be_filtered()
+    {
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'state' => 'all',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
+        ]);
+
+        $query = User::where(function ($query) {
+            $query->where('name', 'like', 'test%')
+                ->orWhere('email', 'like', 'test%');
+        })->withTrashed()
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc');
+
+        $this->assertSame(
+            User::filter($request)->toSql(), $query->toSql()
+        );
+    }
+
+    /** @test */
+    public function a_variation_query_can_be_filtered()
+    {
+        $request = Request::create('/', 'GET', [
+            'search' => 'test',
+            'state' => 'all',
+            'exclude' => [1, 2],
+            'sort' => ['by' => 'created_at', 'order' => 'desc'],
+        ]);
+
+        $query = Variation::where('alias', 'like', 'test%')
+          ->withTrashed()
+          ->whereNotIn('id', [1, 2])
+          ->orderBy('created_at', 'desc');
+
+        $this->assertSame(
+            Variation::filter($request)->toSql(), $query->toSql()
+        );
     }
 }

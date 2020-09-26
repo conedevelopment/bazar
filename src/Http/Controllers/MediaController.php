@@ -2,8 +2,6 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Filters\Filters;
-use Bazar\Filters\Type;
 use Bazar\Http\Requests\MediumStoreRequest as StoreRequest;
 use Bazar\Http\Requests\MediumUpdateRequest as UpdateRequest;
 use Bazar\Jobs\MoveFile;
@@ -40,10 +38,9 @@ class MediaController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $media = Medium::query()->filter(
-            $request,
-            Filters::make(Medium::class, [Type::make()])->searchIn('name')
-        )->latest()->paginate($request->input('per_page'));
+        $media = Medium::query()->filter($request)->latest()->paginate(
+            $request->input('per_page')
+        );
 
         return Response::json($media);
     }

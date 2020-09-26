@@ -3,7 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\User;
-use Bazar\Filters\Filters;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
@@ -39,14 +38,12 @@ class AddressesController extends Controller
      */
     public function index(Request $request, User $user): Response
     {
-        $addresses = $user->addresses()->filter(
-            $request,
-            $filters = Filters::make(Address::class)->searchIn('alias')
-        )->latest()->paginate($request->input('per_page'));
+        $addresses = $user->addresses()->filter($request)->latest()->paginate(
+            $request->input('per_page')
+        );
 
         return Component::render('Addresses/Index', [
             'results' => $addresses,
-            'filters' => $filters->options(),
         ]);
     }
 

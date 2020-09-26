@@ -3,9 +3,11 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\BazarRoutable;
+use Bazar\Concerns\Filterable;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\User as Contract;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -20,7 +22,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
 {
-    use BazarRoutable, Notifiable, SoftDeletes;
+    use BazarRoutable, Filterable, Notifiable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -153,5 +155,20 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     public function getBreadcrumbLabel(Request $request): string
     {
         return $this->name;
+    }
+
+    /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->where(function (Builder $query) use ($value) {
+            return $query->where('name', 'like', "{$value}%")
+                        ->orWhere('email', 'like', "{$value}%");
+        });
     }
 }

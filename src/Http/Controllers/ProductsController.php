@@ -3,8 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Filters\Category as CategoryFilter;
-use Bazar\Filters\Filters;
 use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
 use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
 use Bazar\Models\Category;
@@ -42,17 +40,17 @@ class ProductsController extends Controller
      */
     public function index(Request $request)//: Responsable
     {
-        $filters = Filters::make(Product::class, [CategoryFilter::make()])->searchIn([
-            'name', 'inventory->sku',
-        ]);
-
-        $products = Product::query()->with('media')->filter($request, $filters)->latest()->paginate(
+        $products = Product::query()->with('media')->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
         return ! $request->bazar() ? Component::render('Products/Index', [
             'results' => $products,
-            'filters' => $filters->options(),
+            'filters' => [
+                'category' => Category::pluck('name', 'id')->map(function (string $category) {
+                    return __($category);
+                }),
+            ],
         ]) : Response::json($products);
     }
 

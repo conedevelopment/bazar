@@ -22,7 +22,7 @@
                     {{ __('Create Address') }}
                 </inertia-link>
             </template>
-            <data-table :response="$page.results" :filters="$page.filters" searchable>
+            <data-table :response="$page.results" searchable>
                 <data-column :label="__('Alias')" sort="alias">
                     <template #default="item">
                         <inertia-link :href="`${url}/${item.id}`">

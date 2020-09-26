@@ -1,5 +1,9 @@
 <script>
+    import Filterable from '../../Mixins/Filterable';
+
     export default {
+        mixins: [Filterable],
+
         computed: {
             url() {
                 return window.location.pathname.replace(/\/$/, '');
@@ -35,7 +39,7 @@
                     {{ __('Create Order') }}
                 </inertia-link>
             </template>
-            <data-table :response="$page.results" :filters="$page.filters" searchable>
+            <data-table :response="$page.results" :filters="filters" searchable>
                 <data-column :label="__('ID')" sort="id">
                     <template #default="item">
                         <inertia-link :href="`/bazar/orders/${item.id}`">

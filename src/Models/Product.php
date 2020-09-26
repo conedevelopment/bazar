@@ -5,10 +5,12 @@ namespace Bazar\Models;
 use Bazar\Casts\Inventory;
 use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
+use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Sluggable;
 use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Breadcrumbable
 {
-    use BazarRoutable, HasMedia, Sluggable, SoftDeletes, Stockable;
+    use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes, Stockable;
 
     /**
      * The accessors to append to the model's array form.
@@ -152,5 +154,34 @@ class Product extends Model implements Breadcrumbable
         }
 
         return parent::resolveChildRouteBinding($childType, $value, $field);
+    }
+
+    /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->where(function (Builder $query) use ($value) {
+            return $query->where('name', 'like', "{$value}%")
+                        ->orWhere('inventory->sku', 'like', "{$value}");
+        });
+    }
+
+    /**
+     * Scope the query only to the given category.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  int  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCategory(Builder $query, int $value): Builder
+    {
+        return $query->whereHas('categories', function (Builder $query) use ($value) {
+            return $query->where('categories.id', $value);
+        });
     }
 }

@@ -1,5 +1,9 @@
 <script>
+    import Filterable from '../../Mixins/Filterable';
+
     export default {
+        mixins: [Filterable],
+
         computed: {
             url() {
                 return window.location.pathname.replace(/\/$/, '');
@@ -22,7 +26,7 @@
                     {{ __('Create Variation') }}
                 </inertia-link>
             </template>
-            <data-table :response="$page.results" :filters="$page.filters" searchable>
+            <data-table :response="$page.results" :filters="filters" searchable>
                 <data-column :label="__('Photo')">
                     <template #default="item">
                         <img

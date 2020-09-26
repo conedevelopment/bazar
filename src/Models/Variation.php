@@ -5,9 +5,11 @@ namespace Bazar\Models;
 use Bazar\Casts\Inventory;
 use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
+use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +17,7 @@ use Illuminate\Http\Request;
 
 class Variation extends Model implements Breadcrumbable
 {
-    use BazarRoutable, HasMedia, SoftDeletes, Stockable;
+    use BazarRoutable, Filterable, HasMedia, SoftDeletes, Stockable;
 
     /**
      * The accessors to append to the model's array form.
@@ -106,5 +108,17 @@ class Variation extends Model implements Breadcrumbable
     public function getBreadcrumbLabel(Request $request): string
     {
         return $this->alias;
+    }
+
+    /**
+     * Scope the query only to the given search term.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $value
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSearch(Builder $query, string $value): Builder
+    {
+        return $query->where('alias', 'like', "{$value}%");
     }
 }

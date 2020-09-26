@@ -3,9 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Filters\Filters;
-use Bazar\Filters\Status;
-use Bazar\Filters\User as UserFilter;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
@@ -46,19 +43,18 @@ class OrdersController extends Controller
      */
     public function index(Request $request): Response
     {
-        $filters = Filters::make(Order::class, [Status::make(), UserFilter::make()])->searchIn([
-            'address.first_name', 'address.last_name',
-        ]);
-
         $orders = Order::query()->with([
             'address', 'products', 'transactions', 'shipping',
-        ])->filter($request, $filters)->latest()->paginate(
+        ])->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
         return Component::render('Orders/Index', [
             'results' => $orders,
-            'filters' => $filters->options(),
+            'filters' => [
+                'status' => Order::statuses(),
+                'user' => User::pluck('name', 'id'),
+            ],
         ]);
     }
 
