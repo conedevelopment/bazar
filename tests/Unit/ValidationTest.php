@@ -8,7 +8,7 @@ use Illuminate\Validation\Validator;
 
 class ValidationTest extends TestCase
 {
-    protected $translator;
+    protected $trans;
 
     public function setUp(): void
     {
