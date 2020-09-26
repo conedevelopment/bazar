@@ -41,7 +41,7 @@ class CategoriesController extends Controller
         $categories = Category::query()->with('media')->filter(
             $request,
             $filters = Filters::make(Category::class)->searchIn('name')
-        )->paginate($request->input('per_page', 25));
+        )->latest()->paginate($request->input('per_page'));
 
         return Component::render('Categories/Index', [
             'results' => $categories,

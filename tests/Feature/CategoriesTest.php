@@ -30,7 +30,7 @@ class CategoriesTest extends TestCase
             ->assertComponent('Categories/Index')
             ->assertPropValue('results', function ($results) {
                 $this->assertEquals(
-                    $results, Category::with('media')->paginate(25)->toArray()
+                    $results, Category::with('media')->paginate()->toArray()
                 );
             });
     }

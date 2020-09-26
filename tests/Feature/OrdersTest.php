@@ -39,7 +39,7 @@ class OrdersTest extends TestCase
             ->assertPropValue('results', function ($results) {
                 $this->assertEquals(
                     $results,
-                    Order::with(['address', 'products', 'transactions', 'shipping'])->paginate(25)->toArray()
+                    Order::with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
                 );
             });
     }

@@ -31,7 +31,7 @@ class VariationsTest extends TestCase
             ->assertOk()
             ->assertComponent('Variations/Index')
             ->assertPropValue('results', function ($results) {
-                $variations = $this->product->refresh()->variations()->with('media')->paginate(25);
+                $variations = $this->product->refresh()->variations()->with('media')->paginate();
 
                 $variations->getCollection()->each(function (Variation $variation) {
                     $variation->setRelation('product', $this->product->withoutRelations()->makeHidden('variations'));

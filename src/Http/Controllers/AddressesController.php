@@ -42,7 +42,7 @@ class AddressesController extends Controller
         $addresses = $user->addresses()->filter(
             $request,
             $filters = Filters::make(Address::class)->searchIn('alias')
-        )->paginate($request->input('per_page', 25));
+        )->latest()->paginate($request->input('per_page'));
 
         return Component::render('Addresses/Index', [
             'results' => $addresses,

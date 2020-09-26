@@ -90,7 +90,7 @@ abstract class Bazar
         Route::as('bazar.')
             ->prefix('bazar')
             ->middleware([
-                ComponentMiddleware::class, 'web', 'auth', 'can:manage-bazar', ShareComponentData::class,
+                'web', 'auth', 'can:manage-bazar', ComponentMiddleware::class, ShareComponentData::class,
             ])->group(function ($router) use ($callback) {
                 $callback($router);
             });

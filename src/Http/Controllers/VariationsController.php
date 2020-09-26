@@ -44,7 +44,7 @@ class VariationsController extends Controller
         $variations = $product->variations()->with('media')->filter(
             $request,
             $filters = Filters::make(Variation::class)->searchIn('alias')
-        )->paginate($request->input('per_page', 25));
+        )->latest()->paginate($request->input('per_page'));
 
         $variations->getCollection()->each(function (Variation $variation) use ($product) {
             $variation->setRelation(

@@ -26,7 +26,7 @@ export default {
                 'sort[by]': 'created_at',
                 'sort[order]': 'desc',
                 page: 1,
-                per_page: 25,
+                per_page: null,
                 search: null
             }
         };

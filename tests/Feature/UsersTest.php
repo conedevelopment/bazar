@@ -21,7 +21,7 @@ class UsersTest extends TestCase
             ->assertComponent('Users/Index')
             ->assertPropValue('results', function ($results) {
                 $this->assertEquals(
-                    $results, User::with('addresses')->paginate(25)->toArray()
+                    $results, User::with('addresses')->paginate()->toArray()
                 );
             });
     }

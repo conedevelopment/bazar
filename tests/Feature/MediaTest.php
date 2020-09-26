@@ -42,7 +42,7 @@ class MediaTest extends TestCase
         $this->actingAs($this->admin)
             ->get(route('bazar.media.index'))
             ->assertOk()
-            ->assertJson(Medium::paginate(25)->toArray());
+            ->assertJson(Medium::paginate()->toArray());
     }
 
     /** @test */

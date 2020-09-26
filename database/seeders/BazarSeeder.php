@@ -91,8 +91,8 @@ class BazarSeeder extends Seeder
     {
         $orders = OrderFactory::new()->count(15)->make();
 
-        $orders->each(function ($order) {
-            $order->created_at = Carbon::now()->subDays(mt_rand(0, 20));
+        $orders->each(function ($order, $key) {
+            $order->created_at = Carbon::now()->subDays(15 - $key);
 
             $order->save();
 

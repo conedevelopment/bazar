@@ -30,7 +30,7 @@ class ProductsTest extends TestCase
             ->assertComponent('Products/Index')
             ->assertPropValue('results', function ($results) {
                 $this->assertEquals(
-                    $results, Product::with('media')->paginate(25)->toArray()
+                    $results, Product::with('media')->paginate()->toArray()
                 );
             });
     }

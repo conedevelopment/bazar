@@ -46,8 +46,8 @@ class ProductsController extends Controller
             'name', 'inventory->sku',
         ]);
 
-        $products = Product::query()->with('media')->filter($request, $filters)->paginate(
-            $request->input('per_page', 25)
+        $products = Product::query()->with('media')->filter($request, $filters)->latest()->paginate(
+            $request->input('per_page')
         );
 
         return ! $request->bazar() ? Component::render('Products/Index', [

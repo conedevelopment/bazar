@@ -30,7 +30,7 @@ class AddressesTest extends TestCase
             ->assertPropValue('results', function ($results) {
                 $this->assertEquals(
                     $results,
-                    $this->user->addresses()->paginate(25)->toArray()
+                    $this->user->addresses()->paginate()->toArray()
                 );
             });
     }
