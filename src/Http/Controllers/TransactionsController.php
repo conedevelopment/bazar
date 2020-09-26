@@ -10,6 +10,7 @@ use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class TransactionsController extends Controller
@@ -32,6 +33,8 @@ class TransactionsController extends Controller
      * @param  \Bazar\Http\Requests\TransactionStoreRequest  $request
      * @param  \Bazar\Models\Order  $order
      * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function store(StoreRequest $request, Order $order): JsonResponse
     {
@@ -42,11 +45,8 @@ class TransactionsController extends Controller
                 [Gateway::driver($request->input('driver')), $method],
                 [$order, $request->amount ? (float) $request->amount : null]
             );
-        } catch (Throwable $e) {
-            return Response::json(
-                ['message' => $e->getMessage()],
-                JsonResponse::HTTP_BAD_REQUEST
-            );
+        } catch (Throwable $exception) {
+            throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $exception->getMessage());
         }
 
         return Response::json($transaction, JsonResponse::HTTP_CREATED);

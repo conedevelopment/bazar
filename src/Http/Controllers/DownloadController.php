@@ -30,7 +30,7 @@ class DownloadController extends Controller
                     $url, false, stream_context_create(['ssl' => ['verify_peer' => false]])
                 );
             }, basename($url));
-        } catch (DecryptException $e) {
+        } catch (DecryptException $exception) {
             throw new NotFoundHttpException(__('Not found.'));
         }
     }

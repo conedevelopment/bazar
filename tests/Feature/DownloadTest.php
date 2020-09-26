@@ -8,6 +8,7 @@ use Bazar\Database\Factories\ProductFactory;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DownloadTest extends TestCase
 {
@@ -24,8 +25,8 @@ class DownloadTest extends TestCase
             'inventory' => [
                 'downloadable' => true,
                 'files' => [
-                    ['name' => 'Valid', 'url' => $medium->url(), 'expiration' => 7],
-                    ['name' => 'Expired', 'url' => $medium->url(), 'expiration' => 1],
+                    ['name' => 'Valid', 'url' => $medium->fullPath(), 'expiration' => 7],
+                    ['name' => 'Expired', 'url' => $medium->fullPath(), 'expiration' => 1],
                 ],
             ],
         ]);
@@ -46,9 +47,11 @@ class DownloadTest extends TestCase
         $this->travel(2)->days();
 
         $valid = $this->order->downloads()->firstWhere('name', 'Valid');
-        $this->get($valid['url'])
+        $response = $this->get($valid['url'])
             ->assertOk()
             ->assertHeader('Content-Disposition');
+
+        $this->assertSame('fake content', $response->streamedContent());
 
         $expired = $this->order->downloads()->firstWhere('name', 'Expired');
         $this->get($expired['url'])->assertForbidden();
