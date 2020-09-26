@@ -43,7 +43,7 @@ class MediaController extends Controller
         $media = Medium::query()->filter(
             $request,
             Filters::make(Medium::class, [Type::make()])->searchIn('name')
-        )->paginate($request->input('per_page', 25));
+        )->paginate($request->input('per_page', Controller::DEFAULT_ITEMS_PER_PAGE));
 
         return Response::json($media);
     }

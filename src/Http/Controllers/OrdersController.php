@@ -53,7 +53,7 @@ class OrdersController extends Controller
         $orders = Order::query()->with([
             'address', 'products', 'transactions', 'shipping',
         ])->filter($request, $filters)->paginate(
-            $request->input('per_page', 25)
+            $request->input('per_page', Controller::DEFAULT_ITEMS_PER_PAGE)
         );
 
         return Component::render('Orders/Index', [

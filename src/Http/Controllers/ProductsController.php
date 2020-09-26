@@ -47,7 +47,7 @@ class ProductsController extends Controller
         ]);
 
         $products = Product::query()->with('media')->filter($request, $filters)->paginate(
-            $request->input('per_page', 25)
+            $request->input('per_page', Controller::DEFAULT_ITEMS_PER_PAGE)
         );
 
         return ! $request->bazar() ? Component::render('Products/Index', [

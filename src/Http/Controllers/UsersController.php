@@ -43,7 +43,7 @@ class UsersController extends Controller
         $users = $user->newQuery()->with('addresses')->filter(
             $request,
             $filters = Filters::make(get_class($user))->searchIn(['name', 'email'])
-        )->paginate($request->input('per_page', 25));
+        )->paginate($request->input('per_page', Controller::DEFAULT_ITEMS_PER_PAGE));
 
         return ! $request->bazar() ? Component::render('Users/Index', [
             'results' => $users,
