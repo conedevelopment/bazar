@@ -52,7 +52,7 @@ class TransactionsTest extends TestCase
                 'driver' => 'manual',
                 'amount' => $this->order->fresh()->totalPayable(),
             ])->toArray()
-        )->assertOk()
+        )->assertCreated()
          ->assertJson($payment);
 
          $this->actingAs($this->admin)->post(
@@ -62,7 +62,7 @@ class TransactionsTest extends TestCase
                 'driver' => 'manual',
                 'amount' => $this->order->totalRefundable(),
             ])->toArray()
-        )->assertOk()
+        )->assertCreated()
          ->assertJson($refund);
 
         $this->assertDatabaseHas('transactions', ['amount' => $payment['amount'], 'type' => $payment['type']]);

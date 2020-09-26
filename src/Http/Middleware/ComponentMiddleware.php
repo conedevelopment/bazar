@@ -28,13 +28,13 @@ class ComponentMiddleware
                 $request->session()->reflash();
             }
 
-            return Response::make('', 409, ['X-Inertia-Location' => $request->fullUrl()]);
+            return Response::make('', Redirect::HTTP_CONFLICT, ['X-Inertia-Location' => $request->fullUrl()]);
         }
 
         if ($response instanceof Redirect
-            && $response->getStatusCode() === 302
+            && $response->getStatusCode() === Redirect::HTTP_FOUND
             && in_array($request->method(), ['PUT', 'PATCH', 'DELETE'])) {
-            $response->setStatusCode(303);
+            $response->setStatusCode(Redirect::HTTP_SEE_OTHER);
         }
 
         return $response;

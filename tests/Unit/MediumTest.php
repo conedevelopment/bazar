@@ -34,6 +34,6 @@ class MediumTest extends TestCase
             array_keys($this->medium->urls)
         );
 
-        $this->assertStringContainsString('-thumb.', $this->medium->url('thumb'));
+        $this->assertStringContainsString('-thumb', $this->medium->url('thumb'));
     }
 }

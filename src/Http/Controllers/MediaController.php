@@ -72,7 +72,7 @@ class MediaController extends Controller
             $medium->isImage ? [new PerformConversions($medium)] : []
         )->dispatch($medium, $path);
 
-        return Response::json($medium);
+        return Response::json($medium, JsonResponse::HTTP_CREATED);
     }
 
     /**

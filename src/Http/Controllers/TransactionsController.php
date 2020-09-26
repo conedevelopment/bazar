@@ -2,6 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
+use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Http\Requests\TransactionStoreRequest as StoreRequest;
 use Bazar\Http\Requests\TransactionUpdateRequest as UpdateRequest;
 use Bazar\Models\Order;
@@ -43,21 +44,24 @@ class TransactionsController extends Controller
                 [$order, $request->amount ? (float) $request->amount : null]
             );
         } catch (Throwable $e) {
-            return Response::json(['message' => $e->getMessage()], 400);
+            return Response::json(
+                ['message' => $e->getMessage()],
+                JsonResponse::HTTP_BAD_REQUEST
+            );
         }
 
-        return Response::json($transaction);
+        return Response::json($transaction, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\TransactionUpdateRequest  $request
-     * @param  int  $order
+     * @param  \Bazar\Models\Order  $order
      * @param  \Bazar\Models\Transaction  $transaction
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateRequest $request, int $order, Transaction $transaction): JsonResponse
+    public function update(UpdateRequest $request, Order $order, Transaction $transaction): JsonResponse
     {
         if ($transaction->completed()) {
             $transaction->markAsPending();
@@ -71,11 +75,11 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $order
+     * @param  \Bazar\Models\Order
      * @param  \Bazar\Models\Transaction  $transaction
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(int $order, Transaction $transaction)
+    public function destroy(Order $order, Transaction $transaction): JsonResponse
     {
         $transaction->delete();
 

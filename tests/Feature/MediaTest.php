@@ -69,7 +69,7 @@ class MediaTest extends TestCase
             ->post(route('bazar.media.store'), [
                 'file' => UploadedFile::fake()->image('test.png.part'),
             ])
-            ->assertOk()
+            ->assertCreated()
             ->assertJson(['name' => 'test']);
 
         $this->assertDatabaseHas('media', ['name' => 'test']);
@@ -86,7 +86,7 @@ class MediaTest extends TestCase
             ->post(route('bazar.media.store'), [
                 'file' => UploadedFile::fake()->create('test.pdf.part'),
             ])
-            ->assertOk()
+            ->assertCreated()
             ->assertJson(['name' => 'test']);
 
         $this->assertDatabaseHas('media', ['name' => 'test']);

@@ -119,7 +119,7 @@ class Response implements Responsable
         ];
 
         if ($request->header('X-Inertia')) {
-            return ResponseFactory::json($page, 200, [
+            return ResponseFactory::json($page, BaseResponse::HTTP_OK, [
                 'Vary' => 'Accept',
                 'X-Inertia' => 'true',
             ]);
