@@ -74,7 +74,7 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Order
+     * @param  \Bazar\Models\Order  $order
      * @param  \Bazar\Models\Transaction  $transaction
      * @return \Illuminate\Http\JsonResponse
      */
