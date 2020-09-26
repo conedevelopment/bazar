@@ -54,7 +54,8 @@ class UsersTest extends TestCase
         $this->actingAs($this->admin)->post(
             route('bazar.users.store'),
             UserFactory::new()->make(['name' => 'Test'])->toArray()
-        )->assertRedirect(route('bazar.users.show', User::find(3)));
+        )->assertRedirect(route('bazar.users.show', User::find(3)))
+         ->assertSessionHas('message', 'The user has been created.');
 
         $this->assertDatabaseHas('users', ['name' => 'Test']);
     }
@@ -90,7 +91,8 @@ class UsersTest extends TestCase
         $this->actingAs($this->admin)->patch(
             route('bazar.users.update', $this->user),
             array_replace($this->user->toArray(), ['name' => 'Updated'])
-        )->assertRedirect(route('bazar.users.show', $this->user));
+        )->assertRedirect(route('bazar.users.show', $this->user))
+         ->assertSessionHas('message', 'The user has been updated.');
 
         $this->assertSame('Updated', $this->user->refresh()->name);
     }
@@ -109,13 +111,15 @@ class UsersTest extends TestCase
 
         $this->actingAs($this->admin)
             ->delete(route('bazar.users.destroy', $this->user))
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertSessionHas('message', 'The user has been deleted.');
 
         $this->assertTrue($this->user->fresh()->trashed());
 
         $this->actingAs($this->admin)
             ->delete(route('bazar.users.destroy', $this->user))
-            ->assertStatus(302);
+            ->assertStatus(302)
+            ->assertSessionHas('message', 'The user has been deleted.');
 
         $this->assertDatabaseMissing('users', ['id' => $this->user->id]);
     }
