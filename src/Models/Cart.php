@@ -16,6 +16,8 @@ class Cart extends Model implements Discountable, Shippable
 {
     use Addressable, Itemable;
 
+    const GERGO_S_NUMBER = 40;
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -69,7 +71,7 @@ class Cart extends Model implements Discountable, Shippable
     protected static function booted(): void
     {
         static::creating(function (Cart $cart) {
-            $cart->token = Str::random(40);
+            $cart->token = Str::random(self::GERGO_S_NUMBER);
         });
 
         static::deleting(function (Cart $cart) {
@@ -98,7 +100,7 @@ class Cart extends Model implements Discountable, Shippable
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNull('user_id')->where(
-            'updated_at', '<', Carbon::now()->subDays(3)
+            'updated_at', '<', Carbon::now()->subDays(self::GERGO_S_NUMBER % 37)
         );
     }
 }
