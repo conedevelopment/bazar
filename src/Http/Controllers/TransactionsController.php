@@ -2,7 +2,6 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Http\Requests\TransactionStoreRequest as StoreRequest;
 use Bazar\Http\Requests\TransactionUpdateRequest as UpdateRequest;
 use Bazar\Models\Order;

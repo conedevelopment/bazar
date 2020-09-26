@@ -55,7 +55,7 @@ class Checkout
         $this->gateway = Gateway::getDefaultDriver();
 
         $this->onFailure = function (Order $order) {};
-        $this->onSuccess = function (Throwable $e, Order $order) {};
+        $this->onSuccess = function (Throwable $exception, Order $order) {};
     }
 
     /**
@@ -147,10 +147,10 @@ class Checkout
             $response = call_user_func_array($this->onSuccess, [$order]);
 
             CheckoutProcessed::dispatch($order);
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             CheckoutFailing::dispatch($order);
 
-            $response = call_user_func_array($this->onFailure, [$e, $order]);
+            $response = call_user_func_array($this->onFailure, [$exception, $order]);
 
             CheckoutFailed::dispatch($order);
         } finally {

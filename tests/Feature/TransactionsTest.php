@@ -5,6 +5,11 @@ namespace Bazar\Tests\Feature;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\TransactionFactory;
+use Bazar\Exceptions\TransactionFailedException;
+use Bazar\Gateway\Driver;
+use Bazar\Models\Order;
+use Bazar\Models\Transaction;
+use Bazar\Support\Facades\Gateway;
 use Bazar\Tests\TestCase;
 
 class TransactionsTest extends TestCase
@@ -27,11 +32,19 @@ class TransactionsTest extends TestCase
             'amount' => 0,
             'type' => 'payment',
         ]));
+
+        Gateway::extend('fake', function ($app) {
+            return new FakeGateway;
+        });
     }
 
     /** @test */
     public function an_admin_can_store_transaction()
     {
+        $this->order->transactions()->save(
+            TransactionFactory::new()->make(['driver' => 'fake', 'amount' => 0])
+        );
+
         $this->order->products()->attach(
             $product = ProductFactory::new()->create(),
             ['quantity' => 1, 'tax' => 0, 'price' => $product->price],
@@ -44,6 +57,15 @@ class TransactionsTest extends TestCase
         $this->actingAs($this->admin)
             ->post(route('bazar.orders.transactions.store', $this->order), [])
             ->assertStatus(422);
+
+        $this->actingAs($this->admin)->post(
+            route('bazar.orders.transactions.store', $this->order),
+            $payment = TransactionFactory::new()->make([
+                'type' => 'refund',
+                'driver' => 'fake',
+                'amount' => null,
+            ])->toArray()
+        )->assertStatus(400);
 
         $this->actingAs($this->admin)->post(
             route('bazar.orders.transactions.store', $this->order),
@@ -76,10 +98,21 @@ class TransactionsTest extends TestCase
             ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
             ->assertForbidden();
 
+        $this->assertFalse($this->transaction->completed());
+
         $this->actingAs($this->admin)
             ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
             ->assertOk()
             ->assertExactJson(['updated' => true]);
+
+        $this->assertTrue($this->transaction->fresh()->completed());
+
+        $this->actingAs($this->admin)
+            ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
+            ->assertOk()
+            ->assertExactJson(['updated' => true]);
+
+        $this->assertTrue($this->transaction->fresh()->pending());
     }
 
     /** @test */
@@ -95,5 +128,22 @@ class TransactionsTest extends TestCase
             ->assertExactJson(['deleted' => true]);
 
         $this->assertDatabaseMissing('transactions', ['id' => $this->transaction->id]);
+    }
+}
+
+class FakeGateway extends Driver
+{
+    public function pay(Order $order, float $amount = null): Transaction
+    {
+        throw new TransactionFailedException('Payment failed');
+
+        return new Transaction;
+    }
+
+    public function refund(Order $order, float $amount = null): Transaction
+    {
+        throw new TransactionFailedException('Refund failed');
+
+        return new Transaction;
     }
 }

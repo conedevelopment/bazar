@@ -62,7 +62,7 @@ class Transaction extends Model
     {
         try {
             return Gateway::driver($this->driver)->name();
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             return $this->driver;
         }
     }
@@ -76,7 +76,7 @@ class Transaction extends Model
     {
         try {
             return Gateway::driver($this->driver)->transactionUrl($this);
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             return null;
         }
     }

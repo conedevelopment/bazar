@@ -162,7 +162,7 @@ class Shipping extends Model implements Taxable
     {
         try {
             return Manager::driver($this->driver)->name();
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             return $this->driver;
         }
     }
@@ -234,7 +234,7 @@ class Shipping extends Model implements Taxable
             if ($this->exists && $update) {
                 $this->update(['cost' => $this->cost]);
             }
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             //
         }
 
