@@ -73,6 +73,7 @@ class FilterTest extends TestCase
     {
         $request = Request::create('/', 'GET', [
             'search' => 'test',
+            'state' => 'fake',
             'exclude' => [1, 2],
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
             'type' => 'image',
@@ -129,7 +130,7 @@ class FilterTest extends TestCase
     {
         $request = Request::create('/', 'GET', [
             'search' => 'test',
-            'state' => 'all',
+            'state' => 'fake',
             'exclude' => [1, 2],
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
@@ -137,8 +138,7 @@ class FilterTest extends TestCase
         $query = User::where(function ($query) {
             $query->where('name', 'like', 'test%')
                 ->orWhere('email', 'like', 'test%');
-        })->withTrashed()
-          ->whereNotIn('id', [1, 2])
+        })->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
@@ -151,13 +151,13 @@ class FilterTest extends TestCase
     {
         $request = Request::create('/', 'GET', [
             'search' => 'test',
-            'state' => 'all',
+            'state' => 'trashed',
             'exclude' => [1, 2],
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
         $query = Variation::where('alias', 'like', 'test%')
-          ->withTrashed()
+          ->onlyTrashed()
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');
 
