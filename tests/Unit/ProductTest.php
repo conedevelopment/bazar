@@ -7,6 +7,7 @@ use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
+use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -74,7 +75,10 @@ class ProductTest extends TestCase
             sprintf('%s mm', implode('x', $this->product->inventory('dimensions'))),
             $this->product->formattedDimensions('x')
         );
+        $this->assertNull((new Product)->formattedDimensions());
+
         $this->assertSame(sprintf('%s g', $this->product->inventory('weight')), $this->product->formattedWeight('x'));
+        $this->assertNull((new Product)->formattedWeight());
 
         $this->assertTrue($this->product->tracksQuantity());
         $this->assertTrue($this->product->available());
