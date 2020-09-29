@@ -64,20 +64,18 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertEquals($this->order->totalPaid() - 1, $payment->amount);
+        $this->assertTrue($this->order->fresh()->paid());
+        $this->assertNull($driver->transactionUrl($payment));
         $this->expectException(TransactionFailedException::class);
-        $transaction = $driver->pay($this->order);
-        $this->assertTrue($transaction->completed());
-        $this->assertNull($driver->transactionUrl($transaction));
+        $driver->pay($this->order);
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertEquals($this->order->totalRefunded(), $refund->amount);
+        $this->assertTrue($this->order->fresh()->refunded());
+        $this->assertNull($driver->transactionUrl($payment));
         $this->expectException(TransactionFailedException::class);
-        $transaction = $driver->refund($this->order);
-        $this->assertTrue($transaction->completed());
-        $this->assertNull($driver->transactionUrl($transaction));
+        $driver->refund($this->order);
     }
 
     /** @test */
@@ -91,20 +89,17 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertEquals($this->order->totalPaid() - 1, $payment->amount);
+        $this->assertTrue($this->order->fresh()->paid());
+        $this->assertNull($driver->transactionUrl($payment));
         $this->expectException(TransactionFailedException::class);
-        $transaction = $driver->pay($this->order);
-        $this->assertTrue($transaction->completed());
-        $this->assertNull($driver->transactionUrl($transaction));
+        $driver->pay($this->order);
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertEquals($this->order->totalRefunded(), $refund->amount);
+        $this->assertTrue($this->order->fresh()->refunded());
+        $this->assertNull($driver->transactionUrl($payment));
         $this->expectException(TransactionFailedException::class);
-        $transaction = $driver->refund($this->order);
-        $this->assertTrue($transaction->completed());
-        $this->assertNull($driver->transactionUrl($transaction));
     }
 
     /** @test */
@@ -116,14 +111,16 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertEquals($this->order->totalPaid() - 1, $payment->amount);
+        $this->assertSame('fake-url', $driver->transactionUrl($payment));
+        $this->assertTrue($this->order->fresh()->paid());
         $this->expectException(TransactionFailedException::class);
         $driver->pay($this->order);
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertEquals($this->order->totalRefunded(), $refund->amount);
+        $this->assertSame('fake-url', $driver->transactionUrl($payment));
+        $this->assertTrue($this->order->fresh()->refunded());
         $this->expectException(TransactionFailedException::class);
         $driver->refund($this->order);
     }
@@ -131,6 +128,11 @@ class GatewayDriverTest extends TestCase
 
 class CustomGatewayDriver Extends Driver
 {
+    public function transactionUrl(Transaction $transaction): ?string
+    {
+        return 'fake-url';
+    }
+
     public function pay(Order $order, float $amount = null): Transaction
     {
         $transaction = $this->transaction($order, 'payment', $amount);
