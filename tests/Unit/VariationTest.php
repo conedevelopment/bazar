@@ -48,4 +48,13 @@ class VariationTest extends TestCase
         $this->assertInstanceOf(Breadcrumbable::class, $this->variation);
         $this->assertSame($this->variation->alias, $this->variation->getBreadcrumbLabel($this->app['request']));
     }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $this->assertSame(
+            $this->variation->newQuery()->search('test')->toSql(),
+            $this->variation->newQuery()->where('alias', 'like', 'test%')->toSql()
+        );
+    }
 }

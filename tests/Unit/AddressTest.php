@@ -132,4 +132,17 @@ class AddressTest extends TestCase
         $this->assertInstanceOf(Breadcrumbable::class, $address);
         $this->assertSame($address->alias, $address->getBreadcrumbLabel($this->app['request']));
     }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $address = AddressFactory::new()->make();
+
+        $address->addressable()->associate($this->user)->save();
+
+        $this->assertSame(
+            $address->newQuery()->search('test')->toSql(),
+            $address->newQuery()->where('alias', 'like', 'test%')->toSql()
+        );
+    }
 }

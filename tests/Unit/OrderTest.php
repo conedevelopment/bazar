@@ -97,18 +97,33 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function it_has_query_scopes()
-    {
-        $this->assertSame(
-            $this->order->newQuery()->status(['pending'])->toSql(),
-            $this->order->newQuery()->whereIn('status', ['pending'])->toSql(),
-        );
-    }
-
-    /** @test */
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->order);
         $this->assertSame("#{$this->order->id}", $this->order->getBreadcrumbLabel($this->app['request']));
+    }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $this->assertSame(
+            $this->order->newQuery()->search('test')->toSql(),
+            $this->order->newQuery()->whereHas('address', function ($q) {
+                $q->where('addresses.first_name', 'like', 'test%')
+                    ->orWhere('addresses.last_name', 'like', 'test%');
+            })->toSql()
+        );
+
+        $this->assertSame(
+            $this->order->newQuery()->status('pending')->toSql(),
+            $this->order->newQuery()->whereIn('status', ['pending'])->toSql()
+        );
+
+        $this->assertSame(
+            $this->order->newQuery()->user(1)->toSql(),
+            $this->order->newQuery()->whereHas('user', function ($q) {
+                $q->where('users.id', 1);
+            })->toSql()
+        );
     }
 }

@@ -76,4 +76,16 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Breadcrumbable::class, $this->user);
         $this->assertSame($this->user->name, $this->user->getBreadcrumbLabel($this->app['request']));
     }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $this->assertSame(
+            $this->user->newQuery()->search('test')->toSql(),
+            $this->user->newQuery()->where(function ($q) {
+                $q->where('name', 'like', 'test%')
+                    ->orWhere('email', 'like', 'test%');
+            })->toSql()
+        );
+    }
 }

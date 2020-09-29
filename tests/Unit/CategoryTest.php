@@ -47,4 +47,13 @@ class CategoryTest extends TestCase
         $this->assertInstanceOf(Breadcrumbable::class, $this->category);
         $this->assertSame($this->category->name, $this->category->getBreadcrumbLabel($this->app['request']));
     }
+
+    /** @test */
+    public function it_has_query_scopes()
+    {
+        $this->assertSame(
+            $this->category->newQuery()->search('test')->toSql(),
+            $this->category->newQuery()->where('name', 'like', 'test%')->toSql(),
+        );
+    }
 }
