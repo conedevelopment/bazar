@@ -16,7 +16,8 @@ class TransactionTest extends TestCase
         parent::setUp();
 
         $this->order = $this->admin->orders()->save(OrderFactory::new()->make());
-        $this->transaction = $this->order->transactions()->save(TransactionFactory::new()->make());
+        $this->transaction = TransactionFactory::new()->make();
+        $this->transaction->order()->associate($this->order)->save();
     }
 
     /** @test */
