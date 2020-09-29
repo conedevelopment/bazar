@@ -25,14 +25,14 @@ class Option implements Rule
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Models\Product|int  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  \Bazar\Models\Variation|null  $variation
      * @return void
      */
-    public function __construct($product, Variation $variation = null)
+    public function __construct(Product $product, Variation $variation = null)
     {
+        $this->product = $product;
         $this->variation = $variation;
-        $this->product = $product instanceof Product ? $product : Product::find($product);
     }
 
     /**
@@ -44,9 +44,9 @@ class Option implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return $this->product && $this->product->variations->reject(function ($variation) {
+        return $this->product->variations->reject(function (Variation $variation) {
             return $this->variation && $variation->id === $this->variation->id;
-        })->filter(function ($variation) use ($value) {
+        })->filter(function (Variation $variation) use ($value) {
             $value = array_replace(array_fill_keys(array_keys($this->product->options), '*'), $value);
 
             return empty(array_diff($value, $variation->option));
