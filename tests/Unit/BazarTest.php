@@ -3,20 +3,23 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Bazar;
+use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\InvalidCurrencyException;
+use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Route;
 
 class BazarTest extends TestCase
 {
     /** @test */
-    public function bazar_has_version()
+    public function it_has_version()
     {
         $this->assertSame(Bazar::VERSION, Bazar::version());
     }
 
     /** @test */
-    public function bazar_has_asset_version()
+    public function it_has_asset_version()
     {
         $this->assertNull(Bazar::assetVersion());
 
@@ -28,22 +31,38 @@ class BazarTest extends TestCase
     }
 
     /** @test */
-    public function bazar_has_currencies()
+    public function it_has_currencies()
     {
         $this->assertSame(
-            config('bazar.currencies.available'), Bazar::currencies()
+            $this->app['config']->get('bazar.currencies.available'), Bazar::currencies()
         );
     }
 
     /** @test */
-    public function bazar_can_set_or_get_currency()
+    public function it_can_set_or_get_currency()
     {
-        $this->assertSame(config('bazar.currencies.default'), Bazar::currency());
+        $this->assertSame($this->app['config']->get('bazar.currencies.default'), Bazar::currency());
 
         $this->expectException(InvalidCurrencyException::class);
         Bazar::currency('fake');
 
         Bazar::currency('eur');
         $this->assertSame('eur', Bazar::currency());
+    }
+
+    /** @test */
+    public function it_can_route_bind_soft_deleted_only_for_bazar_routes()
+    {
+        Route::middleware('web')->get('shop/products/{product}', function (Product $product) {
+            //
+        });
+
+        $product = ProductFactory::new()->create();
+
+        $this->get('shop/products/'.$product->id)->assertOk();
+
+        $product->delete();
+
+        $this->get('shop/products/'.$product->id)->assertNotFound();
     }
 }
