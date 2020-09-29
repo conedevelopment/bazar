@@ -54,7 +54,7 @@ class Breadcrumbs implements Arrayable
 
             $path = end($keys).'/'.$segment;
 
-            return array_merge($breadcrumbs, [$path => $this->label($uri, $segment)]);
+            return array_merge($breadcrumbs, [$path => $this->label($uri)]);
         }, []);
     }
 
@@ -62,21 +62,18 @@ class Breadcrumbs implements Arrayable
      * Get the label for the URI.
      *
      * @param  string  $uri
-     * @param  string  $segment
      * @return string
      */
-    protected function label(string $uri, string $segment): string
+    protected function label(string $uri): string
     {
-        if (! preg_match('/(?<=\{).*(?=\})/', $uri, $match)) {
-            return Str::title($this->replacers[$uri] ?? $uri);
+        if (preg_match('/(?<=\{).*(?=\})/', $uri, $match)) {
+            $item = $this->request->route($match[0]);
+
+            if ($item instanceof Breadcrumbable) {
+                return $item->getBreadcrumbLabel($this->request);
+            }
         }
 
-        $item = $this->request->route($match[0]);
-
-        if ($item instanceof Breadcrumbable) {
-            return $item->getBreadcrumbLabel($this->request);
-        }
-
-        return $segment;
+        return Str::title($this->replacers[$uri] ?? $uri);
     }
 }
