@@ -59,7 +59,7 @@ class Countries
      *
      * @return array
      */
-    public function oceania(): array
+    public static function oceania(): array
     {
         return [];
     }

@@ -20,7 +20,7 @@
         "resolve-url-loader": "^3.1.0",
         "sass": "^1.26.11",
         "sass-loader": "^8.0.0",
-        "simplebar": "^5.2.1",
+        "simplebar": "^5.3.0",
         "vue": "^2.6.12",
         "vue-template-compiler": "^2.6.12"
     }
