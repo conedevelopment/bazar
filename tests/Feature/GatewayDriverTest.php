@@ -4,7 +4,6 @@ namespace Bazar\Tests\Feature;
 
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
@@ -66,16 +65,12 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order);
         $this->assertTrue($this->order->fresh()->paid());
         $this->assertNull($driver->transactionUrl($payment));
-        $this->expectException(TransactionFailedException::class);
-        $driver->pay($this->order);
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->fresh()->refunded());
         $this->assertNull($driver->transactionUrl($payment));
-        $this->expectException(TransactionFailedException::class);
-        $driver->refund($this->order);
     }
 
     /** @test */
@@ -91,15 +86,12 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order);
         $this->assertTrue($this->order->fresh()->paid());
         $this->assertNull($driver->transactionUrl($payment));
-        $this->expectException(TransactionFailedException::class);
-        $driver->pay($this->order);
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->fresh()->refunded());
         $this->assertNull($driver->transactionUrl($payment));
-        $this->expectException(TransactionFailedException::class);
     }
 
     /** @test */
@@ -111,18 +103,14 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertSame('fake-url', $driver->transactionUrl($payment));
         $this->assertTrue($this->order->fresh()->paid());
-        $this->expectException(TransactionFailedException::class);
-        $driver->pay($this->order);
+        $this->assertSame('fake-url', $driver->transactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertSame('fake-url', $driver->transactionUrl($payment));
         $this->assertTrue($this->order->fresh()->refunded());
-        $this->expectException(TransactionFailedException::class);
-        $driver->refund($this->order);
+        $this->assertSame('fake-url', $driver->transactionUrl($payment));
     }
 }
 
