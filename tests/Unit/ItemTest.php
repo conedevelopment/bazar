@@ -36,6 +36,10 @@ class ItemTest extends TestCase
     {
         $this->assertSame($this->item->product->price('sale') + 0.9, $this->item->price);
         $this->assertSame($this->item->price, $this->item->price());
+        $this->assertSame(
+            Str::currency($this->item->price, $this->item->pivotParent->currency), $this->item->formattedPrice()
+        );
+        $this->assertSame($this->item->formattedPrice(), $this->item->formattedPrice);
         $this->assertSame($this->item->price * 0.1, $this->item->tax);
         $this->assertSame(
             Str::currency($this->item->tax, $this->item->pivotParent->currency),
@@ -50,12 +54,14 @@ class ItemTest extends TestCase
             Str::currency($this->item->total, $this->item->pivotParent->currency),
             $this->item->formattedTotal()
         );
+        $this->assertSame($this->item->formattedTotal(), $this->item->formattedTotal);
         $this->assertSame($this->item->price * $this->item->quantity, $this->item->netTotal());
         $this->assertSame($this->item->netTotal(), $this->item->netTotal);
         $this->assertSame(
             Str::currency($this->item->netTotal, $this->item->pivotParent->currency),
             $this->item->formattedNetTotal()
         );
+        $this->assertSame($this->item->formattedNetTotal(), $this->item->formattedNetTotal);
     }
 
     /** @test */

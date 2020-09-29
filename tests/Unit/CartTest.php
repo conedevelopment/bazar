@@ -6,6 +6,10 @@ use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\ShippingFactory;
+use Bazar\Models\Address;
+use Bazar\Models\Cart;
+use Bazar\Models\Item;
+use Bazar\Models\Shipping;
 use Bazar\Tests\TestCase;
 
 class CartTest extends TestCase
@@ -93,5 +97,21 @@ class CartTest extends TestCase
         $total -= $this->cart->discount;
 
         $this->assertEquals($total, $this->cart->netTotal);
+    }
+
+    /** @test */
+    public function it_deletes_relations_on_deleting()
+    {
+        $this->cart->delete();
+
+        $this->assertNull(
+            Address::where([['addressable_type', Cart::class], ['addressable_id', $this->cart->id]])->first()
+        );
+        $this->assertNull(
+            Shipping::where([['shippable_type', Cart::class], ['shippable_id', $this->cart->id]])->first()
+        );
+        $this->assertSame(
+            0, Item::where([['itemable_type', Cart::class], ['itemable_id', $this->cart->id]])->count()
+        );
     }
 }
