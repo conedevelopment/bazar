@@ -69,6 +69,16 @@ class ShippingTest extends TestCase
     }
 
     /** @test */
+    public function it_can_calculate_cost()
+    {
+        $cost = $this->shipping->cost();
+        $this->assertSame($cost, $this->shipping->cost);
+
+        $cost = $this->shipping->driver('fake')->cost();
+        $this->assertSame($cost, $this->shipping->cost);
+    }
+
+    /** @test */
     public function it_is_taxable()
     {
         $this->shipping->tax();

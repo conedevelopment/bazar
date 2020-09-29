@@ -22,9 +22,7 @@ class TransactionTest extends TestCase
     /** @test */
     public function it_belongs_to_an_order()
     {
-        $this->assertTrue(
-            $this->order->transactions->pluck('id')->contains($this->transaction->id)
-        );
+        $this->assertSame($this->order->id, $this->transaction->order_id);
     }
 
     /** @test */
