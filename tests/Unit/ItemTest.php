@@ -32,7 +32,15 @@ class ItemTest extends TestCase
     }
 
     /** @test */
-    public function it_has_attributes()
+    public function it_is_taxable()
+    {
+        $this->assertInstanceOf(Taxable::class, $this->item);
+        $this->assertSame(Str::currency($this->item->tax, $this->item->pivotParent->currency), $this->item->formattedTax());
+        $this->assertSame($this->item->formattedTax(), $this->item->formattedTax);
+    }
+
+    /** @test */
+    public function it_has_price_attribute()
     {
         $this->assertSame($this->item->product->price('sale') + 0.9, $this->item->price);
         $this->assertSame($this->item->price, $this->item->price());
@@ -40,11 +48,11 @@ class ItemTest extends TestCase
             Str::currency($this->item->price, $this->item->pivotParent->currency), $this->item->formattedPrice()
         );
         $this->assertSame($this->item->formattedPrice(), $this->item->formattedPrice);
-        $this->assertSame($this->item->price * 0.1, $this->item->tax);
-        $this->assertSame(
-            Str::currency($this->item->tax, $this->item->pivotParent->currency),
-            $this->item->formattedTax()
-        );
+    }
+
+    /** @test */
+    public function it_has_total_attribute()
+    {
         $this->assertSame(
             ($this->item->price + $this->item->tax) * $this->item->quantity,
             $this->item->total()
