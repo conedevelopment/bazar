@@ -4,6 +4,7 @@ namespace Bazar\Tests\Feature;
 
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
+use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
@@ -11,6 +12,8 @@ use Bazar\Gateway\TransferDriver;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
+use InvalidArgumentException;
+use Throwable;
 
 class GatewayDriverTest extends TestCase
 {
@@ -50,6 +53,32 @@ class GatewayDriverTest extends TestCase
         $this->assertTrue($this->manager->has('cash'));
         $this->assertTrue($this->manager->has('custom-driver'));
         $this->assertFalse($this->manager->has('fake-driver'));
+    }
+
+    /** @test */
+    public function it_throws_exceptions()
+    {
+        $driver = $this->manager->driver('cash');
+
+        try {
+            $driver->transaction($this->order, 'fake');
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(InvalidArgumentException::class, $e);
+        }
+
+        $driver->pay($this->order);
+        try {
+            $driver->pay($this->order);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(TransactionFailedException::class, $e);
+        }
+
+        $driver->refund($this->order);
+        try {
+            $driver->refund($this->order);
+        } catch (Throwable $e) {
+            $this->assertInstanceOf(TransactionFailedException::class, $e);
+        }
     }
 
     /** @test */
