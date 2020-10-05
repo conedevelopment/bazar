@@ -6,10 +6,25 @@ use Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchCategoriesController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Category::class)) {
+            $this->middleware('can:batchUpdate,Bazar\Models\Category')->only('update');
+            $this->middleware('can:batchDelete,Bazar\Models\Category')->only('destroy');
+            $this->middleware('can:batchRestore,Bazar\Models\Category')->only('restore');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

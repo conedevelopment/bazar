@@ -5,11 +5,24 @@ namespace Bazar\Http\Controllers;
 use Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class BatchMediaController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Medium::class)) {
+            $this->middleware('can:batchDelete,Bazar\Models\Medium')->only('destroy');
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

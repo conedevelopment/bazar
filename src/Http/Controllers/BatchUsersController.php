@@ -6,10 +6,26 @@ use Bazar\Contracts\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchUsersController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \Bazar\Contracts\Models\User  $user
+     * @return void
+     */
+    public function __construct(User $user)
+    {
+        if (Gate::getPolicyFor($user = get_class($user))) {
+            $this->middleware("can:batchUpdate,{$user}")->only('update');
+            $this->middleware("can:batchDelete,{$user}")->only('destroy');
+            $this->middleware("can:batchRestore,{$user}")->only('restore');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

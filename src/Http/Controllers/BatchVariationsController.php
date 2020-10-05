@@ -3,13 +3,29 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Models\Product;
+use Bazar\Models\Variation;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchVariationsController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Variation::class)) {
+            $this->middleware('can:batchUpdate,Bazar\Models\Variation')->only('update');
+            $this->middleware('can:batchDelete,Bazar\Models\Variation')->only('destroy');
+            $this->middleware('can:batchRestore,Bazar\Models\Variation')->only('restore');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

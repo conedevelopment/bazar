@@ -5,10 +5,25 @@ use Bazar\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchOrdersController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Order::class)) {
+            $this->middleware('can:batchUpdate,Bazar\Models\Order')->only('update');
+            $this->middleware('can:batchDelete,Bazar\Models\Order')->only('destroy');
+            $this->middleware('can:batchRestore,Bazar\Models\Order')->only('restore');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

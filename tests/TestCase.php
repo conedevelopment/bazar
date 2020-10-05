@@ -3,10 +3,17 @@
 namespace Bazar\Tests;
 
 use Bazar\Database\Factories\UserFactory;
+use Bazar\Models\Address;
+use Bazar\Models\Category;
+use Bazar\Models\Medium;
+use Bazar\Models\Product;
+use Bazar\Models\Transaction;
 use Bazar\Models\User;
+use Bazar\Models\Variation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
@@ -21,7 +28,9 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        $this->withoutMix();
         $this->registerMacros();
+        $this->registerPolicies();
 
         $this->app['config']->set('auth.providers.users.model', User::class);
         $this->app['config']->set('bazar.admins', ['admin@bazar.test']);
@@ -29,10 +38,21 @@ abstract class TestCase extends BaseTestCase
         Storage::fake('local');
         Storage::fake('public');
 
-        $this->withoutMix();
-
         $this->admin = UserFactory::new()->create(['email' => 'admin@bazar.test']);
         $this->user = UserFactory::new()->create();
+    }
+
+    public function registerPolicies(): void
+    {
+        Gate::policy(User::class, ModelPolicy::class);
+        Gate::policy(Product::class, ModelPolicy::class);
+        Gate::policy(Variation::class, ModelPolicy::class);
+        Gate::policy(Address::class, ModelPolicy::class);
+        Gate::policy(Address::class, ModelPolicy::class);
+        Gate::policy(Order::class, ModelPolicy::class);
+        Gate::policy(Medium::class, ModelPolicy::class);
+        Gate::policy(Transaction::class, ModelPolicy::class);
+        Gate::policy(Category::class, ModelPolicy::class);
     }
 
     protected function registerMacros(): void
@@ -40,11 +60,7 @@ abstract class TestCase extends BaseTestCase
         TestResponse::macro('props', function ($key = null) {
             $props = json_decode(json_encode($this->original->getData()['page']['props']), JSON_OBJECT_AS_ARRAY);
 
-            if ($key) {
-                return Arr::get($props, $key);
-            }
-
-            return $props;
+            return $key ? Arr::get($props, $key) : $props;
         });
 
         TestResponse::macro('assertComponent', function ($component) {

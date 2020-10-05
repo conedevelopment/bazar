@@ -6,10 +6,25 @@ use Bazar\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchProductsController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Product::class)) {
+            $this->middleware('can:batchUpdate,Bazar\Models\Product')->only('update');
+            $this->middleware('can:batchDelete,Bazar\Models\Product')->only('destroy');
+            $this->middleware('can:batchRestore,Bazar\Models\Product')->only('restore');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

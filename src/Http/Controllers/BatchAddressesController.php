@@ -3,13 +3,28 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\User;
+use Bazar\Models\Address;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
 class BatchAddressesController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        if (Gate::getPolicyFor(Address::class)) {
+            $this->middleware('can:batchUpdate,Bazar\Models\Address')->only('update');
+            $this->middleware('can:batchDelete,Bazar\Models\Address')->only('destroy');
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
