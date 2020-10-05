@@ -6,6 +6,7 @@ use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\Address;
 use Bazar\Models\Category;
 use Bazar\Models\Medium;
+use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
 use Bazar\Models\User;
@@ -47,7 +48,6 @@ abstract class TestCase extends BaseTestCase
         Gate::policy(User::class, ModelPolicy::class);
         Gate::policy(Product::class, ModelPolicy::class);
         Gate::policy(Variation::class, ModelPolicy::class);
-        Gate::policy(Address::class, ModelPolicy::class);
         Gate::policy(Address::class, ModelPolicy::class);
         Gate::policy(Order::class, ModelPolicy::class);
         Gate::policy(Medium::class, ModelPolicy::class);

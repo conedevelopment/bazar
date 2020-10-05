@@ -1,6 +1,7 @@
 <?php
 
 namespace Bazar\Http\Controllers;
+
 use Bazar\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
