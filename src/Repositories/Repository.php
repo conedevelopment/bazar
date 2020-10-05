@@ -2,6 +2,8 @@
 
 namespace Bazar\Repositories;
 
+use Illuminate\Support\Collection;
+
 abstract class Repository
 {
     /**
@@ -18,7 +20,7 @@ abstract class Repository
      */
     public function __construct()
     {
-        $this->items = collect();
+        $this->items = Collection::make();
     }
 
     /**

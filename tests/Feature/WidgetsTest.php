@@ -2,11 +2,19 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Database\Factories\OrderFactory;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 
 class WidgetsTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        OrderFactory::new()->count(3)->create();
+    }
+
     /** @test */
     public function it_shows_activities_widget()
     {

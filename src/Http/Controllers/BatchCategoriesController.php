@@ -6,6 +6,7 @@ use Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
@@ -35,7 +36,7 @@ class BatchCategoriesController extends Controller
     {
         $data = Arr::dot($request->except('ids'));
 
-        $data = collect($data)->filter()->mapWithKeys(function ($item, $key) {
+        $data = Collection::make($data)->filter()->mapWithKeys(function ($item, $key) {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 

@@ -17,6 +17,7 @@ use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
@@ -70,9 +71,12 @@ class OrdersController extends Controller
             'user', $request->old('user') ? User::make($request->old('user', [])) : null
         )->setRelation(
             'address', Address::make($request->old('address', []))
-        )->setRelation('products', collect($request->old('products'))->map(function ($product) {
-            return Product::make()->forceFill($product);
-        }));
+        )->setRelation(
+            'products',
+            Collection::make($request->old('products'))->map(function (array $product) {
+                return Product::make()->forceFill($product);
+            })
+        );
 
         $order->shipping->fill($request->old('shipping', []))->setRelation(
             'address', Address::make($request->old('shipping.address', []))
@@ -84,7 +88,7 @@ class OrdersController extends Controller
             'statuses' => Order::statuses(),
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.orders.store'),
-            'drivers' => collect(Shipping::enabled())->map->name(),
+            'drivers' => Collection::make(Shipping::enabled())->map->name(),
         ]);
     }
 
@@ -106,7 +110,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $products = collect($data['products'])->mapWithKeys(function ($product) use ($data) {
+        $products = Collection::make($data['products'])->mapWithKeys(function ($product) use ($data) {
             return [$product['id'] => [
                 'tax' => $product['item_tax'] ?? 0,
                 'quantity' => $product['item_quantity'] ?? 1,
