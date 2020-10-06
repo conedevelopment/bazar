@@ -9,50 +9,149 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageTest extends TestCase
 {
-    protected $medium;
-
-    public function setUp(): void
+    /** @test */
+    public function jpeg_can_be_converted()
     {
-        parent::setUp();
+        $medium = MediumFactory::new()->create(['file_name' => 'test.jpg']);
 
-        $this->medium = MediumFactory::new()->create(['file_name' => 'test.jpg']);
-
-        Storage::disk('public')->makeDirectory($this->medium->id);
+        Storage::disk('public')->makeDirectory($medium->id);
 
         $i = imagecreate(800, 400);
-        imagejpeg($i, $this->medium->fullPath());
+        imagejpeg($i, $medium->fullPath());
         imagedestroy($i);
-    }
 
-    /** @test */
-    public function images_can_be_resized()
-    {
-        Image::make($this->medium)->resize(400)->save('resized');
-        [$w, $h] = getimagesize($this->medium->fullPath('resized'));
+        Image::make($medium)->quality(70)->resize(400)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
         $this->assertSame([400, 200], [$w, $h]);
 
-        Image::make($this->medium)->resize(400, 100)->save('resized');
-        [$w, $h] = getimagesize($this->medium->fullPath('resized'));
+        Image::make($medium)->resize(400, 100)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($this->medium)->width(400)->height(100)->resize()->save('resized');
-        [$w, $h] = getimagesize($this->medium->fullPath('resized'));
+        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
         $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->crop(400)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 400], [$w, $h]);
+
+        Image::make($medium)->crop(400, 100)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
     }
 
     /** @test */
-    public function images_can_be_cropped()
+    public function png_can_be_converted()
     {
-        Image::make($this->medium)->crop(400)->save('cropped');
-        [$w, $h] = getimagesize($this->medium->fullPath('cropped'));
+        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+
+        Storage::disk('public')->makeDirectory($medium->id);
+
+        $i = imagecreate(800, 400);
+        imagecolorallocate($i, 0, 0, 0);
+        imagesavealpha($i, true);
+        imagepng($i, $medium->fullPath());
+        imagedestroy($i);
+
+        Image::make($medium)->quality(70)->resize(400)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([400, 200], [$w, $h]);
+
+        Image::make($medium)->resize(400, 100)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->crop(400)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($this->medium)->crop(400, 100)->save('cropped');
-        [$w, $h] = getimagesize($this->medium->fullPath('cropped'));
+        Image::make($medium)->crop(400, 100)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 100], [$w, $h]);
 
-        Image::make($this->medium)->width(400)->height(100)->crop()->save('cropped');
-        [$w, $h] = getimagesize($this->medium->fullPath('cropped'));
+        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
+    }
+
+    /** @test */
+    public function gif_can_be_converted()
+    {
+        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+
+        Storage::disk('public')->makeDirectory($medium->id);
+
+        $i = imagecreate(800, 400);
+        imagegif($i, $medium->fullPath());
+        imagedestroy($i);
+
+        Image::make($medium)->quality(70)->resize(400)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([400, 200], [$w, $h]);
+
+        Image::make($medium)->resize(400, 100)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->crop(400)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 400], [$w, $h]);
+
+        Image::make($medium)->crop(400, 100)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
+    }
+
+    /** @test */
+    public function webp_can_be_converted()
+    {
+        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+
+        Storage::disk('public')->makeDirectory($medium->id);
+
+        $i = imagecreatetruecolor(800, 400);
+        imagewebp($i, $medium->fullPath());
+        imagedestroy($i);
+
+        Image::make($medium)->quality(70)->resize(400)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([400, 200], [$w, $h]);
+
+        Image::make($medium)->resize(400, 100)->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
+        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        $this->assertSame([200, 100], [$w, $h]);
+
+        Image::make($medium)->crop(400)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 400], [$w, $h]);
+
+        Image::make($medium)->crop(400, 100)->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        $this->assertSame([400, 100], [$w, $h]);
+
+        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
+        [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 100], [$w, $h]);
     }
 }

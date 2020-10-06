@@ -162,7 +162,7 @@ class Image
 
         $this->target = imagecreatetruecolor($width, $height);
 
-        if ($this->type === IMAGETYPE_PNG) {
+        if (in_array($this->type, [IMAGETYPE_PNG, IMAGETYPE_WEBP])) {
             imagealphablending($this->target, false);
             imagesavealpha($this->target, true);
             imagefill($this->target, 0, 0, imagecolorallocatealpha($this->target, 0, 0, 0, 127));
@@ -188,9 +188,6 @@ class Image
         $path = Storage::disk('local')->path('bazar-tmp/'.Str::random(40));
 
         switch ($this->type) {
-            case IMAGETYPE_BMP:
-                imagebmp($this->target, $path);
-                break;
             case IMAGETYPE_GIF:
                 imagegif($this->target, $path);
                 break;
@@ -229,8 +226,6 @@ class Image
         }
 
         switch ($this->type) {
-            case IMAGETYPE_BMP:
-                return imagecreatefrombmp($this->medium->fullPath());
             case IMAGETYPE_GIF:
                 return imagecreatefromgif($this->medium->fullPath());
             case IMAGETYPE_JPEG:
