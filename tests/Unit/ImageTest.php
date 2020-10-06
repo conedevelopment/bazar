@@ -36,9 +36,9 @@ class ImageTest extends TestCase
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(400, 100)->save('cropped');
+        Image::make($medium)->crop(100, 400)->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
-        $this->assertSame([400, 100], [$w, $h]);
+        $this->assertSame([100, 400], [$w, $h]);
 
         Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
@@ -74,9 +74,9 @@ class ImageTest extends TestCase
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(400, 100)->save('cropped');
+        Image::make($medium)->crop(100, 400)->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
-        $this->assertSame([400, 100], [$w, $h]);
+        $this->assertSame([100, 400], [$w, $h]);
 
         Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
@@ -110,9 +110,9 @@ class ImageTest extends TestCase
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(400, 100)->save('cropped');
+        Image::make($medium)->crop(100, 400)->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
-        $this->assertSame([400, 100], [$w, $h]);
+        $this->assertSame([100, 400], [$w, $h]);
 
         Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
@@ -146,12 +146,27 @@ class ImageTest extends TestCase
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(400, 100)->save('cropped');
+        Image::make($medium)->crop(100, 400)->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
-        $this->assertSame([400, 100], [$w, $h]);
+        $this->assertSame([100, 400], [$w, $h]);
 
         Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
         [$w, $h] = getimagesize($medium->fullPath('cropped'));
         $this->assertSame([400, 100], [$w, $h]);
+    }
+
+    /** @test */
+    public function not_supported_types_cannot_be_converted()
+    {
+        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+
+        Storage::disk('public')->makeDirectory($medium->id);
+
+        $i = imagecreatetruecolor(800, 400);
+        imagexbm($i, $medium->fullPath());
+        imagedestroy($i);
+
+        $this->expectExceptionMessage('The file type is not supported');
+        Image::make($medium)->quality(70)->resize(400)->save('resized');
     }
 }
