@@ -82,6 +82,12 @@ trait Filterable
      */
     public static function filters(): array
     {
-        return [];
+        return [
+            'state' => [
+                'all' => __('All'),
+                'available' => __('Available'),
+                'trashed' => __('Trashed')
+            ],
+        ];
     }
 }
