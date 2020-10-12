@@ -22,6 +22,12 @@
         },
 
         watch: {
+            value: {
+                handler(n, o) {
+                    this.selection = Array.isArray(this.value) ? this.value : (this.value ? [this.value] : []);
+                },
+                deep: true
+            },
             selection: {
                 handler(n, o) {
                     this.$emit('input', this.multiple ? n : (n[0] || null));

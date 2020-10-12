@@ -42,14 +42,6 @@ class CommandsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_install_scaffolding()
-    {
-        $this->artisan('bazar:scaffold')
-            ->expectsOutput('Bazar scaffolding has been installed.')
-            ->assertExitCode(Command::SUCCESS);
-    }
-
-    /** @test */
     public function it_can_publish_assets()
     {
         $this->artisan('bazar:publish')

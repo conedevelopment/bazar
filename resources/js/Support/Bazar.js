@@ -30,18 +30,20 @@ export default class Bazar
             render: h => h(InertiaApp, {
                 props: {
                     initialPage: JSON.parse(app.dataset.page),
-                    resolveComponent: name => {
-                        try {
-                            return require(`./../Pages/${name}`).default;
-                        } catch {
-                            return name.replace('/', '');
-                        }
+                    resolveComponent: component => {
+                        return Vue.component('Layout', { template: component });
                     },
                     transformProps: props => Object.assign(props, {
                         translations: window.translations
                     })
                 }
-            })
+            }),
+
+            data() {
+                return {
+                    isSidebarOpen: false
+                };
+            }
         }).$mount(app);
 
         this.$emit('booted', { app: this.app });

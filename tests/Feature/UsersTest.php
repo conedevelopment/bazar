@@ -5,6 +5,7 @@ namespace Bazar\Tests\Feature;
 use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\User;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class UsersTest extends TestCase
 {
@@ -12,49 +13,46 @@ class UsersTest extends TestCase
     public function an_admin_can_index_users()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.index'))
+            ->get(URL::route('bazar.users.index'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.index'))
+            ->get(URL::route('bazar.users.index'))
             ->assertOk()
-            ->assertComponent('Users/Index')
-            ->assertPropValue('results', function ($results) {
-                $this->assertEquals(
-                    $results, User::with('addresses')->paginate()->toArray()
-                );
-            });
+            ->assertViewHas(
+                'page.props.results', User::with('addresses')->paginate()->toArray()
+            );
     }
 
     /** @test */
     public function an_admin_can_create_user()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.create'))
+            ->get(URL::route('bazar.users.create'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.create'))
+            ->get(URL::route('bazar.users.create'))
             ->assertOk()
-            ->assertComponent('Users/Create');
+            ->assertViewHas('page.props.user');
     }
 
     /** @test */
     public function an_admin_can_store_user()
     {
         $this->actingAs($this->user)
-            ->post(route('bazar.users.store'))
+            ->post(URL::route('bazar.users.store'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->post(route('bazar.users.store'), [])
+            ->post(URL::route('bazar.users.store'), [])
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
         $this->actingAs($this->admin)->post(
-            route('bazar.users.store'),
+            URL::route('bazar.users.store'),
             UserFactory::new()->make(['name' => 'Test'])->toArray()
-        )->assertRedirect(route('bazar.users.show', User::find(3)))
+        )->assertRedirect(URL::route('bazar.users.show', User::find(3)))
          ->assertSessionHas('message', 'The user has been created.');
 
         $this->assertDatabaseHas('users', ['name' => 'Test']);
@@ -64,34 +62,31 @@ class UsersTest extends TestCase
     public function an_admin_can_show_user()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.show', $this->user))
+            ->get(URL::route('bazar.users.show', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.show', $this->user))
+            ->get(URL::route('bazar.users.show', $this->user))
             ->assertOk()
-            ->assertComponent('Users/Show')
-            ->assertPropValue('user', function ($user) {
-                $this->assertEquals($user, $this->user->refresh()->toArray());
-            });
+            ->assertViewHas('page.props.user', $this->user->refresh()->toArray());
     }
 
     /** @test */
     public function an_admin_can_update_user()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.update', $this->user))
+            ->patch(URL::route('bazar.users.update', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.users.update', $this->user), [])
+            ->patch(URL::route('bazar.users.update', $this->user), [])
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
         $this->actingAs($this->admin)->patch(
-            route('bazar.users.update', $this->user),
+            URL::route('bazar.users.update', $this->user),
             array_replace($this->user->toArray(), ['name' => 'Updated'])
-        )->assertRedirect(route('bazar.users.show', $this->user))
+        )->assertRedirect(URL::route('bazar.users.show', $this->user))
          ->assertSessionHas('message', 'The user has been updated.');
 
         $this->assertSame('Updated', $this->user->refresh()->name);
@@ -101,23 +96,23 @@ class UsersTest extends TestCase
     public function an_admin_can_destroy_user()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.users.destroy', $this->user))
+            ->delete(URL::route('bazar.users.destroy', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.destroy', $this->admin))
+            ->delete(URL::route('bazar.users.destroy', $this->admin))
             ->assertStatus(302)
             ->assertSessionHas('message', 'The authenticated user cannot be deleted.');
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.destroy', $this->user))
+            ->delete(URL::route('bazar.users.destroy', $this->user))
             ->assertStatus(302)
             ->assertSessionHas('message', 'The user has been deleted.');
 
         $this->assertTrue($this->user->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.destroy', $this->user))
+            ->delete(URL::route('bazar.users.destroy', $this->user))
             ->assertStatus(302)
             ->assertSessionHas('message', 'The user has been deleted.');
 
@@ -130,13 +125,13 @@ class UsersTest extends TestCase
         $this->user->delete();
 
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.restore', $this->user))
+            ->patch(URL::route('bazar.users.restore', $this->user))
             ->assertForbidden();
 
         $this->assertTrue($this->user->trashed());
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.users.restore', $this->user))
+            ->patch(URL::route('bazar.users.restore', $this->user))
             ->assertStatus(302);
 
         $this->assertFalse($this->user->fresh()->trashed());
@@ -146,11 +141,11 @@ class UsersTest extends TestCase
     public function an_admin_can_batch_update_users()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.batch-update'))
+            ->patch(URL::route('bazar.users.batch-update'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.users.batch-update'), ['ids' => [$this->user->id], 'name' => 'Cat'])
+            ->patch(URL::route('bazar.users.batch-update'), ['ids' => [$this->user->id], 'name' => 'Cat'])
             ->assertStatus(302);
 
         $this->assertEquals('Cat', $this->user->fresh()->name);
@@ -160,17 +155,17 @@ class UsersTest extends TestCase
     public function an_admin_can_batch_destroy_users()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.users.batch-destroy'))
+            ->delete(URL::route('bazar.users.batch-destroy'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.batch-destroy'), ['ids' => [$this->user->id]])
+            ->delete(URL::route('bazar.users.batch-destroy'), ['ids' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->user->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.batch-destroy', ['force']), ['ids' => [$this->user->id]])
+            ->delete(URL::route('bazar.users.batch-destroy', ['force']), ['ids' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('users', ['id' => $this->user->id]);
@@ -182,11 +177,11 @@ class UsersTest extends TestCase
         $this->user->delete();
 
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.batch-restore'))
+            ->patch(URL::route('bazar.users.batch-restore'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.users.batch-restore'), ['ids' => [$this->user->id]])
+            ->patch(URL::route('bazar.users.batch-restore'), ['ids' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->user->fresh()->trashed());

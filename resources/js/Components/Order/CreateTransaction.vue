@@ -27,7 +27,7 @@
 
         computed: {
             action() {
-                return `${this.$page.action}/transactions`;
+                return `/bazar/orders/${this.order.id}/transactions`;
             },
             types() {
                 return {

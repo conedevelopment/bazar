@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 
 class CategoriesController extends Controller
 {
@@ -41,8 +40,9 @@ class CategoriesController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Categories/Index', [
+        return Component::render('bazar::admin.categories.index', [
             'results' => $categories,
+            'filters' => Category::filters(),
         ]);
     }
 
@@ -58,9 +58,8 @@ class CategoriesController extends Controller
             ->setAttribute('media', [])
             ->forceFill($request->old());
 
-        return Component::render('Categories/Create', [
+        return Component::render('bazar::admin.categories.create', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.store'),
         ]);
     }
 
@@ -94,9 +93,8 @@ class CategoriesController extends Controller
     {
         $category->loadMissing('media');
 
-        return Component::render('Categories/Show', [
+        return Component::render('bazar::admin.categories.show', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.update', $category),
         ]);
     }
 

@@ -38,6 +38,22 @@ class Category extends Model implements Breadcrumbable
     ];
 
     /**
+     * Get the filter options for the model.
+     *
+     * @return array
+     */
+    public static function filters(): array
+    {
+        return [
+            'state' => [
+                'all' => __('All'),
+                'available' => __('Available'),
+                'trashed' => __('Trashed')
+            ],
+        ];
+    }
+
+    /**
      * Get the products for the category.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

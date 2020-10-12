@@ -8,6 +8,7 @@ use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class OrdersTest extends TestCase
 {
@@ -29,43 +30,40 @@ class OrdersTest extends TestCase
     public function an_admin_can_index_orders()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.orders.index'))
+            ->get(URL::route('bazar.orders.index'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.orders.index'))
+            ->get(URL::route('bazar.orders.index'))
             ->assertOk()
-            ->assertComponent('Orders/Index')
-            ->assertPropValue('results', function ($results) {
-                $this->assertEquals(
-                    $results,
-                    Order::with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
-                );
-            });
+            ->assertViewHas(
+                'page.props.results',
+                Order::query()->with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
+            );
     }
 
     /** @test */
     public function an_admin_can_create_order()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.orders.create'))
+            ->get(URL::route('bazar.orders.create'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.orders.create'))
+            ->get(URL::route('bazar.orders.create'))
             ->assertOk()
-            ->assertComponent('Orders/Create');
+            ->assertViewHas('page.props.order');
     }
 
     /** @test */
     public function an_admin_can_store_order()
     {
         $this->actingAs($this->user)
-            ->post(route('bazar.orders.store'))
+            ->post(URL::route('bazar.orders.store'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->post(route('bazar.orders.store'), [])
+            ->post(URL::route('bazar.orders.store'), [])
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
@@ -74,11 +72,11 @@ class OrdersTest extends TestCase
         $order->shipping->setRelation('address', AddressFactory::new()->make());
 
         $this->actingAs($this->admin)->post(
-            route('bazar.orders.store'),
+            URL::route('bazar.orders.store'),
             array_merge($order->toArray(), [
                 'products' => [Product::first()->toArray() + ['item_quantity' => 1, 'item_tax' => 10]],
             ])
-        )->assertRedirect(route('bazar.orders.show', Order::find(2)));
+        )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 
         $this->assertDatabaseHas('orders', $order->only(['discount', 'currency']));
     }
@@ -87,40 +85,38 @@ class OrdersTest extends TestCase
     public function an_admin_can_show_order()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.orders.show', $this->order))
+            ->get(URL::route('bazar.orders.show', $this->order))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.orders.show', $this->order))
+            ->get(URL::route('bazar.orders.show', $this->order))
             ->assertOk()
-            ->assertComponent('Orders/Show')
-            ->assertPropValue('order', function ($order) {
+            ->assertViewHas(
+                'page.props.order',
                 $this->order->refresh()->loadMissing([
                     'address', 'products', 'transactions', 'shipping', 'shipping.address',
-                ]);
-
-                $this->assertEquals($order, $this->order->toArray());
-            });
+                ])->toArray()
+            );
     }
 
     /** @test */
     public function an_admin_can_update_order()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.orders.update', $this->order))
+            ->patch(URL::route('bazar.orders.update', $this->order))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.update', $this->order), [])
+            ->patch(URL::route('bazar.orders.update', $this->order), [])
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
         $this->order->loadMissing(['address', 'shipping', 'shipping.address']);
 
         $this->actingAs($this->admin)->patch(
-            route('bazar.orders.update', $this->order),
+            URL::route('bazar.orders.update', $this->order),
             array_replace($this->order->toArray(), ['status' => 'cancelled'])
-        )->assertRedirect(route('bazar.orders.show', $this->order));
+        )->assertRedirect(URL::route('bazar.orders.show', $this->order));
 
         $this->assertSame('cancelled', $this->order->refresh()->status);
     }
@@ -129,17 +125,17 @@ class OrdersTest extends TestCase
     public function an_admin_can_destroy_order()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.orders.destroy', $this->order))
+            ->delete(URL::route('bazar.orders.destroy', $this->order))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.orders.destroy', $this->order))
+            ->delete(URL::route('bazar.orders.destroy', $this->order))
             ->assertStatus(302);
 
         $this->assertTrue($this->order->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.orders.destroy', $this->order))
+            ->delete(URL::route('bazar.orders.destroy', $this->order))
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('orders', ['id' => $this->order->id]);
@@ -151,13 +147,13 @@ class OrdersTest extends TestCase
         $this->order->delete();
 
         $this->actingAs($this->user)
-            ->patch(route('bazar.orders.restore', $this->order))
+            ->patch(URL::route('bazar.orders.restore', $this->order))
             ->assertForbidden();
 
         $this->assertTrue($this->order->trashed());
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.restore', $this->order))
+            ->patch(URL::route('bazar.orders.restore', $this->order))
             ->assertStatus(302);
 
         $this->assertFalse($this->order->fresh()->trashed());
@@ -167,11 +163,11 @@ class OrdersTest extends TestCase
     public function an_admin_can_batch_update_orders()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.orders.batch-update'))
+            ->patch(URL::route('bazar.orders.batch-update'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.batch-update'), ['ids' => [$this->order->id], 'status' => 'cancelled'])
+            ->patch(URL::route('bazar.orders.batch-update'), ['ids' => [$this->order->id], 'status' => 'cancelled'])
             ->assertStatus(302);
 
         $this->assertEquals('cancelled', $this->order->fresh()->status);
@@ -181,17 +177,17 @@ class OrdersTest extends TestCase
     public function an_admin_can_batch_destroy_orders()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.orders.batch-destroy'))
+            ->delete(URL::route('bazar.orders.batch-destroy'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.orders.batch-destroy'), ['ids' => [$this->order->id]])
+            ->delete(URL::route('bazar.orders.batch-destroy'), ['ids' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->order->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.orders.batch-destroy', ['force']), ['ids' => [$this->order->id]])
+            ->delete(URL::route('bazar.orders.batch-destroy', ['force']), ['ids' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('orders', ['id' => $this->order->id]);
@@ -203,11 +199,11 @@ class OrdersTest extends TestCase
         $this->order->delete();
 
         $this->actingAs($this->user)
-            ->patch(route('bazar.orders.batch-restore'))
+            ->patch(URL::route('bazar.orders.batch-restore'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.batch-restore'), ['ids' => [$this->order->id]])
+            ->patch(URL::route('bazar.orders.batch-restore'), ['ids' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->order->fresh()->trashed());

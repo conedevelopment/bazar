@@ -36,7 +36,10 @@ class InstallCommand extends Command
 
         $status = $this->call('bazar:publish');
 
-        $status = $this->call('bazar:scaffold');
+        // Symlinking...
+        // ln -s /.../packages/conedevelopment/bazar/public/app.js /.../public/vendor/bazar/app.js
+        // ln -s /.../packages/conedevelopment/bazar/public/app.css /.../public/vendor/bazar/app.css
+        // ln -s /.../packages/conedevelopment/bazar/resources/img /.../public/vendor/bazar/
 
         return $status;
     }

@@ -30,7 +30,7 @@
                 return !! this.transaction.completed_at;
             },
             action() {
-                return `${this.$page.action}/transactions/${this.transaction.id}`;
+                return `/bazar/orders/${this.transaction.order_id}/transactions/${this.transaction.id}`;
             },
             completedAt() {
                 return this.transaction.completed_at.substr(0, 16).replace('T', ' ');

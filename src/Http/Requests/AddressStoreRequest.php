@@ -35,6 +35,7 @@ class AddressStoreRequest extends FormRequest
             'company' => ['nullable', 'string'],
             'address' => ['required', 'string'],
             'address_secondary' => ['nullable', 'string'],
+            'default' => ['required', 'boolean'],
         ];
     }
 }

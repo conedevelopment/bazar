@@ -11,6 +11,7 @@ use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class TransactionsTest extends TestCase
 {
@@ -51,15 +52,15 @@ class TransactionsTest extends TestCase
         );
 
         $this->actingAs($this->user)
-            ->post(route('bazar.orders.transactions.store', $this->order))
+            ->post(URL::route('bazar.orders.transactions.store', $this->order))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->post(route('bazar.orders.transactions.store', $this->order), [])
+            ->post(URL::route('bazar.orders.transactions.store', $this->order), [])
             ->assertStatus(422);
 
         $this->actingAs($this->admin)->post(
-            route('bazar.orders.transactions.store', $this->order),
+            URL::route('bazar.orders.transactions.store', $this->order),
             $payment = TransactionFactory::new()->make([
                 'type' => 'refund',
                 'driver' => 'fake',
@@ -68,7 +69,7 @@ class TransactionsTest extends TestCase
         )->assertStatus(400);
 
         $this->actingAs($this->admin)->post(
-            route('bazar.orders.transactions.store', $this->order),
+            URL::route('bazar.orders.transactions.store', $this->order),
             $payment = TransactionFactory::new()->make([
                 'type' => 'payment',
                 'driver' => 'manual',
@@ -78,7 +79,7 @@ class TransactionsTest extends TestCase
          ->assertJson($payment);
 
          $this->actingAs($this->admin)->post(
-            route('bazar.orders.transactions.store', $this->order),
+            URL::route('bazar.orders.transactions.store', $this->order),
             $refund = TransactionFactory::new()->make([
                 'type' => 'refund',
                 'driver' => 'manual',
@@ -95,20 +96,20 @@ class TransactionsTest extends TestCase
     public function an_admin_can_update_transaction()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
+            ->patch(URL::route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
             ->assertForbidden();
 
         $this->assertFalse($this->transaction->completed());
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
+            ->patch(URL::route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
             ->assertOk()
             ->assertExactJson(['updated' => true]);
 
         $this->assertTrue($this->transaction->fresh()->completed());
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
+            ->patch(URL::route('bazar.orders.transactions.update', [$this->order, $this->transaction]))
             ->assertOk()
             ->assertExactJson(['updated' => true]);
 
@@ -119,11 +120,11 @@ class TransactionsTest extends TestCase
     public function an_admin_can_destroy_transaction()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.orders.transactions.destroy', [$this->order, $this->transaction]))
+            ->delete(URL::route('bazar.orders.transactions.destroy', [$this->order, $this->transaction]))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.orders.transactions.destroy', [$this->order, $this->transaction]))
+            ->delete(URL::route('bazar.orders.transactions.destroy', [$this->order, $this->transaction]))
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 

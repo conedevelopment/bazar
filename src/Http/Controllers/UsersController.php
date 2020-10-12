@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\URL;
 
 class UsersController extends Controller
 {
@@ -43,8 +42,9 @@ class UsersController extends Controller
             $request->input('per_page')
         );
 
-        return ! $request->bazar() ? Component::render('Users/Index', [
+        return ! $request->bazar() ? Component::render('bazar::admin.users.index', [
             'results' => $users,
+            'filters' => $user::filters(),
         ]) : Response::json($users);
     }
 
@@ -57,12 +57,10 @@ class UsersController extends Controller
      */
     public function create(Request $request, User $user): Responsable
     {
-        $user->setAttribute('addresses', [])
-            ->forceFill($request->old());
+        $user->setAttribute('addresses', [])->forceFill($request->old());
 
-        return Component::render('Users/Create', [
+        return Component::render('bazar::admin.users.create', [
             'user' => $user,
-            'action' => URL::route('bazar.users.store'),
         ]);
     }
 
@@ -90,9 +88,8 @@ class UsersController extends Controller
      */
     public function show(User $user): Responsable
     {
-        return Component::render('Users/Show', [
+        return Component::render('bazar::admin.users.show', [
             'user' => $user,
-            'action' => URL::route('bazar.users.update', $user),
         ]);
     }
 

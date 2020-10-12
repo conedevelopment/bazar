@@ -4,6 +4,7 @@ namespace Bazar\Tests\Feature;
 
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\URL;
 
 class AddressesTest extends TestCase
 {
@@ -20,45 +21,41 @@ class AddressesTest extends TestCase
     public function an_admin_can_index_addresses()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.addresses.index', $this->user))
+            ->get(URL::route('bazar.users.addresses.index', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.addresses.index', $this->user))
+            ->get(URL::route('bazar.users.addresses.index', $this->user))
             ->assertOk()
-            ->assertComponent('Addresses/Index')
-            ->assertPropValue('results', function ($results) {
-                $this->assertEquals(
-                    $results,
-                    $this->user->addresses()->paginate()->toArray()
-                );
-            });
+            ->assertViewHas(
+                'page.props.results', $this->user->addresses()->paginate()->toArray()
+            );
     }
 
     /** @test */
     public function an_admin_can_create_address()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.addresses.create', $this->user))
+            ->get(URL::route('bazar.users.addresses.create', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.addresses.create', $this->user))
+            ->get(URL::route('bazar.users.addresses.create', $this->user))
             ->assertOk()
-            ->assertComponent('Addresses/Create');
+            ->assertViewHas('page.props.address');
     }
 
     /** @test */
     public function an_admin_can_store_address()
     {
         $this->actingAs($this->user)
-            ->post(route('bazar.users.addresses.store', $this->user))
+            ->post(URL::route('bazar.users.addresses.store', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)->post(
-            route('bazar.users.addresses.store', $this->user),
+            URL::route('bazar.users.addresses.store', $this->user),
             AddressFactory::new()->make(['first_name' => 'Test'])->toArray()
-        )->assertRedirect(route('bazar.users.addresses.show', [
+        )->assertRedirect(URL::route('bazar.users.addresses.show', [
             $this->user,
             $this->user->fresh()->addresses->reverse()->first()
         ]));
@@ -70,29 +67,26 @@ class AddressesTest extends TestCase
     public function an_admin_can_show_address()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.users.addresses.show', [$this->user, $this->address]))
+            ->get(URL::route('bazar.users.addresses.show', [$this->user, $this->address]))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.users.addresses.show', [$this->user, $this->address]))
+            ->get(URL::route('bazar.users.addresses.show', [$this->user, $this->address]))
             ->assertOk()
-            ->assertComponent('Addresses/Show')
-            ->assertPropValue('address', function ($address) {
-                $this->assertEquals($address, $this->address->toArray());
-            });
+            ->assertViewHas('page.props.address', $this->address->toArray());
     }
 
     /** @test */
     public function an_admin_can_update_address()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.addresses.update', [$this->user, $this->address]))
+            ->patch(URL::route('bazar.users.addresses.update', [$this->user, $this->address]))
             ->assertForbidden();
 
         $this->actingAs($this->admin)->patch(
-            route('bazar.users.addresses.update', [$this->user, $this->address]),
+            URL::route('bazar.users.addresses.update', [$this->user, $this->address]),
             array_replace($this->address->toArray(), ['first_name' => 'Updated'])
-        )->assertRedirect(route('bazar.users.addresses.show', [
+        )->assertRedirect(URL::route('bazar.users.addresses.show', [
             $this->user, $this->address
         ]));
 
@@ -103,12 +97,12 @@ class AddressesTest extends TestCase
     public function an_admin_can_destroy_address()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.users.addresses.destroy', [$this->user, $this->address]))
+            ->delete(URL::route('bazar.users.addresses.destroy', [$this->user, $this->address]))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.users.addresses.destroy', [$this->user, $this->address]))
-            ->assertRedirect(route('bazar.users.addresses.index', $this->user));
+            ->delete(URL::route('bazar.users.addresses.destroy', [$this->user, $this->address]))
+            ->assertRedirect(URL::route('bazar.users.addresses.index', $this->user));
 
         $this->assertDatabaseMissing('addresses', ['id' => $this->address->id]);
     }
@@ -117,11 +111,11 @@ class AddressesTest extends TestCase
     public function an_admin_can_batch_update_addresses()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.users.addresses.batch-update', $this->user))
+            ->patch(URL::route('bazar.users.addresses.batch-update', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)->patch(
-            route('bazar.users.addresses.batch-update', $this->user),
+            URL::route('bazar.users.addresses.batch-update', $this->user),
             ['ids' => [$this->address->id], 'first_name' => 'Batch Update']
         )->assertStatus(302);
 
@@ -132,11 +126,11 @@ class AddressesTest extends TestCase
     public function an_admin_can_batch_destroy_addresses()
     {
         $this->actingAs($this->user)
-            ->delete(route('bazar.users.addresses.batch-destroy', $this->user))
+            ->delete(URL::route('bazar.users.addresses.batch-destroy', $this->user))
             ->assertForbidden();
 
         $this->actingAs($this->admin)->delete(
-            route('bazar.users.addresses.batch-destroy', $this->user),
+            URL::route('bazar.users.addresses.batch-destroy', $this->user),
             ['ids' => [$this->address->id]]
         )->assertStatus(302);
 

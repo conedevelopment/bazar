@@ -31,6 +31,6 @@
 <body>
     <div id="app" data-page="{{ json_encode($page) }}"></div>
 
-    @include ('bazar::partials.svg-icons')
+    @include ('bazar::layout.svg-icons')
 </body>
 </html>

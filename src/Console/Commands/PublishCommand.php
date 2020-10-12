@@ -13,7 +13,7 @@ class PublishCommand extends Command
      * @var string
      */
     protected $signature = 'bazar:publish {--force : Overwrite any existing files}
-                    {--tag=* : One or many tags that have assets you want to publish}';
+                                          {--tag=* : One or many tags that have assets you want to publish}';
 
     /**
      * The console command description.

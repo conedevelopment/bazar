@@ -2,13 +2,13 @@
 
 namespace Bazar\Http;
 
-use Bazar\Bazar;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response as ResponseFactory;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
 class Response implements Responsable
@@ -26,13 +26,6 @@ class Response implements Responsable
      * @var array
      */
     protected $props;
-
-    /**
-     * The view data.
-     *
-     * @var array
-     */
-    protected $viewData = [];
 
     /**
      * Create a new response instance.
@@ -66,24 +59,6 @@ class Response implements Responsable
     }
 
     /**
-     * Push a property to the view data.
-     *
-     * @param  array|string  $key
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function withViewData($key, $value = null): Response
-    {
-        if (is_array($key)) {
-            $this->viewData = array_merge($this->viewData, $key);
-        } else {
-            $this->viewData[$key] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
      * Create an HTTP response that represents the object.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,6 +67,10 @@ class Response implements Responsable
     public function toResponse($request): BaseResponse
     {
         $only = array_filter(explode(',', $request->header('X-Inertia-Partial-Data')));
+
+        $component = View::make($this->component, $this->props);
+
+        $this->props = $component->getData();
 
         $props = ($only && $request->header('X-Inertia-Partial-Component') === $this->component)
             ? Arr::only($this->props, $only)
@@ -112,10 +91,9 @@ class Response implements Responsable
         });
 
         $page = [
-            'component' => $this->component,
             'props' => $props,
             'url' => $request->getRequestUri(),
-            'version' => Bazar::assetVersion(),
+            'component' => $component->render(),
         ];
 
         if ($request->header('X-Inertia')) {
@@ -125,6 +103,6 @@ class Response implements Responsable
             ]);
         }
 
-        return ResponseFactory::view('bazar::app', $this->viewData + ['page' => $page]);
+        return ResponseFactory::view('bazar::app', ['page' => $page]);
     }
 }

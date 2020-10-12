@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 
 class VariationsController extends Controller
 {
@@ -50,8 +49,10 @@ class VariationsController extends Controller
             );
         });
 
-        return Component::render('Variations/Index', [
+        return Component::render('bazar::admin.variations.index', [
+            'product' => $product,
             'results' => $variations,
+            'filters' => Variation::filters(),
         ]);
     }
 
@@ -70,10 +71,10 @@ class VariationsController extends Controller
                 'product', $product->withoutRelations()->makeHidden('variation')
             );
 
-        return Component::render('Variations/Create', [
+        return Component::render('bazar::admin.variations.create', [
+            'product' => $product,
             'variation' => $variation,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variations.store', $product),
         ]);
     }
 
@@ -111,10 +112,10 @@ class VariationsController extends Controller
             'product', $product->withoutRelations()->makeHidden('variation')
         )->loadMissing('media');
 
-        return Component::render('Variations/Show', [
+        return Component::render('bazar::admin.variations.show', [
+            'product' => $product,
             'variation' => $variation,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variations.update', [$product, $variation]),
         ]);
     }
 

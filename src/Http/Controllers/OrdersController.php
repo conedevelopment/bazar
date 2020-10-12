@@ -20,7 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 
 class OrdersController extends Controller
 {
@@ -50,12 +49,9 @@ class OrdersController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Orders/Index', [
+        return Component::render('bazar::admin.orders.index', [
             'results' => $orders,
-            'filters' => [
-                'status' => Order::statuses(),
-                'user' => User::pluck('name', 'id'),
-            ],
+            'filters' => Order::filters(),
         ]);
     }
 
@@ -68,9 +64,11 @@ class OrdersController extends Controller
     public function create(Request $request): Response
     {
         $order = Order::make()->setAttribute(
-            'user', $request->old('user') ? User::make($request->old('user', [])) : null
+            'user',
+            User::make()->setAttribute('addresses', [])->forceFill($request->old('user', []))
         )->setRelation(
-            'address', Address::make($request->old('address', []))
+            'address',
+            Address::make($request->old('address', []))
         )->setRelation(
             'products',
             Collection::make($request->old('products'))->map(function (array $product) {
@@ -82,12 +80,11 @@ class OrdersController extends Controller
             'address', Address::make($request->old('shipping.address', []))
         );
 
-        return Component::render('Orders/Create', [
+        return Component::render('bazar::admin.orders.create', [
             'order' => $order,
             'countries' => Countries::all(),
             'statuses' => Order::statuses(),
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.orders.store'),
             'drivers' => Collection::make(Shipping::enabled())->map->name(),
         ]);
     }
@@ -135,10 +132,9 @@ class OrdersController extends Controller
     {
         $order->loadMissing(['address', 'products', 'transactions', 'shipping', 'shipping.address']);
 
-        return Component::render('Orders/Show', [
+        return Component::render('bazar::admin.orders.show', [
             'order' => $order,
             'statuses' => Order::statuses(),
-            'action' => URL::route('bazar.orders.update', $order),
         ]);
     }
 

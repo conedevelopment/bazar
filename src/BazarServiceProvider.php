@@ -6,10 +6,13 @@ use Bazar\Models\Item;
 use Bazar\Services\Image;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -144,7 +147,6 @@ class BazarServiceProvider extends ServiceProvider
             $this->commands([
                 Console\Commands\InstallCommand::class,
                 Console\Commands\PublishCommand::class,
-                Console\Commands\ScaffoldCommand::class,
                 Console\Commands\ClearCartsCommand::class,
                 Console\Commands\ClearChunksCommand::class,
             ]);
@@ -167,6 +169,11 @@ class BazarServiceProvider extends ServiceProvider
         Request::macro('bazar', function () {
             return boolval($this->header('X-Bazar-Api'));
         });
+
+        Blade::componentNamespace('Bazar\\View\\Components', 'bazar');
+        Blade::components([
+            View\Components\Breadcrumbs::class,
+        ]);
     }
 
     /**
@@ -176,10 +183,15 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerComposers(): void
     {
-        View::composer('bazar::app', function ($view) {
+        View::creator('bazar::*', function ($view) {
+            $view->with('admin', Auth::user());
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
+            $view->with('message', Session::has('errors') ? __('Something went wrong!') : Session::get('message'));
+            $view->with('errors', Session::has('errors') ? array_map(function (array $errors) {
+                return $errors[0];
+            }, Session::get('errors')->getBag('default')->messages()) : (object) []);
         });
     }
 

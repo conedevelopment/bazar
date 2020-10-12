@@ -74,4 +74,14 @@ trait Filterable
             $value['by'] ?? 'created_at', $value['order'] ?? 'desc'
         );
     }
+
+    /**
+     * Get the filter options for the model.
+     *
+     * @return array
+     */
+    public static function filters(): array
+    {
+        return [];
+    }
 }

@@ -3,11 +3,8 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Bazar;
-use Bazar\Support\Breadcrumbs;
 use Bazar\Support\Countries;
 use Bazar\Tests\TestCase;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
 
 class SupportTest extends TestCase
@@ -35,27 +32,5 @@ class SupportTest extends TestCase
         $this->assertSame([], Countries::northAmerica());
         $this->assertSame([], Countries::southAmerica());
         $this->assertSame([], Countries::oceania());
-    }
-
-    /** @test */
-    public function breadcrumb_can_process_request()
-    {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => "/bazar/users/{$this->user->id}"]);
-
-        $request->setRouteResolver(function () use ($request) {
-            $router = (new Route('GET', '/bazar/users/{user}', []))->bind($request);
-
-            $router->setParameter('user', $this->user);
-
-            return $router;
-        });
-
-        $breadcrumbs = new Breadcrumbs($request);
-
-        $this->assertSame([
-            '/bazar' => 'Dashboard',
-            '/bazar/users' => 'Users',
-            "/bazar/users/{$this->user->id}" => $this->user->name,
-        ], $breadcrumbs->toArray());
     }
 }

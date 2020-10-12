@@ -126,6 +126,24 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     }
 
     /**
+     * Get the filter options for the model.
+     *
+     * @return array
+     */
+    public static function filters(): array
+    {
+        return [
+            'state' => [
+                'all' => __('All'),
+                'available' => __('Available'),
+                'trashed' => __('Trashed')
+            ],
+            'status' => static::statuses(),
+            'category' => User::pluck('name', 'id'),
+        ];
+    }
+
+    /**
      * Get the transactions for the order.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

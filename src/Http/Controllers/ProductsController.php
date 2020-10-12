@@ -15,7 +15,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\URL;
 
 class ProductsController extends Controller
 {
@@ -44,13 +43,9 @@ class ProductsController extends Controller
             $request->input('per_page')
         );
 
-        return ! $request->bazar() ? Component::render('Products/Index', [
+        return ! $request->bazar() ? Component::render('bazar::admin.products.index', [
             'results' => $products,
-            'filters' => [
-                'category' => Category::pluck('name', 'id')->map(function (string $category) {
-                    return __($category);
-                }),
-            ],
+            'filters' => Product::filters(),
         ]) : Response::json($products);
     }
 
@@ -67,10 +62,9 @@ class ProductsController extends Controller
             ->setAttribute('categories', [])
             ->forceFill($request->old());
 
-        return Component::render('Products/Create', [
+        return Component::render('bazar::admin.products.create', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.store'),
             'categories' => Category::select(['id', 'name'])->get(),
         ]);
     }
@@ -108,10 +102,9 @@ class ProductsController extends Controller
     {
         $product->loadMissing(['media', 'categories:categories.id,categories.name']);
 
-        return Component::render('Products/Show', [
+        return Component::render('bazar::admin.products.show', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.update', $product),
             'categories' => Category::select(['id', 'name'])->get(),
         ]);
     }

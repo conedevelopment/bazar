@@ -13,11 +13,8 @@ use Bazar\Models\User;
 use Bazar\Models\Variation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Testing\TestResponse;
-use PHPUnit\Framework\Assert;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -30,7 +27,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutMix();
-        $this->registerMacros();
         $this->registerPolicies();
 
         $this->app['config']->set('auth.providers.users.model', User::class);
@@ -53,38 +49,5 @@ abstract class TestCase extends BaseTestCase
         Gate::policy(Medium::class, ModelPolicy::class);
         Gate::policy(Transaction::class, ModelPolicy::class);
         Gate::policy(Category::class, ModelPolicy::class);
-    }
-
-    protected function registerMacros(): void
-    {
-        TestResponse::macro('props', function ($key = null) {
-            $props = json_decode(json_encode($this->original->getData()['page']['props']), JSON_OBJECT_AS_ARRAY);
-
-            return $key ? Arr::get($props, $key) : $props;
-        });
-
-        TestResponse::macro('assertComponent', function ($component) {
-            Assert::assertEquals($this->original->getData()['page']['component'], $component);
-
-            return $this;
-        });
-
-        TestResponse::macro('assertHasProp', function ($key) {
-            Assert::assertTrue(Arr::has($this->props(), $key));
-
-            return $this;
-        });
-
-        TestResponse::macro('assertPropValue', function ($key, $value) {
-            $this->assertHasProp($key);
-
-            if (is_callable($value)) {
-                $value($this->props($key));
-            } else {
-                Assert::assertEquals($this->props($key), $value);
-            }
-
-            return $this;
-        });
     }
 }

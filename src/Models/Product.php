@@ -70,6 +70,23 @@ class Product extends Model implements Breadcrumbable
     ];
 
     /**
+     * Get the filter options for the model.
+     *
+     * @return array
+     */
+    public static function filters(): array
+    {
+        return [
+            'state' => [
+                'all' => __('All'),
+                'available' => __('Available'),
+                'trashed' => __('Trashed')
+            ],
+            'category' => array_map('__', Category::pluck('name', 'id')->toArray()),
+        ];
+    }
+
+    /**
      * Get all of the categories for the model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

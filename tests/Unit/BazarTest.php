@@ -19,18 +19,6 @@ class BazarTest extends TestCase
     }
 
     /** @test */
-    public function it_has_asset_version()
-    {
-        $this->assertNull(Bazar::assetVersion());
-
-        $file = UploadedFile::fake()->createWithContent('mix.manifest.json', 'fake-content');
-
-        $this->assertSame(
-            md5('fake-content'), Bazar::assetVersion($file->getRealPath())
-        );
-    }
-
-    /** @test */
     public function it_has_currencies()
     {
         $this->assertSame(

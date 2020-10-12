@@ -10,6 +10,7 @@ use Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class MediaTest extends TestCase
 {
@@ -36,11 +37,11 @@ class MediaTest extends TestCase
     public function an_admin_can_index_media()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.media.index'))
+            ->get(URL::route('bazar.media.index'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.media.index'))
+            ->get(URL::route('bazar.media.index'))
             ->assertOk()
             ->assertJson(Medium::paginate()->toArray());
     }
@@ -49,11 +50,11 @@ class MediaTest extends TestCase
     public function an_admin_can_show_medium()
     {
         $this->actingAs($this->user)
-            ->get(route('bazar.media.show', $this->medium))
+            ->get(URL::route('bazar.media.show', $this->medium))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(route('bazar.media.show', $this->medium))
+            ->get(URL::route('bazar.media.show', $this->medium))
             ->assertOk()
             ->assertJson($this->medium->toArray());
     }
@@ -62,11 +63,11 @@ class MediaTest extends TestCase
     public function an_admin_can_store_medium_as_image()
     {
         $this->actingAs($this->user)
-            ->post(route('bazar.media.store'))
+            ->post(URL::route('bazar.media.store'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->post(route('bazar.media.store'), [
+            ->post(URL::route('bazar.media.store'), [
                 'file' => UploadedFile::fake()->image('test.png.part'),
             ])
             ->assertCreated()
@@ -83,7 +84,7 @@ class MediaTest extends TestCase
     public function an_admin_can_store_medium_as_file()
     {
         $this->actingAs($this->admin)
-            ->post(route('bazar.media.store'), [
+            ->post(URL::route('bazar.media.store'), [
                 'file' => UploadedFile::fake()->create('test.pdf.part'),
             ])
             ->assertCreated()
@@ -98,11 +99,11 @@ class MediaTest extends TestCase
     public function an_admin_can_update_medium()
     {
         $this->actingAs($this->user)
-            ->patch(route('bazar.media.update', $this->medium))
+            ->patch(URL::route('bazar.media.update', $this->medium))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(route('bazar.media.update', $this->medium), [])
+            ->patch(URL::route('bazar.media.update', $this->medium), [])
             ->assertOk()
             ->assertExactJson(['updated' => true]);
     }
@@ -113,11 +114,11 @@ class MediaTest extends TestCase
         Storage::disk($this->medium->disk)->assertExists($this->medium->path());
 
         $this->actingAs($this->user)
-            ->delete(route('bazar.media.destroy', $this->medium))
+            ->delete(URL::route('bazar.media.destroy', $this->medium))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.media.destroy', $this->medium))
+            ->delete(URL::route('bazar.media.destroy', $this->medium))
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 
@@ -132,11 +133,11 @@ class MediaTest extends TestCase
         Storage::disk($this->medium->disk)->assertExists($this->medium->path());
 
         $this->actingAs($this->user)
-            ->delete(route('bazar.media.batch-destroy'))
+            ->delete(URL::route('bazar.media.batch-destroy'))
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(route('bazar.media.batch-destroy'), ['ids' => [$this->medium->id]])
+            ->delete(URL::route('bazar.media.batch-destroy'), ['ids' => [$this->medium->id]])
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 
