@@ -5,7 +5,6 @@ namespace Bazar\Http;
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response as ResponseFactory;
 use Illuminate\Support\Facades\View;
@@ -66,15 +65,9 @@ class Response implements Responsable
      */
     public function toResponse($request): BaseResponse
     {
-        $only = array_filter(explode(',', $request->header('X-Inertia-Partial-Data')));
-
         $component = View::make($this->component, $this->props);
 
-        $this->props = $component->getData();
-
-        $props = ($only && $request->header('X-Inertia-Partial-Component') === $this->component)
-            ? Arr::only($this->props, $only)
-            : $this->props;
+        $props = $component->getData();
 
         array_walk_recursive($props, function (&$prop) use ($request) {
             if ($prop instanceof Closure) {
@@ -96,13 +89,9 @@ class Response implements Responsable
             'component' => $component->render(),
         ];
 
-        if ($request->header('X-Inertia')) {
-            return ResponseFactory::json($page, BaseResponse::HTTP_OK, [
-                'Vary' => 'Accept',
-                'X-Inertia' => 'true',
-            ]);
-        }
-
-        return ResponseFactory::view('bazar::app', ['page' => $page]);
+        return $request->header('X-Inertia') ? ResponseFactory::json($page, BaseResponse::HTTP_OK, [
+            'Vary' => 'Accept',
+            'X-Inertia' => 'true',
+        ]) : ResponseFactory::view('bazar::app', compact('page'));
     }
 }
