@@ -82,10 +82,10 @@ class Response implements Responsable
         $page = [
             'props' => $props,
             'url' => $request->getRequestUri(),
-            'component' => $component->render(),
+            'component' => preg_replace('/\s+/', ' ', $component->render()),
         ];
 
-        return $request->header('X-Inertia') ? ResponseFactory::json($page, BaseResponse::HTTP_OK, [
+        return $request->header('X-Inertia') ? ResponseFactory::json($page)->withHeaders([
             'Vary' => 'Accept',
             'X-Inertia' => 'true',
         ]) : ResponseFactory::view('bazar::app', compact('page'));
