@@ -125,7 +125,7 @@ class BazarSeeder extends Seeder
     protected function seedMedia(): void
     {
         foreach (range(1, 4) as $key) {
-            $path = __DIR__."/../../stubs/photo-0{$key}.jpg";
+            $path = __DIR__."/../../resources/stubs/photo-0{$key}.jpg";
 
             $medium = Medium::createFrom($path);
 
