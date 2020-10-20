@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class Breadcrumbs extends Component
 {
@@ -82,7 +82,7 @@ class Breadcrumbs extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Contracts\View\View
      */
     public function render(): View
     {
