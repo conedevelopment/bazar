@@ -17,7 +17,10 @@
     <link href="{{ asset(mix('vendor/bazar/app.css')) }}" rel="stylesheet">
 
     {{-- Scripts --}}
-    <script>window.translations = {!! json_encode($translations) !!};</script>
+    <script>
+        window.initialPage = {!! json_encode($page) !!};
+        window.translations = {!! json_encode($translations) !!};
+    </script>
     <script src="{{ asset(mix('vendor/bazar/app.js')) }}" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -29,7 +32,7 @@
     <title>Bazar</title>
 </head>
 <body>
-    <div id="app" data-page="{{ json_encode($page) }}"></div>
+    <div id="app"></div>
 
     @include ('bazar::layout.svg-icons')
 </body>

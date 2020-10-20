@@ -29,7 +29,7 @@ export default class Bazar
         this.app = new Vue({
             render: h => h(InertiaApp, {
                 props: {
-                    initialPage: JSON.parse(app.dataset.page),
+                    initialPage: window.initialPage,
                     resolveComponent: component => {
                         return Vue.component('Layout', { template: component });
                     },

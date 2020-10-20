@@ -9,6 +9,18 @@ use Illuminate\Support\Facades\File;
 class InstallCommand extends Command
 {
     /**
+     * The assets.
+     *
+     * @var array
+     */
+    protected $assets = [
+        'resources/img' => 'vendor/bazar/img',
+        'public/app.js' => 'vendor/bazar/app.js',
+        'public/app.css' => 'vendor/bazar/app.css',
+        'public/app.css.map' => 'vendor/bazar/app.css.map',
+    ];
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -37,16 +49,10 @@ class InstallCommand extends Command
 
         File::ensureDirectoryExists(public_path('vendor/bazar'));
 
-        if (! is_file(public_path('vendor/bazar/app.js'))) {
-            symlink(__DIR__.'/../../../public/app.js', public_path('vendor/bazar/app.js'));
-        }
-
-        if (! is_file(public_path('vendor/bazar/app.css'))) {
-            symlink(__DIR__.'/../../../public/app.css', public_path('vendor/bazar/app.css'));
-        }
-
-        if (! is_dir(public_path('vendor/bazar/img'))) {
-            symlink(__DIR__.'/../../../resources/img', public_path('vendor/bazar/img'));
+        foreach ($this->assets as $from => $to) {
+            if (! file_exists(public_path($to))) {
+                symlink(__DIR__.'/../../../'.$from, public_path($to));
+            }
         }
 
         return $status;

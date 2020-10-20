@@ -82,7 +82,7 @@ class Response implements Responsable
         $page = [
             'props' => $props,
             'url' => $request->getRequestUri(),
-            'component' => preg_replace('/\s+/', ' ', $component->render()),
+            'component' => $component->render(),
         ];
 
         return $request->header('X-Inertia') ? ResponseFactory::json($page)->withHeaders([
