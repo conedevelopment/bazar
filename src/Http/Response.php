@@ -40,24 +40,6 @@ class Response implements Responsable
     }
 
     /**
-     * Push a property to the stack.
-     *
-     * @param  array|string  $key
-     * @param  mixed  $value
-     * @return $this
-     */
-    public function with($key, $value = null): Response
-    {
-        if (is_array($key)) {
-            $this->props = array_merge($this->props, $key);
-        } else {
-            $this->props[$key] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
      * Create an HTTP response that represents the object.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -85,9 +67,11 @@ class Response implements Responsable
             'component' => $component->render(),
         ];
 
-        return $request->header('X-Inertia') ? ResponseFactory::json($page)->withHeaders([
-            'Vary' => 'Accept',
-            'X-Inertia' => 'true',
-        ]) : ResponseFactory::view('bazar::app', compact('page'));
+        return $request->header('X-Inertia')
+            ? ResponseFactory::json($page)->withHeaders([
+                'Vary' => 'Accept',
+                'X-Inertia' => 'true',
+            ])
+            : ResponseFactory::view('bazar::app', compact('page'));
     }
 }
