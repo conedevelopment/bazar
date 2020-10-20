@@ -5,11 +5,12 @@ namespace Bazar\Tests\Feature;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Mail\NewOrderMail;
-use Bazar\Notifications\NewOrderNotification;
+use Bazar\Models\User;
+use Bazar\Notifications\AdminNewOrder;
+use Bazar\Notifications\CustomerNewOrder;
 use Bazar\Services\Checkout;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 
 class CheckoutTest extends TestCase
@@ -34,7 +35,6 @@ class CheckoutTest extends TestCase
     /** @test */
     public function it_can_process_checkout()
     {
-        Mail::fake();
         Notification::fake();
 
         $response = (new Checkout($this->cart))->shipping(
@@ -47,10 +47,14 @@ class CheckoutTest extends TestCase
             //
         })->process();
 
-        Mail::assertQueued(NewOrderMail::class, function ($mailable) {
-            return $mailable->order->address->email === $this->cart->address->email;
-        });
-        Notification::assertSentTo($this->admin, NewOrderNotification::class);
+        Notification::assertSentTo($this->admin, AdminNewOrder::class);
+        Notification::assertSentTo(
+            new AnonymousNotifiable,
+            CustomerNewOrder::class,
+            function ($notification, $channels, $notifiable) {
+                return $notifiable->routes['mail'] === $this->cart->address->email;
+            }
+        );
 
         $this->assertEquals('Success', $response);
     }

@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewOrderMail extends Mailable implements ShouldQueue
+class CustomerNewOrder extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -35,7 +35,7 @@ class NewOrderMail extends Mailable implements ShouldQueue
      *
      * @return $this
      */
-    public function build(): NewOrderMail
+    public function build(): CustomerNewOrder
     {
         return $this->markdown('bazar::emails.new-order');
     }
