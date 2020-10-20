@@ -34,9 +34,9 @@ class UsersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Illuminate\Contracts\Support\Responsable
+     * //return \Illuminate\Contracts\Support\Responsable
      */
-    public function index(Request $request, User $user): Responsable
+    public function index(Request $request, User $user)//: Responsable
     {
         $users = $user->newQuery()->with('addresses')->filter($request)->latest()->paginate(
             $request->input('per_page')
