@@ -5,7 +5,6 @@ namespace Bazar\Tests\Feature;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Models\User;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
 use Bazar\Services\Checkout;
