@@ -5,8 +5,8 @@ namespace Bazar\Http\Controllers;
 use Bazar\Contracts\Models\User;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 

@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class MoveFile implements ShouldQueue
 {
@@ -70,7 +69,7 @@ class MoveFile implements ShouldQueue
             $this->medium->path(), File::get($this->path)
         );
 
-        if (! $this->preserve && ! Str::startsWith($this->path, ['http://', 'https://'])) {
+        if (! $this->preserve && ! filter_var($this->path, FILTER_VALIDATE_URL)) {
             File::delete($this->path);
         }
     }

@@ -13,8 +13,8 @@ use Bazar\Models\Category;
 use Bazar\Models\Medium;
 use Bazar\Models\Product;
 use Bazar\Models\User;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 
 class BazarSeeder extends Seeder

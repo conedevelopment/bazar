@@ -11,7 +11,7 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
@@ -27,15 +27,13 @@ class CreateProductsTable extends Migration
 
         Schema::create('itemables', function (Blueprint $table) {
             $table->uuid('id');
-            $table->foreignId('product_id')->nullable();
+            $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
             $table->morphs('itemable');
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('tax')->default(0);
             $table->unsignedInteger('quantity');
             $table->json('properties')->nullable();
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('set null');
         });
     }
 
@@ -44,7 +42,7 @@ class CreateProductsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('itemables');
         Schema::dropIfExists('products');

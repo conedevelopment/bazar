@@ -15,7 +15,7 @@
 
 **Bazar is a powerful "headless" e-commerce system. Built on Laravel and Vue.**
 
-Adopt your own solutions quickly. Bazar provides a flexible and easily extensible system, following the good old Laravel conventions.
+Bazar provides a flexible and easily extensible system, respecting the Laravel conventions.
 
 
 ## 📚 Documentation

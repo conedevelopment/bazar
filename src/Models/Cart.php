@@ -7,10 +7,10 @@ use Bazar\Concerns\Addressable;
 use Bazar\Concerns\Itemable;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Shippable;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
+use Ramsey\Uuid\Uuid;
 
 class Cart extends Model implements Discountable, Shippable
 {
@@ -69,7 +69,7 @@ class Cart extends Model implements Discountable, Shippable
     protected static function booted(): void
     {
         static::creating(function (Cart $cart) {
-            $cart->token = Str::random(40);
+            $cart->token = Uuid::uuid4();
         });
 
         static::deleting(function (Cart $cart) {

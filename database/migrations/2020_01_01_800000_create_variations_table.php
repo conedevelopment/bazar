@@ -11,11 +11,11 @@ class CreateVariationsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id');
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->string('alias')->nullable();
             $table->json('option');
             $table->json('prices')->nullable();
@@ -24,7 +24,6 @@ class CreateVariationsTable extends Migration
             $table->softDeletes();
 
             $table->unique(['alias', 'product_id']);
-            $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
         });
     }
 
@@ -33,7 +32,7 @@ class CreateVariationsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('variations');
     }

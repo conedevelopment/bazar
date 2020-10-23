@@ -11,7 +11,7 @@ class CreateMediaTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
             $table->id();
@@ -28,10 +28,8 @@ class CreateMediaTable extends Migration
 
         Schema::create('mediables', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medium_id');
+            $table->foreignId('medium_id')->constrained()->cascadeOnDelete();
             $table->morphs('mediable');
-
-            $table->foreign('medium_id')->references('id')->on('media')->cascadeOnDelete();
         });
     }
 
@@ -40,7 +38,7 @@ class CreateMediaTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('mediables');
         Schema::dropIfExists('media');

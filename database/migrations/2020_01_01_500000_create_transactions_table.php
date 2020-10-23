@@ -11,19 +11,17 @@ class CreateTransactionsTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->string('key')->nullable()->unique();
             $table->string('driver')->nullable();
             $table->string('type');
             $table->unsignedDecimal('amount');
-            $table->timestamps();
             $table->timestamp('completed_at')->nullable();
-
-            $table->foreign('order_id')->references('id')->on('orders')->cascadeOnDelete();
+            $table->timestamps();
         });
     }
 
@@ -32,7 +30,7 @@ class CreateTransactionsTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('transactions');
     }
