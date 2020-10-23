@@ -3,7 +3,7 @@
     <br />
     <img src="https://pineco.de/wp-content/uploads/bazar/bazar-logo.svg" alt="bazar" width="100"/>
     <br />
-    <sub><strong>Toughtful Laravel e-commerce<strong></sub>
+    <sub><strong>Toughtful Laravel e-commerce</strong></sub>
     <br />
     <br />
   </a>
