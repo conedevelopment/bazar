@@ -57,9 +57,6 @@
             form() {
                 return this;
             },
-            trashed() {
-                return !! this.model.deleted_at;
-            },
             config() {
                 return {
                     data: this.fields,
@@ -104,30 +101,7 @@
 </script>
 
 <template>
-    <form @submit.prevent="submit" @reset.prevent="reset" @keydown.enter.prevent class="form">
-        <div v-if="! ajax" class="row">
-            <div class="col-12 col-lg-7 col-xl-8 form__body">
-                <slot v-bind="form"></slot>
-            </div>
-            <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
-                <div class="sticky-helper">
-                    <slot name="aside" v-bind="form"></slot>
-                    <card :title="__('Actions')">
-                        <div class="form-group d-flex justify-content-between mb-0">
-                            <inertia-link v-if="model.id" :href="action" method="DELETE" class="btn btn-outline-danger">
-                                {{ trashed ? __('Delete Permanently') : __('Trash') }}
-                            </inertia-link>
-                            <inertia-link v-if="trashed" :href="`${action}/restore`" method="PATCH" class="btn btn-warning">
-                                {{ __('Restore') }}
-                            </inertia-link>
-                            <button v-else type="submit" class="btn btn-primary">
-                                {{ model.id ? __('Update') : __('Save') }}
-                            </button>
-                        </div>
-                    </card>
-                </div>
-            </div>
-        </div>
-        <slot v-else v-bind="form"></slot>
+    <form class="form" @submit.prevent="submit" @reset.prevent="reset" @keydown.enter.prevent>
+        <slot v-bind="form"></slot>
     </form>
 </template>

@@ -1,22 +1,20 @@
 <p align="center">
   <a href="https://bazar.conedevelopment.com/">
-    <br />
+    <br/>
     <img src="https://pineco.de/wp-content/uploads/bazar/bazar-logo.svg" alt="bazar" width="100"/>
-    <br />
+    <br/>
     <sub><strong>Toughtful Laravel e-commerce</strong></sub>
-    <br />
-    <br />
+    <br/>
+    <br/>
   </a>
 </p>
 
 [![GitHub Actions](https://github.com/conedevelopment/bazar/workflows/tests/badge.svg)](https://github.com/conedevelopment/bazar/actions?query=workflow%3Atests)
 [![Coverage Status](https://coveralls.io/repos/github/conedevelopment/bazar/badge.svg?branch=master)](https://coveralls.io/github/conedevelopment/bazar?branch=master)
 
-
 **Bazar is a powerful "headless" e-commerce system. Built on Laravel and Vue.**
 
 Bazar provides a flexible and easily extensible system, respecting the Laravel conventions.
-
 
 ## 📚 Documentation
 
@@ -35,7 +33,6 @@ Bazar provides a flexible and easily extensible system, respecting the Laravel c
 
 Thank you for considering contributing to Bazar! The contribution guide can be found in the [documentation](https://bazar.conedevelopment.com/docs/contribution).
 
-
 ## 📝 License
 
-Bazar is open-sourced software licensed under the [MIT license](LICENSE.md).
+Bazar is open-sourced software licensed under the [MIT](LICENSE.md).

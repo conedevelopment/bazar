@@ -35,9 +35,9 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)//: Responsable
+    public function index(Request $request) //: Responsable
     {
         $products = Product::query()->with('media')->filter($request)->latest()->paginate(
             $request->input('per_page')

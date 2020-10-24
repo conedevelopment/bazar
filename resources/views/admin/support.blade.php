@@ -22,13 +22,17 @@
                         <tr>
                             <th>GitHub:</th>
                             <td>
-                                <a href="https://github.com/conedevelopment/bazar">https://github.com/conedevelopment/bazar</a>
+                                <a href="https://github.com/conedevelopment/bazar">
+                                    https://github.com/conedevelopment/bazar
+                                </a>
                             </td>
                         </tr>
                         <tr>
                             <th>Docs:</th>
                             <td>
-                                <a href="https://bazar.condevelopment.com">https://bazar.condevelopment.com</a>
+                                <a href="https://bazar.condevelopment.com">
+                                    https://bazar.condevelopment.com
+                                </a>
                             </td>
                         </tr>
                     </table>

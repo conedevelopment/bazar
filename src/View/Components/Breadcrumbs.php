@@ -86,7 +86,7 @@ class Breadcrumbs extends Component
      */
     public function render(): View
     {
-        return ViewFactory::make('bazar::layout.breadcrumbs', [
+        return ViewFactory::make('bazar::components.breadcrumbs', [
             'items' => $this->items(),
         ]);
     }

@@ -69,7 +69,7 @@ class Cart extends Model implements Discountable, Shippable
     protected static function booted(): void
     {
         static::creating(function (Cart $cart) {
-            $cart->token = Uuid::uuid4();
+            $cart->token = $cart->token ?: Uuid::uuid4();
         });
 
         static::deleting(function (Cart $cart) {

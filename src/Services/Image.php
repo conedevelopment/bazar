@@ -219,7 +219,7 @@ class Image
      * @throws \Exception
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    protected function create() //: resource
+     protected function create() //: resource
     {
         if (! is_file($this->medium->fullPath())) {
             throw new FileNotFoundException("The file located at [{$this->medium->fullPath()}] is not found.");

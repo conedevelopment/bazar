@@ -1,7 +1,7 @@
 /*!
- * Chart.js v2.9.3
+ * Chart.js v2.9.4
  * https://www.chartjs.org
- * (c) 2019 Chart.js Contributors
+ * (c) 2020 Chart.js Contributors
  * Released under the MIT License
  */
 
@@ -26,7 +26,5 @@
  */
 
 //! moment.js
-
-//! moment.js language configuration
 
 //! moment.js locale configuration

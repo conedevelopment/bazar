@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 
 class AdminNewOrder extends Notification implements ShouldQueue
 {
@@ -51,7 +52,7 @@ class AdminNewOrder extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->line(__('A new order has been placed.'))
-                    ->action(__('View Order'), route('bazar.orders.show', $this->order));
+                    ->action(__('View Order'), URL::route('bazar.orders.show', $this->order));
     }
 
     /**
@@ -64,7 +65,7 @@ class AdminNewOrder extends Notification implements ShouldQueue
     {
         return [
             'message' => __('A new order has been placed.'),
-            'url' => route('bazar.orders.show', $this->order),
+            'url' => URL::route('bazar.orders.show', $this->order),
         ];
     }
 }

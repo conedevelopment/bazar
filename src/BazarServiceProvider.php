@@ -172,6 +172,8 @@ class BazarServiceProvider extends ServiceProvider
 
         Blade::componentNamespace('Bazar\\View\\Components', 'bazar');
         Blade::components([
+            View\Components\Card::class,
+            View\Components\Form::class,
             View\Components\Breadcrumbs::class,
         ]);
     }
