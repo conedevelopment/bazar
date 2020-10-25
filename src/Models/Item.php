@@ -41,7 +41,7 @@ class Item extends MorphPivot implements Taxable
     protected $casts = [
         'tax' => 'float',
         'price' => 'float',
-        'properties' => 'array',
+        'properties' => 'json',
     ];
 
     /**

@@ -72,7 +72,7 @@ trait Itemable
      */
     public function getItemsAttribute(): Collection
     {
-        return $this->products->pluck('item')->filter();
+        return $this->products->pluck('item')->filter()->values();
     }
 
     /**
@@ -84,7 +84,7 @@ trait Itemable
     {
         return $this->items->merge([$this->shipping])->filter(function ($item) {
             return $item instanceof Taxable;
-        });
+        })->values();
     }
 
     /**
@@ -290,7 +290,7 @@ trait Itemable
     {
         return $this->items->first(function (Item $item) use ($product, $properties) {
             return (int) $item->product_id === (int) $product->id && empty(array_diff(
-                Arr::dot($properties), Arr::dot((array) $item->properties)
+                Arr::dot($properties), Arr::dot($item->properties)
             ));
         });
     }
