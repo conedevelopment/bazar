@@ -13,13 +13,6 @@ class Item extends MorphPivot implements Taxable
     use InteractsWithTaxes;
 
     /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'itemables';
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -69,6 +62,13 @@ class Item extends MorphPivot implements Taxable
      * @var array
      */
     protected static $propertyResolvers = [];
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'items';
 
     /**
      * The "booted" method of the model.

@@ -36,9 +36,11 @@ trait Itemable
      */
     public function products(): MorphToMany
     {
-        return $this->morphToMany(Product::class, 'itemable')->withPivot([
-            'id', 'price', 'tax', 'quantity', 'properties',
-        ])->withTimestamps()->as('item')->using(Item::class);
+        return $this->morphToMany(Product::class, 'itemable', 'items')
+                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
+                    ->withTimestamps()
+                    ->as('item')
+                    ->using(Item::class);
     }
 
     /**

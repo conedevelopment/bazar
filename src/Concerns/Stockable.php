@@ -3,6 +3,7 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -107,7 +108,7 @@ trait Stockable
      */
     public function free(): bool
     {
-        return is_null($this->price) || (int) $this->price === 0;
+        return is_null($this->price) || $this->price === 0;
     }
 
     /**
@@ -119,7 +120,7 @@ trait Stockable
     {
         $price = $this->price('sale');
 
-        return ! is_null($price) && (int) $price < (int) $this->price;
+        return ! is_null($price) && $price < $this->price;
     }
 
     /**
@@ -149,9 +150,9 @@ trait Stockable
      * Increment the quantity by the given value.
      *
      * @param  float  $quantity
-     * @return void
+     * @return $this
      */
-    public function incrementQuantity(float $quantity = 1): void
+    public function incrementQuantity(float $quantity = 1): Model
     {
         if ($this->tracksQuantity()) {
             $this->inventory = array_replace($this->inventory, [
@@ -160,15 +161,17 @@ trait Stockable
 
             $this->save();
         }
+
+        return $this;
     }
 
     /**
      * Decrement the quantity by the given value.
      *
      * @param  float  $quantity
-     * @return void
+     * @return $this
      */
-    public function decrementQuantity(float $quantity = 1): void
+    public function decrementQuantity(float $quantity = 1): Model
     {
         if ($this->tracksQuantity()) {
             $stock = $this->inventory('quantity');
@@ -179,5 +182,7 @@ trait Stockable
 
             $this->save();
         }
+
+        return $this;
     }
 }
