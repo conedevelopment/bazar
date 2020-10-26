@@ -7,7 +7,7 @@
                 type: String,
                 required: true
             },
-            ajax: {
+            json: {
                 type: Boolean,
                 default: false
             },
@@ -61,7 +61,7 @@
                 return {
                     data: this.fields,
                     method: this.method,
-                    headers: this.ajax ? {
+                    headers: this.json ? {
                         Accept: 'application/json',
                         'Content-Type': 'application/json'
                     } : {}
@@ -74,13 +74,13 @@
                 this.errors.clear();
                 this.$emit('submit');
 
-                if (this.ajax) {
-                    this.submitAjax();
+                if (this.json) {
+                    this.submitJson();
                 } else {
                     this.$inertia.visit(this.action, this.config);
                 }
             },
-            submitAjax() {
+            submitJson() {
                 this.busy = true;
                 this.success = false;
                 this.$http(Object.assign({ url: this.action }, this.config)).then(response => {

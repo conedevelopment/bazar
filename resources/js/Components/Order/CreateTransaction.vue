@@ -62,7 +62,7 @@
 </script>
 
 <template>
-    <data-form ajax ref="form" :action="action" :model="model" @success="add">
+    <data-form json ref="form" :action="action" :model="model" @success="add">
         <template #default="form">
             <button type="button" class="btn btn-sm btn-primary" @click.prevent="$refs.refund.open">
                 {{ __('Create Transaction') }}

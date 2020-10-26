@@ -32,10 +32,7 @@ export default class Bazar
                     initialPage: window.initialPage,
                     resolveComponent: component => {
                         return Vue.component('Layout', { template: component });
-                    },
-                    transformProps: props => Object.assign(props, {
-                        translations: window.translations
-                    })
+                    }
                 }
             }),
 

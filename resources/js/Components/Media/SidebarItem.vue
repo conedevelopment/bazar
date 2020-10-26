@@ -79,7 +79,7 @@
                 <li>{{ size }}</li>
                 <li v-if="item.is_image" v-html="dimensions"></li>
             </ul>
-            <data-form ajax ref="form" :action="action" :model="item">
+            <data-form json ref="form" :action="action" :model="item">
                 <template #default="form">
                     <form-input
                         class="form-group-sm"
