@@ -43,10 +43,12 @@ class ProductsController extends Controller
             $request->input('per_page')
         );
 
-        return ! $request->bazar() ? Component::render('bazar::admin.products.index', [
-            'results' => $products,
-            'filters' => Product::filters(),
-        ]) : Response::json($products);
+        return $request->expectsJson()
+            ? Response::json($products)
+            : Component::render('bazar::admin.products.index', [
+                'results' => $products,
+                'filters' => Product::filters(),
+            ]);
     }
 
     /**

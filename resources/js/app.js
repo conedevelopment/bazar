@@ -6,7 +6,9 @@ import 'simplebar';
 
 Vue.use(Http);
 Vue.use(InertiaApp);
-Vue.use(Translator);
+Vue.use(Translator, {
+    translations: window.translations
+});
 
 import debounce from './Directives/Debounce';
 Vue.directive('debounce', debounce);

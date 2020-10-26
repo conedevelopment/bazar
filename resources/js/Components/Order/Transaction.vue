@@ -85,7 +85,8 @@
             <div class="d-flex">
                 <button
                     type="button"
-                    class="icon-btn icon-btn-success"
+                    class="icon-btn"
+                    :class="{ 'icon-btn-success': ! completed, 'icon-btn-warning': completed }"
                     :disabled="busy"
                     :aria-label="completed ? __('Mark pending') : __('Mark completed')"
                     @click.prevent="update"

@@ -105,7 +105,7 @@
             :name="name"
             :class="{ 'is-invalid': invalid }"
             v-bind="attrs"
-            v-model.lazy="query.term"
+            v-model.lazy="query.search"
             v-debounce="300"
             @focus="open"
             @keydown.up="highlightPrev"

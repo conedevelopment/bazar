@@ -40,7 +40,11 @@ export default {
             return {
                 method: 'GET',
                 url: this.endpoint,
-                params: this.query
+                params: this.query,
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json'
+                }
             };
         }
     },

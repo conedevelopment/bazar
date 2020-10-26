@@ -42,10 +42,12 @@ class UsersController extends Controller
             $request->input('per_page')
         );
 
-        return ! $request->bazar() ? Component::render('bazar::admin.users.index', [
-            'results' => $users,
-            'filters' => $user::filters(),
-        ]) : Response::json($users);
+        return $request->expectsJson()
+            ? Response::json($users)
+            : Component::render('bazar::admin.users.index', [
+                'results' => $users,
+                'filters' => $user::filters(),
+            ]);
     }
 
     /**

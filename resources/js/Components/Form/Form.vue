@@ -60,7 +60,11 @@
             config() {
                 return {
                     data: this.fields,
-                    method: this.method
+                    method: this.method,
+                    headers: this.ajax ? {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    } : {}
                 };
             }
         },
