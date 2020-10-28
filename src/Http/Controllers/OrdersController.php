@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class OrdersController extends Controller
 {
@@ -49,7 +50,7 @@ class OrdersController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('bazar::admin.orders.index', [
+        return Component::render('Orders/Index', [
             'results' => $orders,
             'filters' => Order::filters(),
         ]);
@@ -80,11 +81,12 @@ class OrdersController extends Controller
             'address', Address::make($request->old('shipping.address', []))
         );
 
-        return Component::render('bazar::admin.orders.create', [
+        return Component::render('Orders/Create', [
             'order' => $order,
             'countries' => Countries::all(),
             'statuses' => Order::statuses(),
             'currencies' => Bazar::currencies(),
+            'action' => URL::route('bazar.orders.store', $order),
             'drivers' => Collection::make(Shipping::enabled())->map->name(),
         ]);
     }
@@ -132,9 +134,10 @@ class OrdersController extends Controller
     {
         $order->loadMissing(['address', 'products', 'transactions', 'shipping', 'shipping.address']);
 
-        return Component::render('bazar::admin.orders.show', [
+        return Component::render('Orders/Show', [
             'order' => $order,
             'statuses' => Order::statuses(),
+            'action' => URL::route('bazar.orders.update', $order),
         ]);
     }
 

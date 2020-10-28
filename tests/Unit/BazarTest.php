@@ -7,7 +7,6 @@ use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Route;
 
 class BazarTest extends TestCase
@@ -36,6 +35,12 @@ class BazarTest extends TestCase
 
         Bazar::currency('eur');
         $this->assertSame('eur', Bazar::currency());
+    }
+
+    /** @test */
+    public function it_has_asset_version()
+    {
+        $this->assertNull(Bazar::assetVersion());
     }
 
     /** @test */

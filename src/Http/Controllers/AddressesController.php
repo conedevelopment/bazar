@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 
 class AddressesController extends Controller
 {
@@ -41,7 +42,7 @@ class AddressesController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('bazar::admin.addresses.index', [
+        return Component::render('Addresses/Index', [
             'user' => $user,
             'results' => $addresses,
         ]);
@@ -57,10 +58,11 @@ class AddressesController extends Controller
     {
         $address = Address::make($request->old());
 
-        return Component::render('bazar::admin.addresses.create', [
+        return Component::render('Addresses/Create', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
+            'action' => URL::route('bazar.users.addresses.store', $user),
         ]);
     }
 
@@ -89,10 +91,11 @@ class AddressesController extends Controller
      */
     public function show(User $user, Address $address): Response
     {
-        return Component::render('bazar::admin.addresses.show', [
+        return Component::render('Addresses/Show', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
+            'action' => URL::route('bazar.users.addresses.update', [$user, $address]),
         ]);
     }
 

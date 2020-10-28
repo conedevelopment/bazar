@@ -26,6 +26,8 @@ import Alert from './Components/Alert';
 Vue.component('alert', Alert);
 import Modal from './Components/Modal';
 Vue.component('modal', Modal);
+import Layout from './Components/Layout';
+Vue.component('layout', Layout);
 
 // Table Components
 import Table from './Components/Table/Table';
@@ -59,20 +61,19 @@ Vue.component('form-downloads', Downloads);
 import Media from './Components/Form/Media';
 Vue.component('form-media', Media);
 
-// Widgets
-import Sales from './Components/Widgets/Sales';
-Vue.component('widget-sales', Sales);
-import Metrics from './Components/Widgets/Metrics';
-Vue.component('widget-metrics', Metrics);
-import Activities from './Components/Widgets/Activities';
-Vue.component('widget-activities', Activities);
-
 // Order Components
 import Products from './Components/Order/Products';
 Vue.component('order-products', Products);
 import Transactions from './Components/Order/Transactions';
 Vue.component('order-transactions', Transactions);
 
-// Bazar
-import Bazar from './Support/Bazar';
-window.Bazar = new Bazar;
+new Vue({
+    render: h => h(InertiaApp, {
+        props: {
+            initialPage: JSON.parse(app.dataset.page),
+            resolveComponent: name => {
+                return require(`./Pages/${name}`).default;
+            }
+        }
+    })
+}).$mount(app);

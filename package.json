@@ -12,6 +12,7 @@
     "devDependencies": {
         "@inertiajs/inertia": "^0.3.6",
         "@inertiajs/inertia-vue": "^0.2.4",
+        "axios": "^0.21.0",
         "bootstrap": "^4.5.3",
         "chart.js": "^2.9.4",
         "cross-env": "^7.0.2",

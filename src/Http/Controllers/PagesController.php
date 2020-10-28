@@ -15,7 +15,7 @@ class PagesController extends Controller
      */
     public function dashboard(): Response
     {
-        return Component::render('bazar::admin.dashboard');
+        return Component::render('Dashboard');
     }
 
     /**
@@ -25,7 +25,7 @@ class PagesController extends Controller
      */
     public function support(): Response
     {
-        return Component::render('bazar::admin.support', [
+        return Component::render('Support', [
             'version' => Bazar::version(),
         ]);
     }

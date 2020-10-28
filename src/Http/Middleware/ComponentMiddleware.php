@@ -23,6 +23,14 @@ class ComponentMiddleware
             return $response;
         }
 
+        if ($request->isMethod('GET') && $request->header('X-Inertia-Version', '') !== Bazar::assetVersion()) {
+            if ($request->hasSession()) {
+                $request->session()->reflash();
+            }
+
+            return Response::make('', Redirect::HTTP_CONFLICT, ['X-Inertia-Location' => $request->fullUrl()]);
+        }
+
         if ($response instanceof Redirect
             && $response->getStatusCode() === Redirect::HTTP_FOUND
             && in_array($request->method(), ['PUT', 'PATCH', 'DELETE'])) {

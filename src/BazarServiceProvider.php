@@ -6,12 +6,9 @@ use Bazar\Models\Item;
 use Bazar\Services\Image;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -164,13 +161,6 @@ class BazarServiceProvider extends ServiceProvider
                 '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::currency())
             );
         });
-
-        Blade::componentNamespace('Bazar\\View\\Components', 'bazar');
-        Blade::components([
-            View\Components\Card::class,
-            View\Components\Form::class,
-            View\Components\Breadcrumbs::class,
-        ]);
     }
 
     /**
@@ -181,17 +171,9 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerComposers(): void
     {
         View::composer('bazar::*', function ($view) {
-            $view->with('admin', Auth::user());
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
-        });
-
-        View::creator('bazar::*', function ($view) {
-            $view->with('message', Session::has('errors') ? __('Something went wrong!') : Session::get('message'));
-            $view->with('errors', Session::has('errors') ? array_map(function (array $errors) {
-                return $errors[0];
-            }, Session::get('errors')->getBag('default')->messages()) : (object) []);
         });
     }
 

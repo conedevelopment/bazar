@@ -18,21 +18,15 @@
 
     {{-- Scripts --}}
     <script>
-        window.initialPage = {!! json_encode($page) !!};
         window.translations = {!! json_encode($translations) !!};
     </script>
     <script src="{{ URL::asset('vendor/bazar/app.js') }}" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Bazar.boot();
-        });
-    </script>
 
     {{-- Title --}}
     <title>Bazar</title>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="app" data-page="{{ json_encode($page) }}"></div>
 
     @include ('bazar::layout.svg-icons')
 </body>

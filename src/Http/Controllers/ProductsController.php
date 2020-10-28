@@ -15,6 +15,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
 
 class ProductsController extends Controller
 {
@@ -45,7 +46,7 @@ class ProductsController extends Controller
 
         return $request->expectsJson()
             ? Response::json($products)
-            : Component::render('bazar::admin.products.index', [
+            : Component::render('Products/Index', [
                 'results' => $products,
                 'filters' => Product::filters(),
             ]);
@@ -64,9 +65,10 @@ class ProductsController extends Controller
             ->setAttribute('categories', [])
             ->forceFill($request->old());
 
-        return Component::render('bazar::admin.products.create', [
+        return Component::render('Products/Create', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
+            'action' => URL::route('bazar.products.store'),
             'categories' => Category::select(['id', 'name'])->get(),
         ]);
     }
@@ -104,9 +106,10 @@ class ProductsController extends Controller
     {
         $product->loadMissing(['media', 'categories:categories.id,categories.name']);
 
-        return Component::render('bazar::admin.products.show', [
+        return Component::render('Products/Show', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
+            'action' => URL::route('bazar.products.update', $product),
             'categories' => Category::select(['id', 'name'])->get(),
         ]);
     }
