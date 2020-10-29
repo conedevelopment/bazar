@@ -78,7 +78,7 @@ class ProductsTest extends TestCase
             ->assertOk()
             ->assertViewHas(
                 'page.props.product',
-                $this->product->refresh()->loadMissing(['media', 'categories:categories.id,categories.name'])->toArray()
+                $this->product->refresh()->loadMissing(['media', 'categories.id.name'])->toArray()
             );
     }
 

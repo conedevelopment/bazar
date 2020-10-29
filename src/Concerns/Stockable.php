@@ -124,6 +124,26 @@ trait Stockable
     }
 
     /**
+     * Determine if the stockable model is virtual.
+     *
+     * @return bool
+     */
+    public function virtual(): bool
+    {
+        return (bool) $this->inventory('virtual', false);
+    }
+
+    /**
+     * Determine if the stockable model is downloadable.
+     *
+     * @return bool
+     */
+    public function downloadable(): bool
+    {
+        return (bool) $this->inventory('downloadable', false);
+    }
+
+    /**
      * Determine if the stockable model tracks quantity.
      *
      * @return bool

@@ -88,6 +88,9 @@ class ProductTest extends TestCase
         $this->assertSame(30, $this->product->inventory('quantity'));
         $this->product->decrementQuantity(6);
         $this->assertSame(24, $this->product->inventory('quantity'));
+
+        $this->assertFalse($this->product->virtual());
+        $this->assertFalse($this->product->downloadable());
     }
 
     /** @test */

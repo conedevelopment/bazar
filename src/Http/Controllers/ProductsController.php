@@ -36,9 +36,9 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Support\Responsable|\Illuminate\Http\JsonResponse
+     * @return \Bazar\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function index(Request $request) //: Responsable
+    public function index(Request $request) //: Response
     {
         $products = Product::query()->with('media')->filter($request)->latest()->paginate(
             $request->input('per_page')
@@ -104,7 +104,7 @@ class ProductsController extends Controller
      */
     public function show(Product $product): Responsable
     {
-        $product->loadMissing(['media', 'categories:categories.id,categories.name']);
+        $product->loadMissing(['media', 'categories:id,name']);
 
         return Component::render('Products/Show', [
             'product' => $product,

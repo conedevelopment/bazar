@@ -156,7 +156,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerMacros(): void
     {
-        Str::macro('currency', function ($value, string $currency = null) {
+        Str::macro('currency', static function ($value, string $currency = null) {
             return sprintf(
                 '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::currency())
             );
@@ -196,11 +196,11 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerConversions(): void
     {
-        Conversion::register('thumb', function (Image $image) {
+        Conversion::register('thumb', static function (Image $image) {
             $image->crop(500, 500);
         });
 
-        Conversion::register('medium', function (Image $image) {
+        Conversion::register('medium', static function (Image $image) {
             $image->resize(1400, 1000);
         });
     }
@@ -228,7 +228,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerItemProperties(): void
     {
-        Item::resolvePropertyUsing('option', function (Item $item, array $value) {
+        Item::resolvePropertyUsing('option', static function (Item $item, array $value) {
             $item->product->loadMissing('variations');
 
             $stock = $item->product->inventory('quantity');

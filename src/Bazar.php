@@ -16,7 +16,7 @@ abstract class Bazar
      *
      * @var string
      */
-    public const VERSION = '0.1.0';
+    public const VERSION = '0.2.0';
 
     /**
      * The default currency.
@@ -90,7 +90,7 @@ abstract class Bazar
             ->prefix('bazar')
             ->middleware([
                 'web', 'auth', 'can:manage-bazar', ComponentMiddleware::class, ShareComponentData::class,
-            ])->group(function ($router) use ($callback) {
+            ])->group(static function ($router) use ($callback) {
                 $callback($router);
             });
     }
