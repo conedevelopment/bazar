@@ -27,7 +27,7 @@ abstract class FormRequest extends BaseFormRequest
     protected function prepareForValidation(): void
     {
         Event::dispatch(
-            'bazar.validating: '.get_class($this),
+            'bazar.validating:'.get_class($this),
             $this->getValidatorInstance()
         );
     }

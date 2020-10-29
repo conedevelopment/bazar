@@ -36,7 +36,7 @@ class BatchProductsController extends Controller
     {
         $data = Arr::dot($request->except('ids'));
 
-        $data = Collection::make($data)->filter()->mapWithKeys(function ($item, $key) {
+        $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, $key) {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 

@@ -26,8 +26,8 @@ class TransactionStoreRequest extends FormRequest
             'driver' => [
                 'required',
                 Rule::in($this->route('order')->transactions->pluck('driver')->push('manual')->unique()->when(
-                    $this->input('type') === 'payment', function (Collection $collection) {
-                        return $collection->filter(function (string $driver) {
+                    $this->input('type') === 'payment', static function (Collection $collection) {
+                        return $collection->filter(static function (string $driver) {
                             return $driver === 'manual';
                         });
                     }

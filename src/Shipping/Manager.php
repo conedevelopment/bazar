@@ -53,7 +53,7 @@ class Manager extends BaseManager implements Contract
      */
     public function enabled(): array
     {
-        return array_filter($this->all(), function (Driver $driver) {
+        return array_filter($this->all(), static function (Driver $driver) {
             return $driver->enabled();
         });
     }
@@ -65,7 +65,7 @@ class Manager extends BaseManager implements Contract
      */
     public function disabled(): array
     {
-        return array_filter($this->all(), function (Driver $driver) {
+        return array_filter($this->all(), static function (Driver $driver) {
             return $driver->disabled();
         });
     }

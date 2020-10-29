@@ -2,6 +2,7 @@
 
 namespace Bazar\Http\Requests;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
 class AddressStoreRequest extends FormRequest
@@ -20,7 +21,7 @@ class AddressStoreRequest extends FormRequest
             'alias' => [
                 'nullable',
                 'string',
-                Rule::unique('addresses')->where(function ($query) {
+                Rule::unique('addresses')->where(function (Builder $query) {
                     return $query->where([
                         ['addressable_type', get_class($this->route('user'))],
                         ['addressable_id', $this->route('user')->id]

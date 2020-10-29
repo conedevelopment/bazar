@@ -25,7 +25,7 @@ class DownloadController extends Controller
         try {
             $url = Crypt::decryptString($request->input('url'));
 
-            return ResponseFactory::streamDownload(function () use ($url) {
+            return ResponseFactory::streamDownload(static function () use ($url) {
                 echo file_get_contents(
                     $url, false, stream_context_create(['ssl' => ['verify_peer' => false]])
                 );

@@ -109,7 +109,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $products = Collection::make($data['products'])->mapWithKeys(function ($product) use ($data) {
+        $products = Collection::make($data['products'])->mapWithKeys(static function ($product) use ($data) {
             return [$product['id'] => [
                 'tax' => $product['item_tax'] ?? 0,
                 'quantity' => $product['item_quantity'] ?? 1,

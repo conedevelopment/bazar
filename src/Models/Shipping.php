@@ -64,7 +64,7 @@ class Shipping extends Model implements Taxable
      */
     protected static function booted(): void
     {
-        static::deleting(function (Shipping $shipping) {
+        static::deleting(static function (Shipping $shipping) {
             $shipping->address()->delete();
         });
     }

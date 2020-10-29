@@ -128,7 +128,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function variation(array $option): ?Variation
     {
-        return $this->variations->sortBy(function (Variation $variation) {
+        return $this->variations->sortBy(static function (Variation $variation) {
             return array_count_values($variation->option)['*'] ?? 0;
         })->first(function (Variation $variation) use ($option) {
             $option = array_replace(array_fill_keys(array_keys($this->options), '*'), $option);
@@ -182,7 +182,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where(function (Builder $query) use ($value) {
+        return $query->where(static function (Builder $query) use ($value) {
             return $query->where('name', 'like', "{$value}%")
                         ->orWhere('inventory->sku', 'like', "{$value}");
         });

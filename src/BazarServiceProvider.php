@@ -6,10 +6,12 @@ use Bazar\Models\Item;
 use Bazar\Services\Image;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Contracts\View\View;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Route as RouteFactory;
+use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -82,12 +84,12 @@ class BazarServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
-            Route::get('bazar/download', Http\Controllers\DownloadController::class)
+            RouteFactory::get('bazar/download', Http\Controllers\DownloadController::class)
                 ->middleware('signed')
                 ->name('bazar.download');
         }
 
-        Route::bind('user', function (string $value, $route) {
+        RouteFactory::bind('user', function (string $value, Route $route) {
             return $this->app->make(Contracts\Models\User::class)->resolveRouteBinding(
                 $value, $route->bindingFieldFor('user')
             );
@@ -170,7 +172,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerComposers(): void
     {
-        View::composer('bazar::*', function ($view) {
+        ViewFactory::composer('bazar::*', function (View $view) {
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));

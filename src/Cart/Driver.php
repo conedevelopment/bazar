@@ -106,7 +106,7 @@ abstract class Driver
      */
     public function remove($item): void
     {
-        $ids = array_map(function ($item) {
+        $ids = array_map(static function ($item) {
             return $item instanceof Item ? $item->id : $item;
         }, Arr::wrap($item));
 
@@ -125,7 +125,7 @@ abstract class Driver
     {
         $this->cart->products->whereIn(
             'item.id', array_keys($items)
-        )->each(function (Product $product) use ($items) {
+        )->each(static function (Product $product) use ($items) {
             $product->item
                 ->setRelation('product', $product)
                 ->update($items[$product->item->id]);

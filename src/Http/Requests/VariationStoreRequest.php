@@ -3,6 +3,7 @@
 namespace Bazar\Http\Requests;
 
 use Bazar\Rules\Option;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
 class VariationStoreRequest extends FormRequest
@@ -18,7 +19,7 @@ class VariationStoreRequest extends FormRequest
             'alias' => [
                 'nullable',
                 'string',
-                Rule::unique('variations')->where(function ($query) {
+                Rule::unique('variations')->where(function (Builder $query) {
                     return $query->where('product_id', $this->route('product')->id);
                 }),
             ],

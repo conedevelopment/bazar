@@ -54,8 +54,8 @@ class Checkout
         $this->cart = $cart;
         $this->gateway = Gateway::getDefaultDriver();
 
-        $this->onFailure = function (Order $order) {};
-        $this->onSuccess = function (Throwable $exception, Order $order) {};
+        $this->onFailure = static function (Order $order) {};
+        $this->onSuccess = static function (Throwable $exception, Order $order) {};
     }
 
     /**
@@ -93,7 +93,7 @@ class Checkout
      */
     public function shipping(string $driver, array $details = []): Checkout
     {
-        tap($this->cart->shipping->driver($driver), function (Shipping $shipping) {
+        tap($this->cart->shipping->driver($driver), static function (Shipping $shipping) {
             if (! $shipping->exists) {
                 $shipping->save();
             }

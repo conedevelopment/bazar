@@ -66,7 +66,7 @@ class Medium extends Model
      */
     protected static function booted(): void
     {
-        static::deleting(function (Medium $medium) {
+        static::deleting(static function (Medium $medium) {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);
         });
     }

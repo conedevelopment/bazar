@@ -82,7 +82,7 @@ trait Itemable
      */
     public function getTaxablesAttribute(): Collection
     {
-        return $this->items->merge([$this->shipping])->filter(function ($item) {
+        return $this->items->merge([$this->shipping])->filter(static function ($item) {
             return $item instanceof Taxable;
         })->values();
     }
@@ -134,7 +134,7 @@ trait Itemable
      */
     public function getTaxAttribute(): float
     {
-        $value = $this->taxables->sum(function (Taxable $taxable) {
+        $value = $this->taxables->sum(static function (Taxable $taxable) {
             return $taxable->tax * $taxable->quantity;
         });
 
@@ -168,7 +168,7 @@ trait Itemable
      */
     public function total(): float
     {
-        $value = $this->taxables->reduce(function (float $value, Taxable $item) {
+        $value = $this->taxables->reduce(static function (float $value, Taxable $item) {
             return $value + $item->total;
         }, -$this->discount);
 
@@ -192,7 +192,7 @@ trait Itemable
      */
     public function netTotal(): float
     {
-        $value = $this->taxables->reduce(function (float $value, Taxable $item) {
+        $value = $this->taxables->reduce(static function (float $value, Taxable $item) {
             return $value + $item->netTotal;
         }, -$this->discount);
 
@@ -217,7 +217,7 @@ trait Itemable
      */
     public function tax(bool $update = true): float
     {
-        return $this->taxables->sum(function (Taxable $taxable) use ($update) {
+        return $this->taxables->sum(static function (Taxable $taxable) use ($update) {
             return $taxable->tax($update) * $taxable->quantity;
         });
     }
@@ -266,9 +266,9 @@ trait Itemable
      */
     public function downloads(): Collection
     {
-        return $this->products->filter(function (Product $product) {
+        return $this->products->filter(static function (Product $product) {
             return $product->inventory['downloadable'];
-        })->flatMap(function (Product $product) {
+        })->flatMap(static function (Product $product) {
             return $product->inventory['files'];
         })->map(function (array $file) {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;

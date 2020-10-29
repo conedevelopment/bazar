@@ -17,20 +17,20 @@ class ShareComponentData
     public function handle($request, callable $next)
     {
         Component::share([
-            'csrf_token' => function () {
+            'csrf_token' => static function () {
                 return csrf_token();
             },
-            'admin' => function () use ($request) {
+            'admin' => static function () use ($request) {
                 return $request->user();
             },
-            'breadcrumbs' => function () use ($request) {
+            'breadcrumbs' => static function () use ($request) {
                 return new Breadcrumbs($request);
             },
-            'message' => function () use ($request) {
+            'message' => static function () use ($request) {
                 return $request->session()->get('message');
             },
-            'errors' => function () use ($request) {
-                return $request->session()->has('errors') ? array_map(function (array $errors) {
+            'errors' => static function () use ($request) {
+                return $request->session()->has('errors') ? array_map(static function (array $errors) {
                     return $errors[0];
                 }, $request->session()->get('errors')->getBag('default')->messages()) : (object) [];
             },

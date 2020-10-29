@@ -2,6 +2,7 @@
 
 namespace Bazar\Http\Requests;
 
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
 class AddressUpdateRequest extends FormRequest

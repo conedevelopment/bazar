@@ -75,7 +75,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      */
     protected static function booted(): void
     {
-        static::deleting(function (Order $order) {
+        static::deleting(static function (Order $order) {
             if ($order->forceDeleting) {
                 $order->address()->delete();
                 $order->products()->detach();
@@ -96,7 +96,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
 
         $order->user()->associate($cart->user)->save();
 
-        $cart->items->each(function (Item $item) use ($order) {
+        $cart->items->each(static function (Item $item) use ($order) {
             $order->products()->attach($item->product_id, $item->toArray());
         });
 
@@ -293,7 +293,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->whereHas('address', function (Builder $query) use ($value) {
+        return $query->whereHas('address', static function (Builder $query) use ($value) {
             return $query->where('addresses.first_name', 'like', "{$value}%")
                         ->orWhere('addresses.last_name', 'like', "{$value}%");
         });
@@ -320,7 +320,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      */
     public function scopeUser(Builder $query, int $value): Builder
     {
-        return $query->whereHas('user', function (Builder $query) use ($value) {
+        return $query->whereHas('user', static function (Builder $query) use ($value) {
             return $query->where('users.id', $value);
         });
     }
