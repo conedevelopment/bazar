@@ -9,16 +9,6 @@ use Illuminate\Support\Facades\File;
 class InstallCommand extends Command
 {
     /**
-     * The assets.
-     *
-     * @var array
-     */
-    protected $assets = [
-        'public' => 'vendor/bazar',
-        'resources/img' => 'vendor/bazar/img',
-    ];
-
-    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -47,10 +37,8 @@ class InstallCommand extends Command
 
         File::ensureDirectoryExists(public_path('vendor'));
 
-        foreach ($this->assets as $from => $to) {
-            if (! file_exists(public_path($to))) {
-                symlink(__DIR__.'/../../../'.$from, public_path($to));
-            }
+        if (! file_exists(public_path('vendor/bazar'))) {
+            symlink(__DIR__.'/../../../public', public_path('vendor/bazar'));
         }
 
         return $status;
