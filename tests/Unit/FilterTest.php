@@ -25,7 +25,7 @@ class FilterTest extends TestCase
             'category' => 1,
         ]);
 
-        $query = Product::where(function ($query) {
+        $query = Product::query()->where(function ($query) {
             $query->where('name', 'like', 'test%')
                 ->orWhere('inventory->sku', 'like', 'test%');
         })->withTrashed()
@@ -52,7 +52,7 @@ class FilterTest extends TestCase
             'user' => 1,
         ]);
 
-        $query = Order::whereHas('address', function ($query) {
+        $query = Order::query()->whereHas('address', function ($query) {
             $query->where('addresses.first_name', 'like', 'test%')
                 ->orWhere('addresses.last_name', 'like', 'test%');
         })->withTrashed()
@@ -79,7 +79,7 @@ class FilterTest extends TestCase
             'type' => 'image',
         ]);
 
-        $query = Medium::where('name', 'like', 'test%')
+        $query = Medium::query()->where('name', 'like', 'test%')
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc')
           ->where('mime_type', 'like', 'image%');
@@ -98,7 +98,7 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Address::where('alias', 'like', 'test%')
+        $query = Address::query()->where('alias', 'like', 'test%')
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');
 
@@ -116,7 +116,7 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Category::where('name', 'like', 'test%')
+        $query = Category::query()->where('name', 'like', 'test%')
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');
 
@@ -135,7 +135,7 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = User::where(function ($query) {
+        $query = User::query()->where(function ($query) {
             $query->where('name', 'like', 'test%')
                 ->orWhere('email', 'like', 'test%');
         })->whereNotIn('id', [1, 2])
@@ -156,7 +156,7 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Variation::where('alias', 'like', 'test%')
+        $query = Variation::query()->where('alias', 'like', 'test%')
           ->onlyTrashed()
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');

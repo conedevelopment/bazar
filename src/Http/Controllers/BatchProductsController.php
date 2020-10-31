@@ -40,7 +40,7 @@ class BatchProductsController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Product::whereIn(
+        Product::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 

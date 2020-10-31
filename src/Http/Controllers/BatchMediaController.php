@@ -31,7 +31,7 @@ class BatchMediaController extends Controller
      */
     public function destroy(Request $request): JsonResponse
     {
-        $media = Medium::whereIn('id', $request->input('ids', []));
+        $media = Medium::query()->whereIn('id', $request->input('ids', []));
 
         $media->each(static function (Medium $medium) {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);

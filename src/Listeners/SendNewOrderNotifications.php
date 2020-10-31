@@ -23,7 +23,7 @@ class SendNewOrderNotifications implements ShouldQueue
      */
     public function handle(OrderPlaced $event): void
     {
-        if ($users = User::whereIn('email', Config::get('bazar.admins', []))->get()) {
+        if ($users = User::query()->whereIn('email', Config::get('bazar.admins', []))->get()) {
             Notification::send($users, new AdminNewOrder($event->order));
         }
 

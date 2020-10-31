@@ -40,7 +40,7 @@ class BatchOrdersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Order::whereIn(
+        Order::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 

@@ -66,7 +66,7 @@ class WidgetsController extends Controller
                 return array_merge($days, [Carbon::now()->subDays(count($days))->format('m-d')]);
             }, []));
 
-            $orders = Order::whereNotIn('status', ['cancelled', 'failed'])->where(
+            $orders = Order::query()->whereNotIn('status', ['cancelled', 'failed'])->where(
                 'created_at', '>=', Carbon::now()->subDays(7)->startOfDay()
             )->get()->groupBy(static function ($order) {
                 return $order->created_at->format('m-d');

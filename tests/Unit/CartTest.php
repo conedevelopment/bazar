@@ -111,7 +111,7 @@ class CartTest extends TestCase
             'shippings', ['shippable_type' => Cart::class, 'shippable_id' => $this->cart->id]
         );
         $this->assertSame(
-            0, Item::where([['itemable_type', Cart::class], ['itemable_id', $this->cart->id]])->count()
+            0, Item::query()->where([['itemable_type', Cart::class], ['itemable_id', $this->cart->id]])->count()
         );
     }
 }

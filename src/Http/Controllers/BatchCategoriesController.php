@@ -40,7 +40,7 @@ class BatchCategoriesController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Category::whereIn(
+        Category::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 

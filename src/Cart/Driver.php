@@ -231,7 +231,7 @@ abstract class Driver
         ]);
 
         if ($user && $cart->user_id !== $user->id) {
-            Cart::where('user_id', $user->id)->update(['user_id' => null]);
+            Cart::query()->where('user_id', $user->id)->update(['user_id' => null]);
 
             $cart->user()->associate($user)->save();
         }

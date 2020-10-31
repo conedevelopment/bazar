@@ -31,23 +31,23 @@ class ClearCartsCommand extends Command
     public function handle(): int
     {
         if ($this->option('all')) {
-            Item::where('itemable_type', Cart::class)->delete();
-
-            Shipping::where('shippable_type', Cart::class)->delete();
-
-            Cart::truncate();
+            Cart::query()->truncate();
+            Item::query()->where('itemable_type', Cart::class)->delete();
+            Shipping::query()->where('shippable_type', Cart::class)->delete();
 
             $this->info('All carts have been deleted.');
         } else {
-            Item::where('itemable_type', Cart::class)->whereIn(
-                'itemable_id', Cart::expired()->select('id')
-            )->delete();
+            Item::query()
+                ->where('itemable_type', Cart::class)
+                ->whereIn('itemable_id', Cart::expired()->select('id'))
+                ->delete();
 
-            Shipping::where('shippable_type', Cart::class)->whereIn(
-                'shippable_id', Cart::expired()->select('id')
-            )->delete();
+            Shipping::query()
+                    ->where('shippable_type', Cart::class)
+                    ->whereIn('shippable_id', Cart::expired()->select('id'))
+                    ->delete();
 
-            Cart::expired()->delete();
+            Cart::query()->expired()->delete();
 
             $this->info('Expired carts have been deleted.');
         }
