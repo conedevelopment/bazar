@@ -37,7 +37,7 @@ class InstallCommand extends Command
 
         File::ensureDirectoryExists(public_path('vendor'));
 
-        if (! file_exists(public_path('vendor/bazar'))) {
+        if (! is_dir(public_path('vendor/bazar'))) {
             symlink(__DIR__.'/../../../public', public_path('vendor/bazar'));
         }
 
