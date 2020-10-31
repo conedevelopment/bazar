@@ -28,6 +28,9 @@ jobs:
           tools: composer:v2
           coverage: pcov
 
+      - name: Check Composer configuration
+        run: composer validate --strict
+
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
