@@ -13,7 +13,7 @@ class CreateItemsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('items', static function (Blueprint $table) {
             $table->uuid('id');
             $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
             $table->morphs('itemable');

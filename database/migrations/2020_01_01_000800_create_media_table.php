@@ -13,7 +13,7 @@ class CreateMediaTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('media', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('file_name');
@@ -26,7 +26,7 @@ class CreateMediaTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mediables', function (Blueprint $table) {
+        Schema::create('mediables', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('medium_id')->constrained()->cascadeOnDelete();
             $table->morphs('mediable');

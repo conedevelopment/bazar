@@ -13,7 +13,7 @@ class CreateCategoriesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('categories', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -22,7 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('category_product', function (Blueprint $table) {
+        Schema::create('category_product', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();

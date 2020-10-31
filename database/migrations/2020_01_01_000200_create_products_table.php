@@ -13,7 +13,7 @@ class CreateProductsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('products', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -24,17 +24,6 @@ class CreateProductsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        Schema::create('itemables', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
-            $table->morphs('itemable');
-            $table->unsignedDecimal('price');
-            $table->unsignedDecimal('tax')->default(0);
-            $table->unsignedInteger('quantity');
-            $table->json('properties')->nullable();
-            $table->timestamps();
-        });
     }
 
     /**
@@ -44,7 +33,6 @@ class CreateProductsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('itemables');
         Schema::dropIfExists('products');
     }
 }

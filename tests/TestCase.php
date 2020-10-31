@@ -39,7 +39,7 @@ abstract class TestCase extends BaseTestCase
         $this->user = UserFactory::new()->create();
     }
 
-    public function registerPolicies(): void
+    protected function registerPolicies(): void
     {
         Gate::policy(User::class, ModelPolicy::class);
         Gate::policy(Product::class, ModelPolicy::class);

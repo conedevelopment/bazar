@@ -13,7 +13,7 @@ class CreateAddressesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
+        Schema::create('addresses', static function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
             $table->string('first_name', 60)->nullable();

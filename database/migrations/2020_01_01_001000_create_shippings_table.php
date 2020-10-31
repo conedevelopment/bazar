@@ -13,7 +13,7 @@ class CreateShippingsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('shippings', function (Blueprint $table) {
+        Schema::create('shippings', static function (Blueprint $table) {
             $table->id();
             $table->morphs('shippable');
             $table->string('driver')->default('local-pickup');
