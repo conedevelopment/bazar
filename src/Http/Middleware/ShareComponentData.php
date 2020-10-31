@@ -4,6 +4,7 @@ namespace Bazar\Http\Middleware;
 
 use Bazar\Support\Breadcrumbs;
 use Bazar\Support\Facades\Component;
+use Illuminate\Support\Facades\Config;
 
 class ShareComponentData
 {
@@ -19,6 +20,12 @@ class ShareComponentData
         Component::share([
             'csrf_token' => static function () {
                 return csrf_token();
+            },
+            'config' => static function () {
+                return [
+                    'weight_unit' => Config::get('bazar.weight_unit'),
+                    'dimension_unit' => Config::get('bazar.dimension_unit'),
+                ];
             },
             'admin' => static function () use ($request) {
                 return $request->user();

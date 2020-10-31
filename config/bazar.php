@@ -14,7 +14,7 @@ return [
     */
 
     'admins' => [
-        // admin@bazar.test
+        'admin@bazar.test',
     ],
 
     /*

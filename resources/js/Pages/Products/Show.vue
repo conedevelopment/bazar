@@ -67,7 +67,7 @@
                         name="inventory.weight"
                         min="0"
                         type="number"
-                        :label="__('Weight (:unit)', { unit: 'g' })"
+                        :label="__('Weight (:unit)', { unit: $page.config.weight_unit })"
                         v-model="form.fields.inventory.weight"
                         v-show="! form.fields.inventory.virtual"
                     ></form-input>
@@ -77,7 +77,7 @@
                                 name="inventory.dimensions.length"
                                 min="0"
                                 type="number"
-                                :label="__('Length (:unit)', { unit: 'mm' })"
+                                :label="__('Length (:unit)', { unit: $page.config.dimension_unit })"
                                 v-model="form.fields.inventory.dimensions.length"
                             ></form-input>
                         </div>
@@ -86,7 +86,7 @@
                                 name="inventory.dimensions.width"
                                 min="0"
                                 type="number"
-                                :label="__('Width (:unit)', { unit: 'mm' })"
+                                :label="__('Width (:unit)', { unit: $page.config.dimension_unit })"
                                 v-model="form.fields.inventory.dimensions.width"
                             ></form-input>
                         </div>
@@ -95,7 +95,7 @@
                                 name="inventory.dimensions.height"
                                 min="0"
                                 type="number"
-                                :label="__('Height (:unit)', { unit: 'mm' })"
+                                :label="__('Height (:unit)', { unit: $page.config.dimension_unit })"
                                 v-model="form.fields.inventory.dimensions.height"
                             ></form-input>
                         </div>
