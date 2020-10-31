@@ -12,7 +12,9 @@ use Bazar\Http\Controllers\CategoriesController;
 use Bazar\Http\Controllers\MediaController;
 use Bazar\Http\Controllers\OrdersController;
 use Bazar\Http\Controllers\PagesController;
+use Bazar\Http\Controllers\PasswordController;
 use Bazar\Http\Controllers\ProductsController;
+use Bazar\Http\Controllers\ProfileController;
 use Bazar\Http\Controllers\TransactionsController;
 use Bazar\Http\Controllers\UsersController;
 use Bazar\Http\Controllers\VariationsController;
@@ -22,6 +24,12 @@ use Illuminate\Support\Facades\Route;
 // Pages
 Route::get('/', [PagesController::class, 'dashboard'])->name('dashboard');
 Route::get('support', [PagesController::class, 'support'])->name('support');
+
+// Profile & Password
+Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::get('password', [PasswordController::class, 'show'])->name('password.show');
+Route::patch('password', [PasswordController::class, 'update'])->name('password.update');
 
 // Users
 Route::patch('users/batch-update', [BatchUsersController::class, 'update'])->name('users.batch-update');

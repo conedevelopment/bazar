@@ -20,6 +20,10 @@
             model: {
                 type: Object,
                 required: true
+            },
+            custom: {
+                type: Boolean,
+                default: false
             }
         },
 
@@ -109,7 +113,7 @@
 
 <template>
     <form class="form" @submit.prevent="submit" @reset.prevent="reset" @keydown.enter.prevent>
-        <div v-if="! json" class="row">
+        <div v-if="! json && ! custom" class="row">
             <div class="col-12 col-lg-7 col-xl-8 form__body">
                 <slot v-bind="form"></slot>
             </div>

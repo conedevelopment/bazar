@@ -4,7 +4,6 @@ namespace Bazar\Console\Commands;
 
 use Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
 {
@@ -14,10 +13,8 @@ class InstallCommand extends Command
      * @var array
      */
     protected $assets = [
+        'public' => 'vendor/bazar',
         'resources/img' => 'vendor/bazar/img',
-        'public/app.js' => 'vendor/bazar/app.js',
-        'public/app.css' => 'vendor/bazar/app.css',
-        'public/app.css.map' => 'vendor/bazar/app.css.map',
     ];
 
     /**
@@ -46,8 +43,6 @@ class InstallCommand extends Command
         if ($this->option('seed') && $this->laravel->environment('local')) {
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
-
-        File::ensureDirectoryExists(public_path('vendor/bazar'));
 
         foreach ($this->assets as $from => $to) {
             if (! file_exists(public_path($to))) {

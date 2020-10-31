@@ -33,17 +33,17 @@
                             container: [
                                 [{ header: [1, 2, 3, 4, false] }],
                                 ['bold', 'italic', 'underline'],
-                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                                ['clean'],
-                                // ['image']
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
+                                ['link', 'image'],
+                                ['clean']
                             ],
-                            // handlers: {
-                            //     image: this.mediaHandler
-                            // }
+                            handlers: {
+                                image: this.mediaHandler
+                            }
                         }
                     },
                     theme: 'snow',
-                    formats: ['header', 'bold', 'underline', 'italic', 'list'],
+                    formats: ['header', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
                     placeholder: this.$attrs.placeholder || ''
                 };
             }
@@ -53,24 +53,26 @@
             update() {
                 this.$emit('input', this.editor.root.innerHTML === '<p><br></p>' ? '' : this.editor.root.innerHTML);
             },
-            // mediaHandler() {
-            //     this.$refs.media.open();
-            // },
-            // insertMedia(values) {
-            //     const range = this.editor.getSelection() || 0;
-            //     values.forEach(value => {
-            //         if (value.is_image) {
-            //             this.editor.insertEmbed(
-            //                 range ? range.index : 0, 'image', value.urls.original, Quill.sources.USER
-            //             );
-            //         } else {
-            //             this.editor.insertText(
-            //                 range ? range.index : 0, value.name, 'link', value.urls.original, Quill.sources.USER
-            //             );
-            //         }
-            //     });
-            //     this.$refs.media.selection = [];
-            // }
+            mediaHandler() {
+                this.$refs.media.open();
+            },
+            insertMedia(values) {
+                const range = this.editor.getSelection() || 0;
+
+                values.forEach(value => {
+                    if (value.is_image) {
+                        this.editor.insertEmbed(
+                            range ? range.index : 0, 'image', value.urls.original, Quill.sources.USER
+                        );
+                    } else {
+                        this.editor.insertText(
+                            range ? range.index : 0, value.name, 'link', value.urls.original, Quill.sources.USER
+                        );
+                    }
+                });
+
+                this.$refs.media.selection = [];
+            }
         }
     }
 </script>
@@ -82,6 +84,6 @@
         <span v-if="help || invalid" class="form-text" :class="{ 'text-danger': invalid }">
             {{ error || help }}
         </span>
-        <!-- <media-manager ref="media" multiple @input="insertMedia"></media-manager> -->
+        <media-manager ref="media" multiple @input="insertMedia"></media-manager>
     </div>
 </template>

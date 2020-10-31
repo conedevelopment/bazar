@@ -144,7 +144,16 @@
                 </template>
                 <template #default>
                     <h6 class="dropdown-header">{{ __('User') }}</h6>
-                    <button type="submit" form="logout-form" class="dropdown-item">{{ __('Logout') }}</button>
+                    <inertia-link href="/bazar/profile" class="dropdown-item">
+                        {{ __('Profile') }}
+                    </inertia-link>
+                    <inertia-link href="/bazar/password" class="dropdown-item">
+                        {{ __('Password') }}
+                    </inertia-link>
+                    <div class="dropdown-divider"></div>
+                    <button type="submit" form="logout-form" class="dropdown-item">
+                        {{ __('Logout') }}
+                    </button>
                 </template>
             </dropdown>
             <form id="logout-form" :action="logoutUrl" method="POST" style="display: none;">
