@@ -3,6 +3,8 @@
 namespace Bazar\Http\Middleware;
 
 use Bazar\Bazar;
+use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse as Redirect;
 
@@ -12,10 +14,10 @@ class ComponentMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  callable  $next
+     * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, callable $next)
+    public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
 

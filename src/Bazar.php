@@ -6,6 +6,7 @@ use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Http\Middleware\ComponentMiddleware;
 use Bazar\Http\Middleware\ShareComponentData;
 use Closure;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -86,12 +87,15 @@ abstract class Bazar
      */
     public static function routes(Closure $callback): void
     {
-        Route::as('bazar.')
-            ->prefix('bazar')
-            ->middleware([
-                'web', 'auth', 'can:manage-bazar', ComponentMiddleware::class, ShareComponentData::class,
-            ])->group(static function ($router) use ($callback) {
-                $callback($router);
-            });
+        Route::as('bazar.')->prefix('bazar')->middleware([
+            'web',
+            'auth',
+            'verified',
+            'can:manage-bazar',
+            ComponentMiddleware::class,
+            ShareComponentData::class,
+        ])->group(static function (Router $router) use ($callback) {
+            $callback($router);
+        });
     }
 }
