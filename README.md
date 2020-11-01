@@ -1,13 +1,13 @@
-<p align="center">
+<h1 align="center">
   <a href="https://bazar.conedevelopment.com">
     <br/>
-    <img src="https://pineco.de/wp-content/uploads/bazar/bazar-logo.svg" alt="Bazar" width="100">
+    <img src="https://pineco.de/wp-content/uploads/bazar/bazar-logo.svg" alt="Bazar" width="100%">
     <br/>
-    <sub><strong>Toughtful Laravel e-commerce</strong></sub>
+    Toughtful Laravel e-commerce
     <br/>
     <br/>
   </a>
-</p>
+</h1>
 
 [![GitHub Actions](https://github.com/conedevelopment/bazar/workflows/tests/badge.svg)](https://github.com/conedevelopment/bazar/actions?query=workflow%3Atests)
 [![Coverage Status](https://coveralls.io/repos/github/conedevelopment/bazar/badge.svg?branch=master)](https://coveralls.io/github/conedevelopment/bazar?branch=master)
