@@ -111,7 +111,7 @@ class Transaction extends Model
     {
         $date = $date ?: Carbon::now();
 
-        if (is_null($this->completed_at) || $this->completed_at->diff($date)->s !== 0) {
+        if (is_null($this->completed_at) || $this->completed_at->notEqualTo($date)) {
             $this->forceFill(['completed_at' => $date])->save();
         }
 
@@ -151,7 +151,7 @@ class Transaction extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePayments(Builder $query): Builder
+    public function scopePayment(Builder $query): Builder
     {
         return $query->where('type', 'payment');
     }
@@ -162,7 +162,7 @@ class Transaction extends Model
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeRefunds(Builder $query): Builder
+    public function scopeRefund(Builder $query): Builder
     {
         return $query->where('type', 'refund');
     }

@@ -96,9 +96,11 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
 
         $order->user()->associate($cart->user)->save();
 
-        $cart->items->each(static function (Item $item) use ($order) {
-            $order->products()->attach($item->product_id, $item->toArray());
-        });
+        $order->products()->attach(
+            $cart->items->mapWithKeys(static function (Item $item) {
+                return [$item->product_id => $item->only(['price', 'tax', 'quantity', 'properties'])];
+            })->all()
+        );
 
         $order->address()->save($cart->address);
         $order->shipping()->save($cart->shipping);

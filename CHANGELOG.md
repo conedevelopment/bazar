@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+### Changed
+- `payments` scope hasa been renamed to `payment` in the `Transaction` model
+- `refunds` scope hasa been renamed to `refund` in the `Transaction` model
+
 ## v0.2.0 (2020-10-29)
 ### Added
 - Added `virtial` method in the `Stockable` trait
