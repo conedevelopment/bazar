@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -84,6 +85,34 @@ class Product extends Model implements Breadcrumbable
             ],
             'category' => array_map('__', Category::pluck('name', 'id')->toArray()),
         ];
+    }
+
+    /**
+     * Get the orders for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function orders(): MorphToMany
+    {
+        return $this->morphedByMany(Order::class, 'itemable', 'items')
+                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
+                    ->withTimestamps()
+                    ->as('item')
+                    ->using(Item::class);
+    }
+
+    /**
+     * Get the carts for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function carts(): MorphToMany
+    {
+        return $this->morphedByMany(Cart::class, 'itemable', 'items')
+                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
+                    ->withTimestamps()
+                    ->as('item')
+                    ->using(Item::class);
     }
 
     /**

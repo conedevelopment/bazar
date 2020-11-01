@@ -3,8 +3,10 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
+use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
 use Bazar\Models\Product;
@@ -22,6 +24,30 @@ class ProductTest extends TestCase
         $this->product = ProductFactory::new()->create([
             'options' => ['size' => ['XS', 'S', 'M', 'L'], 'material' => ['Gold', 'Silver']],
         ]);
+    }
+
+    /** @test */
+    public function it_belongs_to_orders()
+    {
+        $order = OrderFactory::new()->create();
+
+        $this->product->orders()->attach($order, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
+
+        $this->assertTrue(
+            $this->product->orders->pluck('id')->contains($order->id)
+        );
+    }
+
+    /** @test */
+    public function it_belongs_to_carts()
+    {
+        $cart = CartFactory::new()->create();
+
+        $this->product->carts()->attach($cart, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
+
+        $this->assertTrue(
+            $this->product->carts->pluck('id')->contains($cart->id)
+        );
     }
 
     /** @test */

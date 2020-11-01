@@ -1,9 +1,13 @@
 # Changelog
 
 ## Unreleased
+### Added
+- The `orders` relations has been added to the `Product` model
+- The `carts` relations has been added to the `Product` model
+
 ### Changed
-- `payments` scope hasa been renamed to `payment` in the `Transaction` model
-- `refunds` scope hasa been renamed to `refund` in the `Transaction` model
+- The `payments` scope has been renamed to `payment` in the `Transaction` model
+- The `refunds` scope has been renamed to `refund` in the `Transaction` model
 
 ## v0.2.0 (2020-10-29)
 ### Added
@@ -12,12 +16,12 @@
 - Added missing unit and feature tests
 
 ### Changed
-- The `bazar:install` will create a symlink to the compiled assets
+- The `bazar:install` creates a symlink to the compiled assets
 - `Mailabiles` are removed, using `Notifications` instead
 - Reorganized migrations
 
 ### Removed
-- Removed `bazar:scaffold` command
+- Removed the `bazar:scaffold` command
 
 ### Fixed
 - Reset item and taxable keys in the `Itemable` trait
