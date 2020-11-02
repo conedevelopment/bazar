@@ -72,7 +72,11 @@ trait Itemable
      */
     public function getItemsAttribute(): Collection
     {
-        return $this->products->pluck('item')->filter()->values();
+        return $this->products->map(function (Product $product) {
+            return $product->item
+                ->setRelation('product', $product)
+                ->setRelation('itemable', $this);
+        });
     }
 
     /**
@@ -288,7 +292,7 @@ trait Itemable
      */
     public function item(Product $product, array $properties = []): ?Item
     {
-        return $this->items->first(function (Item $item) use ($product, $properties) {
+        return $this->items->first(static function (Item $item) use ($product, $properties) {
             return (int) $item->product_id === (int) $product->id && empty(array_diff(
                 Arr::dot($properties), Arr::dot($item->properties)
             ));

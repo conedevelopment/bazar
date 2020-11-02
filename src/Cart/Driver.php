@@ -74,21 +74,13 @@ abstract class Driver
     public function add(Product $product, float $quantity = 1, array $properties = []): Item
     {
         if ($item = $this->item($product, $properties)) {
-            $item->setRelation('product', $product);
-
-            $item->pivotParent = $this->cart;
-
             $item->update(compact('properties') + [
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            $item = Item::make(compact('quantity', 'properties'))->forceFill([
-                'product_id' => $product->id,
-                'itemable_type' => Cart::class,
-                'itemable_id' => $this->cart->id,
-            ])->setRelation('product', $product);
-
-            $item->pivotParent = $this->cart;
+            $item = Item::make(compact('quantity', 'properties'))
+                ->product()->associate($product)
+                ->itemable()->associate($this->cart);
 
             $item->save();
         }
@@ -123,12 +115,10 @@ abstract class Driver
      */
     public function update(array $items = []): void
     {
-        $this->cart->products->whereIn(
-            'item.id', array_keys($items)
-        )->each(static function (Product $product) use ($items) {
-            $product->item
-                ->setRelation('product', $product)
-                ->update($items[$product->item->id]);
+        $this->cart->items->whereIn(
+            'id', array_keys($items)
+        )->each(static function (Item $item) use ($items) {
+            $item->update($items[$item->id]);
         });
 
         CartTouched::dispatch($this->cart);

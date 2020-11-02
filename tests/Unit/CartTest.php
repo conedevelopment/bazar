@@ -6,10 +6,8 @@ use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\ShippingFactory;
-use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
-use Bazar\Models\Shipping;
 use Bazar\Tests\TestCase;
 
 class CartTest extends TestCase
@@ -23,7 +21,7 @@ class CartTest extends TestCase
         $this->cart = CartFactory::new()->create();
 
         $this->products = ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
-            [$quantity, $tax, $price] = [mt_rand(1, 5), 0, $product->price];
+            [$quantity, $tax, $price] = [mt_rand(1, 5), 0, $product->price('sale') ?: $product->price()];
 
             return [$product->id => compact('price', 'tax', 'quantity')];
         });

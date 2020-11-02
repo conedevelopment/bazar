@@ -88,7 +88,7 @@ class Product extends Model implements Breadcrumbable
     }
 
     /**
-     * Get the orders for the model.
+     * Get the orders for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -102,7 +102,7 @@ class Product extends Model implements Breadcrumbable
     }
 
     /**
-     * Get the carts for the model.
+     * Get the carts for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
@@ -116,7 +116,7 @@ class Product extends Model implements Breadcrumbable
     }
 
     /**
-     * Get all of the categories for the model.
+     * Get all of the categories for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

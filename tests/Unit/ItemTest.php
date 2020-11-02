@@ -35,7 +35,7 @@ class ItemTest extends TestCase
     public function it_is_taxable()
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
-        $this->assertSame(Str::currency($this->item->tax, $this->item->pivotParent->currency), $this->item->formattedTax());
+        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->formattedTax());
         $this->assertSame($this->item->formattedTax(), $this->item->formattedTax);
     }
 
@@ -45,7 +45,7 @@ class ItemTest extends TestCase
         $this->assertSame($this->item->product->price('sale') + 0.9, $this->item->price);
         $this->assertSame($this->item->price, $this->item->price());
         $this->assertSame(
-            Str::currency($this->item->price, $this->item->pivotParent->currency), $this->item->formattedPrice()
+            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->formattedPrice()
         );
         $this->assertSame($this->item->formattedPrice(), $this->item->formattedPrice);
     }
@@ -59,14 +59,14 @@ class ItemTest extends TestCase
         );
         $this->assertSame($this->item->total(), $this->item->total);
         $this->assertSame(
-            Str::currency($this->item->total, $this->item->pivotParent->currency),
+            Str::currency($this->item->total, $this->item->itemable->currency),
             $this->item->formattedTotal()
         );
         $this->assertSame($this->item->formattedTotal(), $this->item->formattedTotal);
         $this->assertSame($this->item->price * $this->item->quantity, $this->item->netTotal());
         $this->assertSame($this->item->netTotal(), $this->item->netTotal);
         $this->assertSame(
-            Str::currency($this->item->netTotal, $this->item->pivotParent->currency),
+            Str::currency($this->item->netTotal, $this->item->itemable->currency),
             $this->item->formattedNetTotal()
         );
         $this->assertSame($this->item->formattedNetTotal(), $this->item->formattedNetTotal);

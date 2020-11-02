@@ -4,7 +4,9 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Taxable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
@@ -45,6 +47,16 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'product',
+        'itemable',
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -82,8 +94,8 @@ class Item extends MorphPivot implements Taxable
         });
 
         static::saving(static function (Item $item) {
-            if ($item->itemable_type === Cart::class && $item->product instanceof Product) {
-                foreach (array_replace(['option' => []], $item->properties) as $name => $value) {
+            if ($item->itemable_type === Cart::class) {
+                foreach (array_replace(['option' => []], (array) $item->properties) as $name => $value) {
                     if ($resolver = static::$propertyResolvers[$name] ?? null) {
                         call_user_func_array($resolver, [$item, $value]);
                     }
@@ -104,6 +116,26 @@ class Item extends MorphPivot implements Taxable
     public static function resolvePropertyUsing(string $name, callable $callback): void
     {
         static::$propertyResolvers[$name] = $callback;
+    }
+
+    /**
+     * Get the product for the item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the itemable model for the item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function itemable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
     /**
@@ -183,7 +215,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function formattedPrice(): string
     {
-        return Str::currency($this->price(), $this->pivotParent->currency);
+        return Str::currency($this->price(), $this->itemable->currency);
     }
 
     /**
@@ -203,7 +235,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function formattedTotal(): string
     {
-        return Str::currency($this->total(), $this->pivotParent->currency);
+        return Str::currency($this->total(), $this->itemable->currency);
     }
 
     /**
@@ -223,7 +255,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function formattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->pivotParent->currency);
+        return Str::currency($this->netTotal(), $this->itemable->currency);
     }
 
     /**

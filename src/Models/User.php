@@ -103,7 +103,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     }
 
     /**
-     * Get the cart for the model.
+     * Get the cart for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
@@ -113,7 +113,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     }
 
     /**
-     * Get the orders for the model.
+     * Get the orders for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -123,7 +123,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     }
 
     /**
-     * Get the addresses for the model.
+     * Get the addresses for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */

@@ -30,7 +30,7 @@ trait InteractsWithTaxes
         $currency = Bazar::currency();
 
         if ($this instanceof Item) {
-            $currency = $this->pivotParent->currency;
+            $currency = $this->itemable->currency;
         }
 
         if ($this instanceof Shipping) {
