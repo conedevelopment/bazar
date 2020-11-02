@@ -78,11 +78,13 @@ abstract class Driver
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            $item = Item::make(compact('quantity', 'properties'))
-                ->product()->associate($product)
-                ->itemable()->associate($this->cart);
-
-            $item->save();
+            $item = tap(Item::make(compact('quantity', 'properties')), function (Item $item) use ($product) {
+                $item->product()
+                    ->associate($product)
+                    ->itemable()
+                    ->associate($this->cart)
+                    ->save();
+            });
         }
 
         CartTouched::dispatch($this->cart);
