@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v0.2.1 (2020-11-02)
 ### Added
 - The `orders` relations has been added to the `Product` model
 - The `carts` relations has been added to the `Product` model
