@@ -97,13 +97,9 @@ class Response implements Responsable
             ? Arr::only($this->props, $only)
             : $this->props;
 
-        array_walk_recursive($props, function (&$prop) use ($request) {
+        array_walk_recursive($props, function (&$prop) {
             if ($prop instanceof Closure) {
                 $prop = App::call($prop);
-            }
-
-            if ($prop instanceof Responsable) {
-                $prop = $prop->toResponse($request)->getData();
             }
 
             if ($prop instanceof Arrayable) {
