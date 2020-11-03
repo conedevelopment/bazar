@@ -18,7 +18,7 @@ class ProductUpdateRequest extends FormRequest
             'slug' => [
                 'required',
                 'string',
-                Rule::unique('products')->ignoreModel($this->route('product')),
+                Rule::unique('bazar_products')->ignoreModel($this->route('product')),
             ],
             'description' => ['nullable', 'string'],
             'options' => ['nullable', 'array'],
@@ -31,7 +31,7 @@ class ProductUpdateRequest extends FormRequest
             'inventory.sku' => [
                 'nullable',
                 'string',
-                Rule::unique('products', 'inventory->sku')->ignoreModel($this->route('product')),
+                Rule::unique('bazar_products', 'inventory->sku')->ignoreModel($this->route('product')),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],

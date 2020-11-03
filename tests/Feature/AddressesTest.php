@@ -60,7 +60,7 @@ class AddressesTest extends TestCase
             $this->user->fresh()->addresses->reverse()->first()
         ]));
 
-        $this->assertDatabaseHas('addresses', ['first_name' => 'Test']);
+        $this->assertDatabaseHas('bazar_addresses', ['first_name' => 'Test']);
     }
 
     /** @test */
@@ -104,7 +104,7 @@ class AddressesTest extends TestCase
             ->delete(URL::route('bazar.users.addresses.destroy', [$this->user, $this->address]))
             ->assertRedirect(URL::route('bazar.users.addresses.index', $this->user));
 
-        $this->assertDatabaseMissing('addresses', ['id' => $this->address->id]);
+        $this->assertDatabaseMissing('bazar_addresses', ['id' => $this->address->id]);
     }
 
     /** @test */
@@ -134,6 +134,6 @@ class AddressesTest extends TestCase
             ['ids' => [$this->address->id]]
         )->assertStatus(302);
 
-        $this->assertDatabaseMissing('addresses', ['id' => $this->address->id]);
+        $this->assertDatabaseMissing('bazar_addresses', ['id' => $this->address->id]);
     }
 }

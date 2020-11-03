@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class CreateBazarOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateOrdersTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', static function (Blueprint $table) {
+        Schema::create('bazar_orders', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('status');
             $table->string('currency');
             $table->unsignedDecimal('discount')->default(0);
@@ -31,6 +31,6 @@ class CreateOrdersTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('bazar_orders');
     }
 }

@@ -58,6 +58,13 @@ class Shipping extends Model implements Taxable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_shippings';
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -76,7 +83,7 @@ class Shipping extends Model implements Taxable
      */
     public function shippable(): MorphTo
     {
-        return $this->morphTo()->withDefault(function () {
+        return $this->morphTo()->withDefault(static function () {
             return new Cart;
         });
     }

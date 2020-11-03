@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVariationsTable extends Migration
+class CreateBazarProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreateVariationsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('variations', static function (Blueprint $table) {
+        Schema::create('bazar_products', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->string('alias')->nullable();
-            $table->json('option');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
             $table->json('prices')->nullable();
+            $table->json('options')->nullable();
             $table->json('inventory')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->unique(['alias', 'product_id']);
         });
     }
 
@@ -34,6 +33,6 @@ class CreateVariationsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('variations');
+        Schema::dropIfExists('bazar_products');
     }
 }

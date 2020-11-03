@@ -88,8 +88,8 @@ class TransactionsTest extends TestCase
         )->assertCreated()
          ->assertJson($refund);
 
-        $this->assertDatabaseHas('transactions', ['amount' => $payment['amount'], 'type' => $payment['type']]);
-        $this->assertDatabaseHas('transactions', ['amount' => $refund['amount'], 'type' => $refund['type']]);
+        $this->assertDatabaseHas('bazar_transactions', ['amount' => $payment['amount'], 'type' => $payment['type']]);
+        $this->assertDatabaseHas('bazar_transactions', ['amount' => $refund['amount'], 'type' => $refund['type']]);
     }
 
     /** @test */
@@ -128,7 +128,7 @@ class TransactionsTest extends TestCase
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 
-        $this->assertDatabaseMissing('transactions', ['id' => $this->transaction->id]);
+        $this->assertDatabaseMissing('bazar_transactions', ['id' => $this->transaction->id]);
     }
 }
 

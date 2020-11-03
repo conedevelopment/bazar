@@ -69,6 +69,13 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_orders';
+
+    /**
      * The "booted" method of the model.
      *
      * @return void

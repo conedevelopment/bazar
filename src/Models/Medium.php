@@ -60,6 +60,13 @@ class Medium extends Model
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_media';
+
+    /**
      * The "booted" method of the model.
      *
      * @return void

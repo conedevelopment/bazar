@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CreateBazarShippingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateItemsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('items', static function (Blueprint $table) {
-            $table->uuid('id');
-            $table->foreignId('product_id')->nullable()->constrained()->onDelete('set null');
-            $table->morphs('itemable');
-            $table->unsignedDecimal('price');
+        Schema::create('bazar_shippings', static function (Blueprint $table) {
+            $table->id();
+            $table->morphs('shippable');
+            $table->string('driver')->default('local-pickup');
+            $table->unsignedDecimal('cost')->default(0);
             $table->unsignedDecimal('tax')->default(0);
-            $table->unsignedInteger('quantity');
-            $table->json('properties')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateItemsTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('bazar_shippings');
     }
 }

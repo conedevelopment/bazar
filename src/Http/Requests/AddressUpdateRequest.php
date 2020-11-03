@@ -21,7 +21,7 @@ class AddressUpdateRequest extends FormRequest
             'alias' => [
                 'nullable',
                 'string',
-                Rule::unique('addresses')->where(function ($query) {
+                Rule::unique('bazar_addresses')->where(function ($query) {
                     return $query->where([
                         ['addressable_type', get_class($this->route('user'))],
                         ['addressable_id', $this->route('user')->id]

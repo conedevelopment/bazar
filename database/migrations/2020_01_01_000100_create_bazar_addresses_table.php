@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddressesTable extends Migration
+class CreateBazarAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAddressesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', static function (Blueprint $table) {
+        Schema::create('bazar_addresses', static function (Blueprint $table) {
             $table->id();
             $table->morphs('addressable');
             $table->string('first_name', 60)->nullable();
@@ -41,6 +41,6 @@ class CreateAddressesTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::dropIfExists('bazar_addresses');
     }
 }

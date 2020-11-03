@@ -64,6 +64,13 @@ class Variation extends Model implements Breadcrumbable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_variations';
+
+    /**
      * Get the product for the transaction.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

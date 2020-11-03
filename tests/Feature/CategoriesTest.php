@@ -64,7 +64,7 @@ class CategoriesTest extends TestCase
             CategoryFactory::new()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(URL::route('bazar.categories.show', Category::find(2)));
 
-        $this->assertDatabaseHas('categories', ['name' => 'Test']);
+        $this->assertDatabaseHas('bazar_categories', ['name' => 'Test']);
     }
 
     /** @test */
@@ -120,7 +120,7 @@ class CategoriesTest extends TestCase
             ->delete(URL::route('bazar.categories.destroy', $this->category))
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('categories', ['id' => $this->category->id]);
+        $this->assertDatabaseMissing('bazar_categories', ['id' => $this->category->id]);
     }
 
     /** @test */
@@ -172,7 +172,7 @@ class CategoriesTest extends TestCase
             ->delete(URL::route('bazar.categories.batch-destroy', ['force']), ['ids' => [$this->category->id]])
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('categories', ['id' => $this->category->id]);
+        $this->assertDatabaseMissing('bazar_categories', ['id' => $this->category->id]);
     }
 
     /** @test */

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMediaTable extends Migration
+class CreateBazarMediaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMediaTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('media', static function (Blueprint $table) {
+        Schema::create('bazar_media', static function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('file_name');
@@ -26,9 +26,9 @@ class CreateMediaTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('mediables', static function (Blueprint $table) {
+        Schema::create('bazar_mediables', static function (Blueprint $table) {
             $table->id();
-            $table->foreignId('medium_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('medium_id')->constrained('bazar_media')->cascadeOnDelete();
             $table->morphs('mediable');
         });
     }
@@ -40,7 +40,7 @@ class CreateMediaTable extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mediables');
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('bazar_mediables');
+        Schema::dropIfExists('bazar_media');
     }
 }

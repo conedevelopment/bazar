@@ -44,6 +44,13 @@ class Transaction extends Model
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_transactions';
+
+    /**
      * Get the order for the transaction.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

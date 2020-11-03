@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.2.2 (2020-11-03)
+### Changed
+- Bazar migrations table names have the `bazar_` prefix
+
 ## v0.2.1 (2020-11-02)
 ### Added
 - The `orders` relations has been added to the `Product` model

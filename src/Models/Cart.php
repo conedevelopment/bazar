@@ -62,6 +62,13 @@ class Cart extends Model implements Discountable, Shippable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_carts';
+
+    /**
      * The "booted" method of the model.
      *
      * @return void

@@ -78,7 +78,7 @@ class OrdersTest extends TestCase
             ])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 
-        $this->assertDatabaseHas('orders', $order->only(['discount', 'currency']));
+        $this->assertDatabaseHas('bazar_orders', $order->only(['discount', 'currency']));
     }
 
     /** @test */
@@ -138,7 +138,7 @@ class OrdersTest extends TestCase
             ->delete(URL::route('bazar.orders.destroy', $this->order))
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('orders', ['id' => $this->order->id]);
+        $this->assertDatabaseMissing('bazar_orders', ['id' => $this->order->id]);
     }
 
     /** @test */
@@ -190,7 +190,7 @@ class OrdersTest extends TestCase
             ->delete(URL::route('bazar.orders.batch-destroy', ['force']), ['ids' => [$this->order->id]])
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('orders', ['id' => $this->order->id]);
+        $this->assertDatabaseMissing('bazar_orders', ['id' => $this->order->id]);
     }
 
     /** @test */

@@ -38,13 +38,20 @@ class Category extends Model implements Breadcrumbable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_categories';
+
+    /**
      * Get the products for the category.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'bazar_category_product');
     }
 
     /**

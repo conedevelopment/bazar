@@ -103,10 +103,10 @@ class CartTest extends TestCase
         $this->cart->delete();
 
         $this->assertDatabaseMissing(
-            'addresses', ['addressable_type' => Cart::class, 'addressable_id' => $this->cart->id]
+            'bazar_addresses', ['addressable_type' => Cart::class, 'addressable_id' => $this->cart->id]
         );
         $this->assertDatabaseMissing(
-            'shippings', ['shippable_type' => Cart::class, 'shippable_id' => $this->cart->id]
+            'bazar_shippings', ['shippable_type' => Cart::class, 'shippable_id' => $this->cart->id]
         );
         $this->assertSame(
             0, Item::query()->where([['itemable_type', Cart::class], ['itemable_id', $this->cart->id]])->count()

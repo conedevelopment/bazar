@@ -63,7 +63,7 @@ class VariationsTest extends TestCase
             VariationFactory::new()->make(['option' => ['Size' => 'M']])->toArray()
         )->assertRedirect(URL::route('bazar.products.variations.show', [$this->product, Variation::find(2)]));
 
-        $this->assertDatabaseHas('variations', ['option->Size' => 'M']);
+        $this->assertDatabaseHas('bazar_variations', ['option->Size' => 'M']);
     }
 
     /** @test */
@@ -96,7 +96,7 @@ class VariationsTest extends TestCase
             array_replace_recursive($this->variation->toArray(), ['option' => ['Size' => 'L']])
         )->assertRedirect(URL::route('bazar.products.variations.show', [$this->product, $this->variation]));
 
-        $this->assertDatabaseHas('variations', ['option->Size' => 'L']);
+        $this->assertDatabaseHas('bazar_variations', ['option->Size' => 'L']);
     }
 
     /** @test */
@@ -116,7 +116,7 @@ class VariationsTest extends TestCase
             ->delete(URL::route('bazar.products.variations.destroy', [$this->product, $this->variation]))
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('variations', ['id' => $this->variation->id]);
+        $this->assertDatabaseMissing('bazar_variations', ['id' => $this->variation->id]);
     }
 
     /** @test */
@@ -172,7 +172,7 @@ class VariationsTest extends TestCase
                 ['ids' => [$this->variation->id]]
             )->assertStatus(302);
 
-        $this->assertDatabaseMissing('variations', ['id' => $this->variation->id]);
+        $this->assertDatabaseMissing('bazar_variations', ['id' => $this->variation->id]);
     }
 
     /** @test */

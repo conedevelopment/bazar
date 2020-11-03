@@ -18,7 +18,7 @@ class CategoryStoreRequest extends FormRequest
             'slug' => [
                 'nullable',
                 'string',
-                Rule::unique('categories'),
+                Rule::unique('bazar_categories'),
             ],
             'description' => ['nullable', 'string'],
             'media' => ['nullable', 'array'],

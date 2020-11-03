@@ -71,6 +71,13 @@ class Product extends Model implements Breadcrumbable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_products';
+
+    /**
      * Get the filter options for the model.
      *
      * @return array
@@ -94,7 +101,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function orders(): MorphToMany
     {
-        return $this->morphedByMany(Order::class, 'itemable', 'items')
+        return $this->morphedByMany(Order::class, 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -108,7 +115,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function carts(): MorphToMany
     {
-        return $this->morphedByMany(Cart::class, 'itemable', 'items')
+        return $this->morphedByMany(Cart::class, 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -122,7 +129,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'bazar_category_product');
     }
 
     /**

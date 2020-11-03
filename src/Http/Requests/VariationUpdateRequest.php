@@ -19,7 +19,7 @@ class VariationUpdateRequest extends FormRequest
             'alias' => [
                 'nullable',
                 'string',
-                Rule::unique('variations')->where(function (Builder $query) {
+                Rule::unique('bazar_variations')->where(function (Builder $query) {
                     return $query->where('product_id', $this->route('product')->id);
                 })->ignoreModel($this->route('variation')),
             ],
@@ -37,7 +37,7 @@ class VariationUpdateRequest extends FormRequest
             'inventory.sku' => [
                 'nullable',
                 'string',
-                Rule::unique('variations', 'inventory->sku')->ignoreModel($this->route('variation')),
+                Rule::unique('bazar_variations', 'inventory->sku')->ignoreModel($this->route('variation')),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],

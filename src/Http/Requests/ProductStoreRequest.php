@@ -18,7 +18,7 @@ class ProductStoreRequest extends FormRequest
             'slug' => [
                 'nullable',
                 'string',
-                Rule::unique('products'),
+                Rule::unique('bazar_products'),
             ],
             'description' => ['nullable', 'string'],
             'options' => ['nullable', 'array'],
@@ -31,7 +31,7 @@ class ProductStoreRequest extends FormRequest
             'inventory.sku' => [
                 'nullable',
                 'string',
-                Rule::unique('products', 'inventory->sku'),
+                Rule::unique('bazar_products', 'inventory->sku'),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],

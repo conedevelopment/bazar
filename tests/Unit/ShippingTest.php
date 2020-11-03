@@ -134,7 +134,7 @@ class ShippingTest extends TestCase
         $this->shipping->delete();
 
         $this->assertDatabaseMissing(
-            'addresses', ['addressable_type' => Shipping::class, 'addressable_id' => $this->shipping->id]
+            'bazar_addresses', ['addressable_type' => Shipping::class, 'addressable_id' => $this->shipping->id]
         );
     }
 }

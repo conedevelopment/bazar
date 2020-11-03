@@ -63,7 +63,7 @@ class ProductsTest extends TestCase
             ProductFactory::new()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(URL::route('bazar.products.show', Product::find(2)));
 
-        $this->assertDatabaseHas('products', ['name' => 'Test']);
+        $this->assertDatabaseHas('bazar_products', ['name' => 'Test']);
     }
 
     /** @test */
@@ -119,7 +119,7 @@ class ProductsTest extends TestCase
             ->delete(URL::route('bazar.products.destroy', $this->product))
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('products', ['id' => $this->product->id]);
+        $this->assertDatabaseMissing('bazar_products', ['id' => $this->product->id]);
     }
 
     /** @test */
@@ -171,7 +171,7 @@ class ProductsTest extends TestCase
             ->delete(URL::route('bazar.products.batch-destroy', ['force']), ['ids' => [$this->product->id]])
             ->assertStatus(302);
 
-        $this->assertDatabaseMissing('products', ['id' => $this->product->id]);
+        $this->assertDatabaseMissing('bazar_products', ['id' => $this->product->id]);
     }
 
     /** @test */

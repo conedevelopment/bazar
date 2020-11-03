@@ -14,6 +14,6 @@ trait HasMedia
      */
     public function media(): MorphToMany
     {
-        return $this->morphToMany(Medium::class, 'mediable');
+        return $this->morphToMany(Medium::class, 'mediable', 'bazar_mediables');
     }
 }

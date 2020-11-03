@@ -80,6 +80,13 @@ class Address extends Model implements Breadcrumbable
     ];
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'bazar_addresses';
+
+    /**
      * Get the addressable model for the address.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

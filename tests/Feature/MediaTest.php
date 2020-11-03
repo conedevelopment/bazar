@@ -73,7 +73,7 @@ class MediaTest extends TestCase
             ->assertCreated()
             ->assertJson(['name' => 'test']);
 
-        $this->assertDatabaseHas('media', ['name' => 'test']);
+        $this->assertDatabaseHas('bazar_media', ['name' => 'test']);
 
         Queue::assertPushedWithChain(MoveFile::class, [
             PerformConversions::class,
@@ -90,7 +90,7 @@ class MediaTest extends TestCase
             ->assertCreated()
             ->assertJson(['name' => 'test']);
 
-        $this->assertDatabaseHas('media', ['name' => 'test']);
+        $this->assertDatabaseHas('bazar_media', ['name' => 'test']);
 
         Queue::assertPushedWithoutChain(MoveFile::class);
     }
@@ -124,7 +124,7 @@ class MediaTest extends TestCase
 
         Storage::disk($this->medium->disk)->assertMissing($this->medium->path());
 
-        $this->assertDatabaseMissing('media', ['id' => $this->medium->id]);
+        $this->assertDatabaseMissing('bazar_media', ['id' => $this->medium->id]);
     }
 
     /** @test */
@@ -143,6 +143,6 @@ class MediaTest extends TestCase
 
         Storage::disk($this->medium->disk)->assertMissing($this->medium->path());
 
-        $this->assertDatabaseMissing('media', ['id' => $this->medium->id]);
+        $this->assertDatabaseMissing('bazar_media', ['id' => $this->medium->id]);
     }
 }

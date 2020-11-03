@@ -47,16 +47,6 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'product',
-        'itemable',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -66,6 +56,16 @@ class Item extends MorphPivot implements Taxable
         'price',
         'quantity',
         'properties',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'product',
+        'itemable',
     ];
 
     /**
@@ -80,7 +80,7 @@ class Item extends MorphPivot implements Taxable
      *
      * @var string
      */
-    protected $table = 'items';
+    protected $table = 'bazar_items';
 
     /**
      * The "booted" method of the model.

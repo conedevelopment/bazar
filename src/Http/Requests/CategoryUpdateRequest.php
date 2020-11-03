@@ -18,7 +18,7 @@ class CategoryUpdateRequest extends FormRequest
             'slug' => [
                 'required',
                 'string',
-                Rule::unique('categories')->ignoreModel($this->route('category')),
+                Rule::unique('bazar_categories')->ignoreModel($this->route('category')),
             ],
             'description' => ['nullable', 'string'],
             'media' => ['nullable', 'array'],
