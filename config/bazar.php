@@ -51,7 +51,9 @@ return [
     'cart' => [
         'default' => 'cookie',
         'drivers' => [
-            'cookie' => [],
+            'cookie' => [
+                'expiration' => 4320,
+            ],
         ],
     ],
 
