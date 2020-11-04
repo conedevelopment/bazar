@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class MoveFile implements ShouldQueue
 {
@@ -70,6 +71,21 @@ class MoveFile implements ShouldQueue
         );
 
         if (! $this->preserve && ! filter_var($this->path, FILTER_VALIDATE_URL)) {
+            File::delete($this->path);
+        }
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    public function failed(Throwable $exception): void
+    {
+        $this->medium->delete();
+
+        if (! filter_var($this->path, FILTER_VALIDATE_URL)) {
             File::delete($this->path);
         }
     }

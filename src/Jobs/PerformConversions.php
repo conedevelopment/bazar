@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class PerformConversions implements ShouldQueue
 {
@@ -46,5 +47,16 @@ class PerformConversions implements ShouldQueue
     public function handle(): void
     {
         $this->medium->convert();
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    public function failed(Throwable $exception): void
+    {
+        $this->medium->delete();
     }
 }
