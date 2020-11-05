@@ -17,7 +17,7 @@ class ExtendUsersTable extends Migration
     {
         $column = Container::getInstance()->make(User::class)->getDeletedAtColumn();
 
-        Schema::table('users', static function (Blueprint $table) use ($column) {
+        Schema::table('users', static function (Blueprint $table) use ($column): void {
             if (! Schema::hasColumn('users', $column)) {
                 $table->softDeletes($column);
             }

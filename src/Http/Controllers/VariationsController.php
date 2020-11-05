@@ -44,7 +44,7 @@ class VariationsController extends Controller
             $request->input('per_page')
         );
 
-        $variations->getCollection()->each(static function (Variation $variation) use ($product) {
+        $variations->getCollection()->each(static function (Variation $variation) use ($product): void {
             $variation->setRelation(
                 'product', $product->withoutRelations()->makeHidden('variations')
             );

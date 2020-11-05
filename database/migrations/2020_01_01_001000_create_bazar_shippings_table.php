@@ -13,7 +13,7 @@ class CreateBazarShippingsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_shippings', static function (Blueprint $table) {
+        Schema::create('bazar_shippings', static function (Blueprint $table): void {
             $table->id();
             $table->morphs('shippable');
             $table->string('driver')->default('local-pickup');

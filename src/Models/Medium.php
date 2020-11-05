@@ -73,7 +73,7 @@ class Medium extends Model
      */
     protected static function booted(): void
     {
-        static::deleting(static function (Medium $medium) {
+        static::deleting(static function (Medium $medium): void {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);
         });
     }
@@ -120,7 +120,7 @@ class Medium extends Model
      */
     public function getUrlsAttribute(): array
     {
-        return Conversion::keys()->reduce(function ($urls, $name) {
+        return Conversion::keys()->reduce(function (array $urls, string $name): array {
             return $this->isImage ? array_merge($urls, [$name => $this->url($name)]) : $urls;
         }, ['original' => $this->url()]);
     }

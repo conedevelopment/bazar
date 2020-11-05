@@ -53,7 +53,7 @@
                 busy: false,
                 success: false,
                 fields: this.model || {},
-                errors: new Errors(this.$page.errors)
+                errors: new Errors(Array.isArray(this.$page.errors) ? {} : this.$page.errors)
             };
         },
 

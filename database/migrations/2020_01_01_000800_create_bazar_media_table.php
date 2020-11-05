@@ -13,7 +13,7 @@ class CreateBazarMediaTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_media', static function (Blueprint $table) {
+        Schema::create('bazar_media', static function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('file_name');
@@ -26,7 +26,7 @@ class CreateBazarMediaTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('bazar_mediables', static function (Blueprint $table) {
+        Schema::create('bazar_mediables', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('medium_id')->constrained('bazar_media')->cascadeOnDelete();
             $table->morphs('mediable');

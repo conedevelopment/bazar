@@ -8,6 +8,7 @@ use Bazar\Models\Product;
 use Illuminate\Container\Container;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 
@@ -20,8 +21,8 @@ class WidgetsController extends Controller
      */
     public function activities(): JsonResponse
     {
-        $orders = Cache::remember('bazar.activities', 3600, static function () {
-            return Order::latest()->take(3)->get()->map(static function ($order) {
+        $orders = Cache::remember('bazar.activities', 3600, static function (): Collection {
+            return Order::latest()->take(3)->get()->map(static function (Order $order): array {
                 return [
                     'icon' => 'shop-basket',
                     'url' => route('bazar.orders.show', $order),
@@ -43,7 +44,7 @@ class WidgetsController extends Controller
      */
     public function metrics(): JsonResponse
     {
-        $metrics = Cache::remember('bazar.metrics', 3600, static function () {
+        $metrics = Cache::remember('bazar.metrics', 3600, static function (): array {
             return [
                 'orders' => Order::count(),
                 'products' => Product::count(),
@@ -61,16 +62,18 @@ class WidgetsController extends Controller
      */
     public function sales(): JsonResponse
     {
-        $sales = Cache::remember('bazar.sales', 3600, static function () {
-            $days = array_reverse(array_reduce(array_fill(0, 7, null), static function ($days, $day) {
+        $sales = Cache::remember('bazar.sales', 3600, static function (): array {
+            $days = array_reverse(array_reduce(array_fill(0, 7, null), static function (array $days): array {
                 return array_merge($days, [Carbon::now()->subDays(count($days))->format('m-d')]);
             }, []));
 
-            $orders = Order::query()->whereNotIn('status', ['cancelled', 'failed'])->where(
+            $orders = Order::query()->whereNotIn(
+                'status', ['cancelled', 'failed']
+            )->where(
                 'created_at', '>=', Carbon::now()->subDays(7)->startOfDay()
-            )->get()->groupBy(static function ($order) {
+            )->get()->groupBy(static function (Order $order): string {
                 return $order->created_at->format('m-d');
-            })->map(static function ($group) {
+            })->map(static function (Collection $group): int {
                 return $group->count();
             })->toArray();
 

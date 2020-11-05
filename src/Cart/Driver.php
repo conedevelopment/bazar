@@ -78,7 +78,7 @@ abstract class Driver
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            $item = tap(Item::make(compact('quantity', 'properties')), function (Item $item) use ($product) {
+            $item = tap(Item::make(compact('quantity', 'properties')), function (Item $item) use ($product): void {
                 $item->product()
                     ->associate($product)
                     ->itemable()
@@ -100,7 +100,7 @@ abstract class Driver
      */
     public function remove($item): void
     {
-        $ids = array_map(static function ($item) {
+        $ids = array_map(static function ($item): string {
             return $item instanceof Item ? $item->id : $item;
         }, Arr::wrap($item));
 
@@ -119,7 +119,7 @@ abstract class Driver
     {
         $this->cart->items->whereIn(
             'id', array_keys($items)
-        )->each(static function (Item $item) use ($items) {
+        )->each(static function (Item $item) use ($items): void {
             $item->update($items[$item->id]);
         });
 

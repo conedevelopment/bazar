@@ -13,7 +13,7 @@ class CreateBazarItemsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_items', static function (Blueprint $table) {
+        Schema::create('bazar_items', static function (Blueprint $table): void {
             $table->uuid('id');
             $table->foreignId('product_id')->nullable()->constrained('bazar_products')->nullOnDelete();
             $table->morphs('itemable');

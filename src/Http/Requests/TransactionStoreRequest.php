@@ -25,13 +25,15 @@ class TransactionStoreRequest extends FormRequest
             ],
             'driver' => [
                 'required',
-                Rule::in($this->route('order')->transactions->pluck('driver')->push('manual')->unique()->when(
-                    $this->input('type') === 'payment', static function (Collection $collection) {
-                        return $collection->filter(static function (string $driver) {
-                            return $driver === 'manual';
-                        });
-                    }
-                )->values()),
+                Rule::in(
+                    $this->route('order')->transactions->pluck('driver')->push('manual')->unique()->when(
+                        $this->input('type') === 'payment', static function (Collection $collection): Collection {
+                            return $collection->filter(static function (string $driver): bool {
+                                return $driver === 'manual';
+                            });
+                        }
+                    )->values()
+                ),
             ],
         ];
     }

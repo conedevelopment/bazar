@@ -67,7 +67,7 @@ class TaxRepository extends Repository implements Contract
      */
     public function calculate(Taxable $model): float
     {
-        return ! $this->disabled ? $this->items->sum(function ($tax) use ($model) {
+        return ! $this->disabled ? $this->items->sum(function ($tax) use ($model): float {
             return $this->process($model, $tax);
         }) : $model->tax;
     }

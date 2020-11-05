@@ -81,7 +81,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     protected static function booted(): void
     {
-        static::creating(static function (User $user) {
+        static::creating(static function (User $user): void {
             $user->password = $user->password ?: Hash::make(Str::random(10));
         });
     }
@@ -182,7 +182,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where(static function (Builder $query) use ($value) {
+        return $query->where(static function (Builder $query) use ($value): Builder {
             return $query->where('name', 'like', "{$value}%")
                         ->orWhere('email', 'like', "{$value}%");
         });

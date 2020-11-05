@@ -47,7 +47,7 @@ class Breadcrumbs implements Arrayable
 
         $uris = explode('/', $this->request->route()->uri());
 
-        return array_reduce($uris, function ($breadcrumbs, $uri) use ($segments) {
+        return array_reduce($uris, function (array $breadcrumbs, string $uri) use ($segments): array {
             $keys = array_keys($breadcrumbs);
 
             $segment = $segments[count($breadcrumbs)];

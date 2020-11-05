@@ -72,7 +72,7 @@ trait Itemable
      */
     public function getItemsAttribute(): Collection
     {
-        return $this->products->map(function (Product $product) {
+        return $this->products->map(function (Product $product): Item {
             return $product->item
                 ->setRelation('product', $product)
                 ->setRelation('itemable', $this);
@@ -86,7 +86,7 @@ trait Itemable
      */
     public function getTaxablesAttribute(): Collection
     {
-        return $this->items->merge([$this->shipping])->filter(static function ($item) {
+        return $this->items->merge([$this->shipping])->filter(static function ($item): bool {
             return $item instanceof Taxable;
         })->values();
     }
@@ -138,7 +138,7 @@ trait Itemable
      */
     public function getTaxAttribute(): float
     {
-        $value = $this->taxables->sum(static function (Taxable $taxable) {
+        $value = $this->taxables->sum(static function (Taxable $taxable): float {
             return $taxable->tax * $taxable->quantity;
         });
 
@@ -172,7 +172,7 @@ trait Itemable
      */
     public function total(): float
     {
-        $value = $this->taxables->reduce(static function (float $value, Taxable $item) {
+        $value = $this->taxables->reduce(static function (float $value, Taxable $item): float {
             return $value + $item->total;
         }, -$this->discount);
 
@@ -196,7 +196,7 @@ trait Itemable
      */
     public function netTotal(): float
     {
-        $value = $this->taxables->reduce(static function (float $value, Taxable $item) {
+        $value = $this->taxables->reduce(static function (float $value, Taxable $item): float {
             return $value + $item->netTotal;
         }, -$this->discount);
 
@@ -221,7 +221,7 @@ trait Itemable
      */
     public function tax(bool $update = true): float
     {
-        return $this->taxables->sum(static function (Taxable $taxable) use ($update) {
+        return $this->taxables->sum(static function (Taxable $taxable) use ($update): float {
             return $taxable->tax($update) * $taxable->quantity;
         });
     }
@@ -270,11 +270,11 @@ trait Itemable
      */
     public function downloads(): Collection
     {
-        return $this->products->filter(static function (Product $product) {
-            return $product->inventory['downloadable'];
-        })->flatMap(static function (Product $product) {
-            return $product->inventory['files'];
-        })->map(function (array $file) {
+        return $this->products->filter(static function (Product $product): bool {
+            return $product->inventory('downloadable', false);
+        })->flatMap(static function (Product $product): array {
+            return $product->inventory('files', []);
+        })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 
             return array_replace($file, compact('expiration') + ['url' => URL::signedRoute(
@@ -292,7 +292,7 @@ trait Itemable
      */
     public function item(Product $product, array $properties = []): ?Item
     {
-        return $this->items->first(static function (Item $item) use ($product, $properties) {
+        return $this->items->first(static function (Item $item) use ($product, $properties): bool {
             return (int) $item->product_id === (int) $product->id && empty(array_diff(
                 Arr::dot($properties), Arr::dot($item->properties)
             ));

@@ -13,7 +13,7 @@ class CreateBazarCategoriesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_categories', static function (Blueprint $table) {
+        Schema::create('bazar_categories', static function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
@@ -22,7 +22,7 @@ class CreateBazarCategoriesTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('bazar_category_product', static function (Blueprint $table) {
+        Schema::create('bazar_category_product', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('category_id')->constrained('bazar_categories')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();

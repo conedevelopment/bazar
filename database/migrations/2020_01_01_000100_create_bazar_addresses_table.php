@@ -13,7 +13,7 @@ class CreateBazarAddressesTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_addresses', static function (Blueprint $table) {
+        Schema::create('bazar_addresses', static function (Blueprint $table): void {
             $table->id();
             $table->morphs('addressable');
             $table->string('first_name', 60)->nullable();

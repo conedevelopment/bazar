@@ -13,7 +13,7 @@ class CreateBazarProductsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_products', static function (Blueprint $table) {
+        Schema::create('bazar_products', static function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();

@@ -72,7 +72,7 @@ class OrdersController extends Controller
             Address::make($request->old('address', []))
         )->setRelation(
             'products',
-            Collection::make($request->old('products'))->map(function (array $product) {
+            Collection::make($request->old('products'))->map(function (array $product): Product {
                 return Product::make()->forceFill($product);
             })
         );
@@ -109,7 +109,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $products = Collection::make($data['products'])->mapWithKeys(static function ($product) use ($data) {
+        $products = Collection::make($data['products'])->mapWithKeys(static function (array $product) use ($data): array {
             return [$product['id'] => [
                 'tax' => $product['item_tax'] ?? 0,
                 'quantity' => $product['item_quantity'] ?? 1,

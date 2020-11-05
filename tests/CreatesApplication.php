@@ -17,7 +17,7 @@ trait CreatesApplication
     {
         $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
 
-        $app->booting(static function () use ($app) {
+        $app->booting(static function () use ($app): void {
             $app->register(BazarServiceProvider::class);
         });
 

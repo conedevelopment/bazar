@@ -94,7 +94,7 @@ abstract class Bazar
             'can:manage-bazar',
             ComponentMiddleware::class,
             ShareComponentData::class,
-        ])->group(static function (Router $router) use ($callback) {
+        ])->group(static function (Router $router) use ($callback): void {
             $callback($router);
         });
     }

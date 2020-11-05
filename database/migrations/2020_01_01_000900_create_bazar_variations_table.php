@@ -13,7 +13,7 @@ class CreateBazarVariationsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_variations', static function (Blueprint $table) {
+        Schema::create('bazar_variations', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();
             $table->string('alias')->nullable();

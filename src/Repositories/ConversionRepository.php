@@ -40,7 +40,7 @@ class ConversionRepository extends Repository implements Contract
      */
     public function perform(Medium $medium): Medium
     {
-        $this->items->each(static function (Closure $callback, string $name) use ($medium) {
+        $this->items->each(static function (Closure $callback, string $name) use ($medium): void {
             $image = Image::make($medium);
 
             call_user_func_array($callback, [$image]);

@@ -44,9 +44,9 @@ class Option implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return $this->product->variations->reject(function (Variation $variation) {
+        return $this->product->variations->reject(function (Variation $variation): bool {
             return $this->variation && $variation->id === $this->variation->id;
-        })->filter(function (Variation $variation) use ($value) {
+        })->filter(function (Variation $variation) use ($value): bool {
             $value = array_replace(array_fill_keys(array_keys($this->product->options), '*'), $value);
 
             return empty(array_diff($value, $variation->option));

@@ -33,7 +33,7 @@ class BatchMediaController extends Controller
     {
         $media = Medium::query()->whereIn('id', $request->input('ids', []));
 
-        $media->each(static function (Medium $medium) {
+        $media->each(static function (Medium $medium): void {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);
         });
 

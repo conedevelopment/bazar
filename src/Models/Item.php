@@ -89,11 +89,11 @@ class Item extends MorphPivot implements Taxable
      */
     protected static function booted(): void
     {
-        static::creating(static function (Item $item) {
+        static::creating(static function (Item $item): void {
             $item->id = Uuid::uuid4();
         });
 
-        static::saving(static function (Item $item) {
+        static::saving(static function (Item $item): void {
             if ($item->itemable_type === Cart::class) {
                 foreach (array_replace(['option' => []], (array) $item->properties) as $name => $value) {
                     if ($resolver = static::$propertyResolvers[$name] ?? null) {

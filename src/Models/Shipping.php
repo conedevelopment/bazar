@@ -71,7 +71,7 @@ class Shipping extends Model implements Taxable
      */
     protected static function booted(): void
     {
-        static::deleting(static function (Shipping $shipping) {
+        static::deleting(static function (Shipping $shipping): void {
             $shipping->address()->delete();
         });
     }
@@ -83,7 +83,7 @@ class Shipping extends Model implements Taxable
      */
     public function shippable(): MorphTo
     {
-        return $this->morphTo()->withDefault(static function () {
+        return $this->morphTo()->withDefault(static function (): Cart {
             return new Cart;
         });
     }

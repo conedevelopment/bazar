@@ -3,6 +3,9 @@
 namespace Bazar\Listeners;
 
 use Bazar\Events\OrderPlaced;
+use Bazar\Models\Product;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class RefreshInventory
 {
@@ -16,7 +19,7 @@ class RefreshInventory
     {
         $event->order->loadMissing(['products', 'products.variations']);
 
-        $event->order->products->reject(function ($product) {
+        $event->order->products->reject(function (Product $product): bool {
             $variation = $product->variation($product->item->option);
 
             if ($shouldReject = ($variation && $variation->tracksQuantity())) {
@@ -24,9 +27,9 @@ class RefreshInventory
             }
 
             return $shouldReject;
-        })->groupBy(function ($product) {
+        })->groupBy(function (Model $product): string {
             return get_class($product).':'.$product->id;
-        })->each(function ($products) {
+        })->each(function (Collection $products): void {
             $products->first()->decrementQuantity($products->sum('item.quantity'));
         });
     }

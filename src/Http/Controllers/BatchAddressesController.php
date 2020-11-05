@@ -36,7 +36,7 @@ class BatchAddressesController extends Controller
     {
         $data = Arr::dot($request->except('ids'));
 
-        $data = collect($data)->filter()->mapWithKeys(static function ($item, $key) {
+        $data = collect($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 

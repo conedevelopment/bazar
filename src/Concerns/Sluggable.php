@@ -14,7 +14,7 @@ trait Sluggable
      */
     protected static function booted(): void
     {
-        static::saving(static function (Model $model) {
+        static::saving(static function (Model $model): void {
             $model->slug = $model->slug ?: Str::slug($model->name);
         });
     }

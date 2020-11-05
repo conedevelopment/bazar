@@ -67,7 +67,7 @@ class DiscountRepository extends Repository implements Contract
      */
     public function calculate(Discountable $model): float
     {
-        return ! $this->disabled ? $this->items->sum(function ($discount) use ($model) {
+        return ! $this->disabled ? $this->items->sum(function ($discount) use ($model): float {
             return $this->process($model, $discount);
         }) : $model->discount;
     }

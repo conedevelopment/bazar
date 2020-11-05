@@ -80,7 +80,7 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerRoutes(): void
     {
         if (! $this->app->routesAreCached()) {
-            Bazar::routes(function () {
+            Bazar::routes(function (): void {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
@@ -89,7 +89,7 @@ class BazarServiceProvider extends ServiceProvider
                 ->name('bazar.download');
         }
 
-        RouteFactory::bind('user', function (string $value, Route $route) {
+        RouteFactory::bind('user', function (string $value, Route $route): ?Contracts\Models\User {
             return $this->app->make(Contracts\Models\User::class)->resolveRouteBinding(
                 $value, $route->bindingFieldFor('user')
             );
@@ -158,7 +158,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerMacros(): void
     {
-        Str::macro('currency', static function ($value, string $currency = null) {
+        Str::macro('currency', static function ($value, string $currency = null): string {
             return sprintf(
                 '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::currency())
             );
@@ -172,7 +172,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerComposers(): void
     {
-        ViewFactory::composer('bazar::*', function (View $view) {
+        ViewFactory::composer('bazar::*', function (View $view): void {
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
@@ -198,11 +198,11 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerConversions(): void
     {
-        Conversion::register('thumb', static function (Image $image) {
+        Conversion::register('thumb', static function (Image $image): void {
             $image->crop(500, 500);
         });
 
-        Conversion::register('medium', static function (Image $image) {
+        Conversion::register('medium', static function (Image $image): void {
             $image->resize(1400, 1000);
         });
     }
@@ -230,7 +230,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerItemProperties(): void
     {
-        Item::resolvePropertyUsing('option', static function (Item $item, array $value) {
+        Item::resolvePropertyUsing('option', static function (Item $item, array $value): void {
             $item->product->loadMissing('variations');
 
             $stock = $item->product->inventory('quantity');

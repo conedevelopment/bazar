@@ -36,7 +36,7 @@ class BatchOrdersController extends Controller
     {
         $data = Arr::dot($request->except('ids'));
 
-        $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, $key) {
+        $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 

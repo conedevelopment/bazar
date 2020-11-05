@@ -149,7 +149,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function getVariationsAttribute(): Collection
     {
-        return $this->getRelationValue('variations')->each(function (Variation $variation) {
+        return $this->getRelationValue('variations')->each(function (Variation $variation): void {
             $variation->setRelation(
                 'product', $this->withoutRelations()->makeHidden('variations')
             )->makeHidden('product');
@@ -164,9 +164,9 @@ class Product extends Model implements Breadcrumbable
      */
     public function variation(array $option): ?Variation
     {
-        return $this->variations->sortBy(static function (Variation $variation) {
+        return $this->variations->sortBy(static function (Variation $variation): int {
             return array_count_values($variation->option)['*'] ?? 0;
-        })->first(function (Variation $variation) use ($option) {
+        })->first(function (Variation $variation) use ($option): bool {
             $option = array_replace(array_fill_keys(array_keys($this->options), '*'), $option);
 
             foreach ($variation->option as $key => $value) {
@@ -218,7 +218,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where(static function (Builder $query) use ($value) {
+        return $query->where(static function (Builder $query) use ($value): Builder {
             return $query->where('name', 'like', "{$value}%")
                         ->orWhere('inventory->sku', 'like', "{$value}");
         });
@@ -233,7 +233,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function scopeCategory(Builder $query, int $value): Builder
     {
-        return $query->whereHas('categories', function (Builder $query) use ($value) {
+        return $query->whereHas('categories', function (Builder $query) use ($value): Builder {
             return $query->where('categories.id', $value);
         });
     }
