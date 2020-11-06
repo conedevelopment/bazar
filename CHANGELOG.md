@@ -4,7 +4,7 @@
 
 ## v0.2.3 (2020-11-05)
 ### Fixed
-- Fixed `softDeletes` migration on users table – skips if already exists
+- Fixed `softDeletes` migration on users table – skipped if already exists
 
 ## v0.2.2 (2020-11-03)
 ### Changed

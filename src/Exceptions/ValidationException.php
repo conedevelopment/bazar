@@ -13,7 +13,7 @@ class ValidationException extends Exception
      */
     public function errors(): array
     {
-        return array_map(function (array $messages) {
+        return array_map(static function (array $messages): string {
             return $messages[0];
         }, $this->validator->errors()->messages());
     }
