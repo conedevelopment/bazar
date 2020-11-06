@@ -35,7 +35,7 @@ class InstallCommand extends Command
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
 
-        File::ensureDirectoryExists(public_path('vendor'));
+        File::ensureDirectoryExists(public_path('vendor/bazar'));
 
         if (! is_dir(public_path('vendor/bazar'))) {
             symlink(__DIR__.'/../../../public', public_path('vendor/bazar'));
