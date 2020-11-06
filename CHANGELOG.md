@@ -21,7 +21,7 @@
 
 ## v0.2.0 (2020-10-29)
 ### Added
-- Added `virtial` method in the `Stockable` trait
+- Added `virtual` method in the `Stockable` trait
 - Added `downloadable` method in the `Stockable` trait
 - Added missing unit and feature tests
 
