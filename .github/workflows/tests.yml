@@ -7,10 +7,11 @@ on:
 jobs:
   linux_tests:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
+        os: ["ubuntu-latest", "windows-latest"]
         php: ["7.3", "7.4", "8.0"]
         stability: [prefer-stable]
 
