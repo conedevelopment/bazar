@@ -4,6 +4,7 @@ import Http from './Plugins/Http';
 import Translator from './Plugins/Translator';
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import 'simplebar';
+import Layout from './Components/Layout';
 
 Vue.use(Bazar);
 Vue.use(Http);
@@ -17,7 +18,13 @@ new Vue({
         props: {
             initialPage: JSON.parse(app.dataset.page),
             resolveComponent: name => {
-                return require(`./Pages/${name}`).default;
+                return new Promise((resolve, reject) => {
+                    resolve(require(`./Pages/${name}`).default);
+                }).then(component => {
+                    return Object.assign({ layout: Layout }, component);
+                }).catch(error => {
+                    //
+                });
             }
         }
     })

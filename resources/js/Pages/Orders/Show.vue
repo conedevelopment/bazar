@@ -8,12 +8,18 @@
             OrderInfo,
             Transactions,
             ProductsTable
+        },
+
+        data() {
+            return {
+                title: this.__('Order #:id', { id: this.$page.order.id })
+            };
         }
     }
 </script>
 
 <template>
-    <layout :title="`Order #${$page.order.id}`">
+    <div>
         <data-form :action="$page.action" :model="$page.order">
             <template #default>
                 <card :title="__('General')" class="mb-5">
@@ -37,5 +43,5 @@
                 <transactions :order="$page.order"></transactions>
             </div>
         </div>
-    </layout>
+    </div>
 </template>

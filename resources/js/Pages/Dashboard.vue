@@ -8,22 +8,26 @@
             Sales,
             Metrics,
             Activities
+        },
+
+        data() {
+            return {
+                title: this.__('Dashboard')
+            };
         }
     }
 </script>
 
 <template>
-    <layout :title="__('Dashboard')">
-        <div class="row">
-            <div class="col-12">
-                <metrics class="row"></metrics>
-            </div>
-            <div class="col-6">
-                <activities></activities>
-            </div>
-            <div class="col-6">
-                <sales></sales>
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <metrics class="row"></metrics>
         </div>
-    </layout>
+        <div class="col-6">
+            <activities></activities>
+        </div>
+        <div class="col-6">
+            <sales></sales>
+        </div>
+    </div>
 </template>

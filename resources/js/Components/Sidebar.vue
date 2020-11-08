@@ -1,24 +1,29 @@
 <script>
     export default {
         mounted() {
-            const path = window.location.pathname.replace(/\/$/, '');
+            this.setActiveLinks();
 
-            this.$el.querySelectorAll(`.app-sidebar__inside a[href$="${path}"]`).forEach(el => {
-                el.classList.add('is-active');
-
-                el.closest('.app-sidebar-menu-item').classList.add('is-open');
+            this.$inertia.on('success', event => {
+                this.setActiveLinks();
             });
         },
 
-        computed: {
-            csrfToken() {
-                return this.$page.csrf_token;
-            },
-            logoutUrl() {
-                return '/logout';
-            },
-            admin() {
-                return this.$page.admin;
+        methods: {
+            setActiveLinks() {
+                const path = window.location.pathname.replace(/\/$/, '');
+
+                this.$el.querySelectorAll('.app-sidebar__inside a.is-active').forEach(el => {
+                    el.classList.remove('is-active');
+                });
+
+                this.$el.querySelectorAll('.app-sidebar-menu-item.is-open').forEach(el => {
+                    el.classList.remove('is-open');
+                });
+
+                this.$el.querySelectorAll(`.app-sidebar__inside a[href$="${path}"]`).forEach(el => {
+                    el.classList.add('is-active');
+                    el.closest('.app-sidebar-menu-item').classList.add('is-open');
+                });
             }
         }
     }
@@ -137,9 +142,9 @@
                     <button class="loggedin-user dropdown-toggle" type="button" style="max-width: 100%;">
                         <span class="loggedin-user__welcome">{{ __('Hi') }},</span>
                         <span class="loggedin-user__name" style="max-width: 100%; overflow: hidden; text-overflow: ellipsis;">
-                            {{ admin.name }}
+                            {{ $page.admin.name }}
                         </span>
-                        <img class="loggedin-user__avatar" :src="admin.avatar" :alt="admin.name">
+                        <img class="loggedin-user__avatar" :src="$page.admin.avatar" :alt="$page.admin.name">
                     </button>
                 </template>
                 <template #default>
@@ -156,8 +161,8 @@
                     </button>
                 </template>
             </dropdown>
-            <form id="logout-form" :action="logoutUrl" method="POST" style="display: none;">
-                <input type="hidden" name="_token" :value="csrfToken">
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_token" :value="$page.csrf_token">
             </form>
         </div>
     </aside>

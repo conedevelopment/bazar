@@ -8,19 +8,17 @@
             AppSidebar
         },
 
-        props: {
-            title: {
-                type: String,
-                default: null
-            }
-        },
-
         mounted() {
-            document.title = 'Bazar' + (this.title ? ` | ${this.title}` : '');
+            this.setTitle();
+
+            this.$inertia.on('success', event => {
+                this.setTitle();
+            });
         },
 
         data() {
             return {
+                title: null,
                 isSidebarOpen: false
             };
         },
@@ -35,6 +33,13 @@
         },
 
         methods: {
+            setTitle() {
+                const title = this.$slots.default[0].componentInstance.title;
+
+                this.title = title;
+
+                document.title = 'Bazar' + (title ? ` | ${title}` : '');
+            },
             openSidebar() {
                 this.isSidebarOpen = true;
             },
