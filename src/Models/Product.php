@@ -233,7 +233,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function scopeCategory(Builder $query, int $value): Builder
     {
-        return $query->whereHas('categories', function (Builder $query) use ($value): Builder {
+        return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
             return $query->where('categories.id', $value);
         });
     }
