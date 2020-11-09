@@ -186,8 +186,8 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerAuth(): void
     {
-        Gate::define('manage-bazar', function (Contracts\Models\User $user) {
-            return $this->app->environment('local') || $user->isAdmin();
+        Gate::define('manage-bazar', static function (Contracts\Models\User $user): bool {
+            return $user->isAdmin();
         });
     }
 
