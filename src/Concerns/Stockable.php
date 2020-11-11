@@ -108,7 +108,7 @@ trait Stockable
      */
     public function free(): bool
     {
-        return is_null($this->price) || $this->price === 0;
+        return ! (bool) $this->price;
     }
 
     /**

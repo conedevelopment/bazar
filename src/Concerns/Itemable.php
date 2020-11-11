@@ -21,7 +21,7 @@ use Illuminate\Support\Str;
 trait Itemable
 {
     /**
-     * Get the user for the order.
+     * Get the user for the model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
