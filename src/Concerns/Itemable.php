@@ -2,12 +2,13 @@
 
 namespace Bazar\Concerns;
 
+use Bazar\Contracts\Models\User;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
-use Bazar\Models\User;
 use Bazar\Support\Facades\Discount;
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -26,7 +27,9 @@ trait Itemable
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        $instance = Container::getInstance()->make(User::class);
+
+        return $this->belongsTo(get_class($instance));
     }
 
     /**
