@@ -35,4 +35,4 @@ Thank you for considering contributing to Bazar! The contribution guide can be f
 
 ## 📝 License
 
-Bazar is open-sourced software licensed under the [MIT](LICENSE.md).
+Bazar is open-sourced software licensed under the [MIT](LICENSE).
