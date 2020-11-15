@@ -2,8 +2,8 @@
 
 namespace Bazar\Repositories;
 
+use Bazar\Contracts\Models\Medium;
 use Bazar\Contracts\Repositories\ConversionRepository as Contract;
-use Bazar\Models\Medium;
 use Bazar\Services\Image;
 use Closure;
 
@@ -35,8 +35,8 @@ class ConversionRepository extends Repository implements Contract
     /**
      * Perform the registered conversion on the given medium.
      *
-     * @param  \Bazar\Models\Medium  $medium
-     * @return \Bazar\Models\Medium
+     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @return \Bazar\Contracts\Models\Medium
      */
     public function perform(Medium $medium): Medium
     {

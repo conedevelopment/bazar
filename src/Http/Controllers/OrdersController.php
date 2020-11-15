@@ -3,13 +3,16 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
+use Bazar\Contracts\Models\Address;
+use Bazar\Contracts\Models\Order;
+use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
-use Bazar\Models\Address;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\User;
+use Bazar\Proxies\Address as AddressProxy;
+use Bazar\Proxies\Order as OrderProxy;
+use Bazar\Proxies\Product as ProductProxy;
+use Bazar\Proxies\User as UserProxy;
 use Bazar\Support\Countries;
 use Bazar\Support\Facades\Component;
 use Bazar\Support\Facades\Discount;
@@ -31,8 +34,8 @@ class OrdersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Order::class)) {
-            $this->authorizeResource(Order::class);
+        if (Gate::getPolicyFor($class = OrderProxy::getProxiedClass())) {
+            $this->authorizeResource($class);
             $this->middleware('can:update,order')->only('restore');
         }
     }
@@ -44,7 +47,7 @@ class OrdersController extends Controller
      */
     public function index(Request $request): Response
     {
-        $orders = Order::query()->with([
+        $orders = OrderProxy::query()->with([
             'address', 'products', 'transactions', 'shipping',
         ])->filter($request)->latest()->paginate(
             $request->input('per_page')
@@ -52,7 +55,7 @@ class OrdersController extends Controller
 
         return Component::render('Orders/Index', [
             'results' => $orders,
-            'filters' => Order::filters(),
+            'filters' => OrderProxy::filters(),
         ]);
     }
 
@@ -64,27 +67,27 @@ class OrdersController extends Controller
      */
     public function create(Request $request): Response
     {
-        $order = Order::make()->setAttribute(
+        $order = OrderProxy::make()->setAttribute(
             'user',
-            User::make()->setAttribute('addresses', [])->forceFill($request->old('user', []))
+            UserProxy::make()->setAttribute('addresses', [])->forceFill($request->old('user', []))
         )->setRelation(
             'address',
-            Address::make($request->old('address', []))
+            AddressProxy::make($request->old('address', []))
         )->setRelation(
             'products',
             Collection::make($request->old('products'))->map(function (array $product): Product {
-                return Product::make()->forceFill($product);
+                return ProductProxy::make()->forceFill($product);
             })
         );
 
         $order->shipping->fill($request->old('shipping', []))->setRelation(
-            'address', Address::make($request->old('shipping.address', []))
+            'address', AddressProxy::make($request->old('shipping.address', []))
         );
 
         return Component::render('Orders/Create', [
             'order' => $order,
             'countries' => Countries::all(),
-            'statuses' => Order::statuses(),
+            'statuses' => OrderProxy::statuses(),
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.orders.store', $order),
             'drivers' => Collection::make(Shipping::enabled())->map->name(),
@@ -102,7 +105,7 @@ class OrdersController extends Controller
         Tax::disable();
         Discount::disable();
 
-        $order = new Order($data = $request->validated());
+        $order = OrderProxy::make($data = $request->validated());
 
         $order->user()->associate($data['user']['id'] ?? null)->save();
         $order->address->fill($data['address'])->save();
@@ -127,7 +130,7 @@ class OrdersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @return \Bazar\Http\Response
      */
     public function show(Order $order): Response
@@ -136,7 +139,7 @@ class OrdersController extends Controller
 
         return Component::render('Orders/Show', [
             'order' => $order,
-            'statuses' => Order::statuses(),
+            'statuses' => OrderProxy::statuses(),
             'action' => URL::route('bazar.orders.update', $order),
         ]);
     }
@@ -145,7 +148,7 @@ class OrdersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\OrderUpdateRequest  $request
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Order $order): RedirectResponse
@@ -160,7 +163,7 @@ class OrdersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Order $order): RedirectResponse
@@ -175,7 +178,7 @@ class OrdersController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Order $order): RedirectResponse

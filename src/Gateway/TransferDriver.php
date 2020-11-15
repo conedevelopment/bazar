@@ -2,17 +2,17 @@
 
 namespace Bazar\Gateway;
 
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
+use Bazar\Contracts\Models\Order;
+use Bazar\Contracts\Models\Transaction;
 
 class TransferDriver extends Driver
 {
     /**
      * Process the payment.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
+     * @return \Bazar\Contracts\Models\Transaction
      */
     public function pay(Order $order, float $amount = null): Transaction
     {
@@ -24,9 +24,9 @@ class TransferDriver extends Driver
     /**
      * Process the refund.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
+     * @return \Bazar\Contracts\Models\Transaction
      */
     public function refund(Order $order, float $amount = null): Transaction
     {

@@ -2,7 +2,7 @@
 
 namespace Bazar\Concerns;
 
-use Bazar\Models\Medium;
+use Bazar\Proxies\Medium as MediumProxy;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasMedia
@@ -14,6 +14,6 @@ trait HasMedia
      */
     public function media(): MorphToMany
     {
-        return $this->morphToMany(Medium::class, 'mediable', 'bazar_mediables');
+        return $this->morphToMany(MediumProxy::getProxiedClass(), 'mediable', 'bazar_mediables');
     }
 }

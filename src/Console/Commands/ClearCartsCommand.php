@@ -2,9 +2,9 @@
 
 namespace Bazar\Console\Commands;
 
-use Bazar\Models\Cart;
 use Bazar\Models\Item;
-use Bazar\Models\Shipping;
+use Bazar\Proxies\Cart as CartProxy;
+use Bazar\Proxies\Shipping as ShippingProxy;
 use Illuminate\Console\Command;
 
 class ClearCartsCommand extends Command
@@ -31,23 +31,23 @@ class ClearCartsCommand extends Command
     public function handle(): int
     {
         if ($this->option('all')) {
-            Cart::query()->truncate();
-            Item::query()->where('itemable_type', Cart::class)->delete();
-            Shipping::query()->where('shippable_type', Cart::class)->delete();
+            CartProxy::query()->truncate();
+            Item::query()->where('itemable_type', CartProxy::getProxiedClass())->delete();
+            ShippingProxy::query()->where('shippable_type', CartProxy::getProxiedClass())->delete();
 
             $this->info('All carts have been deleted.');
         } else {
             Item::query()
-                ->where('itemable_type', Cart::class)
-                ->whereIn('itemable_id', Cart::expired()->select('id'))
+                ->where('itemable_type', CartProxy::getProxiedClass())
+                ->whereIn('itemable_id', CartProxy::query()->expired()->select('id'))
                 ->delete();
 
-            Shipping::query()
-                    ->where('shippable_type', Cart::class)
-                    ->whereIn('shippable_id', Cart::expired()->select('id'))
-                    ->delete();
+            ShippingProxy::query()
+                ->where('shippable_type', CartProxy::getProxiedClass())
+                ->whereIn('shippable_id', CartProxy::query()->expired()->select('id'))
+                ->delete();
 
-            Cart::query()->expired()->delete();
+            CartProxy::query()->expired()->delete();
 
             $this->info('Expired carts have been deleted.');
         }

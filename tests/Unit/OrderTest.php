@@ -109,8 +109,8 @@ class OrderTest extends TestCase
         $this->assertSame(
             $this->order->newQuery()->search('test')->toSql(),
             $this->order->newQuery()->whereHas('address', function ($q) {
-                $q->where('addresses.first_name', 'like', 'test%')
-                    ->orWhere('addresses.last_name', 'like', 'test%');
+                $q->where('bazar_addresses.first_name', 'like', 'test%')
+                    ->orWhere('bazar_addresses.last_name', 'like', 'test%');
             })->toSql()
         );
 

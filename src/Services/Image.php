@@ -2,7 +2,7 @@
 
 namespace Bazar\Services;
 
-use Bazar\Models\Medium;
+use Bazar\Contracts\Models\Medium;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
@@ -14,7 +14,7 @@ class Image
     /**
      * The medium instance.
      *
-     * @var \Bazar\Models\Medium
+     * @var \Bazar\Contracts\Models\Medium
      */
     protected $medium;
 
@@ -53,7 +53,7 @@ class Image
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)
@@ -68,7 +68,7 @@ class Image
     /**
      * Make a new image instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return static
      */
     public static function make(Medium $medium): Image

@@ -140,7 +140,7 @@ class ProductTest extends TestCase
         $this->assertSame(
             $this->product->newQuery()->category(1)->toSql(),
             $this->product->newQuery()->whereHas('categories', function ($q) {
-                $q->where('categories.id', 1);
+                $q->where('bazar_categories.id', 1);
             })->toSql()
         );
     }

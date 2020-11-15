@@ -5,7 +5,11 @@ namespace Bazar\Models;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\User as Contract;
+use Bazar\Proxies\Address as AddressProxy;
+use Bazar\Proxies\Cart as CartProxy;
+use Bazar\Proxies\Order as OrderProxy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -109,7 +113,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function cart(): HasOne
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasOne(CartProxy::getProxiedClass());
     }
 
     /**
@@ -119,7 +123,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(OrderProxy::getProxiedClass());
     }
 
     /**
@@ -129,13 +133,13 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function addresses(): MorphMany
     {
-        return $this->morphMany(Address::class, 'addressable');
+        return $this->morphMany(AddressProxy::getProxiedClass(), 'addressable');
     }
 
     /**
      * Get the address attribute.
      *
-     * @return \Bazar\Models\Address|null
+     * @return \Bazar\Contracts\Models\Address|null
      */
     public function getAddressAttribute(): ?Address
     {

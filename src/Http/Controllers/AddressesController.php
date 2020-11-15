@@ -2,11 +2,12 @@
 
 namespace Bazar\Http\Controllers;
 
+use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\User;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
-use Bazar\Models\Address;
+use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Support\Countries;
 use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
@@ -24,8 +25,8 @@ class AddressesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Address::class)) {
-            $this->authorizeResource(Address::class);
+        if (Gate::getPolicyFor($class = AddressProxy::getProxiedClass())) {
+            $this->authorizeResource($class);
         }
     }
 
@@ -56,7 +57,7 @@ class AddressesController extends Controller
      */
     public function create(Request $request, User $user): Response
     {
-        $address = Address::make($request->old());
+        $address = AddressProxy::make($request->old());
 
         return Component::render('Addresses/Create', [
             'user' => $user,
@@ -86,7 +87,7 @@ class AddressesController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Models\Address  $address
+     * @param  \Bazar\Contracts\Models\Address  $address
      * @return \Bazar\Http\Response
      */
     public function show(User $user, Address $address): Response
@@ -104,7 +105,7 @@ class AddressesController extends Controller
      *
      * @param  \Bazar\Http\Requests\AddressUpdateRequest  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Models\Address  $address
+     * @param  \Bazar\Contracts\Models\Address  $address
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, User $user, Address $address): RedirectResponse
@@ -120,7 +121,7 @@ class AddressesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Models\Address  $address
+     * @param  \Bazar\Contracts\Models\Address  $address
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(User $user, Address $address): RedirectResponse

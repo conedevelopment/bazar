@@ -2,6 +2,8 @@
 
 namespace Bazar\Models;
 
+use Bazar\Contracts\Models\Transaction as Contract;
+use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Support\Facades\Gateway;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Throwable;
 
-class Transaction extends Model
+class Transaction extends Model implements Contract
 {
     /**
      * The accessors to append to the model's array form.
@@ -57,7 +59,7 @@ class Transaction extends Model
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(OrderProxy::getProxiedClass());
     }
 
     /**

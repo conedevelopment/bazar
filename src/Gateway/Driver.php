@@ -2,9 +2,9 @@
 
 namespace Bazar\Gateway;
 
+use Bazar\Contracts\Models\Order;
+use Bazar\Contracts\Models\Transaction;
 use Bazar\Exceptions\TransactionFailedException;
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use InvalidArgumentException;
 
@@ -104,7 +104,7 @@ abstract class Driver
     /**
      * Get the URL of the transaction.
      *
-     * @param  \Bazar\Models\Transaction  $transaction
+     * @param  \Bazar\Contracts\Models\Transaction  $transaction
      * @return string|null
      */
     public function transactionUrl(Transaction $transaction): ?string
@@ -115,10 +115,10 @@ abstract class Driver
     /**
      * Make a transaction for the given order.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @param  string  $type
      * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
+     * @return \Bazar\Contracts\Models\Transaction
      *
      * @throws \InvalidArgumentException
      * @throws \Bazar\Exceptions\TransactionFailedException
@@ -152,18 +152,18 @@ abstract class Driver
     /**
      * Process the payment.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
+     * @return \Bazar\Contracts\Models\Transaction
      */
     abstract public function pay(Order $order, float $amount = null): Transaction;
 
     /**
      * Process the refund.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
+     * @return \Bazar\Contracts\Models\Transaction
      */
     abstract public function refund(Order $order, float $amount = null): Transaction;
 }

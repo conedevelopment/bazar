@@ -2,13 +2,14 @@
 
 namespace Bazar\Concerns;
 
-use Bazar\Contracts\Models\User;
+use Bazar\Contracts\Models\Product;
+use Bazar\Contracts\Models\Shipping;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
+use Bazar\Proxies\Product as ProductProxy;
+use Bazar\Proxies\Shipping as ShippingProxy;
+use Bazar\Proxies\User as UserProxy;
 use Bazar\Support\Facades\Discount;
-use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
-trait Itemable
+trait InteractsWithItems
 {
     /**
      * Get the user for the model.
@@ -27,9 +28,7 @@ trait Itemable
      */
     public function user(): BelongsTo
     {
-        $instance = Container::getInstance()->make(User::class);
-
-        return $this->belongsTo(get_class($instance));
+        return $this->belongsTo(UserProxy::getProxiedClass());
     }
 
     /**
@@ -39,7 +38,7 @@ trait Itemable
      */
     public function products(): MorphToMany
     {
-        return $this->morphToMany(Product::class, 'itemable', 'bazar_items')
+        return $this->morphToMany(ProductProxy::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -53,13 +52,13 @@ trait Itemable
      */
     public function shipping(): MorphOne
     {
-        return $this->morphOne(Shipping::class, 'shippable')->withDefault();
+        return $this->morphOne(ShippingProxy::getProxiedClass(), 'shippable')->withDefault();
     }
 
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Models\Shipping
+     * @return \Bazar\Contracts\Models\Shipping
      */
     public function getShippingAttribute(): Shipping
     {
@@ -289,7 +288,7 @@ trait Itemable
     /**
      * Get an item by its parent product and properties.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */

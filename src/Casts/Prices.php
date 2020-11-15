@@ -3,7 +3,6 @@
 namespace Bazar\Casts;
 
 use Bazar\Bazar;
-use Bazar\Support\Facades\Currency;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class Prices implements CastsAttributes

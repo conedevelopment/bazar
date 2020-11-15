@@ -2,8 +2,8 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Models\Product;
-use Bazar\Models\Variation;
+use Bazar\Contracts\Models\Product;
+use Bazar\Proxies\Variation as VariationProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -20,10 +20,10 @@ class BatchVariationsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Variation::class)) {
-            $this->middleware('can:batchUpdate,Bazar\Models\Variation')->only('update');
-            $this->middleware('can:batchDelete,Bazar\Models\Variation')->only('destroy');
-            $this->middleware('can:batchRestore,Bazar\Models\Variation')->only('restore');
+        if (Gate::getPolicyFor($class = VariationProxy::getProxiedClass())) {
+            $this->middleware("can:batchUpdate,{$class}")->only('update');
+            $this->middleware("can:batchDelete,{$class}")->only('destroy');
+            $this->middleware("can:batchRestore,{$class}")->only('restore');
         }
     }
 
@@ -31,7 +31,7 @@ class BatchVariationsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Product $product): RedirectResponse
@@ -55,7 +55,7 @@ class BatchVariationsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, Product $product): RedirectResponse
@@ -75,7 +75,7 @@ class BatchVariationsController extends Controller
      * Restore the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Request $request, Product $product): RedirectResponse

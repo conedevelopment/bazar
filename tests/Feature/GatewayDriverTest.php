@@ -2,6 +2,8 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Contracts\Models\Order;
+use Bazar\Contracts\Models\Transaction;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\TransactionFailedException;
@@ -9,8 +11,6 @@ use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
 use Bazar\Gateway\TransferDriver;
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
 use InvalidArgumentException;
 use Throwable;

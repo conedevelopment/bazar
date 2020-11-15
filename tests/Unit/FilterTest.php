@@ -32,7 +32,7 @@ class FilterTest extends TestCase
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc')
           ->whereHas('categories', function ($query) {
-              return $query->where('categories.id', 1);
+              return $query->where('bazar_categories.id', 1);
           });
 
         $this->assertSame(
@@ -53,8 +53,8 @@ class FilterTest extends TestCase
         ]);
 
         $query = Order::query()->whereHas('address', function ($query) {
-            $query->where('addresses.first_name', 'like', 'test%')
-                ->orWhere('addresses.last_name', 'like', 'test%');
+            $query->where('bazar_addresses.first_name', 'like', 'test%')
+                ->orWhere('bazar_addresses.last_name', 'like', 'test%');
         })->withTrashed()
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc')

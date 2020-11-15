@@ -7,13 +7,15 @@ use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Models\Category as Contract;
+use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Category extends Model implements Breadcrumbable
+class Category extends Model implements Breadcrumbable, Contract
 {
     use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes;
 
@@ -51,7 +53,7 @@ class Category extends Model implements Breadcrumbable
      */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'bazar_category_product');
+        return $this->belongsToMany(ProductProxy::getProxiedClass(), 'bazar_category_product');
     }
 
     /**

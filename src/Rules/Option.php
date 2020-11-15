@@ -2,8 +2,8 @@
 
 namespace Bazar\Rules;
 
-use Bazar\Models\Product;
-use Bazar\Models\Variation;
+use Bazar\Contracts\Models\Product;
+use Bazar\Contracts\Models\Variation;
 use Illuminate\Contracts\Validation\Rule;
 
 class Option implements Rule
@@ -11,22 +11,22 @@ class Option implements Rule
     /**
      * The product instance.
      *
-     * @var \Bazar\Models\Product
+     * @var \Bazar\Contracts\Models\Product
      */
     protected $product;
 
     /**
      * The variation instance.
      *
-     * @var \Bazar\Models\Variation|null
+     * @var \Bazar\Contracts\Models\Variation|null
      */
     protected $variation;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variation|null  $variation
+     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Variation|null  $variation
      * @return void
      */
     public function __construct(Product $product, Variation $variation = null)

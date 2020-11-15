@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\User;
+use Bazar\Proxies\User as UserProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -15,15 +15,14 @@ class BatchUsersController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct()
     {
-        if (Gate::getPolicyFor($user = get_class($user))) {
-            $this->middleware("can:batchUpdate,{$user}")->only('update');
-            $this->middleware("can:batchDelete,{$user}")->only('destroy');
-            $this->middleware("can:batchRestore,{$user}")->only('restore');
+        if (Gate::getPolicyFor($class = UserProxy::getProxiedClass())) {
+            $this->middleware("can:batchUpdate,{$class}")->only('update');
+            $this->middleware("can:batchDelete,{$class}")->only('destroy');
+            $this->middleware("can:batchRestore,{$class}")->only('restore');
         }
     }
 
@@ -31,10 +30,9 @@ class BatchUsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $data = Arr::dot($request->except('ids'));
 
@@ -42,7 +40,7 @@ class BatchUsersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        $user->newQuery()->whereIn(
+        UserProxy::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 
@@ -55,12 +53,11 @@ class BatchUsersController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request, User $user): RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
-        $users = $user->newQuery()->withTrashed()->whereIn(
+        $users = UserProxy::query()->withTrashed()->whereIn(
             'id', $ids = array_diff($request->input('ids', []), [$request->user()->id])
         );
 
@@ -75,12 +72,11 @@ class BatchUsersController extends Controller
      * Restore the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore(Request $request, User $user): RedirectResponse
+    public function restore(Request $request): RedirectResponse
     {
-        $user->newQuery()->onlyTrashed()->whereIn(
+        UserProxy::query()->onlyTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->restore();
 

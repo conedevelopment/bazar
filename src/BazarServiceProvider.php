@@ -7,6 +7,7 @@ use Bazar\Services\Image;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -24,6 +25,15 @@ class BazarServiceProvider extends ServiceProvider
      */
     public $bindings = [
         Contracts\Models\User::class => Models\User::class,
+        Contracts\Models\Cart::class => Models\Cart::class,
+        Contracts\Models\Order::class => Models\Order::class,
+        Contracts\Models\Medium::class => Models\Medium::class,
+        Contracts\Models\Product::class => Models\Product::class,
+        Contracts\Models\Address::class => Models\Address::class,
+        Contracts\Models\Category::class => Models\Category::class,
+        Contracts\Models\Shipping::class => Models\Shipping::class,
+        Contracts\Models\Variation::class => Models\Variation::class,
+        Contracts\Models\Transaction::class => Models\Transaction::class,
         Contracts\Http\ResponseFactory::class => Http\ResponseFactory::class,
     ];
 
@@ -69,6 +79,7 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerComposers();
         $this->registerConversions();
+        $this->registerRouteBindings();
         $this->registerItemProperties();
     }
 
@@ -88,12 +99,26 @@ class BazarServiceProvider extends ServiceProvider
                 ->middleware('signed')
                 ->name('bazar.download');
         }
+    }
 
-        RouteFactory::bind('user', function (string $value, Route $route): ?Contracts\Models\User {
-            return $this->app->make(Contracts\Models\User::class)->resolveRouteBinding(
-                $value, $route->bindingFieldFor('user')
-            );
-        });
+    /**
+     * Register the route bindings.
+     *
+     * @return void
+     */
+    public function registerRouteBindings(): void
+    {
+        foreach ($this->bindings as $contract => $abstract) {
+            if (is_subclass_of($abstract, Model::class)) {
+                $key = strtolower(class_basename($contract));
+
+                RouteFactory::bind($key, function (string $value, Route $route) use ($key, $contract): ?Model {
+                    return $this->app->make($contract)->resolveRouteBinding(
+                        $value, $route->bindingFieldFor($key)
+                    );
+                });
+            }
+        }
     }
 
     /**

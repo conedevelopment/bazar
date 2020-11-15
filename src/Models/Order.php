@@ -6,10 +6,14 @@ use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
-use Bazar\Concerns\Itemable;
+use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
+use Bazar\Contracts\Itemable;
+use Bazar\Contracts\Models\Order as Contract;
 use Bazar\Contracts\Shippable;
+use Bazar\Proxies\Transaction as TransactionProxy;
+use Bazar\Proxies\User as UserProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,9 +21,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Breadcrumbable, Discountable, Shippable
+class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable, Shippable
 {
-    use Addressable, BazarRoutable, Filterable, Itemable, SoftDeletes;
+    use Addressable, BazarRoutable, Filterable, InteractsWithItems, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -148,7 +152,9 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
                 'trashed' => __('Trashed')
             ],
             'status' => static::statuses(),
-            'category' => User::pluck('name', 'id'),
+            'category' => static function () {
+                return UserProxy::pluck('name', 'id');
+            },
         ];
     }
 
@@ -159,7 +165,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
      */
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(TransactionProxy::getProxiedClass());
     }
 
     /**
@@ -303,8 +309,8 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->whereHas('address', static function (Builder $query) use ($value): Builder {
-            return $query->where('addresses.first_name', 'like', "{$value}%")
-                        ->orWhere('addresses.last_name', 'like', "{$value}%");
+            return $query->where($query->getModel()->qualifyColumn('first_name'), 'like', "{$value}%")
+                        ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
         });
     }
 
@@ -330,7 +336,7 @@ class Order extends Model implements Breadcrumbable, Discountable, Shippable
     public function scopeUser(Builder $query, int $value): Builder
     {
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
-            return $query->where('users.id', $value);
+            return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
     }
 }

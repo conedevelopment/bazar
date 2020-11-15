@@ -1,7 +1,6 @@
 <?php
 
-use Bazar\Contracts\Models\User;
-use Illuminate\Container\Container;
+use Bazar\Proxies\User as UserProxy;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +14,7 @@ class ExtendUsersTable extends Migration
      */
     public function up(): void
     {
-        $column = Container::getInstance()->make(User::class)->getDeletedAtColumn();
+        $column = UserProxy::getProxiedInstance()->getDeletedAtColumn();
 
         Schema::table('users', static function (Blueprint $table) use ($column): void {
             if (! Schema::hasColumn('users', $column)) {

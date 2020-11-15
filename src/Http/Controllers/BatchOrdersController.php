@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Models\Order;
+use Bazar\Proxies\Order as OrderProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,10 +19,10 @@ class BatchOrdersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Order::class)) {
-            $this->middleware('can:batchUpdate,Bazar\Models\Order')->only('update');
-            $this->middleware('can:batchDelete,Bazar\Models\Order')->only('destroy');
-            $this->middleware('can:batchRestore,Bazar\Models\Order')->only('restore');
+        if (Gate::getPolicyFor($class = OrderProxy::getProxiedClass())) {
+            $this->middleware("can:batchUpdate,{$class}")->only('update');
+            $this->middleware("can:batchDelete,{$class}")->only('destroy');
+            $this->middleware("can:batchRestore,{$class}")->only('restore');
         }
     }
 
@@ -40,7 +40,7 @@ class BatchOrdersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Order::query()->whereIn(
+        OrderProxy::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 
@@ -57,7 +57,7 @@ class BatchOrdersController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $orders = Order::withTrashed()->whereIn(
+        $orders = OrderProxy::query()->withTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         );
 
@@ -76,7 +76,7 @@ class BatchOrdersController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        Order::onlyTrashed()->whereIn(
+        OrderProxy::query()->onlyTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->restore();
 

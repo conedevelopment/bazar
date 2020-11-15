@@ -2,7 +2,7 @@
 
 namespace Bazar\Concerns;
 
-use Bazar\Models\Address;
+use Bazar\Proxies\Address as AddressProxy;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait Addressable
@@ -14,6 +14,6 @@ trait Addressable
      */
     public function address(): MorphOne
     {
-        return $this->morphOne(Address::class, 'addressable')->withDefault();
+        return $this->morphOne(AddressProxy::getProxiedClass(), 'addressable')->withDefault();
     }
 }

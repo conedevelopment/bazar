@@ -3,7 +3,9 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\InteractsWithTaxes;
+use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Taxable;
+use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -94,7 +96,7 @@ class Item extends MorphPivot implements Taxable
         });
 
         static::saving(static function (Item $item): void {
-            if ($item->itemable_type === Cart::class) {
+            if (in_array(Cart::class, class_implements($item->itemable_type))) {
                 foreach (array_replace(['option' => []], (array) $item->properties) as $name => $value) {
                     if ($resolver = static::$propertyResolvers[$name] ?? null) {
                         call_user_func_array($resolver, [$item, $value]);
@@ -125,7 +127,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ProductProxy::getProxiedClass());
     }
 
     /**

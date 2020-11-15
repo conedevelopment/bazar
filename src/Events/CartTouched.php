@@ -2,7 +2,7 @@
 
 namespace Bazar\Events;
 
-use Bazar\Models\Cart;
+use Bazar\Contracts\Models\Cart;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -13,14 +13,14 @@ class CartTouched
     /**
      * The cart instace.
      *
-     * @var \Bazar\Models\Cart
+     * @var \Bazar\Contracts\Models\Cart
      */
     public $cart;
 
     /**
      * Create a new event instance.
      *
-     * @param  \Bazar\Models\Cart  $cart
+     * @param  \Bazar\Contracts\Models\Cart  $cart
      * @return void
      */
     public function __construct(Cart $cart)

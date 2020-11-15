@@ -3,7 +3,7 @@
 namespace Bazar\Http\Requests;
 
 use Bazar\Bazar;
-use Bazar\Models\Order;
+use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Support\Facades\Shipping;
 use Illuminate\Validation\Rule;
 
@@ -33,7 +33,7 @@ class OrderStoreRequest extends FormRequest
             ],
             'status' => [
                 'required',
-                Rule::in(array_keys(Order::statuses())),
+                Rule::in(array_keys(OrderProxy::statuses())),
             ],
             'address' => ['required', 'array'],
             'address.first_name' => ['required', 'string'],

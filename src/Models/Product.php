@@ -10,6 +10,12 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Sluggable;
 use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Models\Product as Contract;
+use Bazar\Contracts\Models\Variation;
+use Bazar\Proxies\Cart as CartProxy;
+use Bazar\Proxies\Category as CategoryProxy;
+use Bazar\Proxies\Order as OrderProxy;
+use Bazar\Proxies\Variation as VariationProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,7 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
-class Product extends Model implements Breadcrumbable
+class Product extends Model implements Breadcrumbable, Contract
 {
     use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes, Stockable;
 
@@ -90,7 +96,7 @@ class Product extends Model implements Breadcrumbable
                 'available' => __('Available'),
                 'trashed' => __('Trashed')
             ],
-            'category' => array_map('__', Category::pluck('name', 'id')->toArray()),
+            'category' => array_map('__', CategoryProxy::pluck('name', 'id')->toArray()),
         ];
     }
 
@@ -101,7 +107,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function orders(): MorphToMany
     {
-        return $this->morphedByMany(Order::class, 'itemable', 'bazar_items')
+        return $this->morphedByMany(OrderProxy::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -115,7 +121,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function carts(): MorphToMany
     {
-        return $this->morphedByMany(Cart::class, 'itemable', 'bazar_items')
+        return $this->morphedByMany(CartProxy::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -129,7 +135,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'bazar_category_product');
+        return $this->belongsToMany(CategoryProxy::getProxiedClass(), 'bazar_category_product');
     }
 
     /**
@@ -139,7 +145,7 @@ class Product extends Model implements Breadcrumbable
      */
     public function variations(): HasMany
     {
-        return $this->hasMany(Variation::class);
+        return $this->hasMany(VariationProxy::getProxiedClass());
     }
 
     /**
@@ -160,7 +166,7 @@ class Product extends Model implements Breadcrumbable
      * Get the variation of the given option.
      *
      * @param  array  $option
-     * @return \Bazar\Models\Variation|null
+     * @return \Bazar\Contract\Models\Variation|null
      */
     public function variation(array $option): ?Variation
     {
@@ -234,7 +240,7 @@ class Product extends Model implements Breadcrumbable
     public function scopeCategory(Builder $query, int $value): Builder
     {
         return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
-            return $query->where('categories.id', $value);
+            return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
     }
 }

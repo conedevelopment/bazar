@@ -2,7 +2,7 @@
 
 namespace Bazar\Events;
 
-use Bazar\Models\Order;
+use Bazar\Contracts\Models\Order;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -13,14 +13,14 @@ class CheckoutFailing
     /**
      * The order instace.
      *
-     * @var \Bazar\Models\Order
+     * @var \Bazar\Contracts\Models\Order
      */
     public $order;
 
     /**
      * Create a new event instance.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Bazar\Contracts\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)

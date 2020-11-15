@@ -9,13 +9,15 @@ use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Models\Variation as Contract;
+use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Variation extends Model implements Breadcrumbable
+class Variation extends Model implements Breadcrumbable, Contract
 {
     use BazarRoutable, Filterable, HasMedia, SoftDeletes, Stockable;
 
@@ -77,7 +79,7 @@ class Variation extends Model implements Breadcrumbable
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(ProductProxy::getProxiedClass());
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Bazar\Jobs;
 
-use Bazar\Models\Medium;
+use Bazar\Contracts\Models\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,7 +17,7 @@ class PerformConversions implements ShouldQueue
     /**
      * The medium instance.
      *
-     * @var \Bazar\Models\Medium
+     * @var \Bazar\Contracts\Models\Medium
      */
     public $medium;
 
@@ -31,7 +31,7 @@ class PerformConversions implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)

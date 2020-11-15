@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Models\Category;
+use Bazar\Proxies\Category as CategoryProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,10 +19,10 @@ class BatchCategoriesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Category::class)) {
-            $this->middleware('can:batchUpdate,Bazar\Models\Category')->only('update');
-            $this->middleware('can:batchDelete,Bazar\Models\Category')->only('destroy');
-            $this->middleware('can:batchRestore,Bazar\Models\Category')->only('restore');
+        if (Gate::getPolicyFor($class = CategoryProxy::getProxiedClass())) {
+            $this->middleware("can:batchUpdate,{$class}")->only('update');
+            $this->middleware("can:batchDelete,{$class}")->only('destroy');
+            $this->middleware("can:batchRestore,{$class}")->only('restore');
         }
     }
 
@@ -40,7 +40,7 @@ class BatchCategoriesController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Category::query()->whereIn(
+        CategoryProxy::query()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 
@@ -57,7 +57,7 @@ class BatchCategoriesController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $categories = Category::withTrashed()->whereIn(
+        $categories = CategoryProxy::query()->withTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         );
 
@@ -76,7 +76,7 @@ class BatchCategoriesController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        Category::onlyTrashed()->whereIn(
+        CategoryProxy::query()->onlyTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->restore();
 

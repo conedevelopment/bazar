@@ -5,6 +5,7 @@ namespace Bazar\Http\Controllers;
 use Bazar\Contracts\Models\User as User;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
+use Bazar\Proxies\User as Proxy;
 use Bazar\Support\Facades\Component;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
@@ -19,13 +20,12 @@ class UsersController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct()
     {
-        if (Gate::getPolicyFor(get_class($user))) {
-            $this->authorizeResource(get_class($user));
+        if (Gate::getPolicyFor($class = Proxy::getProxiedClass())) {
+            $this->authorizeResource($class);
             $this->middleware('can:update,user')->only('restore');
         }
     }
@@ -34,12 +34,11 @@ class UsersController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Bazar\Http\Response|\Illuminate\Http\JsonResponse
      */
-    public function index(Request $request, User $user) //: Response
+    public function index(Request $request) //: Response
     {
-        $users = $user->newQuery()->with('addresses')->filter($request)->latest()->paginate(
+        $users = Proxy::query()->with('addresses')->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
@@ -47,7 +46,7 @@ class UsersController extends Controller
             ? Response::json($users)
             : Component::render('Users/Index', [
                 'results' => $users,
-                'filters' => $user::filters(),
+                'filters' => Proxy::filters(),
             ]);
     }
 
@@ -72,12 +71,11 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Bazar\Http\Requests\UserStoreRequest  $request
-     * @param  \Bazar\Contracts\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(StoreRequest $request, User $user): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
-        $user = $user->newQuery()->create($request->validated());
+        $user = Proxy::create($request->validated());
 
         return Redirect::route('bazar.users.show', $user)->with(
             'message', __('The user has been created.')

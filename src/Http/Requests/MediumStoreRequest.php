@@ -2,7 +2,6 @@
 
 namespace Bazar\Http\Requests;
 
-
 class MediumStoreRequest extends FormRequest
 {
     /**

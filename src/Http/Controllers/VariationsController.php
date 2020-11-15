@@ -3,11 +3,12 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
+use Bazar\Contracts\Models\Product;
+use Bazar\Contracts\Models\Variation;
 use Bazar\Http\Requests\VariationStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariationUpdateRequest as UpdateRequest;
 use Bazar\Http\Response;
-use Bazar\Models\Product;
-use Bazar\Models\Variation;
+use Bazar\Proxies\Variation as VariationProxy;
 use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,8 +26,8 @@ class VariationsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor(Variation::class)) {
-            $this->authorizeResource(Variation::class);
+        if (Gate::getPolicyFor($class = VariationProxy::getProxiedClass())) {
+            $this->authorizeResource($class);
             $this->middleware('can:update,variation')->only('restore');
         }
     }
@@ -35,7 +36,7 @@ class VariationsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Bazar\Http\Response
      */
     public function index(Request $request, Product $product): Response
@@ -53,7 +54,7 @@ class VariationsController extends Controller
         return Component::render('Variation/Index', [
             'product' => $product,
             'results' => $variations,
-            'filters' => Variation::filters(),
+            'filters' => VariationProxy::filters(),
         ]);
     }
 
@@ -61,12 +62,12 @@ class VariationsController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Bazar\Http\Response
      */
     public function create(Request $request, Product $product): Response
     {
-        $variation = Variation::make($request->old())
+        $variation = VariationProxy::make($request->old())
             ->setAttribute('media', [])
             ->setRelation(
                 'product', $product->withoutRelations()->makeHidden('variation')
@@ -84,7 +85,7 @@ class VariationsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Bazar\Http\Requests\VariationStoreRequest  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request, Product $product): RedirectResponse
@@ -103,8 +104,8 @@ class VariationsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variation  $variation
+     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Variation  $variation
      * @return \Bazar\Http\Response
      */
     public function show(Product $product, Variation $variation): Response
@@ -125,8 +126,8 @@ class VariationsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\VariationUpdateRequest  $request
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variation  $variation
+     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Variation  $variation
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product, Variation $variation): RedirectResponse
@@ -145,8 +146,8 @@ class VariationsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variation  $variation
+     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Variation  $variation
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product, Variation $variation): RedirectResponse
@@ -161,8 +162,8 @@ class VariationsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variation  $variation
+     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Variation  $variation
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product, Variation $variation): RedirectResponse

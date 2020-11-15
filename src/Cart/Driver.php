@@ -2,11 +2,12 @@
 
 namespace Bazar\Cart;
 
+use Bazar\Contracts\Models\Cart;
+use Bazar\Contracts\Models\Product;
+use Bazar\Contracts\Models\Shipping;
 use Bazar\Events\CartTouched;
-use Bazar\Models\Cart;
 use Bazar\Models\Item;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
+use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Services\Checkout;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -24,7 +25,7 @@ abstract class Driver
     /**
      * The cart instance.
      *
-     * @var \Bazar\Models\Cart
+     * @var \Bazar\Contracts\Models\Cart
      */
     protected $cart;
 
@@ -44,7 +45,7 @@ abstract class Driver
     /**
      * Get the cart model.
      *
-     * @return \Bazar\Models\Cart
+     * @return \Bazar\Contracts\Models\Cart
      */
     public function model(): Cart
     {
@@ -54,7 +55,7 @@ abstract class Driver
     /**
      * Get the item by the product and its properties.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */
@@ -66,7 +67,7 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Bazar\Models\Item
@@ -162,7 +163,7 @@ abstract class Driver
     /**
      * Get the shipping that belongs to the cart.
      *
-     * @return \Bazar\Models\Shipping
+     * @return \Bazar\Contracts\Models\Shipping
      */
     public function shipping(): Shipping
     {
@@ -212,7 +213,7 @@ abstract class Driver
     /**
      * Retrieve the cart instance.
      *
-     * @return \Bazar\Models\Cart
+     * @return \Bazar\Contracts\Models\Cart
      */
     protected function retrieve(): Cart
     {
@@ -223,7 +224,7 @@ abstract class Driver
         ]);
 
         if ($user && $cart->user_id !== $user->id) {
-            Cart::query()->where('user_id', $user->id)->update(['user_id' => null]);
+            CartProxy::query()->where('user_id', $user->id)->update(['user_id' => null]);
 
             $cart->user()->associate($user)->save();
         }
@@ -234,12 +235,12 @@ abstract class Driver
     /**
      * Resolve the cart instance.
      *
-     * @return \Bazar\Models\Cart
+     * @return \Bazar\Contracts\Models\Cart
      */
     abstract protected function resolve(): Cart;
 
     /**
-     * Dynamically call methods.
+     * Handle dynamic method calls into the driver.
      *
      * @param  string  $method
      * @param  array  $arguments

@@ -3,6 +3,7 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\Filterable;
+use Bazar\Contracts\Models\Medium as Contract;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
-class Medium extends Model
+class Medium extends Model implements Contract
 {
     use Filterable;
 

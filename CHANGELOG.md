@@ -1,6 +1,11 @@
 # Changelog
 
 ## Unreleased
+### Added
+- Added container proxies, that make container bindings easily swappable
+
+### Fixed
+- Fixed columns in scopes
 
 ## v0.2.3 (2020-11-05)
 ### Fixed

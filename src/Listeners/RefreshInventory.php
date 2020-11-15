@@ -2,8 +2,8 @@
 
 namespace Bazar\Listeners;
 
+use Bazar\Contracts\Models\Product;
 use Bazar\Events\OrderPlaced;
-use Bazar\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 

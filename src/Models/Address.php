@@ -5,13 +5,14 @@ namespace Bazar\Models;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Models\Address as Contract;
 use Bazar\Support\Countries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 
-class Address extends Model implements Breadcrumbable
+class Address extends Model implements Breadcrumbable, Contract
 {
     use BazarRoutable, Filterable;
 

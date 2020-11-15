@@ -2,7 +2,8 @@
 
 namespace Bazar\Cart;
 
-use Bazar\Models\Cart;
+use Bazar\Contracts\Models\Cart;
+use Bazar\Proxies\Cart as CartProxy;
 use Illuminate\Support\Facades\Cookie;
 
 class CookieDriver extends Driver
@@ -10,11 +11,11 @@ class CookieDriver extends Driver
     /**
      * Resolve the cart instance.
      *
-     * @return \Bazar\Models\Cart
+     * @return \Bazar\Contracts\Models\Cart
      */
     protected function resolve(): Cart
     {
-        $cart = Cart::query()->firstOrCreate([
+        $cart = CartProxy::query()->firstOrCreate([
             'token' => Cookie::get('cart_token'),
         ]);
 

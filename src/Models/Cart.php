@@ -4,17 +4,19 @@ namespace Bazar\Models;
 
 use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
-use Bazar\Concerns\Itemable;
+use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Discountable;
+use Bazar\Contracts\Itemable;
+use Bazar\Contracts\Models\Cart as Contract;
 use Bazar\Contracts\Shippable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Ramsey\Uuid\Uuid;
 
-class Cart extends Model implements Discountable, Shippable
+class Cart extends Model implements Contract, Discountable, Itemable, Shippable
 {
-    use Addressable, Itemable;
+    use Addressable, InteractsWithItems;
 
     /**
      * The accessors to append to the model's array form.
