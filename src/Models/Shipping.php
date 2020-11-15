@@ -7,8 +7,8 @@ use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Shipping as Contract;
 use Bazar\Contracts\Taxable;
+use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Support\Facades\Shipping as Manager;
-use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
@@ -87,7 +87,7 @@ class Shipping extends Model implements Contract, Taxable
     public function shippable(): MorphTo
     {
         return $this->morphTo()->withDefault(static function (): Cart {
-            return Container::getInstance()->make(Cart::class);
+            return CartProxy::getProxiedInstance();
         });
     }
 
