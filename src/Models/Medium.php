@@ -131,7 +131,7 @@ class Medium extends Model implements Contract
      *
      * @return $this
      */
-    public function convert(): Medium
+    public function convert(): Contract
     {
         return Conversion::perform($this);
     }
