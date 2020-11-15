@@ -222,7 +222,7 @@ class Shipping extends Model implements Contract, Taxable
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Shipping
+    public function driver(string $driver): Contract
     {
         $this->driver = $driver;
 
