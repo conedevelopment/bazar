@@ -281,7 +281,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      * @param  string  $status
      * @return $this
      */
-    public function status(string $status): Order
+    public function status(string $status): Contract
     {
         $this->update(compact('status'));
 
