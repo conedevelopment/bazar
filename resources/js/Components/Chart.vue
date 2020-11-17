@@ -62,7 +62,6 @@
                     pointHoverRadius: 4,
                     pointHoverBackgroundColor: 'rgba(0, 97, 242, 1)',
                     pointHoverBorderColor: 'rgba(0, 97, 242, 1)',
-                    pointHitRadius: 3,
                     pointBorderWidth: 3,
                     pointHitRadius: 16,
                 }];
