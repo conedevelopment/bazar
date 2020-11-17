@@ -98,7 +98,7 @@ class Medium extends Model implements Contract
             'mime_type' => $type,
             'width' => $width ?? null,
             'height' => $height ?? null,
-            'disk' => Config::get('bazar.media.disk'),
+            'disk' => Config::get('bazar.media.disk', 'public'),
             'size' => round(filesize($path) / 1024),
             'name' => pathinfo($name, PATHINFO_FILENAME),
         ]);

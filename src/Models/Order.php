@@ -152,9 +152,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
                 'trashed' => __('Trashed')
             ],
             'status' => static::statuses(),
-            'category' => static function () {
-                return UserProxy::pluck('name', 'id');
-            },
+            'category' => UserProxy::query()->pluck('name', 'id')->toArray(),
         ];
     }
 
@@ -184,7 +182,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     }
 
     /**
-     * Get all the payment transactions.
+     * Get the payments attribute.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -194,7 +192,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     }
 
     /**
-     * Get all the refunds transactions.
+     * Get the refunds attribute.
      *
      * @return \Illuminate\Support\Collection
      */

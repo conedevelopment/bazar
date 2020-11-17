@@ -96,7 +96,7 @@ class Product extends Model implements Breadcrumbable, Contract
                 'available' => __('Available'),
                 'trashed' => __('Trashed')
             ],
-            'category' => array_map('__', CategoryProxy::pluck('name', 'id')->toArray()),
+            'category' => array_map('__', CategoryProxy::query()->pluck('name', 'id')->toArray()),
         ];
     }
 
