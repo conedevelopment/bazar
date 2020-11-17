@@ -166,7 +166,7 @@ class Product extends Model implements Breadcrumbable, Contract
      * Get the variation of the given option.
      *
      * @param  array  $option
-     * @return \Bazar\Contract\Models\Variation|null
+     * @return \Bazar\Contracts\Models\Variation|null
      */
     public function variation(array $option): ?Variation
     {
