@@ -27,7 +27,7 @@ class RefreshInventory
             }
 
             return $shouldReject;
-        })->groupBy(function (Product $product): string {
+        })->groupBy(function (Model $product): string {
             return get_class($product).':'.$product->id;
         })->each(function (Collection $products): void {
             $products->first()->decrementQuantity($products->sum('item.quantity'));
