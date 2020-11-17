@@ -171,7 +171,7 @@ interface Itemable
     /**
      * Get an item by its parent product and properties.
      *
-     * @param  \Bazar\Contract\Models\Product  $product
+     * @param  \Bazar\Contracts\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */
