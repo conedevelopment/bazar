@@ -3,7 +3,6 @@
 namespace Bazar\Cart;
 
 use Bazar\Contracts\Cart\Manager as Contract;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract
