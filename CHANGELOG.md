@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## v0.2.4 (2020-11-19)
 ### Added
 - Added container proxies, that make container bindings easily swappable
+
+### Changed
+- Changed the cart resolution logic in the `Bazar\Cart\Driver` class
 
 ### Fixed
 - Fixed columns in scopes

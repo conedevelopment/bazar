@@ -7,11 +7,11 @@ use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Item;
-use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Services\Checkout;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 abstract class Driver
 {
@@ -38,8 +38,6 @@ abstract class Driver
     public function __construct(array $config = [])
     {
         $this->config = $config;
-
-        $this->cart = $this->retrieve();
     }
 
     /**
@@ -49,6 +47,12 @@ abstract class Driver
      */
     public function model(): Cart
     {
+        if (is_null($this->cart)) {
+            $this->cart = App::call(function (Request $request): Cart {
+                return $this->resolve($request);
+            });
+        }
+
         return $this->cart;
     }
 
@@ -61,7 +65,7 @@ abstract class Driver
      */
     public function item(Product $product, array $properties = []): ?Item
     {
-        return $this->cart->item($product, $properties);
+        return $this->model()->item($product, $properties);
     }
 
     /**
@@ -83,12 +87,12 @@ abstract class Driver
                 $item->product()
                     ->associate($product)
                     ->itemable()
-                    ->associate($this->cart)
+                    ->associate($this->model())
                     ->save();
             });
         }
 
-        CartTouched::dispatch($this->cart);
+        CartTouched::dispatch($this->model());
 
         return $item;
     }
@@ -105,9 +109,9 @@ abstract class Driver
             return $item instanceof Item ? $item->id : $item;
         }, Arr::wrap($item));
 
-        $this->cart->products()->wherePivotIn('id', $ids)->detach();
+        $this->model()->products()->wherePivotIn('id', $ids)->detach();
 
-        CartTouched::dispatch($this->cart);
+        CartTouched::dispatch($this->model());
     }
 
     /**
@@ -118,13 +122,13 @@ abstract class Driver
      */
     public function update(array $items = []): void
     {
-        $this->cart->items->whereIn(
+        $this->model()->items->whereIn(
             'id', array_keys($items)
         )->each(static function (Item $item) use ($items): void {
             $item->update($items[$item->id]);
         });
 
-        CartTouched::dispatch($this->cart);
+        CartTouched::dispatch($this->model());
     }
 
     /**
@@ -134,10 +138,10 @@ abstract class Driver
      */
     public function empty(): void
     {
-        $this->cart->products()->detach();
-        $this->cart->shipping->update(['tax' => 0, 'cost' => 0]);
+        $this->model()->products()->detach();
+        $this->model()->shipping->update(['tax' => 0, 'cost' => 0]);
 
-        CartTouched::dispatch($this->cart);
+        CartTouched::dispatch($this->model());
     }
 
     /**
@@ -147,7 +151,7 @@ abstract class Driver
      */
     public function products(): Collection
     {
-        return $this->cart->products;
+        return $this->model()->products;
     }
 
     /**
@@ -157,7 +161,7 @@ abstract class Driver
      */
     public function items(): Collection
     {
-        return $this->cart->items;
+        return $this->model()->items;
     }
 
     /**
@@ -167,7 +171,7 @@ abstract class Driver
      */
     public function shipping(): Shipping
     {
-        return $this->cart->shipping;
+        return $this->model()->shipping;
     }
 
     /**
@@ -177,7 +181,7 @@ abstract class Driver
      */
     public function count(): float
     {
-        return $this->cart->items->sum('quantity');
+        return $this->model()->items->sum('quantity');
     }
 
     /**
@@ -187,7 +191,7 @@ abstract class Driver
      */
     public function isEmpty(): bool
     {
-        return $this->cart->items->isEmpty();
+        return $this->model()->items->isEmpty();
     }
 
     /**
@@ -207,37 +211,16 @@ abstract class Driver
      */
     public function checkout(): Checkout
     {
-        return new Checkout($this->cart);
-    }
-
-    /**
-     * Retrieve the cart instance.
-     *
-     * @return \Bazar\Contracts\Models\Cart
-     */
-    protected function retrieve(): Cart
-    {
-        $user = Auth::user();
-
-        $cart = $this->resolve()->setRelation('user', $user)->loadMissing([
-            'shipping', 'products', 'products.media', 'products.variations',
-        ]);
-
-        if ($user && $cart->user_id !== $user->id) {
-            CartProxy::query()->where('user_id', $user->id)->update(['user_id' => null]);
-
-            $cart->user()->associate($user)->save();
-        }
-
-        return $cart;
+        return new Checkout($this->model());
     }
 
     /**
      * Resolve the cart instance.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Bazar\Contracts\Models\Cart
      */
-    abstract protected function resolve(): Cart;
+    abstract protected function resolve(Request $request): Cart;
 
     /**
      * Handle dynamic method calls into the driver.
@@ -248,6 +231,6 @@ abstract class Driver
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->cart->{$method}(...$arguments);
+        return $this->model()->{$method}(...$arguments);
     }
 }
