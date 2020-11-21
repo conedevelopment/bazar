@@ -32,7 +32,7 @@ class ClearChunksCommand extends Command
     {
         $now = time();
 
-        $expiration = Config::get('bazar.media.chunk_expiration') * 60;
+        $expiration = Config::get('bazar.media.chunk_expiration', 1440) * 60;
 
         foreach (Storage::disk('local')->allFiles('chunks') as $file) {
             $info = new SplFileInfo(Storage::disk('local')->path($file));

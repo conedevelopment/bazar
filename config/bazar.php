@@ -50,7 +50,6 @@ return [
 
     'cart' => [
         'default' => 'cookie',
-        'reservation' => 60,
         'drivers' => [
             'cookie' => [
                 'expiration' => 4320,
