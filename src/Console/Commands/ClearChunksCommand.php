@@ -21,7 +21,7 @@ class ClearChunksCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Clear the file chunks';
+    protected $description = 'Clear the expired file chunks';
 
     /**
      * Execute the console command.
@@ -32,10 +32,12 @@ class ClearChunksCommand extends Command
     {
         $now = time();
 
+        $expiration = Config::get('bazar.media.chunk_expiration') * 60;
+
         foreach (Storage::disk('local')->allFiles('chunks') as $file) {
             $info = new SplFileInfo(Storage::disk('local')->path($file));
 
-            if ($now - $info->getMTime() >= Config::get('bazar.media.chunk_expiration')) {
+            if ($now - $info->getMTime() >= $expiration) {
                 Storage::disk('local')->delete($file);
             }
         }

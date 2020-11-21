@@ -68,7 +68,7 @@ trait Stockable
      */
     public function formattedDimensions(string $glue = 'x'): ?string
     {
-        if (! $dimensions = array_filter($this->inventory('dimensions'))) {
+        if (! $dimensions = array_filter((array) $this->inventory('dimensions'))) {
             return null;
         }
 

@@ -50,6 +50,7 @@ return [
 
     'cart' => [
         'default' => 'cookie',
+        'reservation' => 60,
         'drivers' => [
             'cookie' => [
                 'expiration' => 4320,
@@ -132,7 +133,7 @@ return [
 
     'media' => [
         'disk' => 'public',
-        'chunk_expiration' => 3600 * 24,
+        'chunk_expiration' => 1440,
     ],
 
 ];
