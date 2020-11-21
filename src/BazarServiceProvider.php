@@ -2,7 +2,6 @@
 
 namespace Bazar;
 
-use Bazar\Models\Item;
 use Bazar\Services\Image;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
@@ -80,7 +79,6 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerComposers();
         $this->registerConversions();
         $this->registerRouteBindings();
-        $this->registerItemProperties();
     }
 
     /**
@@ -246,27 +244,5 @@ class BazarServiceProvider extends ServiceProvider
         Event::listen(Events\OrderPlaced::class, Listeners\SendNewOrderNotifications::class);
         Event::listen(Events\CheckoutFailing::class, Listeners\HandleFailingCheckout::class);
         Event::listen(Events\CheckoutProcessing::class, Listeners\HandleProcessingCheckout::class);
-    }
-
-    /**
-     * Register the item properties.
-     *
-     * @return void
-     */
-    protected function registerItemProperties(): void
-    {
-        Item::resolvePropertyUsing('option', static function (Item $item, array $value): void {
-            $item->product->loadMissing('variations');
-
-            $stock = $item->product->inventory('quantity');
-            $item->price = $item->product->price('sale') ?: $item->product->price();
-
-            if ($variation = $item->product->variation($value)) {
-                $stock = $variation->inventory('quantity', $stock);
-                $item->price = $variation->price('sale') ?: ($variation->price() ?: $item->price);
-            }
-
-            $item->quantity = (is_null($stock) || $stock >= $item->quantity) ? $item->quantity : $stock;
-        });
     }
 }

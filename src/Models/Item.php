@@ -253,6 +253,28 @@ class Item extends MorphPivot implements Taxable
     }
 
     /**
+     * Resolve the option property.
+     *
+     * @return void
+     */
+    protected function resolveOptionProperty(): void
+    {
+        $this->product->loadMissing('variations');
+
+        $stock = $this->product->inventory('quantity');
+
+        $this->price = $this->product->price('sale') ?: $this->product->price();
+
+        if ($variation = $this->product->variation($this->property('option', []))) {
+            $stock = $variation->inventory('quantity', $stock);
+
+            $this->price = $variation->price('sale') ?: ($variation->price() ?: $this->price);
+        }
+
+        $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
+    }
+
+    /*
      * Resolve the registered properties.
      *
      * @return $this
@@ -260,8 +282,10 @@ class Item extends MorphPivot implements Taxable
     public function resolveProperties(): Item
     {
         if (in_array(Cart::class, class_implements($this->itemable_type))) {
-            foreach (array_replace(['option' => []], (array) $this->properties) as $name => $value) {
-                if ($resolver = static::$propertyResolvers[$name] ?? null) {
+            $this->resolveOptionProperty();
+
+            foreach ((array) $this->properties as $name => $value) {
+                if ($name !== 'option' && ($resolver = static::$propertyResolvers[$name] ?? null)) {
                     call_user_func_array($resolver, [$this, $value]);
                 }
             }
