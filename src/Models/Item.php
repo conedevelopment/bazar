@@ -96,15 +96,7 @@ class Item extends MorphPivot implements Taxable
         });
 
         static::saving(static function (Item $item): void {
-            if (in_array(Cart::class, class_implements($item->itemable_type))) {
-                foreach (array_replace(['option' => []], (array) $item->properties) as $name => $value) {
-                    if ($resolver = static::$propertyResolvers[$name] ?? null) {
-                        call_user_func_array($resolver, [$item, $value]);
-                    }
-                }
-            }
-
-            $item->tax(false);
+            $item->resolveProperties()->tax(false);
         });
     }
 
@@ -258,6 +250,24 @@ class Item extends MorphPivot implements Taxable
     public function formattedNetTotal(): string
     {
         return Str::currency($this->netTotal(), $this->itemable->currency);
+    }
+
+    /**
+     * Resolve the registered properties.
+     *
+     * @return $this
+     */
+    public function resolveProperties(): Item
+    {
+        if (in_array(Cart::class, class_implements($this->itemable_type))) {
+            foreach (array_replace(['option' => []], (array) $this->properties) as $name => $value) {
+                if ($resolver = static::$propertyResolvers[$name] ?? null) {
+                    call_user_func_array($resolver, [$this, $value]);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

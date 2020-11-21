@@ -26,7 +26,7 @@ class CookieDriver extends Driver
         ]);
 
         if ($user && $cart->user_id !== $user->id) {
-            CartProxy::query()->where('user_id', $user->id)->update(['user_id' => null]);
+            CartProxy::query()->where('user_id', $user->id)->delete();
 
             $cart->user()->associate($user)->save();
         }
