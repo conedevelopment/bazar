@@ -259,22 +259,16 @@ class Item extends MorphPivot implements Taxable
      */
     protected function resolveOptionProperty(): void
     {
-        $this->product->loadMissing('variations');
+        $item = $this->product->variation($this->property('option', [])) ?: $this->product;
 
-        $stock = $this->product->inventory('quantity');
+        $stock = $item->inventory('quantity');
 
-        $this->price = $this->product->price('sale') ?: $this->product->price();
-
-        if ($variation = $this->product->variation($this->property('option', []))) {
-            $stock = $variation->inventory('quantity', $stock);
-
-            $this->price = $variation->price('sale') ?: ($variation->price() ?: $this->price);
-        }
+        $this->price = $item->price('sale') ?: $item->price();
 
         $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
     }
 
-    /*
+    /**
      * Resolve the registered properties.
      *
      * @return $this
