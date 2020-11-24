@@ -6,8 +6,10 @@ use Bazar\Contracts\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array methods()
- * @method static bool has(string $method)
+ * @method static array all()
+ * @method static array enabled()
+ * @method static array disabled()
+ * @method static bool has(string $driver)
  *
  * @see \Bazar\Contracts\Shipping\Manager
  */
