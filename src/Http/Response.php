@@ -110,7 +110,7 @@ class Response implements Responsable
         $page = [
             'component' => $this->component,
             'props' => $props,
-            'url' => $request->getRequestUri(),
+            'url' => rtrim($request->getRequestUri(), '/'),
             'version' => Bazar::assetVersion(),
         ];
 

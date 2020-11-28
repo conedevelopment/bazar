@@ -28,6 +28,6 @@
 <body>
     <div id="app" data-page="{{ json_encode($page) }}"></div>
 
-    @include ('bazar::layout.svg-icons')
+    @include ('bazar::svg-icons')
 </body>
 </html>
