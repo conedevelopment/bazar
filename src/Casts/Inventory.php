@@ -34,6 +34,6 @@ class Inventory implements CastsAttributes
      */
     public function set($model, string $key, $value, array $attributes): string
     {
-        return is_array($value) ? json_encode($value) : $value->toJson();
+        return is_array($value) ? json_encode($value, JSON_NUMERIC_CHECK) : $value->toJson(JSON_NUMERIC_CHECK);
     }
 }
