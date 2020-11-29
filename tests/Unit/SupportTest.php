@@ -2,8 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
+use ArrayIterator;
 use Bazar\Bazar;
 use Bazar\Support\Countries;
+use Bazar\Support\Inventory;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -32,5 +34,46 @@ class SupportTest extends TestCase
         $this->assertSame([], Countries::northAmerica());
         $this->assertSame([], Countries::southAmerica());
         $this->assertSame([], Countries::oceania());
+    }
+
+    /** @test */
+    public function support_has_inventory_manager()
+    {
+        $inventory = new Inventory;
+
+        $this->assertNull($inventory->formattedDimensions());
+        $this->assertNull($inventory->formattedWeight());
+
+        $this->assertFalse($inventory->virtual());
+        $inventory->virtual = true;
+        $this->assertTrue($inventory->virtual());
+
+        $this->assertFalse($inventory->downloadable());
+        $inventory->downloadable = true;
+        $this->assertTrue($inventory->downloadable());
+
+        $this->assertFalse($inventory->tracksQuantity());
+        $inventory->quantity = 10;
+        $this->assertTrue($inventory->tracksQuantity());
+
+        $this->assertFalse($inventory->available(11));
+        $this->assertTrue($inventory->virtual(8));
+        $this->assertTrue($inventory->virtual());
+
+        $inventory->incrementQuantity(5);
+        $this->assertSame(15, (int) $inventory->quantity);
+        $inventory->decrementQuantity(5);
+        $this->assertSame(10, (int) $inventory->quantity);
+
+        $inventory[] = 'test';
+        $this->assertSame('test', $inventory[0]);
+        unset($inventory[0]);
+        $this->assertFalse(isset($inventory['fake']));
+        $inventory['quantity'] = null;
+        $this->assertNull($inventory['quantity']);
+
+        $this->assertInstanceOf(ArrayIterator::class, $inventory->getIterator());
+
+        $this->assertSame($inventory->toJson(), $inventory->__toString());
     }
 }
