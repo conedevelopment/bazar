@@ -273,9 +273,9 @@ trait InteractsWithItems
     public function downloads(): Collection
     {
         return $this->products->filter(static function (Product $product): bool {
-            return $product->inventory('downloadable', false);
+            return $product->inventory->downloadable();
         })->flatMap(static function (Product $product): array {
-            return $product->inventory('files', []);
+            return $product->inventory->get('files', []);
         })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 

@@ -22,15 +22,19 @@ class RefreshInventory
         $event->order->products->reject(function (Product $product): bool {
             $variation = $product->variation($product->item->option);
 
-            if ($shouldReject = ($variation && $variation->tracksQuantity())) {
-                $variation->decrementQuantity($product->item->quantity);
+            if ($shouldReject = ($variation && $variation->inventory->tracksQuantity())) {
+                $variation->inventory->decrementQuantity($product->item->quantity);
+
+                $variation->save();
             }
 
             return $shouldReject;
         })->groupBy(function (Model $product): string {
             return get_class($product).':'.$product->id;
         })->each(function (Collection $products): void {
-            $products->first()->decrementQuantity($products->sum('item.quantity'));
+            tap($products->first(), static function (Model $product) use ($products): void {
+                $product->inventory->decrementQuantity($products->sum('item.quantity'));
+            })->save();
         });
     }
 }

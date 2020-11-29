@@ -261,7 +261,7 @@ class Item extends MorphPivot implements Taxable
     {
         $item = $this->product->variation($this->property('option', [])) ?: $this->product;
 
-        $stock = $item->inventory('quantity');
+        $stock = $item->inventory->quantity;
 
         $this->price = $item->price('sale') ?: $item->price();
 

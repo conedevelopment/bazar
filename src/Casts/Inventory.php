@@ -2,25 +2,11 @@
 
 namespace Bazar\Casts;
 
+use Bazar\Support\Inventory as Handler;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class Inventory implements CastsAttributes
 {
-    /**
-     * The default value.
-     *
-     * @var array
-     */
-    protected $default = [
-        'files' => [],
-        'sku' => null,
-        'weight' => null,
-        'quantity' => null,
-        'virtual' => false,
-        'downloadable' => false,
-        'dimensions' => ['length' => null, 'width' => null, 'height' => null],
-    ];
-
     /**
      * Cast the given value.
      *
@@ -28,13 +14,13 @@ class Inventory implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return array
+     * @return \Bazar\Support\Inventory
      */
-    public function get($model, string $key, $value, array $attributes): array
+    public function get($model, string $key, $value, array $attributes): Handler
     {
         $value = $value ? json_decode($value, true) : [];
 
-        return array_replace_recursive($this->default, $value);
+        return new Handler($value);
     }
 
     /**
@@ -42,12 +28,12 @@ class Inventory implements CastsAttributes
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $key
-     * @param  array  $value
+     * @param  \Bazar\Support\Inventory|array  $value
      * @param  array  $attributes
      * @return string
      */
     public function set($model, string $key, $value, array $attributes): string
     {
-        return json_encode($value);
+        return is_array($value) ? json_encode($value) : $value->toJson();
     }
 }

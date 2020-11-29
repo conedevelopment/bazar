@@ -85,7 +85,7 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_is_stockable()
+    public function it_manages_prices()
     {
         $this->assertEquals($this->product->prices['usd']['normal'], $this->product->price('normal', 'usd'));
         $this->assertSame($this->product->price(), $this->product->price);
@@ -96,27 +96,31 @@ class ProductTest extends TestCase
         $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());
         $this->assertTrue($this->product->onSale());
+    }
 
+    /** @test */
+    public function it_manages_inventory()
+    {
         $this->assertSame(
-            sprintf('%s mm', implode('x', $this->product->inventory('dimensions'))),
-            $this->product->formattedDimensions('x')
+            sprintf('%s mm', implode('x', $this->product->inventory->dimensions)),
+            $this->product->inventory->formattedDimensions('x')
         );
-        $this->assertNull((new Product)->formattedDimensions());
+        $this->assertNull((new Product)->inventory->formattedDimensions());
 
-        $this->assertSame(sprintf('%s g', $this->product->inventory('weight')), $this->product->formattedWeight('x'));
-        $this->assertNull((new Product)->formattedWeight());
+        $this->assertSame(sprintf('%s g', $this->product->inventory->weight), $this->product->inventory->formattedWeight('x'));
+        $this->assertNull((new Product)->inventory->formattedWeight());
 
-        $this->assertTrue($this->product->tracksQuantity());
-        $this->assertTrue($this->product->available());
-        $this->assertFalse($this->product->available(600));
-        $this->assertSame(20, $this->product->inventory('quantity'));
-        $this->product->incrementQuantity(10);
-        $this->assertSame(30, $this->product->inventory('quantity'));
-        $this->product->decrementQuantity(6);
-        $this->assertSame(24, $this->product->inventory('quantity'));
+        $this->assertTrue($this->product->inventory->tracksQuantity());
+        $this->assertTrue($this->product->inventory->available());
+        $this->assertFalse($this->product->inventory->available(600));
+        $this->assertSame(20, $this->product->inventory->quantity);
+        $this->product->inventory->incrementQuantity(10);
+        $this->assertSame(30, (int) $this->product->inventory->quantity);
+        $this->product->inventory->decrementQuantity(6);
+        $this->assertSame(24, (int) $this->product->inventory->quantity);
 
-        $this->assertFalse($this->product->virtual());
-        $this->assertFalse($this->product->downloadable());
+        $this->assertFalse($this->product->inventory->virtual());
+        $this->assertFalse($this->product->inventory->downloadable());
     }
 
     /** @test */
