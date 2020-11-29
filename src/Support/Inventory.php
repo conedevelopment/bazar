@@ -261,7 +261,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function __toString(): string
     {
-        return $this->toJson();
+        return $this->toJson(JSON_NUMERIC_CHECK);
     }
 
     /**
