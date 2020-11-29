@@ -57,8 +57,8 @@ class SupportTest extends TestCase
         $this->assertTrue($inventory->tracksQuantity());
 
         $this->assertFalse($inventory->available(11));
-        $this->assertTrue($inventory->virtual(8));
-        $this->assertTrue($inventory->virtual());
+        $this->assertTrue($inventory->available(8));
+        $this->assertTrue($inventory->available());
 
         $inventory->incrementQuantity(5);
         $this->assertSame(15, (int) $inventory->quantity);
