@@ -261,30 +261,30 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function __toString(): string
     {
-        return $this->toJson(JSON_NUMERIC_CHECK);
+        return $this->toJson();
     }
 
     /**
      * Dynamically get the given property.
      *
-     * @param  string  $property
+     * @param  string  $key
      * @return mixed
      */
-    public function __get(string $property)
+    public function __get(string $key)
     {
-        return $this->values[$property] ?? null;
+        return $this->offsetGet($key);
     }
 
     /**
      * Dynamically set the given property value.
      *
-     * @param  string  $property
+     * @param  string  $key
      * @param  mixed  $value
      * @return void
      */
-    public function __set(string $property, $value): void
+    public function __set(string $key, $value): void
     {
-        $this->offsetSet($property, $value);
+        $this->offsetSet($key, $value);
     }
 
     /**
