@@ -63,13 +63,11 @@
 
 <template>
     <div class="form-option-list">
-        <div v-for="(option, key) in options" :key="key">
-            <div class="tag mb-3">
-                <label class="tag__label" :for="`${name}.${key}`">{{ __(key) }}</label>
-                <button type="button" class="tag__remove" @click.prevent="remove(key)">
-                    <svg aria-hidden="true" role="img" fill="currentColor" class="icon icon-close">
-                        <use href="#icon-close" xlink:href="#icon-close"></use>
-                    </svg>
+        <div v-for="(option, key) in options" :key="key" class="form-group">
+            <div class="d-flex">
+                <label :for="`${name}.${key}`" class="mr-3">{{ __(key) }}</label>
+                <button type="button" class="icon-btn icon-btn-danger" :aria-label="__('Remove')" @click.prevent="remove(key)">
+                    <icon icon="close"></icon>
                 </button>
             </div>
             <slot v-bind="{ key, option }"></slot>

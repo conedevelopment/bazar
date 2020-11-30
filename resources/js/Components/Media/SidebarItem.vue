@@ -62,9 +62,7 @@
         <div class="media-accordion__heading" @click.prevent="toggle">
             <h3 class="media-accordion__title d-flex">
                 <img v-if="item.is_image" :src="item.urls.thumb" class="media-accordion__image" alt="">
-                <svg v-else aria-hidden="true" role="img" fill="currentColor" class="media-accordion__icon icon-file">
-                    <use href="#icon-file" xlink:href="#icon-file"></use>
-                </svg>
+                <icon v-else icon="file" class="media-accordion__icon"></icon>
                 <span style="text-overflow: ellipsis; max-width: 160px; display: inline-block; overflow: hidden;">
                     {{ item.file_name }}
                 </span>
