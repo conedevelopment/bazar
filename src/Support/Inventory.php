@@ -141,7 +141,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      * Set the value of the given key.
      *
      * @param  string  $key
-     * @param  mixed  $values
+     * @param  mixed  $value
      * @return $this
      */
     public function set(string $key, $value): Inventory
@@ -237,7 +237,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      * Unset the value of the given offset.
      *
      * @param  string|int  $key
-     * @return bool
+     * @return void
      */
     public function offsetUnset($key): void
     {
