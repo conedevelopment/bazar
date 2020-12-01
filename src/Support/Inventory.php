@@ -9,16 +9,17 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use IteratorAggregate;
+use JsonSerializable;
 use Stringable;
 
-class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, Stringable
+class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, JsonSerializable, Stringable
 {
     /**
-     * The inventory values.
+     * The inventory items.
      *
      * @var array
      */
-    protected $values = [
+    protected $items = [
         'files' => [],
         'sku' => null,
         'weight' => null,
@@ -31,12 +32,12 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
     /**
      * Create a new inventory instance.
      *
-     * @param  array  $values
+     * @param  array  $items
      * @return void
      */
-    public function __construct(array $values = [])
+    public function __construct(array $items = [])
     {
-        $this->values = array_replace_recursive($this->values, $values);
+        $this->items = array_replace_recursive($this->items, $items);
     }
 
     /**
@@ -146,7 +147,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function set(string $key, $value): Inventory
     {
-        Arr::set($this->values, $key, $value);
+        Arr::set($this->items, $key, $value);
 
         return $this;
     }
@@ -160,18 +161,18 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function get(string $key, $default = null)
     {
-        return Arr::get($this->values, $key, $default);
+        return Arr::get($this->items, $key, $default);
     }
 
     /**
-     * Remove the given key from the values.
+     * Remove the given key from the items.
      *
      * @param  string  $key
      * @return void
      */
     public function remove(string $key): void
     {
-        Arr::forget($this->values, $key);
+        Arr::forget($this->items, $key);
     }
 
     /**
@@ -181,7 +182,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function toArray(): array
     {
-        return $this->values;
+        return $this->items;
     }
 
     /**
@@ -196,14 +197,24 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
     }
 
     /**
-     * Determine if the offset exists in the values.
+     * Prepare the object for JSON serialization.
+     *
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * Determine if the offset exists in the items.
      *
      * @param  string|int  $key
      * @return bool
      */
     public function offsetExists($key): bool
     {
-        return isset($this->values[$key]);
+        return isset($this->items[$key]);
     }
 
     /**
@@ -214,7 +225,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function offsetGet($key)
     {
-        return $this->values[$key] ?? null;
+        return $this->items[$key] ?? null;
     }
 
     /**
@@ -227,9 +238,9 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
     public function offsetSet($key, $value): void
     {
         if (is_null($key)) {
-            $this->values[] = $value;
+            $this->items[] = $value;
         } else {
-            $this->values[$key] = $value;
+            $this->items[$key] = $value;
         }
     }
 
@@ -241,17 +252,17 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function offsetUnset($key): void
     {
-        unset($this->values[$key]);
+        unset($this->items[$key]);
     }
 
     /**
-     * Get the iterator for the values.
+     * Get the iterator for the items.
      *
      * @return \ArrayIterator
      */
     public function getIterator(): ArrayIterator
     {
-        return new ArrayIterator($this->values);
+        return new ArrayIterator($this->items);
     }
 
     /**
