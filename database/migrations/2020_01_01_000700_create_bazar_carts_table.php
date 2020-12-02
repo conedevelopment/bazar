@@ -16,8 +16,8 @@ class CreateBazarCartsTable extends Migration
         Schema::create('bazar_carts', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->unsignedDecimal('discount')->default(0);
             $table->uuid('token');
+            $table->unsignedDecimal('discount')->default(0);
             $table->timestamps();
         });
     }

@@ -14,11 +14,11 @@ class ExtendUsersTable extends Migration
      */
     public function up(): void
     {
-        $model = UserProxy::getProxiedInstance();
+        $column = UserProxy::getProxiedInstance()->getDeletedAtColumn();
 
-        Schema::table($model->getTable(), static function (Blueprint $table) use ($model): void {
-            if (! Schema::hasColumn($model->getTable(), $model->getDeletedAtColumn())) {
-                $table->softDeletes($model->getDeletedAtColumn());
+        Schema::table('users', static function (Blueprint $table) use ($column): void {
+            if (! Schema::hasColumn('users', $column)) {
+                $table->softDeletes($column);
             }
         });
     }
