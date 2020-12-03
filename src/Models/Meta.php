@@ -13,6 +13,16 @@ use JsonSerializable;
 class Meta extends Model implements Contract
 {
     /**
+     * The model's attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'type' => null,
+        'value' => null,
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -53,6 +63,8 @@ class Meta extends Model implements Contract
         } else {
             $this->mergeCasts(['value' => $value]);
         }
+
+        $this->setAttribute('value', $this->attributes['value'] ?? null);
 
         $this->attributes['type'] = $value;
 

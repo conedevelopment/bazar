@@ -92,19 +92,19 @@ class MetaTest extends TestCase
     public function it_casts_its_value_by_the_saved_type()
     {
         $jsonMeta = $this->product->metas()->create([
-            'key' => 'json', 'value' => ['foo' => 'bar'], 'type' => 'json'
+            'key' => 'json', 'value' => ['foo' => 'bar'], 'type' => 'json',
         ]);
         $this->assertDatabaseHas('bazar_metas', ['key' => 'json', 'value' => json_encode(['foo' => 'bar'])]);
         $this->assertSame(['foo' => 'bar'], $jsonMeta->value);
 
         $stringMeta = $this->product->metas()->create([
-            'key' => 'string', 'value' => ['foo' => 'bar'], 'type' => 'string'
+            'key' => 'string', 'value' => ['foo' => 'bar'], 'type' => 'string',
         ]);
         $this->assertDatabaseHas('bazar_metas', ['key' => 'string', 'value' => json_encode(['foo' => 'bar'])]);
         $this->assertSame(json_encode(['foo' => 'bar']), $stringMeta->value);
 
         $customCastedMeta = $this->product->metas()->create([
-            'key' => 'custom', 'value' => 1, 'type' => CustomCast::class
+            'key' => 'custom','value' => 1, 'type' => CustomCast::class,
         ]);
 
         $this->assertDatabaseHas('bazar_metas', ['key' => 'custom', 'value' => 1.00]);
