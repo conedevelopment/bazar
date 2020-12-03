@@ -6,6 +6,7 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
+use Bazar\Database\Factories\MetaFactory;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
@@ -82,6 +83,18 @@ class ProductTest extends TestCase
         );
 
         $this->assertTrue($this->product->variations->pluck('id')->contains($variation->id));
+    }
+
+    /** @test */
+    public function it_has_metas()
+    {
+        $meta = $this->product->metas()->save(
+            MetaFactory::new()->make([
+                'key' => 'test', 'value' => ['foo' => 'bar'],
+            ])
+        );
+
+        $this->assertTrue($this->product->metas->pluck('id')->contains($meta->id));
     }
 
     /** @test */
