@@ -104,7 +104,7 @@ class MetaTest extends TestCase
         $this->assertSame(json_encode(['foo' => 'bar']), $stringMeta->value);
 
         $customCastedMeta = $this->product->metas()->create([
-            'key' => 'custom','value' => 1, 'type' => CustomCast::class,
+            'key' => 'custom', 'value' => 1, 'type' => CustomCast::class,
         ]);
 
         $this->assertDatabaseHas('bazar_metas', ['key' => 'custom', 'value' => 1.00]);
