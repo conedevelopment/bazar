@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: ["ubuntu-latest", "windows-latest"]
+        os: ["ubuntu-18.04", "windows-latest"]
         php: ["7.3", "7.4", "8.0"]
         stability: [prefer-stable]
 
@@ -39,7 +39,7 @@ jobs:
         run: vendor/bin/phpunit --verbose
 
       - name: Send coverage to Coveralls
-        if: "matrix.os == 'ubuntu-latest' && matrix.php == '7.3'"
+        if: "matrix.os == 'ubuntu-18.04' && matrix.php == '7.3'"
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
