@@ -31,7 +31,9 @@ class PasswordTest extends TestCase
         $this->admin->refresh();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.password.update'), [])
+            ->patch(URL::route('bazar.password.update'), [
+                'current_password' => 'not secret',
+            ])
             ->assertStatus(302)
             ->assertSessionHasErrors();
 
