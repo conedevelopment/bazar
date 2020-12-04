@@ -110,6 +110,16 @@ class MetaTest extends TestCase
         $this->assertDatabaseHas('bazar_metas', ['key' => 'custom', 'value' => 1.00]);
         $this->assertSame(1.00, $customCastedMeta->value);
     }
+
+    /** @test */
+    public function it_handles_casts_dynamically()
+    {
+        $meta = MetaFactory::new()->make();
+        $meta->type = 'json';
+        $this->assertSame(['id' => 'int', 'value' => 'json'], $meta->getCasts());
+        $meta->type = null;
+        $this->assertSame(['id' => 'int'], $meta->getCasts());
+    }
 }
 
 class ArrayableValue implements Arrayable
