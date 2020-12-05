@@ -63,7 +63,6 @@ class ProductsController extends Controller
     {
         $product = ProductProxy::make()
             ->setAttribute('media', [])
-            // ->setAttribute('meta', [])
             ->setAttribute('categories', [])
             ->forceFill($request->old());
 
@@ -92,6 +91,8 @@ class ProductsController extends Controller
         $product->media()->attach(
             Arr::pluck($request->input('media', []), 'id')
         );
+
+        //
 
         return Redirect::route('bazar.products.show', $product)->with(
             'message', __('The product has been created.')
