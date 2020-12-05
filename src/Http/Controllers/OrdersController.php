@@ -3,7 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\Order;
 use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;

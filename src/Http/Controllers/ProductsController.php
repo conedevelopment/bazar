@@ -3,7 +3,6 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Category;
 use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
 use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
@@ -64,6 +63,7 @@ class ProductsController extends Controller
     {
         $product = ProductProxy::make()
             ->setAttribute('media', [])
+            // ->setAttribute('meta', [])
             ->setAttribute('categories', [])
             ->forceFill($request->old());
 
