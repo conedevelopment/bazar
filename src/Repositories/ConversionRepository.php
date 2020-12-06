@@ -10,6 +10,26 @@ use Closure;
 class ConversionRepository extends Repository implements Contract
 {
     /**
+     * Create a new repository instance.
+     *
+     * @param  array  $items
+     * @return void
+     */
+    public function __construct(array $items = [])
+    {
+        $items = array_replace([
+            'thumb' => static function (Image $image): void {
+                $image->crop(500, 500);
+            },
+            'medium' => static function (Image $image): void {
+                $image->resize(1400, 1000);
+            },
+        ], $items);
+
+        parent::__construct($items);
+    }
+
+    /**
      * Register a new conversion.
      *
      * @param  string  $name
@@ -19,17 +39,6 @@ class ConversionRepository extends Repository implements Contract
     public function register(string $name, Closure $callback): void
     {
         $this->items->put($name, $callback);
-    }
-
-    /**
-     * Remove the given conversion.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function remove(string $name): void
-    {
-        $this->items->forget($name);
     }
 
     /**

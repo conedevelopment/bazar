@@ -16,11 +16,23 @@ abstract class Repository
     /**
      * Create a new repository instance.
      *
+     * @param  array  $items
      * @return void
      */
-    public function __construct()
+    public function __construct(array $items = [])
     {
-        $this->items = Collection::make();
+        $this->items = Collection::make($items);
+    }
+
+    /**
+     * Remove the item by the given name.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function remove(string $name): void
+    {
+        $this->items->forget($name);
     }
 
     /**

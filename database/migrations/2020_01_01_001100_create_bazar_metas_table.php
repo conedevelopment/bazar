@@ -16,10 +16,9 @@ class CreateBazarMetasTable extends Migration
         Schema::create('bazar_metas', static function (Blueprint $table): void {
             $table->id();
             $table->morphs('parent');
-            $table->string('key');
+            $table->string('key')->index();
             $table->text('value')->nullable();
             $table->string('type')->nullable();
-            $table->timestamps();
             $table->unique(['parent_id', 'parent_type', 'key']);
         });
     }

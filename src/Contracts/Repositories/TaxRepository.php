@@ -16,14 +16,6 @@ interface TaxRepository
     public function register(string $name, $tax): void;
 
     /**
-     * Remove the given tax.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function remove(string $name): void;
-
-    /**
      * Disable the tax calculation.
      *
      * @return void

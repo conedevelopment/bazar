@@ -29,17 +29,6 @@ class DiscountRepository extends Repository implements Contract
     }
 
     /**
-     * Remove the given discount.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function remove(string $name): void
-    {
-        $this->items->forget($name);
-    }
-
-    /**
      * Disable the discount calculation.
      *
      * @return void

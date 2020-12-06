@@ -17,14 +17,6 @@ interface ConversionRepository
     public function register(string $name, Closure $callback): void;
 
     /**
-     * Remove the given conversion.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function remove(string $name): void;
-
-    /**
      * Perform the registered conversion on the given medium.
      *
      * @param  \Bazar\Contracts\Models\Medium  $medium

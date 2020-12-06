@@ -227,7 +227,7 @@ class Product extends Model implements Breadcrumbable, Contract
     {
         return $query->where(static function (Builder $query) use ($value): Builder {
             return $query->where('name', 'like', "{$value}%")
-                        ->orWhere('inventory->sku', 'like', "{$value}");
+                        ->orWhere('inventory->sku', 'like', "{$value}%");
         });
     }
 

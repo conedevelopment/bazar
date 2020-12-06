@@ -92,8 +92,6 @@ class ProductsController extends Controller
             Arr::pluck($request->input('media', []), 'id')
         );
 
-        //
-
         return Redirect::route('bazar.products.show', $product)->with(
             'message', __('The product has been created.')
         );

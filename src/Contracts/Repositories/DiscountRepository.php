@@ -16,14 +16,6 @@ interface DiscountRepository
     public function register(string $name, $discount): void;
 
     /**
-     * Remove the given discount.
-     *
-     * @param  string  $name
-     * @return void
-     */
-    public function remove(string $name): void;
-
-    /**
      * Disable the discount calculation.
      *
      * @return void

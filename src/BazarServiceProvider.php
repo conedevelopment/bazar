@@ -2,8 +2,6 @@
 
 namespace Bazar;
 
-use Bazar\Services\Image;
-use Bazar\Support\Facades\Conversion;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
@@ -47,6 +45,7 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Gateway\Manager::class => Gateway\Manager::class,
         Contracts\Shipping\Manager::class => Shipping\Manager::class,
         Contracts\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
+        Contracts\Repositories\MetaRepository::class => Repositories\MetaRepository::class,
         Contracts\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
         Contracts\Repositories\ConversionRepository::class => Repositories\ConversionRepository::class,
     ];
@@ -78,7 +77,6 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerPublishes();
         $this->registerComposers();
-        $this->registerConversions();
         $this->registerRouteBindings();
     }
 
@@ -212,22 +210,6 @@ class BazarServiceProvider extends ServiceProvider
     {
         Gate::define('manage-bazar', static function (Contracts\Models\User $user): bool {
             return $user->isAdmin();
-        });
-    }
-
-    /**
-     * Register the default conversions.
-     *
-     * @return void
-     */
-    protected function registerConversions(): void
-    {
-        Conversion::register('thumb', static function (Image $image): void {
-            $image->crop(500, 500);
-        });
-
-        Conversion::register('medium', static function (Image $image): void {
-            $image->resize(1400, 1000);
         });
     }
 

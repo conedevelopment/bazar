@@ -8,11 +8,11 @@ use Illuminate\Support\Str;
 trait Sluggable
 {
     /**
-     * The "booted" method of the model.
+     * Boot the trait.
      *
      * @return void
      */
-    protected static function booted(): void
+    protected static function bootSluggable(): void
     {
         static::saving(static function (Model $model): void {
             $model->slug = $model->slug ?: Str::slug($model->name);
