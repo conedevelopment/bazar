@@ -41,6 +41,13 @@ class Meta extends Model implements Contract
     protected $table = 'bazar_metas';
 
     /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
+
+    /**
      * Get the parent model for the meta.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
