@@ -14,12 +14,11 @@ interface Meta
     public function parent(): MorphTo;
 
     /**
-     * Set the type attribute.
+     * Get the raw value.
      *
-     * @param  string|null  $value
-     * @return \Bazar\Contracts\Models\Meta
+     * @return mixed
      */
-    public function setTypeAttribute($value): Meta;
+    public function getRaw();
 
     /**
      * Get the value attribute.

@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use JsonSerializable;
+use Serializable;
 
 class Meta extends Model implements Contract
 {
@@ -23,13 +24,19 @@ class Meta extends Model implements Contract
     ];
 
     /**
+     * The cached value.
+     *
+     * @var mixed
+     */
+    protected $cache = null;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'key',
-        'type',
         'value',
     ];
 
@@ -58,24 +65,13 @@ class Meta extends Model implements Contract
     }
 
     /**
-     * Set the type attribute.
+    * Get the raw value.
      *
-     * @param  string|null  $value
-     * @return $this
+     * @return mixed
      */
-    public function setTypeAttribute($value): Contract
+    public function getRaw()
     {
-        if (is_null($value)) {
-            unset($this->casts['value']);
-        } else {
-            $this->mergeCasts(['value' => $value]);
-        }
-
-        $this->setAttribute('value', $this->attributes['value'] ?? null);
-
-        $this->attributes['type'] = $value;
-
-        return $this;
+        return $this->attributes['value'];
     }
 
     /**
@@ -86,15 +82,42 @@ class Meta extends Model implements Contract
      */
     public function getValueAttribute($value)
     {
-        if ($this->hasCast('value')) {
-            return $this->castAttribute('value', $value);
-        } elseif (is_numeric($value)) {
-            return strpos($value, '.') === false ? (int) $value : (float) $value;
-        } elseif (strtotime($value)) {
-            return $this->asDateTime($value);
+        if (! is_null($this->cache)) {
+            return $this->cache;
         }
 
-        return json_decode($value, true) ?: $value;
+        switch ($this->type) {
+            case 'int':
+                $this->cache = (int) $value;
+                break;
+            case 'float':
+                $this->cache = $this->fromFloat($value);
+                break;
+            case 'string':
+                $this->cache = (string) $value;
+                break;
+            case 'bool':
+                $this->cache = (bool) $value;
+                break;
+            case 'object':
+                $this->cache = $this->fromJson($value, true);
+                break;
+            case 'json':
+            case 'array':
+                $this->cache = $this->fromJson($value);
+                break;
+            case 'date':
+                $this->cache = $this->asDateTime($value);
+                break;
+            case 'serializable':
+                $this->cache = unserialize($value);
+                break;
+            default:
+                $this->cache = $value;
+                break;
+        }
+
+        return $this->cache;
     }
 
     /**
@@ -105,20 +128,43 @@ class Meta extends Model implements Contract
      */
     public function setValueAttribute($value): Contract
     {
-        if ($this->isClassCastable('value')) {
-            $this->setClassCastableAttribute('value', $value);
-        } elseif ($value instanceof DateTimeInterface) {
-            $this->attributes['value'] = $this->fromDateTime($value);
+        if ($value instanceof DateTimeInterface) {
+            $this->castTo('date', $this->fromDateTime($value));
         } elseif (is_array($value) || $value instanceof JsonSerializable) {
-            $this->attributes['value'] = $this->castAttributeAsJson('value', $value);
+            $this->castTo('array', $this->asJson($value));
         } elseif ($value instanceof Arrayable) {
-            $this->attributes['value'] = $this->castAttributeAsJson('value', $value->toArray());
+            $this->castTo('array', $this->asJson($value->toArray()));
         } elseif ($value instanceof Jsonable) {
-            $this->attributes['value'] = $value->toJson();
-        } else {
-            $this->attributes['value'] = $value;
+            $this->castTo('json', $value->toJson());
+        } elseif ($value instanceof Serializable) {
+            $this->castTo('serializable', serialize($value));
+        } elseif (is_object($value)) {
+            $this->castTo('object', json_encode($value));
+        } elseif (is_int($value) || is_float($value)) {
+            $this->castTo(is_int($value) ? 'int' : 'float', $value);
+        } elseif (is_bool($value)) {
+            $this->castTo('bool', $value ? 1 : 0);
+        } elseif (is_string($value)) {
+            $this->castTo('string', $value);
+        } elseif (is_null($value)) {
+            $this->castTo(null, $value);
         }
 
+        $this->cache = null;
+
         return $this;
+    }
+
+    /**
+     * Set the type and the converted value.
+     *
+     * @param  string|null  $type
+     * @param  mixed  $value
+     * @return void
+     */
+    protected function castTo(?string $type, $value): void
+    {
+        $this->attributes['type'] = $type;
+        $this->attributes['value'] = $value;
     }
 }
