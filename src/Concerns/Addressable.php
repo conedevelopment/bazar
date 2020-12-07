@@ -16,8 +16,7 @@ trait Addressable
     public static function bootAddressable(): void
     {
         static::deleting(static function (self $model): void {
-            if (! in_array(SoftDeletes::class, class_uses($model))
-                || (in_array(SoftDeletes::class, class_uses($model)) && $model->forceDeleting)) {
+            if (! in_array(SoftDeletes::class, class_uses($model)) || $model->forceDeleting) {
                 $model->address()->delete();
             }
         });
