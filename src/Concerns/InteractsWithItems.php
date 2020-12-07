@@ -31,8 +31,8 @@ trait InteractsWithItems
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses($model)) || $model->forceDeleting) {
-                    $model->products()->detach();
-                    $model->shipping()->delete();
+                $model->products()->detach();
+                $model->shipping()->delete();
             }
         });
     }
