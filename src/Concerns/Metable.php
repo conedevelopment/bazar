@@ -2,34 +2,34 @@
 
 namespace Bazar\Concerns;
 
-use Bazar\Proxies\Address as AddressProxy;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Bazar\Proxies\Meta as MetaProxy;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-trait Addressable
+trait Metable
 {
     /**
      * Boot the trait.
      *
      * @return void
      */
-    public static function bootAddressable(): void
+    public static function bootMetable(): void
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses($model))
                 || (in_array(SoftDeletes::class, class_uses($model)) && $model->forceDeleting)) {
-                $model->address()->delete();
+                //
             }
         });
     }
 
     /**
-     * Get the address for the model.
+     * Get the metas for the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function address(): MorphOne
+    public function metas(): MorphMany
     {
-        return $this->morphOne(AddressProxy::getProxiedClass(), 'addressable')->withDefault();
+        return $this->morphMany(MetaProxy::getProxiedClass(), 'parent');
     }
 }

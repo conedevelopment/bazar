@@ -80,12 +80,6 @@ class Cart extends Model implements Contract, Discountable, Itemable, Shippable
         static::creating(static function (Cart $cart): void {
             $cart->token = $cart->token ?: Uuid::uuid4();
         });
-
-        static::deleting(static function (Cart $cart): void {
-            $cart->address()->delete();
-            $cart->products()->detach();
-            $cart->shipping()->delete();
-        });
     }
 
     /**

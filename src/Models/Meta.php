@@ -65,7 +65,7 @@ class Meta extends Model implements Contract
     }
 
     /**
-    * Get the raw value.
+     * Get the raw value.
      *
      * @return mixed
      */

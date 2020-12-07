@@ -7,7 +7,7 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
-use Bazar\Concerns\HasMetas;
+use Bazar\Concerns\Metable;
 use Bazar\Concerns\Sluggable;
 use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Breadcrumbable, Contract
 {
-    use BazarRoutable, Filterable, HasMedia, HasMetas, Sluggable, SoftDeletes, Stockable;
+    use BazarRoutable, Filterable, HasMedia, Metable, Sluggable, SoftDeletes, Stockable;
 
     /**
      * The accessors to append to the model's array form.

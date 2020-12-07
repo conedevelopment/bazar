@@ -13,6 +13,7 @@ use Bazar\Support\Facades\Discount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Crypt;
@@ -21,6 +22,22 @@ use Illuminate\Support\Str;
 
 trait InteractsWithItems
 {
+    /**
+     * Boot the trait.
+     *
+     * @return void
+     */
+    public static function bootInteractsWithItems(): void
+    {
+        static::deleting(static function (self $model): void {
+            if (! in_array(SoftDeletes::class, class_uses($model))
+                || (in_array(SoftDeletes::class, class_uses($model)) && $model->forceDeleting)) {
+                    $model->products()->detach();
+                    $model->shipping()->delete();
+            }
+        });
+    }
+
     /**
      * Get the user for the model.
      *

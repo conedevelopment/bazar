@@ -80,22 +80,6 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     protected $table = 'bazar_orders';
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted(): void
-    {
-        static::deleting(static function (Order $order): void {
-            if ($order->forceDeleting) {
-                $order->address()->delete();
-                $order->products()->detach();
-                $order->shipping()->delete();
-            }
-        });
-    }
-
-    /**
      * Create a new order from the given cart.
      *
      * @param  \Bazar\Models\Cart  $cart

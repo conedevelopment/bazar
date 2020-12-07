@@ -68,18 +68,6 @@ class Shipping extends Model implements Contract, Taxable
     protected $table = 'bazar_shippings';
 
     /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted(): void
-    {
-        static::deleting(static function (Shipping $shipping): void {
-            $shipping->address()->delete();
-        });
-    }
-
-    /**
      * Get the shippable model for the shipping.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
