@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 class Inventory extends Bag
 {
     /**
-     * The inventory items.
+     * The bag items.
      *
      * @var array
      */
@@ -22,17 +22,6 @@ class Inventory extends Bag
         'virtual' => false,
         'downloadable' => false,
     ];
-
-    /**
-     * Create a new inventory instance.
-     *
-     * @param  array  $items
-     * @return void
-     */
-    public function __construct(array $items = [])
-    {
-        parent::__construct(array_replace($this->items, $items));
-    }
 
     /**
      * Get the formatted dimensions.

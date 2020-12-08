@@ -13,21 +13,21 @@ use Stringable;
 abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, JsonSerializable, Stringable
 {
     /**
-     * The handler items.
+     * The bag items.
      *
      * @var array
      */
     protected $items = [];
 
     /**
-     * Create a new inventory instance.
+     * Create a new bag instance.
      *
      * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
     {
-        $this->items = $items;
+        $this->items = array_replace($this->items, $items);
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonabl
     }
 
     /**
-     * Determine if an offset exists on the inventory.
+     * Determine if an offset exists on the items.
      *
      * @param  string|int  $key
      * @return bool
@@ -202,7 +202,7 @@ abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonabl
     }
 
     /**
-     * Unset an value on the inventory.
+     * Unset an value on the items.
      *
      * @param  string|int  $key
      * @return void
