@@ -31,8 +31,7 @@ class VariationStoreRequest extends FormRequest
             'option.*' => ['required', 'string'],
             'prices' => ['array'],
             'prices.*' => ['array'],
-            'prices.*.normal' => ['nullable', 'numeric', 'min:0'],
-            'prices.*.sale' => ['nullable', 'numeric', 'min:0'],
+            'prices.*.*' => ['nullable', 'numeric', 'min:0'],
             'inventory' => ['array'],
             'inventory.sku' => [
                 'nullable',

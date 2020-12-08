@@ -27,11 +27,11 @@
                 <div v-for="(symbol, currency) in $page.currencies" :key="currency" class="row">
                     <div class="col">
                         <form-input
-                            v-model="form.fields.prices[currency].normal"
+                            v-model="form.fields.prices[currency].default"
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.normal`"
+                            :name="`form.fields.prices.${currency}.default`"
                             :label="__('Price (:CURRENCY)', { currency })"
                         ></form-input>
                     </div>
