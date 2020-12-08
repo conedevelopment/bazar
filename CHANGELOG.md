@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+### Added
+- Added `Inventory` attribute bag
+- Added `Prices` attribute bag
+
+### Changed
+- Changed `normal` key to `default` for prices
+- Flattened dimensions in the inventory array/JSON
+
 ## v0.2.4 (2020-11-19)
 ### Added
 - Added container proxies, that make container bindings easily swappable
