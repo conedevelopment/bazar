@@ -2,7 +2,7 @@
 
 namespace Bazar\Casts;
 
-use Bazar\Support\Inventory as Handler;
+use Bazar\Support\Attributes\Inventory as InventoryBag;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class Inventory implements CastsAttributes
@@ -14,13 +14,13 @@ class Inventory implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return \Bazar\Support\Inventory
+     * @return \Bazar\Support\Attributes\Inventory
      */
-    public function get($model, string $key, $value, array $attributes): Handler
+    public function get($model, string $key, $value, array $attributes): InventoryBag
     {
         $value = $value ? json_decode($value, true) : [];
 
-        return new Handler($value);
+        return new InventoryBag($value);
     }
 
     /**
@@ -28,7 +28,7 @@ class Inventory implements CastsAttributes
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $key
-     * @param  \Bazar\Support\Inventory|array  $value
+     * @param  \Bazar\Support\Attributes\Inventory|array  $value
      * @param  array  $attributes
      * @return string
      */

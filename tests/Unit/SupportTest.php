@@ -4,8 +4,8 @@ namespace Bazar\Tests\Unit;
 
 use ArrayIterator;
 use Bazar\Bazar;
+use Bazar\Support\Attributes\Inventory;
 use Bazar\Support\Countries;
-use Bazar\Support\Inventory;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 

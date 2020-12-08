@@ -37,7 +37,9 @@ class ProductFactory extends Factory
                 'weight' => 200,
                 'virtual' => false,
                 'downloadable' => false,
-                'dimensions' => ['length' => 200, 'width' => 300, 'height' => 400],
+                'length' => 200,
+                'width' => 300,
+                'height' => 400,
             ],
         ];
     }

@@ -12,6 +12,7 @@ use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ProductTest extends TestCase
@@ -86,18 +87,6 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_has_metas()
-    {
-        $meta = $this->product->metas()->save(
-            MetaFactory::new()->make([
-                'key' => 'test', 'value' => ['foo' => 'bar'],
-            ])
-        );
-
-        $this->assertTrue($this->product->metas->pluck('id')->contains($meta->id));
-    }
-
-    /** @test */
     public function it_manages_prices()
     {
         $this->assertEquals($this->product->prices['usd']['normal'], $this->product->price('normal', 'usd'));
@@ -115,7 +104,9 @@ class ProductTest extends TestCase
     public function it_manages_inventory()
     {
         $this->assertSame(
-            sprintf('%s mm', implode('x', $this->product->inventory->dimensions)),
+            sprintf('%s mm', implode('x',
+                [$this->product->inventory->length, $this->product->inventory->width, $this->product->inventory->height])
+            ),
             $this->product->inventory->formattedDimensions('x')
         );
         $this->assertNull((new Product)->inventory->formattedDimensions());

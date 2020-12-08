@@ -1,33 +1,23 @@
 <?php
 
-namespace Bazar\Support;
+namespace Bazar\Support\Attributes;
 
 use ArrayAccess;
 use ArrayIterator;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use IteratorAggregate;
 use JsonSerializable;
 use Stringable;
 
-class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, JsonSerializable, Stringable
+abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, JsonSerializable, Stringable
 {
     /**
-     * The inventory items.
+     * The handler items.
      *
      * @var array
      */
-    protected $items = [
-        'files' => [],
-        'sku' => null,
-        'weight' => null,
-        'quantity' => null,
-        'virtual' => false,
-        'downloadable' => false,
-        'dimensions' => ['length' => null, 'width' => null, 'height' => null],
-    ];
+    protected $items = [];
 
     /**
      * Create a new inventory instance.
@@ -37,105 +27,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function __construct(array $items = [])
     {
-        $this->items = array_replace_recursive($this->items, $items);
-    }
-
-    /**
-     * Get the formatted dimensions.
-     *
-     * @param  string  $glue
-     * @return string|null
-     */
-    public function formattedDimensions(string $glue = 'x'): ?string
-    {
-        if (! $dimensions = array_filter((array) $this->get('dimensions'))) {
-            return null;
-        }
-
-        return sprintf('%s %s', implode($glue, $dimensions), Config::get('bazar.dimension_unit'));
-    }
-
-    /**
-     * Get the formatted weight.
-     *
-     * @return string|null
-     */
-    public function formattedWeight(): ?string
-    {
-        if (! $weight = $this->get('weight')) {
-            return null;
-        }
-
-        return sprintf('%s %s', $weight, Config::get('bazar.weight_unit'));
-    }
-
-    /**
-     * Determine if the stockable model is virtual.
-     *
-     * @return bool
-     */
-    public function virtual(): bool
-    {
-        return (bool) $this->get('virtual', false);
-    }
-
-    /**
-     * Determine if the stockable model is downloadable.
-     *
-     * @return bool
-     */
-    public function downloadable(): bool
-    {
-        return (bool) $this->get('downloadable', false);
-    }
-
-    /**
-     * Determine if the stockable model tracks quantity.
-     *
-     * @return bool
-     */
-    public function tracksQuantity(): bool
-    {
-        return ! is_null($this->get('quantity'));
-    }
-
-    /**
-     * Determine if the stockable model is available.
-     *
-     * @param  float  $quantity
-     * @return bool
-     */
-    public function available(float $quantity = 1): bool
-    {
-        $stock = $this->get('quantity', 0);
-
-        return ! $this->tracksQuantity() || (min($stock, $quantity) > 0 && $stock >= $quantity);
-    }
-
-    /**
-     * Increment the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
-     */
-    public function incrementQuantity(float $quantity = 1): void
-    {
-        if ($this->tracksQuantity()) {
-            $this->set('quantity', $this->get('quantity', 0) + $quantity);
-        }
-    }
-
-    /**
-     * Decrement the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
-     */
-    public function decrementQuantity(float $quantity = 1): void
-    {
-        if ($this->tracksQuantity()) {
-            $this->set('quantity', max($this->get('quantity', 0) - $quantity, 0));
-        }
+        $this->items = $items;
     }
 
     /**
@@ -145,9 +37,9 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      * @param  mixed  $value
      * @return $this
      */
-    public function set(string $key, $value): Inventory
+    public function set(string $key, $value): Bag
     {
-        Arr::set($this->items, $key, $value);
+        $this->offsetSet($key, $value);
 
         return $this;
     }
@@ -161,7 +53,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function get(string $key, $default = null)
     {
-        return Arr::get($this->items, $key, $default);
+        return $this->offsetGet($key) ?: $default;
     }
 
     /**
@@ -172,7 +64,7 @@ class Inventory implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, 
      */
     public function remove(string $key): void
     {
-        Arr::forget($this->items, $key);
+        $this->offsetUnset($key);
     }
 
     /**
