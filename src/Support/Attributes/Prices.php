@@ -25,18 +25,6 @@ class Prices extends Bag
     }
 
     /**
-     * Get the instance as an array.
-     *
-     * @return array
-     */
-    public function toArray(): array
-    {
-        return array_map(static function (Price $price): array {
-            return $price->toArray();
-        }, $this->items);
-    }
-
-    /**
      * Get the value of the given offset.
      *
      * @param  string|int|null  $key

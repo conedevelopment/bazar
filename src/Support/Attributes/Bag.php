@@ -74,7 +74,9 @@ abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonabl
      */
     public function toArray(): array
     {
-        return $this->items;
+        return array_map(static function ($item) {
+            return $item instanceof Arrayable ? $item->toArray() : $item;
+        }, $this->items);
     }
 
     /**
