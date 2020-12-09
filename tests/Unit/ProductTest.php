@@ -6,13 +6,10 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
-use Bazar\Database\Factories\MetaFactory;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariationFactory;
-use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class ProductTest extends TestCase
@@ -98,33 +95,6 @@ class ProductTest extends TestCase
         $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());
         $this->assertTrue($this->product->onSale());
-    }
-
-    /** @test */
-    public function it_manages_inventory()
-    {
-        $this->assertSame(
-            sprintf('%s mm', implode('x',
-                [$this->product->inventory->length, $this->product->inventory->width, $this->product->inventory->height])
-            ),
-            $this->product->inventory->formattedDimensions('x')
-        );
-        $this->assertNull((new Product)->inventory->formattedDimensions());
-
-        $this->assertSame(sprintf('%s g', $this->product->inventory->weight), $this->product->inventory->formattedWeight('x'));
-        $this->assertNull((new Product)->inventory->formattedWeight());
-
-        $this->assertTrue($this->product->inventory->tracksQuantity());
-        $this->assertTrue($this->product->inventory->available());
-        $this->assertFalse($this->product->inventory->available(600));
-        $this->assertSame(20, $this->product->inventory->quantity);
-        $this->product->inventory->incrementQuantity(10);
-        $this->assertSame(30, (int) $this->product->inventory->quantity);
-        $this->product->inventory->decrementQuantity(6);
-        $this->assertSame(24, (int) $this->product->inventory->quantity);
-
-        $this->assertFalse($this->product->inventory->virtual());
-        $this->assertFalse($this->product->inventory->downloadable());
     }
 
     /** @test */
