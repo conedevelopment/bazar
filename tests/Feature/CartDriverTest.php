@@ -23,10 +23,10 @@ class CartDriverTest extends TestCase
         parent::setUp();
 
         $this->cart = $this->app->make(Manager::class);
-        $this->product = ProductFactory::new()->create(['prices' => ['usd' => ['normal' => 100]]]);
+        $this->product = ProductFactory::new()->create(['prices' => ['usd' => ['default' => 100]]]);
         $this->variation = $this->product->variations()->save(VariationFactory::new()->make([
             'option' => ['Size' => 'S'],
-            'prices' => ['usd' => ['normal' => 150]],
+            'prices' => ['usd' => ['default' => 150]],
         ]));
 
         $this->cart->add($this->product, 2, ['option' => ['Size' => 'L']]);

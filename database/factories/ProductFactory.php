@@ -27,7 +27,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentences(3, true),
             'options' => ['Size' => ['XS', 'S', 'M', 'L']],
             'prices' => ['usd' => [
-                'normal' => $price = mt_rand(10, 1000) / 10,
+                'default' => $price = mt_rand(10, 1000) / 10,
                 'sale' => round($price * 0.8, 1),
             ]],
             'inventory' => [
@@ -37,7 +37,9 @@ class ProductFactory extends Factory
                 'weight' => 200,
                 'virtual' => false,
                 'downloadable' => false,
-                'dimensions' => ['length' => 200, 'width' => 300, 'height' => 400],
+                'length' => 200,
+                'width' => 300,
+                'height' => 400,
             ],
         ];
     }

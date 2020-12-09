@@ -115,7 +115,7 @@ class OrdersController extends Controller
             return [$product['id'] => [
                 'tax' => $product['item_tax'] ?? 0,
                 'quantity' => $product['item_quantity'] ?? 1,
-                'price' => $product['prices'][$data['currency']]['normal'] ?? 0,
+                'price' => $product['prices'][$data['currency']]['default'] ?? 0,
             ]];
         });
 

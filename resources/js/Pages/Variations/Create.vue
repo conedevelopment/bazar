@@ -53,11 +53,11 @@
                 <div v-for="(symbol, currency) in $page.currencies" :key="currency" class="row">
                     <div class="col">
                         <form-input
-                            v-model="form.fields.prices[currency].normal"
+                            v-model="form.fields.prices[currency].default"
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.normal`"
+                            :name="`form.fields.prices.${currency}.default`"
                             :label="__('Price (:CURRENCY)', { currency })"
                         ></form-input>
                     </div>
@@ -98,29 +98,29 @@
                 <div class="row align-items-end" v-show="! form.fields.inventory.virtual">
                     <div class="col">
                         <form-input
-                            name="inventory.dimensions.length"
+                            name="inventory.length"
                             min="0"
                             type="number"
                             :label="__('Length (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.dimensions.length"
+                            v-model="form.fields.inventory.length"
                         ></form-input>
                     </div>
                     <div class="col">
                         <form-input
-                            name="inventory.dimensions.width"
+                            name="inventory.width"
                             min="0"
                             type="number"
                             :label="__('Width (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.dimensions.width"
+                            v-model="form.fields.inventory.width"
                         ></form-input>
                     </div>
                     <div class="col">
                         <form-input
-                            name="inventory.dimensions.height"
+                            name="inventory.height"
                             min="0"
                             type="number"
                             :label="__('Height (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.dimensions.height"
+                            v-model="form.fields.inventory.height"
                         ></form-input>
                     </div>
                 </div>

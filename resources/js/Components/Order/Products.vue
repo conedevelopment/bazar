@@ -4,7 +4,7 @@
 
         methods: {
             price(product) {
-                return product.prices[this.form.fields.currency].normal || 0;
+                return product.prices[this.form.fields.currency].default || 0;
             },
             total(product) {
                 let total = (this.price(product) + Number(product.item_tax || 0))

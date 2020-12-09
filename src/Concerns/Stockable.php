@@ -3,7 +3,6 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
-use Illuminate\Support\Str;
 
 trait Stockable
 {
@@ -34,7 +33,7 @@ trait Stockable
      * @param  string|null  $currency
      * @return float|null
      */
-    public function price(string $type = 'normal', string $currency = null): ?float
+    public function price(string $type = 'default', string $currency = null): ?float
     {
         $currency = $currency ?: Bazar::currency();
 
@@ -48,13 +47,13 @@ trait Stockable
      * @param  string|null  $currency
      * @return string|null
      */
-    public function formattedPrice(string $type = 'normal', string $currency = null): ?string
+    public function formattedPrice(string $type = 'default', string $currency = null): ?string
     {
         $currency = $currency ?: Bazar::currency();
 
-        $price = $this->price($type, $currency);
+        $price = $this->prices[$currency];
 
-        return $price ? Str::currency($price, $currency) : null;
+        return $price ? $price->format($type) : null;
     }
 
     /**

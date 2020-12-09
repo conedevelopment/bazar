@@ -8,7 +8,6 @@ use Bazar\Database\Factories\ProductFactory;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DownloadTest extends TestCase
 {

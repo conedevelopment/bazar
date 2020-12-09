@@ -24,7 +24,7 @@ class VariationFactory extends Factory
     {
         return [
             'option' => ['Size' => 'XS'],
-            'prices' => ['usd' => ['normal' => mt_rand(10, 1000) / 10]],
+            'prices' => ['usd' => ['default' => mt_rand(10, 1000) / 10]],
             'inventory' => [
                 'files' => [],
                 'sku' => Str::random(5),

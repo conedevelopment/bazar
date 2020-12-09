@@ -31,8 +31,7 @@ class VariationUpdateRequest extends FormRequest
             'option.*' => ['required', 'string'],
             'prices' => ['nullable', 'array'],
             'prices.*' => ['array'],
-            'prices.*.normal' => ['nullable', 'numeric', 'min:0'],
-            'prices.*.sale' => ['nullable', 'numeric', 'min:0'],
+            'prices.*.*' => ['nullable', 'numeric', 'min:0'],
             'inventory' => ['array'],
             'inventory.sku' => [
                 'nullable',
@@ -41,8 +40,9 @@ class VariationUpdateRequest extends FormRequest
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],
-            'inventory.dimensions' => ['array'],
-            'inventory.dimensions.*' => ['nullable', 'numeric'],
+            'inventory.length' => ['nullable', 'numeric', 'min:0'],
+            'inventory.width' => ['nullable', 'numeric', 'min:0'],
+            'inventory.height' => ['nullable', 'numeric', 'min:0'],
             'media' => ['nullable', 'array'],
         ];
     }
