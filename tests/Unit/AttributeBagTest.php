@@ -3,6 +3,8 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Support\Attributes\Inventory;
+use Bazar\Support\Attributes\Price;
+use Bazar\Support\Attributes\Prices;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -43,5 +45,22 @@ class AttributeBagTest extends TestCase
 
         $this->assertFalse($inventory->virtual());
         $this->assertFalse($inventory->downloadable());
+    }
+
+    /** @test */
+    public function it_handles_prices_bag()
+    {
+        $prices = new Prices([
+            'usd' => [
+                'default' => 100,
+                'sale' => 80,
+            ],
+        ]);
+
+        $this->assertInstanceOf(Price::class, $prices->usd);
+        $this->assertSame(100, $prices->usd->default);
+        $this->assertSame(80, $prices->usd->sale);
+        $this->assertSame('100.00 USD', $prices->usd->format());
+        $this->assertSame('usd', $prices->usd->getCurrency());
     }
 }

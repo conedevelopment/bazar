@@ -38,6 +38,16 @@ class Price extends Bag
     }
 
     /**
+     * Get the currency.
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
      * Get the formatted price of the given type.
      *
      * @param  string  $type

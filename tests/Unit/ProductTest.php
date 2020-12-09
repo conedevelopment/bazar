@@ -21,7 +21,8 @@ class ProductTest extends TestCase
         parent::setUp();
 
         $this->product = ProductFactory::new()->create([
-            'options' => ['size' => ['XS', 'S', 'M', 'L'], 'material' => ['Gold', 'Silver']],
+            'options' => ['size' => ['XS', 'S', 'M', 'L'],
+            'material' => ['Gold', 'Silver']],
         ]);
     }
 
