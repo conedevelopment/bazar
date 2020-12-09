@@ -9,13 +9,12 @@ use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Cart as Contract;
-use Bazar\Contracts\Shippable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Ramsey\Uuid\Uuid;
 
-class Cart extends Model implements Contract, Discountable, Itemable, Shippable
+class Cart extends Model implements Contract, Discountable, Itemable
 {
     use Addressable, InteractsWithDiscounts, InteractsWithItems;
 

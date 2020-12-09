@@ -12,7 +12,6 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Order as Contract;
-use Bazar\Contracts\Shippable;
 use Bazar\Proxies\Transaction as TransactionProxy;
 use Bazar\Proxies\User as UserProxy;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable, Shippable
+class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable
 {
     use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, SoftDeletes;
 
