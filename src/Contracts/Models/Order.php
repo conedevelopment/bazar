@@ -15,14 +15,6 @@ interface Order
     public function transactions(): HasMany;
 
     /**
-     * Get the currency attribute.
-     *
-     * @param  string|null  $value
-     * @return string
-     */
-    public function getCurrencyAttribute(string $value = null): string;
-
-    /**
      * Get all the payment transactions.
      *
      * @return \Illuminate\Support\Collection

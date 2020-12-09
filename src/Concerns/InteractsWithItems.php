@@ -9,7 +9,6 @@ use Bazar\Models\Item;
 use Bazar\Proxies\Product as ProductProxy;
 use Bazar\Proxies\Shipping as ShippingProxy;
 use Bazar\Proxies\User as UserProxy;
-use Bazar\Support\Facades\Discount;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -174,16 +173,6 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the formatted discount attribute.
-     *
-     * @return string
-     */
-    public function getFormattedDiscountAttribute(): string
-    {
-        return $this->formattedDiscount();
-    }
-
-    /**
      * Get the itemable model's total.
      *
      * @return float
@@ -252,33 +241,6 @@ trait InteractsWithItems
     public function formattedTax(): string
     {
         return Str::currency($this->tax, $this->currency);
-    }
-
-    /**
-     * Calculate the discount.
-     *
-     * @param  bool  $update
-     * @return float
-     */
-    public function discount(bool $update = true): float
-    {
-        $discount = Discount::calculate($this);
-
-        if ($this->exists && $update) {
-            $this->update(compact('discount'));
-        }
-
-        return $this->discount = $discount;
-    }
-
-    /**
-     * Get the formatted discount.
-     *
-     * @return string
-     */
-    public function formattedDiscount(): string
-    {
-        return Str::currency($this->discount, $this->currency);
     }
 
     /**

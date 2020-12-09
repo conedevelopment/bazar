@@ -17,7 +17,9 @@ class CreateBazarCartsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->uuid('token');
+            $table->string('currency');
             $table->unsignedDecimal('discount')->default(0);
+            $table->boolean('locked')->default(false);
             $table->timestamps();
         });
     }

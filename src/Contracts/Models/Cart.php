@@ -5,9 +5,16 @@ namespace Bazar\Contracts\Models;
 interface Cart
 {
     /**
-     * Get the currency attribute.
+     * Lock the cart.
      *
-     * @return string
+     * @return void
      */
-    public function getCurrencyAttribute(): string;
+    public function lock(): void;
+
+    /**
+     * Unlock the cart.
+     *
+     * @return void
+     */
+    public function unlock(): void;
 }

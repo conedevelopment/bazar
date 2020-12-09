@@ -97,13 +97,6 @@ interface Itemable
     public function getFormattedTaxAttribute(): string;
 
     /**
-     * Get the formatted discount attribute.
-     *
-     * @return string
-     */
-    public function getFormattedDiscountAttribute(): string;
-
-    /**
      * Get the itemable model's total.
      *
      * @return float
@@ -145,21 +138,6 @@ interface Itemable
      * @return string
      */
     public function formattedTax(): string;
-
-    /**
-     * Calculate the discount.
-     *
-     * @param  bool  $update
-     * @return float
-     */
-    public function discount(bool $update = true): float;
-
-    /**
-     * Get the formatted discount.
-     *
-     * @return string
-     */
-    public function formattedDiscount(): string;
 
     /**
      * Get the downloadable files with their signed URL.
