@@ -62,23 +62,23 @@ class TransactionTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->transaction->newQuery()->payment()->toSql(),
             $this->transaction->newQuery()->where('type', 'payment')->toSql(),
+            $this->transaction->newQuery()->payment()->toSql()
         );
 
         $this->assertSame(
-            $this->transaction->newQuery()->refund()->toSql(),
             $this->transaction->newQuery()->where('type', 'refund')->toSql(),
+            $this->transaction->newQuery()->refund()->toSql()
         );
 
         $this->assertSame(
-            $this->transaction->newQuery()->completed()->toSql(),
             $this->transaction->newQuery()->whereNotNull('completed_at')->toSql(),
+            $this->transaction->newQuery()->completed()->toSql()
         );
 
         $this->assertSame(
-            $this->transaction->newQuery()->pending()->toSql(),
             $this->transaction->newQuery()->whereNull('completed_at')->toSql(),
+            $this->transaction->newQuery()->pending()->toSql()
         );
     }
 }

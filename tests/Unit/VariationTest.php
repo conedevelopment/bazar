@@ -53,8 +53,8 @@ class VariationTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->variation->newQuery()->search('test')->toSql(),
-            $this->variation->newQuery()->where('alias', 'like', 'test%')->toSql()
+            $this->variation->newQuery()->where('alias', 'like', 'test%')->toSql(),
+            $this->variation->newQuery()->search('test')->toSql()
         );
     }
 }

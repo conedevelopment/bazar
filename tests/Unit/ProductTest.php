@@ -109,18 +109,18 @@ class ProductTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->product->newQuery()->search('test')->toSql(),
             $this->product->newQuery()->where(function ($q) {
                 $q->where('name', 'like', 'test%')
                     ->orWhere('inventory->sku', 'like', 'test%');
-            })->toSql()
+            })->toSql(),
+            $this->product->newQuery()->search('test')->toSql()
         );
 
         $this->assertSame(
-            $this->product->newQuery()->category(1)->toSql(),
             $this->product->newQuery()->whereHas('categories', function ($q) {
                 $q->where('bazar_categories.id', 1);
-            })->toSql()
+            })->toSql(),
+            $this->product->newQuery()->category(1)->toSql()
         );
     }
 }
