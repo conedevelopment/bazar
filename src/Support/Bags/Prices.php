@@ -31,7 +31,7 @@ class Prices extends Bag
      * @param  \Bazar\Support\Bags\Price  $value
      * @return void
      *
-     * @throws \InvalidArgimentException
+     * @throws \InvalidArgumentException
      */
     public function offsetSet($key, $value): void
     {
