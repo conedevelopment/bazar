@@ -2,9 +2,9 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Support\Attributes\Inventory;
-use Bazar\Support\Attributes\Price;
-use Bazar\Support\Attributes\Prices;
+use Bazar\Support\Bags\Inventory;
+use Bazar\Support\Bags\Price;
+use Bazar\Support\Bags\Prices;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 

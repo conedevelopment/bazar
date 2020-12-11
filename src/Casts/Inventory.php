@@ -2,7 +2,7 @@
 
 namespace Bazar\Casts;
 
-use Bazar\Support\Attributes\Inventory as InventoryBag;
+use Bazar\Support\Bags\Inventory as InventoryBag;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 
 class Inventory implements CastsAttributes
@@ -14,7 +14,7 @@ class Inventory implements CastsAttributes
      * @param  string  $key
      * @param  mixed  $value
      * @param  array  $attributes
-     * @return \Bazar\Support\Attributes\Inventory
+     * @return \Bazar\Support\Bags\Inventory
      */
     public function get($model, string $key, $value, array $attributes): InventoryBag
     {
@@ -28,7 +28,7 @@ class Inventory implements CastsAttributes
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $key
-     * @param  \Bazar\Support\Attributes\Inventory|array  $value
+     * @param  \Bazar\Support\Bags\Inventory|array  $value
      * @param  array  $attributes
      * @return string
      */
