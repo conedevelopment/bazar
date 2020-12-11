@@ -52,8 +52,8 @@ class CategoryTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->category->newQuery()->search('test')->toSql(),
             $this->category->newQuery()->where('name', 'like', 'test%')->toSql(),
+            $this->category->newQuery()->search('test')->toSql()
         );
     }
 }

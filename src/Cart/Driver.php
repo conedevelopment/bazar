@@ -2,6 +2,7 @@
 
 namespace Bazar\Cart;
 
+use Bazar\Bazar;
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Shipping;
@@ -49,7 +50,13 @@ abstract class Driver
     {
         if (is_null($this->cart)) {
             $this->cart = App::call(function (Request $request): Cart {
-                return $this->resolve($request);
+                $cart = $this->resolve($request);
+
+                if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::currency()) {
+                    $cart->fill(['currency' => Bazar::currency()])->save();
+                }
+
+                return $cart;
             });
         }
 

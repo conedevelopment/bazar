@@ -4,28 +4,19 @@ namespace Bazar\Models;
 
 use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
+use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Cart as Contract;
-use Bazar\Contracts\Shippable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Ramsey\Uuid\Uuid;
 
-class Cart extends Model implements Contract, Discountable, Itemable, Shippable
+class Cart extends Model implements Contract, Discountable, Itemable
 {
-    use Addressable, InteractsWithItems;
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'currency',
-    ];
+    use Addressable, InteractsWithDiscounts, InteractsWithItems;
 
     /**
      * The attributes that should have default values.
@@ -34,6 +25,8 @@ class Cart extends Model implements Contract, Discountable, Itemable, Shippable
      */
     protected $attributes = [
         'discount' => 0,
+        'locked' => false,
+        'currency' => null,
     ];
 
     /**
@@ -42,6 +35,7 @@ class Cart extends Model implements Contract, Discountable, Itemable, Shippable
      * @var array
      */
     protected $casts = [
+        'locked' => 'bool',
         'discount' => 'float',
     ];
 
@@ -51,7 +45,9 @@ class Cart extends Model implements Contract, Discountable, Itemable, Shippable
      * @var array
      */
     protected $fillable = [
+        'locked',
         'discount',
+        'currency',
     ];
 
     /**
@@ -79,21 +75,65 @@ class Cart extends Model implements Contract, Discountable, Itemable, Shippable
     {
         static::creating(static function (Cart $cart): void {
             $cart->token = $cart->token ?: Uuid::uuid4();
+            $cart->currency = $cart->currency ?: Bazar::currency();
+        });
+
+        static::updating(static function (Cart $cart): void {
+            if (! $cart->locked && $cart->getOriginal('currency') !== $cart->currency) {
+                $cart->items->each->save();
+                $cart->discount(false);
+            }
         });
     }
 
     /**
-     * Get the currency attribute.
+     * Lock the cart.
      *
-     * @return string
+     * @return void
      */
-    public function getCurrencyAttribute(): string
+    public function lock(): void
     {
-        return Bazar::currency();
+        if (! $this->locked) {
+            $this->fill(['locked' => true])->save();
+        }
     }
 
     /**
-     * Scope a query to only include expired carts.
+     * Unlock the cart.
+     *
+     * @return void
+     */
+    public function unlock(): void
+    {
+        if ($this->locked) {
+            $this->fill(['locked' => false])->save();
+        }
+    }
+
+    /**
+     * Scope a query to only include the locked carts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeLocked(Builder $query): Builder
+    {
+        return $query->where('locked', true);
+    }
+
+    /**
+     * Scope a query to only include the unlocked carts.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeUnlocked(Builder $query): Builder
+    {
+        return $query->where('locked', false);
+    }
+
+    /**
+     * Scope a query to only include the expired carts.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return \Illuminate\Database\Eloquent\Builder

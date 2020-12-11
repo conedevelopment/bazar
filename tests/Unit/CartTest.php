@@ -2,13 +2,13 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Bazar;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\ShippingFactory;
-use Bazar\Models\Cart;
-use Bazar\Models\Item;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Carbon;
 
 class CartTest extends TestCase
 {
@@ -98,18 +98,33 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_deletes_relations_on_deleting()
+    public function it_can_be_locked()
     {
-        $this->cart->delete();
+        $this->assertFalse($this->cart->locked);
+        $this->cart->lock();
+        $this->assertTrue($this->cart->locked);
+        $this->cart->unlock();
+        $this->assertFalse($this->cart->locked);
+    }
 
-        $this->assertDatabaseMissing(
-            'bazar_addresses', ['addressable_type' => Cart::class, 'addressable_id' => $this->cart->id]
-        );
-        $this->assertDatabaseMissing(
-            'bazar_shippings', ['shippable_type' => Cart::class, 'shippable_id' => $this->cart->id]
-        );
+    /** @test */
+    public function it_has_query_scopes()
+    {
         $this->assertSame(
-            0, Item::query()->where([['itemable_type', Cart::class], ['itemable_id', $this->cart->id]])->count()
+            $this->cart->newQuery()->where('locked', true)->toSql(),
+            $this->cart->newQuery()->locked()->toSql()
+        );
+
+        $this->assertSame(
+            $this->cart->newQuery()->where('locked', false)->toSql(),
+            $this->cart->newQuery()->unlocked()->toSql()
+        );
+
+        $this->assertSame(
+            $this->cart->newQuery()->whereNull('user_id')->where(
+                'updated_at', '<', Carbon::now()->subDays(3)
+            )->toSql(),
+            $this->cart->newQuery()->expired()->toSql()
         );
     }
 }

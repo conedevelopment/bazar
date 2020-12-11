@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Support\Attributes;
+namespace Bazar\Support\Bags;
 
 use Bazar\Bazar;
 use InvalidArgumentException;
@@ -28,7 +28,7 @@ class Prices extends Bag
      * Get the value of the given offset.
      *
      * @param  string|int|null  $key
-     * @param  \Bazar\Support\Attributes\Price  $value
+     * @param  \Bazar\Support\Bags\Price  $value
      * @return void
      *
      * @throws \InvalidArgimentException
@@ -36,7 +36,7 @@ class Prices extends Bag
     public function offsetSet($key, $value): void
     {
         if (! $value instanceof Price) {
-            throw new InvalidArgumentException('The given value must be a [Bazar\\Support\\Attributes\\Price] instance.');
+            throw new InvalidArgumentException('The given value must be a [Bazar\\Support\\Bags\\Price] instance.');
         }
 
         parent::offsetSet($key, $value);

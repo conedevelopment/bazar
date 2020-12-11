@@ -125,16 +125,4 @@ class ShippingTest extends TestCase
         $this->assertSame(ShippingManager::driver($this->shipping->driver)->name(), $this->shipping->driverName);
         $this->assertSame('fake', $this->shipping->driver('fake')->driverName);
     }
-
-    /** @test */
-    public function it_deletes_relations_on_deleting()
-    {
-        $this->shipping->address()->save(AddressFactory::new()->make());
-
-        $this->shipping->delete();
-
-        $this->assertDatabaseMissing(
-            'bazar_addresses', ['addressable_type' => Shipping::class, 'addressable_id' => $this->shipping->id]
-        );
-    }
 }

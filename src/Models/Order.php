@@ -6,12 +6,12 @@ use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
+use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Order as Contract;
-use Bazar\Contracts\Shippable;
 use Bazar\Proxies\Transaction as TransactionProxy;
 use Bazar\Proxies\User as UserProxy;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,9 +21,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable, Shippable
+class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable
 {
-    use Addressable, BazarRoutable, Filterable, InteractsWithItems, SoftDeletes;
+    use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -148,21 +148,6 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     public function transactions(): HasMany
     {
         return $this->hasMany(TransactionProxy::getProxiedClass());
-    }
-
-    /**
-     * Get the currency attribute.
-     *
-     * @param  string|null  $value
-     * @return string
-     */
-    public function getCurrencyAttribute(string $value = null): string
-    {
-        if (! is_null($value) && in_array($value, array_keys(Bazar::currencies()))) {
-            return $value;
-        }
-
-        return Bazar::currency();
     }
 
     /**

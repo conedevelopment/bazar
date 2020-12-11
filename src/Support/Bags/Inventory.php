@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Support\Attributes;
+namespace Bazar\Support\Bags;
 
 use Illuminate\Support\Facades\Config;
 

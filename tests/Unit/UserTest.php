@@ -81,11 +81,11 @@ class UserTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->user->newQuery()->search('test')->toSql(),
             $this->user->newQuery()->where(function ($q) {
                 $q->where('name', 'like', 'test%')
                     ->orWhere('email', 'like', 'test%');
-            })->toSql()
+            })->toSql(),
+            $this->user->newQuery()->search('test')->toSql()
         );
     }
 }

@@ -107,23 +107,23 @@ class OrderTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->order->newQuery()->search('test')->toSql(),
             $this->order->newQuery()->whereHas('address', function ($q) {
                 $q->where('bazar_addresses.first_name', 'like', 'test%')
                     ->orWhere('bazar_addresses.last_name', 'like', 'test%');
-            })->toSql()
+            })->toSql(),
+            $this->order->newQuery()->search('test')->toSql()
         );
 
         $this->assertSame(
-            $this->order->newQuery()->status('pending')->toSql(),
-            $this->order->newQuery()->whereIn('status', ['pending'])->toSql()
+            $this->order->newQuery()->whereIn('status', ['pending'])->toSql(),
+            $this->order->newQuery()->status('pending')->toSql()
         );
 
         $this->assertSame(
-            $this->order->newQuery()->user(1)->toSql(),
             $this->order->newQuery()->whereHas('user', function ($q) {
                 $q->where('users.id', 1);
-            })->toSql()
+            })->toSql(),
+            $this->order->newQuery()->user(1)->toSql()
         );
     }
 }

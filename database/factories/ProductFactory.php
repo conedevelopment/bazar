@@ -26,10 +26,16 @@ class ProductFactory extends Factory
             'name' => $this->faker->company,
             'description' => $this->faker->sentences(3, true),
             'options' => ['Size' => ['XS', 'S', 'M', 'L']],
-            'prices' => ['usd' => [
-                'default' => $price = mt_rand(10, 1000) / 10,
-                'sale' => round($price * 0.8, 1),
-            ]],
+            'prices' => [
+                'usd' => [
+                    'default' => $price = mt_rand(10, 1000) / 10,
+                    'sale' => round($price * 0.8, 1),
+                ],
+                'eur' => [
+                    'default' => $price = mt_rand(10, 1000) / 10,
+                    'sale' => round($price * 0.8, 1),
+                ]
+            ],
             'inventory' => [
                 'files' => [],
                 'sku' => Str::random(5),
