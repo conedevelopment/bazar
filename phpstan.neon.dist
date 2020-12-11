@@ -1,12 +1,14 @@
 includes:
     - vendor/nunomaduro/larastan/extension.neon
 parameters:
-    level: 5
-    checkMissingIterableValueType: false
+    level: 1
     paths:
         - src/
         - config/
         - database/
         - routes/
     ignoreErrors:
+        # TODO Consider making static things final.
         - '#^Unsafe usage of new static#'
+        # TODO __callStatic()
+        - '#^Call to an undefined static method Bazar\\Proxies\\#'
