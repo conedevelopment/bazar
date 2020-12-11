@@ -79,7 +79,7 @@ class Cart extends Model implements Contract, Discountable, Itemable
         });
 
         static::updating(static function (Cart $cart): void {
-            if (! $cart->locked && $cart->getOriginal('currency') !== Bazar::currency()) {
+            if (! $cart->locked && $cart->getOriginal('currency') !== $cart->currency) {
                 $cart->items->each->save();
                 $cart->discount(false);
             }
