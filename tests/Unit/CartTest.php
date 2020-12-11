@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Bazar;
 use Bazar\Database\Factories\AddressFactory;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;

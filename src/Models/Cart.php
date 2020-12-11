@@ -77,6 +77,13 @@ class Cart extends Model implements Contract, Discountable, Itemable
             $cart->token = $cart->token ?: Uuid::uuid4();
             $cart->currency = $cart->currency ?: Bazar::currency();
         });
+
+        static::updating(static function (Cart $cart): void {
+            if (! $cart->locked && $cart->getOriginal('currency') !== Bazar::currency()) {
+                $cart->items->each->save();
+                $cart->discount(false);
+            }
+        });
     }
 
     /**

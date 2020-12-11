@@ -2,6 +2,7 @@
 
 namespace Bazar\Models;
 
+use Bazar\Bazar;
 use Bazar\Casts\Inventory;
 use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
@@ -117,6 +118,22 @@ class Variation extends Model implements Breadcrumbable, Contract
     public function getBreadcrumbLabel(Request $request): string
     {
         return $this->alias;
+    }
+
+    /**
+     * Get the price by the given type and currency.
+     *
+     * @param  string  $type
+     * @param  string|null  $currency
+     * @return float|null
+     */
+    public function price(string $type = 'default', string $currency = null): ?float
+    {
+        $currency = $currency ?: Bazar::currency();
+
+        $price = $this->prices[$currency][$type] ?? null;
+
+        return $price ?: $this->product->price($type, $currency);
     }
 
     /**

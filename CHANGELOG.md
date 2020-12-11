@@ -4,6 +4,7 @@
 ### Added
 - Added `Inventory` attribute bag
 - Added `Prices` attribute bag
+- Dynamic cart prices – recalculates prices, taxes and discounts when updating the cart's currency
 
 ### Changed
 - Changed `normal` key to `default` for prices
