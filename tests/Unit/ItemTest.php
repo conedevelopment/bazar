@@ -71,12 +71,4 @@ class ItemTest extends TestCase
         );
         $this->assertSame($this->item->formattedNetTotal(), $this->item->formattedNetTotal);
     }
-
-    /** @test */
-    public function it_accesses_its_properties()
-    {
-        $this->assertSame('test-text', $this->item->property('text'));
-        $this->assertNull($this->item->property('fake'));
-        $this->assertSame('test-text', $this->item->property('fake', 'test-text'));
-    }
 }

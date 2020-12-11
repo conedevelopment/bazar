@@ -191,7 +191,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function getOptionAttribute(): array
     {
-        return $this->property('option', []);
+        return $this->properties['option'] ?? [];
     }
 
     /**
@@ -261,7 +261,7 @@ class Item extends MorphPivot implements Taxable
      */
     protected function resolveOptionProperty(): void
     {
-        $item = $this->product->variation($this->property('option', [])) ?: $this->product;
+        $item = $this->product->variation($this->option) ?: $this->product;
 
         $stock = $item->inventory->quantity;
 
@@ -288,17 +288,5 @@ class Item extends MorphPivot implements Taxable
         }
 
         return $this;
-    }
-
-    /**
-     * Get the property by its name.
-     *
-     * @param  string  $name
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function property(string $name, $default = null)
-    {
-        return $this->properties[$name] ?? $default;
     }
 }
