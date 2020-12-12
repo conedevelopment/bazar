@@ -19,7 +19,7 @@ class CreateBazarItemsTable extends Migration
             $table->morphs('itemable');
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('tax')->default(0);
-            $table->unsignedInteger('quantity');
+            $table->unsignedDecimal('quantity');
             $table->json('properties')->nullable();
             $table->timestamps();
         });
