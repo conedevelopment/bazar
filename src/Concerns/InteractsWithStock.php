@@ -28,7 +28,7 @@ trait InteractsWithStock
      * @return void
      */
     public function setInventoryAttribute(array $value): void
-    {;
+    {
         $this->attributes['inventory'] = json_encode($value, JSON_NUMERIC_CHECK);
     }
 
