@@ -134,8 +134,6 @@ class Item extends MorphPivot implements Taxable
         return $this->morphTo();
     }
 
-    // getProductAttribute(): ?Product|Variation
-
     /**
      * Get the formatted price attribute.
      *
