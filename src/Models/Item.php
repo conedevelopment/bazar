@@ -93,11 +93,11 @@ class Item extends MorphPivot implements Taxable
      */
     protected static function booted(): void
     {
-        static::creating(static function (Item $item): void {
+        static::creating(static function (self $item): void {
             $item->id = Uuid::uuid4();
         });
 
-        static::saving(static function (Item $item): void {
+        static::saving(static function (self $item): void {
             $item->resolveProperties()->tax(false);
         });
     }
