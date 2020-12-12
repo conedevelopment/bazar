@@ -117,7 +117,7 @@ class Item extends MorphPivot implements Taxable
     /**
      * Get the product for the item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product(): BelongsTo
     {
