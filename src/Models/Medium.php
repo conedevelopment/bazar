@@ -83,7 +83,7 @@ class Medium extends Model implements Contract
      * Create a new medium from the given path.
      *
      * @param  string  $path
-     * @return static
+     * @return self
      */
     public static function createFrom(string $path): Medium
     {
