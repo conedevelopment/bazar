@@ -3,14 +3,13 @@
 namespace Bazar\Models;
 
 use Bazar\Bazar;
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
-use Bazar\Concerns\Stockable;
+use Bazar\Concerns\InteractsWithStock;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Variation as Contract;
+use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +17,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Variation extends Model implements Breadcrumbable, Contract
+class Variation extends Model implements Breadcrumbable, Contract, Stockable
 {
-    use BazarRoutable, Filterable, HasMedia, SoftDeletes, Stockable;
+    use BazarRoutable, Filterable, InteractsWithStock, HasMedia, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -49,9 +48,9 @@ class Variation extends Model implements Breadcrumbable, Contract
      * @var array
      */
     protected $casts = [
-        'option' => 'array',
-        'prices' => Prices::class,
-        'inventory' => Inventory::class,
+        'option' => 'json',
+        'prices' => 'json',
+        'inventory' => 'json',
     ];
 
     /**
@@ -131,7 +130,7 @@ class Variation extends Model implements Breadcrumbable, Contract
     {
         $currency = $currency ?: Bazar::currency();
 
-        $price = $this->prices[$currency][$type] ?? null;
+        $price = $this->prices[$currency][$type];
 
         return $price ?: $this->product->price($type, $currency);
     }

@@ -41,7 +41,7 @@ class Medium extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'properties' => 'array',
+        'properties' => 'json',
     ];
 
     /**

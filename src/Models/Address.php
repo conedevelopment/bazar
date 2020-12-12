@@ -54,8 +54,8 @@ class Address extends Model implements Breadcrumbable, Contract
      * @var array
      */
     protected $casts = [
+        'custom' => 'json',
         'default' => 'bool',
-        'custom' => 'array',
     ];
 
     /**

@@ -3,9 +3,59 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Support\Bags\Inventory;
+use Bazar\Support\Bags\Prices;
 
-trait Stockable
+trait InteractsWithStock
 {
+    /**
+     * Get the inventory attribute.
+     *
+     * @param  string  $value
+     * @return \Bazar\Support\Bags\Inventory
+     */
+    public function getInventoryAttribute(string $value): Inventory
+    {
+        $value = $value ? json_decode($value, true) : [];
+
+        return new Inventory($value);
+    }
+
+    /**
+     * Set the inventory attribute.
+     *
+     * @param  array  $value
+     * @return void
+     */
+    public function setInventoryAttribute(array $value): void
+    {;
+        $this->attributes['inventory'] = json_encode($value, JSON_NUMERIC_CHECK);
+    }
+
+    /**
+     * Get the prices attribute.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function getPricesAttribute(string $value): Prices
+    {
+        $value = $value ? json_decode($value, true) : [];
+
+        return new Prices($value);
+    }
+
+    /**
+     * Set the prices attribute.
+     *
+     * @param  array  $value
+     * @return void
+     */
+    public function setPricesAttribute(array $value): void
+    {
+        $this->attributes['prices'] = json_encode($value, JSON_NUMERIC_CHECK);
+    }
+
     /**
      * Get the price attribute.
      *
@@ -37,7 +87,7 @@ trait Stockable
     {
         $currency = $currency ?: Bazar::currency();
 
-        return $this->prices[$currency][$type] ?? null;
+        return $this->prices[$currency][$type];
     }
 
     /**
