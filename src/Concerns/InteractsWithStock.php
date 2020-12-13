@@ -123,9 +123,10 @@ trait InteractsWithStock
     /**
      * Cache the casted attribute bag.
      *
-     * @param  string  $key
-     * @param  \Bazar\Support\Bags\Bag  $value
-     * @return \Bazar\Support\Bags\Bag
+     * @template TBag of \Bazar\Support\Bags\Bag
+     * @param    string  $key
+     * @param    TBag  $value
+     * @return   TBag
      */
     protected function cacheBagCast(string $key, Bag $value): Bag
     {
