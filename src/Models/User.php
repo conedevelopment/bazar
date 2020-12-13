@@ -24,6 +24,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
+/**
+ * @property string  $email
+ * @property string  $password
+ * @property string  $name
+ */
 class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
 {
     use BazarRoutable, Filterable, Notifiable, SoftDeletes;
