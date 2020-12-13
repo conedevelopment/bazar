@@ -26,7 +26,7 @@ abstract class Driver
     /**
      * The cart instance.
      *
-     * @var \Bazar\Contracts\Models\Cart
+     * @var \Bazar\Contracts\Models\Cart|null
      */
     protected $cart;
 
