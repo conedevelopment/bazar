@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Item;
@@ -37,6 +38,12 @@ class ItemTest extends TestCase
         $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->formattedTax());
         $this->assertSame($this->item->formattedTax(), $this->item->formattedTax);
+    }
+
+    /** @test */
+    public function it_has_stockable_attribute()
+    {
+        $this->assertInstanceOf(Stockable::class, $this->item->stockable);
     }
 
     /** @test */

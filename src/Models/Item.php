@@ -4,6 +4,7 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Cart;
+use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -98,7 +99,9 @@ class Item extends MorphPivot implements Taxable
         });
 
         static::saving(static function (self $item): void {
-            $item->resolveProperties()->tax(false);
+            if (in_array(Cart::class, class_implements($item->itemable_type))) {
+                $item->fillFromStockable()->resolveProperties()->tax(false);
+            }
         });
     }
 
@@ -132,6 +135,20 @@ class Item extends MorphPivot implements Taxable
     public function itemable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the stockable attribute.
+     *
+     * @return \Bazar\Contracts\Stockable|null
+     */
+    public function getStockableAttribute(): ?Stockable
+    {
+        if (! $product = $this->product) {
+            return $product;
+        }
+
+        return $product->variation($this->option) ?: $product;
     }
 
     /**
@@ -255,19 +272,22 @@ class Item extends MorphPivot implements Taxable
     }
 
     /**
-     * Resolve the option property.
+     * Fill the properties from the stockable model.
      *
-     * @return void
+     * @return $this
      */
-    protected function resolveOptionProperty(): void
+    protected function fillFromStockable(): Item
     {
-        $item = $this->product->variation($this->option) ?: $this->product;
+        if ($stockable = $this->stockable) {
+            $this->price = $stockable->price('sale', $this->itemable->currency)
+                        ?: $stockable->price('default', $this->itemable->currency);
 
-        $stock = $item->inventory->quantity;
+            $stock = $stockable->inventory->quantity;
 
-        $this->price = $item->price('sale', $this->itemable->currency) ?: $item->price('default', $this->itemable->currency);
+            $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
+        }
 
-        $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
+        return $this;
     }
 
     /**
@@ -277,13 +297,9 @@ class Item extends MorphPivot implements Taxable
      */
     public function resolveProperties(): Item
     {
-        if (in_array(Cart::class, class_implements($this->itemable_type))) {
-            $this->resolveOptionProperty();
-
-            foreach ((array) $this->properties as $name => $value) {
-                if ($name !== 'option' && ($resolver = static::$propertyResolvers[$name] ?? null)) {
-                    call_user_func_array($resolver, [$this, $value]);
-                }
+        foreach ((array) $this->properties as $name => $value) {
+            if ($resolver = static::$propertyResolvers[$name] ?? null) {
+                call_user_func_array($resolver, [$this, $value]);
             }
         }
 
