@@ -2,6 +2,7 @@
 
 namespace Bazar\Database\Factories;
 
+use Bazar\Bazar;
 use Bazar\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,6 +24,7 @@ class CartFactory extends Factory
     {
         return [
             'discount' => 0,
+            'currency' => Bazar::currency(),
         ];
     }
 }

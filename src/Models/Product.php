@@ -2,16 +2,15 @@
 
 namespace Bazar\Models;
 
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
-use Bazar\Concerns\Stockable;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Product as Contract;
 use Bazar\Contracts\Models\Variation;
+use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Order as OrderProxy;
@@ -26,9 +25,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
-class Product extends Model implements Breadcrumbable, Contract
+class Product extends Model implements Breadcrumbable, Contract, Stockable
 {
-    use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes, Stockable;
+    use BazarRoutable, Filterable, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -57,9 +56,9 @@ class Product extends Model implements Breadcrumbable, Contract
      * @var array
      */
     protected $casts = [
-        'options' => 'array',
-        'prices' => Prices::class,
-        'inventory' => Inventory::class,
+        'prices' => 'json',
+        'options' => 'json',
+        'inventory' => 'json',
     ];
 
     /**

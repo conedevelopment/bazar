@@ -73,12 +73,12 @@ class Cart extends Model implements Contract, Discountable, Itemable
      */
     protected static function booted(): void
     {
-        static::creating(static function (Cart $cart): void {
+        static::creating(static function (self $cart): void {
             $cart->token = $cart->token ?: Uuid::uuid4();
             $cart->currency = $cart->currency ?: Bazar::currency();
         });
 
-        static::updating(static function (Cart $cart): void {
+        static::updating(static function (self $cart): void {
             if (! $cart->locked && $cart->getOriginal('currency') !== $cart->currency) {
                 $cart->items->each->save();
                 $cart->discount(false);

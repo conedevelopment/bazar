@@ -11,6 +11,7 @@ use Bazar\Concerns\InteractsWithItems;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
+use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Order as Contract;
 use Bazar\Proxies\Transaction as TransactionProxy;
 use Bazar\Proxies\User as UserProxy;
@@ -82,7 +83,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     /**
      * Create a new order from the given cart.
      *
-     * @param  \Bazar\Models\Cart  $cart
+     * @param  \Bazar\Contracts\Models\Cart  $cart
      * @return static
      */
     public static function createFrom(Cart $cart): Order
@@ -93,7 +94,9 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
 
         $order->products()->attach(
             $cart->items->mapWithKeys(static function (Item $item): array {
-                return [$item->product_id => $item->only(['price', 'tax', 'quantity', 'properties'])];
+                return [$item->product_id => $item->only([
+                    'price', 'tax', 'quantity', 'properties',
+                ])];
             })->toArray()
         );
 

@@ -3,9 +3,51 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Casts\Bag as BagCast;
+use Bazar\Support\Bags\Bag;
+use Bazar\Support\Bags\Inventory;
+use Bazar\Support\Bags\Prices;
 
-trait Stockable
+trait InteractsWithStock
 {
+    /**
+     * Get the inventory attribute.
+     *
+     * @param  string  $value
+     * @return \Bazar\Support\Bags\Inventory
+     */
+    public function getInventoryAttribute(string $value): Inventory
+    {
+        if (isset($this->classCastCache['inventory'])) {
+            return $this->classCastCache['inventory'];
+        }
+
+        $value = new Inventory(
+            $value ? json_decode($value, true) : []
+        );
+
+        return $this->cacheBagCast('inventory', $value);
+    }
+
+    /**
+     * Get the prices attribute.
+     *
+     * @param  string  $value
+     * @return \Bazar\Support\Bags\Prices
+     */
+    public function getPricesAttribute(string $value): Prices
+    {
+        if (isset($this->classCastCache['prices'])) {
+            return $this->classCastCache['prices'];
+        }
+
+        $value = new Prices(
+            $value ? json_decode($value, true) : []
+        );
+
+        return $this->cacheBagCast('prices', $value);
+    }
+
     /**
      * Get the price attribute.
      *
@@ -37,7 +79,7 @@ trait Stockable
     {
         $currency = $currency ?: Bazar::currency();
 
-        return $this->prices[$currency][$type] ?? null;
+        return $this->prices[$currency][$type];
     }
 
     /**
@@ -76,5 +118,21 @@ trait Stockable
         $price = $this->price('sale');
 
         return ! is_null($price) && $price < $this->price;
+    }
+
+    /**
+     * Cache the casted attribute bag.
+     *
+     * @param  string  $key
+     * @param  \Bazar\Support\Bags\Bag  $value
+     * @return \Bazar\Support\Bags\Bag
+     */
+    protected function cacheBagCast(string $key, Bag $value): Bag
+    {
+        if (! $this->hasCast($key, BagCast::class)) {
+            $this->mergeCasts([$key => BagCast::class]);
+        }
+
+        return $this->classCastCache[$key] = $value;
     }
 }

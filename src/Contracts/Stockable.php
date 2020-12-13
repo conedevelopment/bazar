@@ -2,7 +2,7 @@
 
 namespace Bazar\Contracts;
 
-interface Stockable
+interface Stockable extends Priceable, Inventoryable
 {
     //
 }
