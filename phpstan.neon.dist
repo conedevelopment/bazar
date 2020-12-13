@@ -1,12 +1,27 @@
+# Installation
+#$ composer require --dev nunomaduro/larastan orchestra/testbench
+#$ cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
+# Add Str::startsWith($classReflection->getName(), ['Illuminate\\Contracts\\', 'Bazar\\Contracts\\'])
+# to vendor/nunomaduro/larastan/src/Methods/Pipes/Contracts.php
+
 includes:
+    - phpstan-baseline.neon
     - vendor/nunomaduro/larastan/extension.neon
 parameters:
-    level: 5
-    checkMissingIterableValueType: false
+    level: 4
+    bootstrapFiles:
+        - tests/phpstan/override-larastan-Contracts.php
     paths:
         - src/
         - config/
         - database/
         - routes/
     ignoreErrors:
+        # TODO Consider making static things final.
         - '#^Unsafe usage of new static#'
+        # TODO These methods are of ForeignKeyDefinition, see return type of constrained()
+        - '#^Call to an undefined method Illuminate\\Support\\Fluent::(cascadeOnDelete|nullOnDelete)\(\)\.$#'
+        # TODO Remaining problems from Contracts
+        - '#^Access to an undefined property Bazar\\Contracts\\#'
+        # TODO Write an extension!
+        - '#^Call to an undefined static method Bazar\\Proxies\\#'
