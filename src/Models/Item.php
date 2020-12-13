@@ -4,6 +4,7 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Cart;
+use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -132,6 +133,18 @@ class Item extends MorphPivot implements Taxable
     public function itemable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the stockable attribute.
+     *
+     * @return \Bazar\Contracts\Stockable
+     */
+    public function getStockableAttribute(): Stockable
+    {
+        // Determine if product or its variation
+
+        return $this->product;
     }
 
     /**
