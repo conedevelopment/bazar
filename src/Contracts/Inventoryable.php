@@ -13,12 +13,4 @@ interface Inventoryable
      * @return \Bazar\Support\Bags\Inventory
      */
     public function getInventoryAttribute(string $value): Inventory;
-
-    /**
-     * Set the inventory attribute.
-     *
-     * @param  array  $value
-     * @return void
-     */
-    public function setInventoryAttribute(array $value): void;
 }

@@ -15,14 +15,6 @@ interface Priceable
     public function getPricesAttribute(string $value): Prices;
 
     /**
-     * Set the prices attribute.
-     *
-     * @param  array  $value
-     * @return void
-     */
-    public function setPricesAttribute(array $value): void;
-
-    /**
      * Get the price attribute.
      *
      * @return float|null

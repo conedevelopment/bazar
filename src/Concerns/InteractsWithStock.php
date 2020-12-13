@@ -3,6 +3,8 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Casts\Bag as BagCast;
+use Bazar\Support\Bags\Bag;
 use Bazar\Support\Bags\Inventory;
 use Bazar\Support\Bags\Prices;
 
@@ -16,44 +18,34 @@ trait InteractsWithStock
      */
     public function getInventoryAttribute(string $value): Inventory
     {
-        $value = $value ? json_decode($value, true) : [];
+        if (isset($this->classCastCache['inventory'])) {
+            return $this->classCastCache['inventory'];
+        }
 
-        return new Inventory($value);
-    }
+        $value = new Inventory(
+            $value ? json_decode($value, true) : []
+        );
 
-    /**
-     * Set the inventory attribute.
-     *
-     * @param  array  $value
-     * @return void
-     */
-    public function setInventoryAttribute(array $value): void
-    {
-        $this->attributes['inventory'] = json_encode($value, JSON_NUMERIC_CHECK);
+        return $this->cacheBagCasts('inventory', $value);
     }
 
     /**
      * Get the prices attribute.
      *
      * @param  string  $value
-     * @return void
+     * @return \Bazar\Support\Bags\Prices
      */
     public function getPricesAttribute(string $value): Prices
     {
-        $value = $value ? json_decode($value, true) : [];
+        if (isset($this->classCastCache['prices'])) {
+            return $this->classCastCache['prices'];
+        }
 
-        return new Prices($value);
-    }
+        $value = new Prices(
+            $value ? json_decode($value, true) : []
+        );
 
-    /**
-     * Set the prices attribute.
-     *
-     * @param  array  $value
-     * @return void
-     */
-    public function setPricesAttribute(array $value): void
-    {
-        $this->attributes['prices'] = json_encode($value, JSON_NUMERIC_CHECK);
+        return $this->cacheBagCasts('prices', $value);
     }
 
     /**
@@ -126,5 +118,21 @@ trait InteractsWithStock
         $price = $this->price('sale');
 
         return ! is_null($price) && $price < $this->price;
+    }
+
+    /**
+     * Cache the casted attribute bag.
+     *
+     * @param  string  $key
+     * @param  \Bazar\Support\Bags\Bag  $value
+     * @return \Bazar\Support\Bags\Bag
+     */
+    protected function cacheBagCasts(string $key, Bag $value): Bag
+    {
+        if (! $this->hasCast($key, BagCast::class)) {
+            $this->mergeCasts([$key => BagCast::class]);
+        }
+
+        return $this->classCastCache[$key] = $value;
     }
 }
