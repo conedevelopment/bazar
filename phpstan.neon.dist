@@ -11,6 +11,8 @@ parameters:
     level: 4
     bootstrapFiles:
         - tests/phpstan/override-larastan-Contracts.php
+    stubFiles:
+        - tests/phpstan/stubs/User.stub
     paths:
         - src/
         - config/

@@ -123,6 +123,11 @@ trait InteractsWithStock
     /**
      * Cache the casted attribute bag.
      *
+     * @phpstan-template TBag of \Bazar\Support\Bags\Bag
+     * @phpstan-param    string  $key
+     * @phpstan-param    TBag  $value
+     * @phpstan-return   TBag
+     *
      * @param  string  $key
      * @param  \Bazar\Support\Bags\Bag  $value
      * @return \Bazar\Support\Bags\Bag
