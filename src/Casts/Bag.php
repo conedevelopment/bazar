@@ -11,7 +11,7 @@ class Bag implements CastsInboundAttributes
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
      * @param  string  $key
-     * @param  \Bazar\Support\Bags\Prices  $value
+     * @param  array|\JsonSerializable|\Bazar\Support\Bags\Bag  $value
      * @param  array  $attributes
      * @return string
      */

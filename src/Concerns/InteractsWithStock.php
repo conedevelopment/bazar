@@ -26,7 +26,7 @@ trait InteractsWithStock
             $value ? json_decode($value, true) : []
         );
 
-        return $this->cacheBagCasts('inventory', $value);
+        return $this->cacheBagCast('inventory', $value);
     }
 
     /**
@@ -45,7 +45,7 @@ trait InteractsWithStock
             $value ? json_decode($value, true) : []
         );
 
-        return $this->cacheBagCasts('prices', $value);
+        return $this->cacheBagCast('prices', $value);
     }
 
     /**
@@ -127,7 +127,7 @@ trait InteractsWithStock
      * @param  \Bazar\Support\Bags\Bag  $value
      * @return \Bazar\Support\Bags\Bag
      */
-    protected function cacheBagCasts(string $key, Bag $value): Bag
+    protected function cacheBagCast(string $key, Bag $value): Bag
     {
         if (! $this->hasCast($key, BagCast::class)) {
             $this->mergeCasts([$key => BagCast::class]);
