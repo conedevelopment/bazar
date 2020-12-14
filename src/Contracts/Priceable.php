@@ -2,18 +2,8 @@
 
 namespace Bazar\Contracts;
 
-use Bazar\Support\Bags\Prices;
-
 interface Priceable
 {
-    /**
-     * Get the prices attribute.
-     *
-     * @param  string  $value
-     * @return \Bazar\Support\Bags\Prices
-     */
-    public function getPricesAttribute(string $value): Prices;
-
     /**
      * Get the price attribute.
      *

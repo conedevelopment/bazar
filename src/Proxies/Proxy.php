@@ -7,7 +7,7 @@ use Illuminate\Container\Container;
 abstract class Proxy
 {
     /**
-     * The resolve instances.
+     * The resolved instances.
      *
      * @var array
      */
