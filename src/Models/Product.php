@@ -15,6 +15,8 @@ use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Proxies\Variation as VariationProxy;
+use Bazar\Support\Bags\Inventory;
+use Bazar\Support\Bags\Prices;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -56,9 +58,9 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $casts = [
-        'prices' => 'json',
         'options' => 'json',
-        'inventory' => 'json',
+        'prices' => Prices::class,
+        'inventory' => Inventory::class,
     ];
 
     /**

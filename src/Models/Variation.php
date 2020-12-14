@@ -11,6 +11,8 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Variation as Contract;
 use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Product as ProductProxy;
+use Bazar\Support\Bags\Inventory;
+use Bazar\Support\Bags\Prices;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,8 +51,8 @@ class Variation extends Model implements Breadcrumbable, Contract, Stockable
      */
     protected $casts = [
         'option' => 'json',
-        'prices' => 'json',
-        'inventory' => 'json',
+        'prices' => Prices::class,
+        'inventory' => Inventory::class,
     ];
 
     /**

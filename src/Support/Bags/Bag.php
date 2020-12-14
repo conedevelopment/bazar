@@ -4,13 +4,15 @@ namespace Bazar\Support\Bags;
 
 use ArrayAccess;
 use ArrayIterator;
+use Illuminate\Contracts\Database\Eloquent\Castable;
+use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use IteratorAggregate;
 use JsonSerializable;
 use Stringable;
 
-abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonable, JsonSerializable, Stringable
+abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregate, Jsonable, JsonSerializable, Stringable
 {
     /**
      * The bag items.
@@ -212,5 +214,38 @@ abstract class Bag implements Arrayable, ArrayAccess, IteratorAggregate, Jsonabl
     public function __unset($key): void
     {
         $this->offsetUnset($key);
+    }
+
+    /**
+     * Get the caster class to use when casting from / to this cast target.
+     *
+     * @param  array  $arguments
+     * @return object
+     */
+    public static function castUsing(array $arguments): object
+    {
+        return new class(static::class) implements CastsAttributes
+        {
+            protected $class;
+
+            public function __construct(string $class)
+            {
+                $this->class = $class;
+            }
+
+            public function get($model, string $key, $value, array $attributes): Bag
+            {
+                $class = $this->class;
+
+                $value = $value ? json_decode($value, true) : [];
+
+                return new $class($value);
+            }
+
+            public function set($model, string $key, $value, array $attributes): string
+            {
+                return json_encode($value, JSON_NUMERIC_CHECK);
+            }
+        };
     }
 }
