@@ -7,6 +7,7 @@ use Bazar\Support\Bags\Price;
 use Bazar\Support\Bags\Prices;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class AttributeBagTest extends TestCase
 {
@@ -45,6 +46,13 @@ class AttributeBagTest extends TestCase
 
         $this->assertFalse($inventory->virtual());
         $this->assertFalse($inventory->downloadable());
+
+        $inventory->foo = 'bar';
+        $inventory->bar = 'foo';
+        $this->assertTrue(isset($inventory->foo, $inventory->bar));
+        unset($inventory->foo);
+        $inventory->remove('bar');
+        $this->assertFalse(isset($inventory->foo, $inventory->bar));
     }
 
     /** @test */
@@ -62,5 +70,8 @@ class AttributeBagTest extends TestCase
         $this->assertSame(80, $prices->usd->sale);
         $this->assertSame('100.00 USD', $prices->usd->format());
         $this->assertSame('usd', $prices->usd->getCurrency());
+
+        $this->expectException(InvalidArgumentException::class);
+        $prices->huf = [];
     }
 }
