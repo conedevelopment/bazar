@@ -71,6 +71,9 @@ class AttributeBagTest extends TestCase
         $this->assertSame('100.00 USD', $prices->usd->format());
         $this->assertSame('usd', $prices->usd->getCurrency());
 
+        $prices->chf = new Price('chf');
+        $this->assertInstanceOf(Price::class, $prices->chf);
+
         $this->expectException(InvalidArgumentException::class);
         $prices->huf = [];
     }
