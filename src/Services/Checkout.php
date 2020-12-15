@@ -55,8 +55,8 @@ class Checkout
         $this->cart = $cart;
         $this->gateway = Gateway::getDefaultDriver();
 
-        $this->onFailure = static function (Order $order): void {};
-        $this->onSuccess = static function (Throwable $exception, Order $order): void {};
+        $this->onFailure = static function (): void {};
+        $this->onSuccess = static function (): void {};
     }
 
     /**
