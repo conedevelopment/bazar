@@ -19,11 +19,14 @@ class RefreshInventory
         $event->order->loadMissing(['products', 'products.variations']);
 
         $event->order->items->each(static function (Item $item): void {
-            if (($model = $item->stockable) instanceof Stockable && $model->inventory->tracksQuantity()) {
-                $model->inventory->decrementQuantity($item->quantity);
-
-                $model->save();
+            $model = $item->stockable;
+            if (!$model instanceof Stockable || !$model->inventory->tracksQuantity()) {
+                return;
             }
+
+            $model->inventory->decrementQuantity($item->quantity);
+
+            $model->save();
         });
     }
 }
