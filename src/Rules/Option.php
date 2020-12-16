@@ -3,7 +3,7 @@
 namespace Bazar\Rules;
 
 use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Variation;
+use Bazar\Contracts\Models\Variant;
 use Illuminate\Contracts\Validation\Rule;
 
 class Option implements Rule
@@ -16,23 +16,23 @@ class Option implements Rule
     protected $product;
 
     /**
-     * The variation instance.
+     * The variant instance.
      *
-     * @var \Bazar\Contracts\Models\Variation|null
+     * @var \Bazar\Contracts\Models\Variant|null
      */
-    protected $variation;
+    protected $variant;
 
     /**
      * Create a new rule instance.
      *
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @param  \Bazar\Contracts\Models\Variation|null  $variation
+     * @param  \Bazar\Contracts\Models\Variant|null  $variant
      * @return void
      */
-    public function __construct(Product $product, Variation $variation = null)
+    public function __construct(Product $product, Variant $variant = null)
     {
         $this->product = $product;
-        $this->variation = $variation;
+        $this->variant = $variant;
     }
 
     /**
@@ -44,12 +44,12 @@ class Option implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return $this->product->variations->reject(function (Variation $variation): bool {
-            return $this->variation && $variation->id === $this->variation->id;
-        })->filter(function (Variation $variation) use ($value): bool {
+        return $this->product->variants->reject(function (Variant $variant): bool {
+            return $this->variant && $variant->id === $this->variant->id;
+        })->filter(function (Variant $variant) use ($value): bool {
             $value = array_replace(array_fill_keys(array_keys($this->product->options), '*'), $value);
 
-            return empty(array_diff($value, $variation->option));
+            return empty(array_diff($value, $variant->option));
         })->isEmpty();
     }
 

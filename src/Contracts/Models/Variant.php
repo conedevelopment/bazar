@@ -4,7 +4,7 @@ namespace Bazar\Contracts\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-interface Variation
+interface Variant
 {
     /**
      * Get the product for the transaction.

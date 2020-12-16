@@ -8,7 +8,7 @@ use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariationFactory;
+use Bazar\Database\Factories\VariantFactory;
 use Bazar\Support\Bags\Inventory;
 use Bazar\Support\Bags\Price;
 use Bazar\Support\Bags\Prices;
@@ -78,15 +78,15 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_has_variations()
+    public function it_has_variants()
     {
-        $variation = $this->product->variations()->save(
-            VariationFactory::new()->make([
+        $variant = $this->product->variants()->save(
+            VariantFactory::new()->make([
                 'option' => ['Size' => 'S', 'Material' => 'Gold'],
             ])
         );
 
-        $this->assertTrue($this->product->variations->pluck('id')->contains($variation->id));
+        $this->assertTrue($this->product->variants->pluck('id')->contains($variant->id));
     }
 
     /** @test */

@@ -4,7 +4,7 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariationFactory;
+use Bazar\Database\Factories\VariantFactory;
 use Bazar\Rules\Option;
 use Bazar\Rules\TransactionAmount;
 use Bazar\Rules\Vat;
@@ -45,11 +45,11 @@ class ValidationTest extends TestCase
     }
 
     /** @test */
-    public function it_validates_variation_options()
+    public function it_validates_variant_options()
     {
         $product = ProductFactory::new()->create();
-        $variation = $product->variations()->save(
-            VariationFactory::new()->make()
+        $variant = $product->variants()->save(
+            VariantFactory::new()->make()
         );
 
         $v = new Validator(
@@ -61,15 +61,15 @@ class ValidationTest extends TestCase
 
         $v = new Validator(
             $this->translator,
-            ['option' => $variation->option],
+            ['option' => $variant->option],
             ['option' => [new Option($product)]]
         );
         $this->assertFalse($v->passes());
 
         $v = new Validator(
             $this->translator,
-            ['option' => $variation->option],
-            ['option' => [new Option($product, $variation)]]
+            ['option' => $variant->option],
+            ['option' => [new Option($product, $variant)]]
         );
         $this->assertTrue($v->passes());
     }

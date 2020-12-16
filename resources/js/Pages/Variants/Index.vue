@@ -2,7 +2,7 @@
     export default {
         data() {
             return {
-                title: this.__('Variations')
+                title: this.__('Variants')
             };
         },
 
@@ -18,7 +18,7 @@
     <card :title="title">
         <template #header>
             <inertia-link :href="`${$inertia.page.url}/create`" class="btn btn-primary btn-sm">
-                {{ __('Create Variation') }}
+                {{ __('Create Variant') }}
             </inertia-link>
         </template>
         <data-table :response="$page.results" :filters="$page.filters" searchable>

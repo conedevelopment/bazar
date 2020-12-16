@@ -10,7 +10,7 @@ use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
 use Bazar\Models\User;
-use Bazar\Models\Variation;
+use Bazar\Models\Variant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Gate;
@@ -43,7 +43,7 @@ abstract class TestCase extends BaseTestCase
     {
         Gate::policy(User::class, ModelPolicy::class);
         Gate::policy(Product::class, ModelPolicy::class);
-        Gate::policy(Variation::class, ModelPolicy::class);
+        Gate::policy(Variant::class, ModelPolicy::class);
         Gate::policy(Address::class, ModelPolicy::class);
         Gate::policy(Order::class, ModelPolicy::class);
         Gate::policy(Medium::class, ModelPolicy::class);

@@ -7,7 +7,7 @@ use Bazar\Http\Controllers\BatchMediaController;
 use Bazar\Http\Controllers\BatchOrdersController;
 use Bazar\Http\Controllers\BatchProductsController;
 use Bazar\Http\Controllers\BatchUsersController;
-use Bazar\Http\Controllers\BatchVariationsController;
+use Bazar\Http\Controllers\BatchVariantsController;
 use Bazar\Http\Controllers\CategoriesController;
 use Bazar\Http\Controllers\MediaController;
 use Bazar\Http\Controllers\OrdersController;
@@ -17,7 +17,7 @@ use Bazar\Http\Controllers\ProductsController;
 use Bazar\Http\Controllers\ProfileController;
 use Bazar\Http\Controllers\TransactionsController;
 use Bazar\Http\Controllers\UsersController;
-use Bazar\Http\Controllers\VariationsController;
+use Bazar\Http\Controllers\VariantsController;
 use Bazar\Http\Controllers\WidgetsController;
 use Illuminate\Support\Facades\Route;
 
@@ -59,14 +59,14 @@ Route::patch('products/batch-restore', [BatchProductsController::class, 'restore
 Route::patch('products/{product}/restore', [ProductsController::class, 'restore'])->name('products.restore');
 Route::resource('products', ProductsController::class)->except('edit');
 
-// Variations
-Route::as('products.variations.')->prefix('products/{product}/variations')->group(function () {
-    Route::patch('batch-update', [BatchVariationsController::class, 'update'])->name('batch-update');
-    Route::delete('batch-destroy', [BatchVariationsController::class, 'destroy'])->name('batch-destroy');
-    Route::patch('batch-restore', [BatchVariationsController::class, 'restore'])->name('batch-restore');
-    Route::patch('{variation:id}/restore', [VariationsController::class, 'restore'])->name('restore');
+// Variants
+Route::as('products.variants.')->prefix('products/{product}/variants')->group(function () {
+    Route::patch('batch-update', [BatchVariantsController::class, 'update'])->name('batch-update');
+    Route::delete('batch-destroy', [BatchVariantsController::class, 'destroy'])->name('batch-destroy');
+    Route::patch('batch-restore', [BatchVariantsController::class, 'restore'])->name('batch-restore');
+    Route::patch('{variant:id}/restore', [VariantsController::class, 'restore'])->name('restore');
 });
-Route::resource('products.variations', VariationsController::class)->except('edit')->scoped();
+Route::resource('products.variants', VariantsController::class)->except('edit')->scoped();
 
 // Orders
 Route::patch('orders/batch-update', [BatchOrdersController::class, 'update'])->name('orders.batch-update');

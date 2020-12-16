@@ -22,7 +22,7 @@ class CookieDriver extends Driver
         $cart = CartProxy::query()
                     ->firstOrCreate(['token' => $request->cookie('cart_token')])
                     ->setRelation('user', $user)
-                    ->loadMissing(['shipping', 'products', 'products.media', 'products.variations']);
+                    ->loadMissing(['shipping', 'products', 'products.media', 'products.variants']);
 
         if ($user && $cart->user_id !== $user->id) {
             CartProxy::query()->where('user_id', $user->id)->delete();

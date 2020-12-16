@@ -3,7 +3,7 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\Product;
-use Bazar\Proxies\Variation as VariationProxy;
+use Bazar\Proxies\Variant as VariantProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
-class BatchVariationsController extends Controller
+class BatchVariantsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -20,7 +20,7 @@ class BatchVariationsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = VariationProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = VariantProxy::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -42,12 +42,12 @@ class BatchVariationsController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        $product->variations()->whereIn(
+        $product->variants()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count variations have been updated.', ['count' => count($ids)])
+            'message', __(':count variants have been updated.', ['count' => count($ids)])
         );
     }
 
@@ -60,14 +60,14 @@ class BatchVariationsController extends Controller
      */
     public function destroy(Request $request, Product $product): RedirectResponse
     {
-        $variations = $product->variations()->withTrashed()->whereIn(
+        $variants = $product->variants()->withTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         );
 
-        $request->has('force') ? $variations->forceDelete() : $variations->delete();
+        $request->has('force') ? $variants->forceDelete() : $variants->delete();
 
         return Redirect::back()->with(
-            'message', __(':count variations have been deleted.', ['count' => count($ids)])
+            'message', __(':count variants have been deleted.', ['count' => count($ids)])
         );
     }
 
@@ -80,12 +80,12 @@ class BatchVariationsController extends Controller
      */
     public function restore(Request $request, Product $product): RedirectResponse
     {
-        $product->variations()->onlyTrashed()->whereIn(
+        $product->variants()->onlyTrashed()->whereIn(
             'id', $ids = $request->input('ids', [])
         )->restore();
 
         return Redirect::back()->with(
-            'message', __(':count variations have been restored.', ['count' => count($ids)])
+            'message', __(':count variants have been restored.', ['count' => count($ids)])
         );
     }
 }
