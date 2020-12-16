@@ -8,7 +8,7 @@ use Bazar\Models\Medium;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\User;
-use Bazar\Models\Variation;
+use Bazar\Models\Variant;
 use Bazar\Tests\TestCase;
 use Illuminate\Http\Request;
 
@@ -147,7 +147,7 @@ class FilterTest extends TestCase
     }
 
     /** @test */
-    public function a_variation_query_can_be_filtered()
+    public function a_variant_query_can_be_filtered()
     {
         $request = Request::create('/', 'GET', [
             'search' => 'test',
@@ -156,13 +156,13 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Variation::query()->where('alias', 'like', 'test%')
+        $query = Variant::query()->where('alias', 'like', 'test%')
           ->onlyTrashed()
           ->whereNotIn('id', [1, 2])
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
-            Variation::filter($request)->toSql(), $query->toSql()
+            Variant::filter($request)->toSql(), $query->toSql()
         );
     }
 }

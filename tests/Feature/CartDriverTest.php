@@ -5,7 +5,7 @@ namespace Bazar\Tests\Feature;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
 use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariationFactory;
+use Bazar\Database\Factories\VariantFactory;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
 use Bazar\Models\Shipping;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Event;
 
 class CartDriverTest extends TestCase
 {
-    protected $cart, $product, $variation;
+    protected $cart, $product, $variant;
 
     public function setUp(): void
     {
@@ -24,7 +24,7 @@ class CartDriverTest extends TestCase
 
         $this->cart = $this->app->make(Manager::class);
         $this->product = ProductFactory::new()->create(['prices' => ['usd' => ['default' => 100]]]);
-        $this->variation = $this->product->variations()->save(VariationFactory::new()->make([
+        $this->variant = $this->product->variants()->save(VariantFactory::new()->make([
             'option' => ['Size' => 'S'],
             'prices' => ['usd' => ['default' => 150]],
         ]));
@@ -67,9 +67,9 @@ class CartDriverTest extends TestCase
         $this->assertEquals(100, $product->price);
         $this->assertEquals(4, $product->quantity);
 
-        $variation = $this->cart->item($this->product, ['option' => ['Size' => 'S']]);
-        $this->assertEquals(150, $variation->price);
-        $this->assertEquals(1, $variation->quantity);
+        $variant = $this->cart->item($this->product, ['option' => ['Size' => 'S']]);
+        $this->assertEquals(150, $variant->price);
+        $this->assertEquals(1, $variant->quantity);
 
         Event::assertDispatched(CartTouched::class, function ($event) {
             return $event->cart->id === $this->cart->model()->id;

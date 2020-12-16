@@ -6,7 +6,7 @@ use Bazar\Rules\Option;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 
-class VariationStoreRequest extends FormRequest
+class VariantStoreRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -19,7 +19,7 @@ class VariationStoreRequest extends FormRequest
             'alias' => [
                 'nullable',
                 'string',
-                Rule::unique('bazar_variations')->where(function (Builder $query): Builder {
+                Rule::unique('bazar_variants')->where(function (Builder $query): Builder {
                     return $query->where('product_id', $this->route('product')->id);
                 }),
             ],
@@ -36,7 +36,7 @@ class VariationStoreRequest extends FormRequest
             'inventory.sku' => [
                 'nullable',
                 'string',
-                Rule::unique('bazar_variations', 'inventory->sku'),
+                Rule::unique('bazar_variants', 'inventory->sku'),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],

@@ -2,9 +2,9 @@
 
 namespace Bazar\Proxies;
 
-use Bazar\Contracts\Models\Variation as Contract;
+use Bazar\Contracts\Models\Variant as Contract;
 
-class Variation extends Proxy
+class Variant extends Proxy
 {
     /**
      * Get the proxied contract.

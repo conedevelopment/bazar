@@ -31,24 +31,24 @@ interface Product
     public function categories(): BelongsToMany;
 
     /**
-     * Get the variations for the product.
+     * Get the variants for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function variations(): HasMany;
+    public function variants(): HasMany;
 
     /**
-     * Get the variations attribute.
+     * Get the variants attribute.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getVariationsAttribute(): Collection;
+    public function getVariantsAttribute(): Collection;
 
     /**
-     * Get the variation of the given option.
+     * Get the variant of the given option.
      *
      * @param  array  $option
-     * @return \Bazar\Models\Variation|null
+     * @return \Bazar\Models\Variant|null
      */
-    public function variation(array $option): ?Variation;
+    public function variant(array $option): ?Variant;
 }
