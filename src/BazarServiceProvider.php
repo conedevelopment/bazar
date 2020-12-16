@@ -26,10 +26,10 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Models\Order::class => Models\Order::class,
         Contracts\Models\Medium::class => Models\Medium::class,
         Contracts\Models\Product::class => Models\Product::class,
+        Contracts\Models\Variant::class => Models\Variant::class,
         Contracts\Models\Address::class => Models\Address::class,
         Contracts\Models\Category::class => Models\Category::class,
         Contracts\Models\Shipping::class => Models\Shipping::class,
-        Contracts\Models\Variant::class => Models\Variant::class,
         Contracts\Models\Transaction::class => Models\Transaction::class,
         Contracts\Http\ResponseFactory::class => Http\ResponseFactory::class,
     ];
