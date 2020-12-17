@@ -8,7 +8,7 @@ use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Models\Variation as Contract;
+use Bazar\Contracts\Models\Variant as Contract;
 use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Product as ProductProxy;
 use Bazar\Support\Bags\Inventory;
@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Variation extends Model implements Breadcrumbable, Contract, Stockable
+class Variant extends Model implements Breadcrumbable, Contract, Stockable
 {
     use BazarRoutable, Filterable, InteractsWithStock, HasMedia, SoftDeletes;
 
@@ -72,7 +72,7 @@ class Variation extends Model implements Breadcrumbable, Contract, Stockable
      *
      * @var string
      */
-    protected $table = 'bazar_variations';
+    protected $table = 'bazar_variants';
 
     /**
      * Get the product for the transaction.

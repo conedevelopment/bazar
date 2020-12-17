@@ -2,13 +2,13 @@
     export default {
         data() {
             return {
-                title: this.__('Create Variation')
+                title: this.__('Create Variant')
             };
         },
 
         computed: {
             hasOptions() {
-                return Object.keys(this.$page.variation.product.options).length;
+                return Object.keys(this.$page.variant.product.options).length;
             }
         },
 
@@ -23,12 +23,12 @@
 </script>
 
 <template>
-    <data-form :action="$page.action" :model="$page.variation">
+    <data-form :action="$page.action" :model="$page.variant">
         <template #default="form">
             <card :title="__('Options')" class="mb-5">
                 <div v-if="hasOptions">
                     <div class="row">
-                        <div v-for="(options, name) in $page.variation.product.options" :key="name" class="col">
+                        <div v-for="(options, name) in $page.variant.product.options" :key="name" class="col">
                             <form-select
                                 :name="`option.${name}`"
                                 :label="__(name)"

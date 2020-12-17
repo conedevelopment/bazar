@@ -148,7 +148,7 @@ class Item extends MorphPivot implements Taxable
             return $product;
         }
 
-        return $product->variation($this->option) ?: $product;
+        return $product->variant($this->option) ?: $product;
     }
 
     /**

@@ -9,12 +9,12 @@ use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Contracts\Models\Variation;
+use Bazar\Contracts\Models\Variant;
 use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Order as OrderProxy;
-use Bazar\Proxies\Variation as VariationProxy;
+use Bazar\Proxies\Variant as VariantProxy;
 use Bazar\Support\Bags\Inventory;
 use Bazar\Support\Bags\Prices;
 use Illuminate\Database\Eloquent\Builder;
@@ -140,49 +140,49 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     }
 
     /**
-     * Get the variations for the product.
+     * Get the variants for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function variations(): HasMany
+    public function variants(): HasMany
     {
-        return $this->hasMany(VariationProxy::getProxiedClass());
+        return $this->hasMany(VariantProxy::getProxiedClass());
     }
 
     /**
-     * Get the variations attribute.
+     * Get the variants attribute.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getVariationsAttribute(): Collection
+    public function getVariantsAttribute(): Collection
     {
-        return $this->getRelationValue('variations')->each(function (Variation $variation): void {
-            $variation->setRelation(
-                'product', $this->withoutRelations()->makeHidden('variations')
+        return $this->getRelationValue('variants')->each(function (Variant $variant): void {
+            $variant->setRelation(
+                'product', $this->withoutRelations()->makeHidden('variants')
             )->makeHidden('product');
         });
     }
 
     /**
-     * Get the variation of the given option.
+     * Get the variant of the given option.
      *
      * @param  array  $option
-     * @return \Bazar\Contracts\Models\Variation|null
+     * @return \Bazar\Contracts\Models\Variant|null
      */
-    public function variation(array $option): ?Variation
+    public function variant(array $option): ?Variant
     {
-        return $this->variations->sortBy(static function (Variation $variation): int {
-            return array_count_values($variation->option)['*'] ?? 0;
-        })->first(function (Variation $variation) use ($option): bool {
+        return $this->variants->sortBy(static function (Variant $variant): int {
+            return array_count_values($variant->option)['*'] ?? 0;
+        })->first(function (Variant $variant) use ($option): bool {
             $option = array_replace(array_fill_keys(array_keys($this->options), '*'), $option);
 
-            foreach ($variation->option as $key => $value) {
+            foreach ($variant->option as $key => $value) {
                 if ($value === '*') {
                     $option[$key] = $value;
                 }
             }
 
-            return empty(array_diff(array_intersect_key($variation->option, $option), $option));
+            return empty(array_diff(array_intersect_key($variant->option, $option), $option));
         });
     }
 
@@ -207,9 +207,9 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function resolveChildRouteBinding($childType, $value, $field): ?Model
     {
-        if ($childType === 'variation' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->variations()->where(
-                $field ?: $this->variations()->getRelated()->getRouteKeyName(), $value
+        if ($childType === 'variant' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
+            return $this->variants()->where(
+                $field ?: $this->variants()->getRelated()->getRouteKeyName(), $value
             )->withTrashed()->firstOrFail();
         }
 

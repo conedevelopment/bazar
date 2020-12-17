@@ -18,8 +18,8 @@
             </card>
             <card :title="__('Options')" class="mb-5">
                 <template #header>
-                    <inertia-link :href="`${$page.action}/variations`" class="btn btn-sm btn-primary">
-                        {{ __('Variations') }}
+                    <inertia-link :href="`${$page.action}/variants`" class="btn btn-sm btn-primary">
+                        {{ __('Variants') }}
                     </inertia-link>
                 </template>
                 <form-options name="options" v-model="form.fields.options" :schema="[]">

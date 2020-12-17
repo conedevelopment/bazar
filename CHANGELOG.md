@@ -4,11 +4,13 @@
 ### Added
 - Added `Inventory` attribute bag
 - Added `Prices` attribute bag
-- Dynamic cart prices – recalculates prices, taxes and discounts when updating the cart's currency
+- Added dynamic cart prices – recalculates prices, taxes and discounts when updating the cart's currency
+- Added `Stockable`, `Priceable` and `Inventoryable` interfaces
 
 ### Changed
 - Changed `normal` key to `default` for prices
 - Flattened dimensions in the inventory array/JSON
+- Renamed `Variation` to `Variant`
 
 ## v0.2.4 (2020-11-19)
 ### Added

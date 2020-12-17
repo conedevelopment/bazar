@@ -2,18 +2,18 @@
 
 namespace Bazar\Database\Factories;
 
-use Bazar\Models\Variation;
+use Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class VariationFactory extends Factory
+class VariantFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Variation::class;
+    protected $model = Variant::class;
 
     /**
      * Define the model's default state.
