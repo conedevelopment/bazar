@@ -36,29 +36,9 @@ parameters:
 			path: src/Http/Controllers/AddressesController.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:withTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchVariationsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchVariationsController.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:name\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/OrdersController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/VariationsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/VariationsController.php
 
 		-
 			message: "#^Call to an undefined static method Bazar\\\\Support\\\\Facades\\\\Conversion\\:\\:keys\\(\\)\\.$#"
