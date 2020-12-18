@@ -3,9 +3,8 @@
 namespace Bazar\Proxies;
 
 use Bazar\Contracts\Models\Option as Contract;
-use Illuminate\Support\Facades\Facade;
 
-class Option extends Facade
+class Option extends Proxy
 {
     /**
      * Get the registered name of the component.
