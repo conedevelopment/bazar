@@ -2,9 +2,10 @@
 
 namespace Bazar\Proxies;
 
-use Bazar\Contracts\Models\Order as Contract;
+use Bazar\Contracts\Models\Option as Contract;
+use Illuminate\Support\Facades\Facade;
 
-class Order extends Proxy
+class Option extends Facade
 {
     /**
      * Get the registered name of the component.
