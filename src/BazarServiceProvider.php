@@ -24,7 +24,6 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Models\User::class => Models\User::class,
         Contracts\Models\Cart::class => Models\Cart::class,
         Contracts\Models\Order::class => Models\Order::class,
-        Contracts\Models\Option::class => Models\Option::class,
         Contracts\Models\Medium::class => Models\Medium::class,
         Contracts\Models\Product::class => Models\Product::class,
         Contracts\Models\Variant::class => Models\Variant::class,
