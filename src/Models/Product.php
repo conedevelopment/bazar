@@ -130,7 +130,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     }
 
     /**
-     * Get all of the categories for the product.
+     * Get the categories for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

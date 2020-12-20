@@ -24,7 +24,7 @@ interface Product
     public function carts(): MorphToMany;
 
     /**
-     * Get all of the categories for the product.
+     * Get the categories for the product.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
