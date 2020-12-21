@@ -162,9 +162,9 @@ class Checkout
     /**
      * Prepare the order.
      *
-     * @return \Bazar\Contracts\Models\Order
+     * @return \Bazar\Proxies\Order
      */
-    protected function prepare(): Order
+    protected function prepare(): OrderProxy
     {
         CartTouched::dispatch($this->cart);
 
