@@ -9,6 +9,22 @@ use Illuminate\Http\Request;
 trait Filterable
 {
     /**
+     * Get the filter options for the model.
+     *
+     * @return array
+     */
+    public static function filters(): array
+    {
+        return in_array(SoftDeletes::class, class_uses(static::class)) ? [
+            'state' => [
+                'all' => __('All'),
+                'available' => __('Available'),
+                'trashed' => __('Trashed')
+            ],
+        ] : [];
+    }
+
+    /**
      * Apply all the relevant filters on the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -73,21 +89,5 @@ trait Filterable
         return $query->orderBy(
             $value['by'] ?? 'created_at', $value['order'] ?? 'desc'
         );
-    }
-
-    /**
-     * Get the filter options for the model.
-     *
-     * @return array
-     */
-    public static function filters(): array
-    {
-        return [
-            'state' => [
-                'all' => __('All'),
-                'available' => __('Available'),
-                'trashed' => __('Trashed')
-            ],
-        ];
     }
 }

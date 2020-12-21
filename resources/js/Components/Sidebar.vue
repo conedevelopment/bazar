@@ -12,17 +12,20 @@
             setActiveLinks() {
                 const path = window.location.pathname.replace(/\/$/, '');
 
-                this.$el.querySelectorAll('.app-sidebar__inside a.is-active').forEach(el => {
-                    el.classList.remove('is-active');
+                this.$el.querySelectorAll('a.app-sidebar-menu-link').forEach(el => {
+                    if (el.pathname !== '/bazar' && path.includes(el.pathname)) {
+                        el.closest('.app-sidebar-menu-item').classList.add('is-open');
+                    } else {
+                        el.closest('.app-sidebar-menu-item').classList.remove('is-open');
+                    }
                 });
 
-                this.$el.querySelectorAll('.app-sidebar-menu-item.is-open').forEach(el => {
-                    el.classList.remove('is-open');
-                });
-
-                this.$el.querySelectorAll(`.app-sidebar__inside a[href$="${path}"]`).forEach(el => {
-                    el.classList.add('is-active');
-                    el.closest('.app-sidebar-menu-item').classList.add('is-open');
+                this.$el.querySelectorAll('.app-sidebar__inside a').forEach(el => {
+                    if (path === el.pathname) {
+                        el.classList.add('is-active');
+                    } else {
+                        el.classList.remove('is-active');
+                    }
                 });
             }
         }
