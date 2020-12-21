@@ -23,7 +23,9 @@ class SendNewOrderNotifications implements ShouldQueue
      */
     public function handle(OrderPlaced $event): void
     {
-        if ($users = UserProxy::query()->whereIn('email', Config::get('bazar.admins', []))->get()) {
+        $users = UserProxy::query()->whereIn('email', Config::get('bazar.admins', []))->get();
+
+        if ($users->isNotEmpty()) {
             Notification::send($users, new AdminNewOrder($event->order));
         }
 
