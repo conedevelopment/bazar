@@ -1,16 +1,23 @@
 # Changelog
 
-## Unreleased
+## v0.3.0 (2020-12-21)
 ### Added
-- Added `Inventory` attribute bag
-- Added `Prices` attribute bag
-- Added dynamic cart prices – recalculates prices, taxes and discounts when updating the cart's currency
+- Added `Inventory`, `Prices` and `Price` attribute bags
+- Added dynamic cart prices – recalculates prices, taxes and discounts when changing the cart's currency
 - Added `Stockable`, `Priceable` and `Inventoryable` interfaces
+- Addded `.editorconfig`
+- Added cart locking mechanism
+
+### Fixed
+- Fixed active menu classes
 
 ### Changed
 - Changed `normal` key to `default` for prices
 - Flattened dimensions in the inventory array/JSON
 - Renamed `Variation` to `Variant`
+- Proxies became Facades
+- Changed chunk_expiration
+- Refactored interfaces and traits
 
 ## v0.2.4 (2020-11-19)
 ### Added
