@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## v0.3.0 (2020-12-21)
 ### Added
 - Added `Inventory`, `Prices` and `Price` attribute bags
