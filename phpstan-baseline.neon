@@ -1,6 +1,26 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$user_id\\.$#"
+			count: 1
+			path: src/Cart/CookieDriver.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:user\\(\\)\\.$#"
+			count: 1
+			path: src/Cart/CookieDriver.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$token\\.$#"
+			count: 1
+			path: src/Cart/CookieDriver.php
+
+		-
+			message: "#^Method Bazar\\\\Cart\\\\CookieDriver\\:\\:resolve\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Cart but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: src/Cart/CookieDriver.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:itemable\\(\\)\\.$#"
 			count: 1
 			path: src/Cart/Driver.php
@@ -26,6 +46,11 @@ parameters:
 			path: src/Models/Item.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:variant\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Item.php
+
+		-
 			message: "#^Method Bazar\\\\Gateway\\\\Driver\\:\\:transaction\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Transaction but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
 			count: 1
 			path: src/Gateway/Driver.php
@@ -36,9 +61,64 @@ parameters:
 			path: src/Http/Controllers/AddressesController.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchVariantsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchVariantsController.php
+
+		-
+			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/CategoriesController.php
+
+		-
+			message: "#^Anonymous function should return Bazar\\\\Contracts\\\\Models\\\\Product but returns Bazar\\\\Proxies\\\\Product\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:name\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Access to an undefined property Bazar\\\\Proxies\\\\Order\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$address\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Access to an undefined property Bazar\\\\Proxies\\\\Order\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$shipping\\.$#"
+			count: 2
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:categories\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/ProductsController.php
+
+		-
+			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/ProductsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/VariantsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/VariantsController.php
+
+		-
+			message: "#^Call to an undefined method Bazar\\\\Contracts\\\\Stockable\\:\\:save\\(\\)\\.$#"
+			count: 1
+			path: src/Listeners/RefreshInventory.php
 
 		-
 			message: "#^Call to an undefined static method Bazar\\\\Support\\\\Facades\\\\Conversion\\:\\:keys\\(\\)\\.$#"
@@ -56,6 +136,31 @@ parameters:
 			path: src/Models/Order.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Product.php
+
+		-
+			message: "#^Access to an undefined property Bazar\\\\Models\\\\User\\:\\:\\$email\\.$#"
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Bazar\\\\Models\\\\User\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Models/User.php
+
+		-
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$options\\.$#"
+			count: 1
+			path: src/Models/Variant.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:price\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Variant.php
+
+		-
 			message: "#^Result of \\|\\| is always true\\.$#"
 			count: 1
 			path: src/Repositories/DiscountRepository.php
@@ -64,4 +169,9 @@ parameters:
 			message: "#^Result of \\|\\| is always true\\.$#"
 			count: 1
 			path: src/Repositories/TaxRepository.php
+
+		-
+			message: "#^Method Bazar\\\\Services\\\\Checkout\\:\\:prepare\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Order but returns Bazar\\\\Proxies\\\\Order\\.$#"
+			count: 1
+			path: src/Services/Checkout.php
 
