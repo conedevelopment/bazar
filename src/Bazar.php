@@ -4,7 +4,6 @@ namespace Bazar;
 
 use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Http\Middleware\ComponentMiddleware;
-use Bazar\Http\Middleware\ShareComponentData;
 use Closure;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
@@ -93,7 +92,6 @@ abstract class Bazar
             'verified',
             'can:manage-bazar',
             ComponentMiddleware::class,
-            ShareComponentData::class,
         ])->group(static function (Router $router) use ($callback): void {
             $callback($router);
         });

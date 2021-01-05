@@ -6,8 +6,10 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route as RouteFactory;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\ServiceProvider;
@@ -183,6 +185,10 @@ class BazarServiceProvider extends ServiceProvider
                 '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::currency())
             );
         });
+
+        Response::macro('component', function (string $view, array $data = []): Http\Component {
+            return new Http\Component($view, $data);
+        });
     }
 
     /**
@@ -196,6 +202,7 @@ class BazarServiceProvider extends ServiceProvider
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
+            $view->with('admin', Auth::user());
         });
     }
 

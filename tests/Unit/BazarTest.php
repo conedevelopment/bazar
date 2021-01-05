@@ -61,24 +61,22 @@ class BazarTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_inertia_requests()
+    public function it_handles_bazar_requests()
     {
         $this->actingAs($this->admin)
             ->get(URL::route('bazar.support'), [
-                'X-Inertia' => true,
-                'X-Inertia-Version' => Bazar::assetVersion(),
+                'X-Bazar' => true,
+                'X-Bazar-Version' => Bazar::assetVersion(),
             ])
             ->assertOk()
-            ->assertJson([
-                'props' => [
-                    'version' => Bazar::version(),
-                ],
+            ->assertViewHas([
+                'version' => Bazar::version(),
             ]);
 
         $this->actingAs($this->admin)
             ->get(URL::route('bazar.support'), [
-                'X-Inertia' => true,
-                'X-Inertia-Version' => 'fake',
+                'X-Bazar' => true,
+                'X-Bazar-Version' => 'fake',
             ])
             ->assertStatus(409);
     }

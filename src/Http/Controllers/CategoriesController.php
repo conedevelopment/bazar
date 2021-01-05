@@ -3,17 +3,16 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\Category;
+use Bazar\Http\Component;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
 use Bazar\Proxies\Category as CategoryProxy;
-use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class CategoriesController extends Controller
 {
@@ -34,15 +33,15 @@ class CategoriesController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function index(Request $request): Response
+    public function index(Request $request): Component
     {
         $categories = CategoryProxy::query()->with('media')->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
-        return Component::render('Categories/Index', [
+        return Response::component('bazar::categories.index', [
             'results' => $categories,
             'filters' => CategoryProxy::filters(),
         ]);
@@ -52,17 +51,16 @@ class CategoriesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function create(Request $request): Response
+    public function create(Request $request): Component
     {
         $category = CategoryProxy::make()
             ->setAttribute('media', [])
             ->forceFill($request->old());
 
-        return Component::render('Categories/Create', [
+        return Response::component('bazar::categories.create', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.store'),
         ]);
     }
 
@@ -89,15 +87,14 @@ class CategoriesController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\Category  $category
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function show(Category $category): Response
+    public function show(Category $category): Component
     {
         $category->loadMissing('media');
 
-        return Component::render('Categories/Show', [
+        return Response::component('bazar::categories.show', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.update', $category),
         ]);
     }
 

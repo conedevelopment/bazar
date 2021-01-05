@@ -2,25 +2,22 @@
 
 namespace Bazar\Http\Controllers;
 
+use Bazar\Http\Component;
 use Bazar\Http\Requests\ProfileUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
-use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class ProfileController extends Controller
 {
     /**
      * Display the specified resource.
      *
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function show(): Response
+    public function show(): Component
     {
-        return Component::render('Profile', [
-            'action' => URL::route('bazar.profile.update'),
-        ]);
+        return Response::component('bazar::profile');
     }
 
     /**

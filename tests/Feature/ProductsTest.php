@@ -26,11 +26,10 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.index'))
+            ->get(URL::route('bazar.products.index'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.results', Product::with('media')->paginate()->toArray()
-            );
+            ->assertViewIs('bazar::products.index')
+            ->assertViewHas('results');
     }
 
     /** @test */
@@ -41,9 +40,10 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.create'))
+            ->get(URL::route('bazar.products.create'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.product');
+            ->assertViewIs('bazar::products.create')
+            ->assertViewHas('product');
     }
 
     /** @test */
@@ -74,12 +74,10 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.show', $this->product))
+            ->get(URL::route('bazar.products.show', $this->product), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.product',
-                $this->product->refresh()->loadMissing(['media', 'categories.id.name'])->toArray()
-            );
+            ->assertViewIs('bazar::products.show')
+            ->assertViewHas('product');
     }
 
     /** @test */

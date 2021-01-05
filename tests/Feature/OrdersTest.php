@@ -34,12 +34,10 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.orders.index'))
+            ->get(URL::route('bazar.orders.index'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.results',
-                Order::query()->with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
-            );
+            ->assertViewIs('bazar::orders.index')
+            ->assertViewHas('results',);
     }
 
     /** @test */
@@ -50,9 +48,10 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.orders.create'))
+            ->get(URL::route('bazar.orders.create'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.order');
+            ->assertViewIs('bazar::orders.create')
+            ->assertViewHas('order');
     }
 
     /** @test */
@@ -89,14 +88,10 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.orders.show', $this->order))
+            ->get(URL::route('bazar.orders.show', $this->order), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.order',
-                $this->order->refresh()->loadMissing([
-                    'address', 'products', 'transactions', 'shipping', 'shipping.address',
-                ])->toArray()
-            );
+            ->assertViewIs('bazar::orders.show')
+            ->assertViewHas('order');
     }
 
     /** @test */

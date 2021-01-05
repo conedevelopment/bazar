@@ -3,17 +3,15 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\User as User;
+use Bazar\Http\Component;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
 use Bazar\Proxies\User as Proxy;
-use Bazar\Support\Facades\Component;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\URL;
 
 class UsersController extends Controller
 {
@@ -34,9 +32,9 @@ class UsersController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response|\Illuminate\Http\JsonResponse
+     * @return \Bazar\Http\Component|\Illuminate\Http\JsonResponse
      */
-    public function index(Request $request) //: Response
+    public function index(Request $request) //: Component
     {
         $users = Proxy::query()->with('addresses')->filter($request)->latest()->paginate(
             $request->input('per_page')
@@ -44,7 +42,7 @@ class UsersController extends Controller
 
         return $request->expectsJson()
             ? Response::json($users)
-            : Component::render('Users/Index', [
+            : Response::component('bazar::users.index', [
                 'results' => $users,
                 'filters' => Proxy::filters(),
             ]);
@@ -55,15 +53,14 @@ class UsersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Bazar\Http\Component
      */
-    public function create(Request $request, User $user): Responsable
+    public function create(Request $request, User $user): Component
     {
         $user->setAttribute('addresses', [])->forceFill($request->old());
 
-        return Component::render('Users/Create', [
+        return Response::component('bazar::users.create', [
             'user' => $user,
-            'action' => URL::route('bazar.users.store'),
         ]);
     }
 
@@ -86,13 +83,12 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Bazar\Http\Component
      */
-    public function show(User $user): Responsable
+    public function show(User $user): Component
     {
-        return Component::render('Users/Show', [
+        return Response::component('bazar::users.show', [
             'user' => $user,
-            'action' => URL::route('bazar.users.update', $user),
         ]);
     }
 
@@ -123,7 +119,7 @@ class UsersController extends Controller
     {
         if ($user->id === $request->user()->id) {
             return Redirect::back()->with(
-                'message', __('The authenticated user cannot be deleted.')
+                'error', __('The authenticated user cannot be deleted.')
             );
         }
 

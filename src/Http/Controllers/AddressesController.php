@@ -4,17 +4,16 @@ namespace Bazar\Http\Controllers;
 
 use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\User;
+use Bazar\Http\Component;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Support\Countries;
-use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class AddressesController extends Controller
 {
@@ -35,15 +34,15 @@ class AddressesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function index(Request $request, User $user): Response
+    public function index(Request $request, User $user): Component
     {
         $addresses = $user->addresses()->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
-        return Component::render('Addresses/Index', [
+        return Response::component('bazar::addresses.index', [
             'user' => $user,
             'results' => $addresses,
         ]);
@@ -53,17 +52,16 @@ class AddressesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function create(Request $request, User $user): Response
+    public function create(Request $request, User $user): Component
     {
         $address = AddressProxy::make($request->old());
 
-        return Component::render('Addresses/Create', [
+        return Response::component('bazar::addresses.create', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
-            'action' => URL::route('bazar.users.addresses.store', $user),
         ]);
     }
 
@@ -88,15 +86,14 @@ class AddressesController extends Controller
      *
      * @param  \Bazar\Contracts\Models\User  $user
      * @param  \Bazar\Contracts\Models\Address  $address
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function show(User $user, Address $address): Response
+    public function show(User $user, Address $address): Component
     {
-        return Component::render('Addresses/Show', [
+        return Response::component('bazar::addresses.show', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
-            'action' => URL::route('bazar.users.addresses.update', [$user, $address]),
         ]);
     }
 

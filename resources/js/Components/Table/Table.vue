@@ -42,7 +42,7 @@
             }).map(column => column.componentInstance);
 
             this.$watch('query', (n, o) => {
-                this.$inertia.visit(this.url);
+                this.$router.visit(this.url, { replace: true });
             }, { deep: true })
         },
 

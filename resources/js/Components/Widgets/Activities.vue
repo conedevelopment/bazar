@@ -38,9 +38,9 @@
                     </div>
                     <div class="activity__content">
                         <h3 class="activity__title">
-                            <inertia-link :href="activity.url">
+                            <bazar-link :href="activity.url">
                                 {{ activity.title }}
-                            </inertia-link>
+                            </bazar-link>
                         </h3>
                         <p class="activity__description">{{ activity.description }}</p>
                         <div class="activity__meta">

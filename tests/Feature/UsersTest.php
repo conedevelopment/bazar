@@ -17,11 +17,10 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.index'))
+            ->get(URL::route('bazar.users.index'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.results', User::with('addresses')->paginate()->toArray()
-            );
+            ->assertViewIs('bazar::users.index')
+            ->assertViewHas('results');
     }
 
     /** @test */
@@ -32,9 +31,10 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.create'))
+            ->get(URL::route('bazar.users.create'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.user');
+            ->assertViewIs('bazar::users.create')
+            ->assertViewHas('user');
     }
 
     /** @test */
@@ -66,9 +66,10 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.show', $this->user))
+            ->get(URL::route('bazar.users.show', $this->user), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.user', $this->user->refresh()->toArray());
+            ->assertViewIs('bazar::users.show')
+            ->assertViewHas('user');
     }
 
     /** @test */
@@ -102,7 +103,7 @@ class UsersTest extends TestCase
         $this->actingAs($this->admin)
             ->delete(URL::route('bazar.users.destroy', $this->admin))
             ->assertStatus(302)
-            ->assertSessionHas('message', 'The authenticated user cannot be deleted.');
+            ->assertSessionHas('error', 'The authenticated user cannot be deleted.');
 
         $this->actingAs($this->admin)
             ->delete(URL::route('bazar.users.destroy', $this->user))

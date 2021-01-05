@@ -26,8 +26,10 @@
     <title>Bazar</title>
 </head>
 <body>
-    <div id="app" data-page="{{ json_encode($page) }}"></div>
+    <div id="app" data-page="{{ json_encode($__page) }}" v-cloak>
+        @include ($__view)
+    </div>
 
-    @include ('bazar::svg-icons')
+    @include ('bazar::layout.svg-icons')
 </body>
 </html>

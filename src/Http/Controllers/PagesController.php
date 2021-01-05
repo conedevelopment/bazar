@@ -3,29 +3,29 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Http\Response;
-use Bazar\Support\Facades\Component;
+use Bazar\Http\Component;
+use Illuminate\Support\Facades\Response;
 
 class PagesController extends Controller
 {
     /**
      * Show the dashboard page.
      *
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function dashboard(): Response
+    public function dashboard(): Component
     {
-        return Component::render('Dashboard');
+        return Response::component('bazar::dashboard');
     }
 
     /**
      * Show the support page.
      *
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function support(): Response
+    public function support(): Component
     {
-        return Component::render('Support', [
+        return Response::component('bazar::support', [
             'version' => Bazar::version(),
         ]);
     }

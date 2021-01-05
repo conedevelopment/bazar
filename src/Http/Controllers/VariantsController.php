@@ -5,17 +5,16 @@ namespace Bazar\Http\Controllers;
 use Bazar\Bazar;
 use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Variant;
+use Bazar\Http\Component;
 use Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
 use Bazar\Proxies\Variant as VariantProxy;
-use Bazar\Support\Facades\Component;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class VariantsController extends Controller
 {
@@ -37,9 +36,9 @@ class VariantsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function index(Request $request, Product $product): Response
+    public function index(Request $request, Product $product): Component
     {
         $variants = $product->variants()->with('media')->filter($request)->latest()->paginate(
             $request->input('per_page')
@@ -51,7 +50,7 @@ class VariantsController extends Controller
             );
         });
 
-        return Component::render('Variants/Index', [
+        return Response::component('bazar::variants.index', [
             'product' => $product,
             'results' => $variants,
             'filters' => VariantProxy::filters(),
@@ -63,9 +62,9 @@ class VariantsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function create(Request $request, Product $product): Response
+    public function create(Request $request, Product $product): Component
     {
         $variant = VariantProxy::make($request->old())
             ->setAttribute('media', [])
@@ -73,11 +72,10 @@ class VariantsController extends Controller
                 'product', $product->withoutRelations()->makeHidden('variant')
             );
 
-        return Component::render('Variants/Create', [
+        return Response::component('bazar::variants.create', [
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variants.store', $product),
         ]);
     }
 
@@ -106,19 +104,18 @@ class VariantsController extends Controller
      *
      * @param  \Bazar\Contracts\Models\Product  $product
      * @param  \Bazar\Contracts\Models\Variant  $variant
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function show(Product $product, Variant $variant): Response
+    public function show(Product $product, Variant $variant): Component
     {
         $variant->setRelation(
             'product', $product->withoutRelations()->makeHidden('variant')
         )->loadMissing('media');
 
-        return Component::render('Variants/Show', [
+        return Response::component('bazar::variants.show', [
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variants.update', [$product, $variant]),
         ]);
     }
 

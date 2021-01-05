@@ -16,7 +16,8 @@ class PagesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.dashboard'));
+            ->get(URL::route('bazar.dashboard'), ['X-Bazar' => true])
+            ->assertViewIs('bazar::dashboard');
     }
 
     /** @test */
@@ -27,8 +28,9 @@ class PagesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.support'))
+            ->get(URL::route('bazar.support'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.version', Bazar::version());
+            ->assertViewIs('bazar::support')
+            ->assertViewHas('version', Bazar::version());
     }
 }

@@ -21,16 +21,17 @@ class ComponentMiddleware
     {
         $response = $next($request);
 
-        if (! $request->header('X-Inertia')) {
+        if (! $request->header('X-Bazar')) {
             return $response;
         }
 
-        if ($request->isMethod('GET') && $request->header('X-Inertia-Version', '') !== Bazar::assetVersion()) {
+        if ($request->isMethod('GET')
+            && $request->hasHeader('X-Bazar-Version') && $request->header('X-Bazar-Version') !== Bazar::assetVersion()) {
             if ($request->hasSession()) {
                 $request->session()->reflash();
             }
 
-            return Response::make('', Redirect::HTTP_CONFLICT, ['X-Inertia-Location' => $request->fullUrl()]);
+            return Response::make('', Redirect::HTTP_CONFLICT, ['X-Bazar-Location' => $request->fullUrl()]);
         }
 
         if ($response instanceof Redirect

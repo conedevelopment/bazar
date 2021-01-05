@@ -26,12 +26,10 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.categories.index'))
+            ->get(URL::route('bazar.categories.index'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.results',
-                Category::query()->with('media')->paginate()->toArray()
-            );
+            ->assertViewIs('bazar::categories.index')
+            ->assertViewHas('results');
     }
 
     /** @test */
@@ -42,9 +40,10 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.categories.create'))
+            ->get(URL::route('bazar.categories.create'), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.category');
+            ->assertViewIs('bazar::categories.create')
+            ->assertViewHas('category');
     }
 
     /** @test */
@@ -75,12 +74,10 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.categories.show', $this->category))
+            ->get(URL::route('bazar.categories.show', $this->category), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.category',
-                $this->category->refresh()->loadMissing('media')->toArray()
-            );
+            ->assertViewIs('bazar::categories.show')
+            ->assertViewHas('category');
     }
 
     /** @test */

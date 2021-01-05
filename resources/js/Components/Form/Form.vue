@@ -53,7 +53,7 @@
                 busy: false,
                 success: false,
                 fields: this.model || {},
-                errors: new Errors(Array.isArray(this.$page.errors) ? {} : this.$page.errors)
+                errors: new Errors({})
             };
         },
 
@@ -84,7 +84,7 @@
                 if (this.json) {
                     this.submitJson();
                 } else {
-                    this.$inertia.visit(this.action, this.config);
+                    this.$router.visit(this.action, this.config);
                 }
             },
             submitJson() {
@@ -122,12 +122,12 @@
                     <slot name="aside" v-bind="form"></slot>
                     <card :title="__('Actions')">
                         <div class="form-group d-flex justify-content-between mb-0">
-                            <inertia-link v-if="model.id" :href="action" method="DELETE" class="btn btn-outline-danger">
+                            <bazar-link v-if="model.id" :href="action" method="DELETE" class="btn btn-outline-danger">
                                 {{ trashed ? __('Delete Permanently') : __('Trash') }}
-                            </inertia-link>
-                            <inertia-link v-if="trashed" :href="`${action}/restore`" method="PATCH" class="btn btn-warning">
+                            </bazar-link>
+                            <bazar-link v-if="trashed" :href="`${action}/restore`" method="PATCH" class="btn btn-warning">
                                 {{ __('Restore') }}
-                            </inertia-link>
+                            </bazar-link>
                             <button v-else type="submit" class="btn btn-primary">
                                 {{ model.id ? __('Update') : __('Save') }}
                             </button>

@@ -36,7 +36,7 @@
                     <p class="card__inner-data">{{ metrics.orders }}</p>
                 </div>
                 <div class="card__footer d-flex justify-content-end">
-                    <inertia-link href="/bazar/orders">{{ __('View Orders') }}</inertia-link>
+                    <bazar-link href="/bazar/orders">{{ __('View Orders') }}</bazar-link>
                 </div>
             </section>
         </div>
@@ -48,7 +48,7 @@
                     <p v-else class="card__inner-data">{{ metrics.products }}</p>
                 </div>
                 <div class="card__footer d-flex justify-content-end">
-                    <inertia-link href="/bazar/products">{{ __('View Products') }}</inertia-link>
+                    <bazar-link href="/bazar/products">{{ __('View Products') }}</bazar-link>
                 </div>
             </section>
         </div>
@@ -60,7 +60,7 @@
                     <p v-else class="card__inner-data">{{ metrics.users }}</p>
                 </div>
                 <div class="card__footer d-flex justify-content-end">
-                    <inertia-link href="/bazar/users">{{ __('View Users') }}</inertia-link>
+                    <bazar-link href="/bazar/users">{{ __('View Users') }}</bazar-link>
                 </div>
             </section>
         </div>

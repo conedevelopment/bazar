@@ -15,8 +15,8 @@ class ProfileTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.profile.show'))
-            ->assertViewHas('page.props.action', URL::route('bazar.profile.update'));
+            ->get(URL::route('bazar.profile.show'), ['X-Bazar' => true])
+            ->assertViewIs('bazar::profile');
     }
 
     /** @test */

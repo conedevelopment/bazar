@@ -28,9 +28,10 @@ class VariantsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.variants.index', $this->product))
+            ->get(URL::route('bazar.products.variants.index', $this->product), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.results');
+            ->assertViewIs('bazar::variants.index')
+            ->assertViewHas('results');
     }
 
     /** @test */
@@ -41,9 +42,10 @@ class VariantsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.variants.create', $this->product))
+            ->get(URL::route('bazar.products.variants.create', $this->product), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.variant');
+            ->assertViewIs('bazar::variants.create')
+            ->assertViewHas('variant');
     }
 
     /** @test */
@@ -74,9 +76,10 @@ class VariantsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.products.variants.show', [$this->product, $this->variant]))
+            ->get(URL::route('bazar.products.variants.show', [$this->product, $this->variant]), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.variant');
+            ->assertViewIs('bazar::variants.show')
+            ->assertViewHas('variant');
     }
 
     /** @test */

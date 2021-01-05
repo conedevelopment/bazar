@@ -5,15 +5,14 @@ namespace Bazar\Http\Controllers;
 use Bazar\Bazar;
 use Bazar\Contracts\Models\Order;
 use Bazar\Contracts\Models\Product;
+use Bazar\Http\Component;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Proxies\Product as ProductProxy;
 use Bazar\Proxies\User as UserProxy;
 use Bazar\Support\Countries;
-use Bazar\Support\Facades\Component;
 use Bazar\Support\Facades\Discount;
 use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
@@ -22,7 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class OrdersController extends Controller
 {
@@ -42,9 +41,9 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function index(Request $request): Response
+    public function index(Request $request): Component
     {
         $orders = OrderProxy::query()->with([
             'address', 'products', 'transactions', 'shipping',
@@ -52,7 +51,7 @@ class OrdersController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Orders/Index', [
+        return Response::component('bazar::orders.index', [
             'results' => $orders,
             'filters' => OrderProxy::filters(),
         ]);
@@ -62,11 +61,11 @@ class OrdersController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function create(Request $request): Response
+    public function create(Request $request): Component
     {
-        $order = OrderProxy::make()->setAttribute(
+        $order = OrderProxy::make(['currency' => Bazar::currency()])->setAttribute(
             'user',
             UserProxy::make()->setAttribute('addresses', [])->forceFill($request->old('user', []))
         )->setRelation(
@@ -74,7 +73,7 @@ class OrdersController extends Controller
             AddressProxy::make($request->old('address', []))
         )->setRelation(
             'products',
-            Collection::make($request->old('products'))->map(function (array $product): Product {
+            Collection::make($request->old('products'))->map(static function (array $product): Product {
                 return ProductProxy::make()->forceFill($product);
             })
         );
@@ -83,12 +82,11 @@ class OrdersController extends Controller
             'address', AddressProxy::make($request->old('shipping.address', []))
         );
 
-        return Component::render('Orders/Create', [
+        return Response::component('bazar::orders.create', [
             'order' => $order,
             'countries' => Countries::all(),
-            'statuses' => OrderProxy::statuses(),
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.orders.store', $order),
+            'statuses' => OrderProxy::statuses(),
             'drivers' => Collection::make(Shipping::enabled())->map->name(),
         ]);
     }
@@ -130,16 +128,15 @@ class OrdersController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\Order  $order
-     * @return \Bazar\Http\Response
+     * @return \Bazar\Http\Component
      */
-    public function show(Order $order): Response
+    public function show(Order $order): Component
     {
         $order->loadMissing(['address', 'products', 'transactions', 'shipping', 'shipping.address']);
 
-        return Component::render('Orders/Show', [
+        return Response::component('bazar::orders.show', [
             'order' => $order,
             'statuses' => OrderProxy::statuses(),
-            'action' => URL::route('bazar.orders.update', $order),
         ]);
     }
 

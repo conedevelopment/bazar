@@ -25,11 +25,10 @@ class AddressesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.addresses.index', $this->user))
+            ->get(URL::route('bazar.users.addresses.index', $this->user), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas(
-                'page.props.results', $this->user->addresses()->paginate()->toArray()
-            );
+            ->assertViewIs('bazar::addresses.index')
+            ->assertViewHas('results');
     }
 
     /** @test */
@@ -40,9 +39,10 @@ class AddressesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.addresses.create', $this->user))
+            ->get(URL::route('bazar.users.addresses.create', $this->user), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.address');
+            ->assertViewIs('bazar::addresses.create')
+            ->assertViewHas('address');
     }
 
     /** @test */
@@ -71,9 +71,10 @@ class AddressesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.users.addresses.show', [$this->user, $this->address]))
+            ->get(URL::route('bazar.users.addresses.show', [$this->user, $this->address]), ['X-Bazar' => true])
             ->assertOk()
-            ->assertViewHas('page.props.address', $this->address->toArray());
+            ->assertViewIs('bazar::addresses.show')
+            ->assertViewHas('address');
     }
 
     /** @test */
