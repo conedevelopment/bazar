@@ -22,7 +22,7 @@ export default class Router
         this.dispatcher = new Dispatcher;
 
         window.addEventListener('popstate', event => {
-            if (event.state.bazar) {
+            if (event?.state?.bazar) {
                 this.dispatcher.dispatchEvent('success', event.state);
             }
         });
@@ -47,7 +47,7 @@ export default class Router
                 component: response.headers['x-bazar-component']
             };
 
-            replace // || state.pathname === window.location.pathname
+            (replace || state.url === window.location.pathname)
                 ? this.replace(state.url, null, state)
                 : this.push(state.url, null, state);
 
@@ -132,7 +132,6 @@ export default class Router
 
     // cancel()
     // isBjaxResponse()
-
     // get()
     // post()
     // put()
