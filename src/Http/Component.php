@@ -62,6 +62,8 @@ class Component implements Responsable
      */
     public function toResponse($request): Response
     {
+        // $request->header('X-Bazar-Only')
+
         if ($request->header('X-Bazar')) {
             return Factory::view($this->view, $this->data)->withHeaders([
                 'Vary' => 'Accept',

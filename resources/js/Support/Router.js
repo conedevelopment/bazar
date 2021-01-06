@@ -10,16 +10,18 @@ export default class Router
      */
     constructor()
     {
+        this.dispatcher = new Dispatcher;
+
+        this.cancelTokenSource = Axios.CancelToken.source();
+
         this.http = Axios.create({
             headers: {
                 'X-Bazar': true,
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'text/html, application/xhtml+xml'
             },
-            // cancelToken: new CancelToken(token => {}),
+            cancelToken: this.cancelTokenSource.token
         });
-
-        this.dispatcher = new Dispatcher;
 
         window.addEventListener('popstate', event => {
             if (event?.state?.bazar) {
@@ -48,12 +50,14 @@ export default class Router
             };
 
             (replace || state.url === window.location.pathname)
-                ? this.replace(state.url, null, state)
-                : this.push(state.url, null, state);
+                ? this.replace(state.url, state)
+                : this.push(state.url, state);
 
             this.dispatcher.dispatchEvent('success', state);
         }).catch(error => {
-            this.dispatcher.dispatchEvent('error', error);
+            Axios.isCancel(error)
+                ? this.dispatcher.dispatchEvent('cancel')
+                : this.dispatcher.dispatchEvent('error', error);
         }).finally(() => {
             this.dispatcher.dispatchEvent('after');
         });
@@ -63,11 +67,11 @@ export default class Router
      * Push a state to the history.
      *
      * @param  {string}  url
-     * @param  {string|null}  title
      * @param  {object|null}  state
+     * @param  {string|null}  title
      * @return {void}
      */
-    push(url, title = null, state = null)
+    push(url, state = null, title = null)
     {
         window.history.pushState(
             { bazar: true, ...state }, title, url
@@ -78,11 +82,11 @@ export default class Router
      * Replace a state in the history.
      *
      * @param  {string}  url
-     * @param  {string|null}  title
      * @param  {object|null}  state
+     * @param  {string|null}  title
      * @return {void}
      */
-    replace(url, title = null, state = null)
+    replace(url, state = null, title = null)
     {
         window.history.replaceState(
             { bazar: true, ...state }, title, url
@@ -130,8 +134,16 @@ export default class Router
         this.go();
     }
 
-    // cancel()
-    // isBjaxResponse()
+    /**
+     * Cancel the request.
+     *
+     * @return {void}
+     */
+    cancel()
+    {
+        this.cancelTokenSource.cancel();
+    }
+
     // get()
     // post()
     // put()
