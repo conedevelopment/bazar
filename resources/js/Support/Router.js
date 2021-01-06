@@ -16,14 +16,15 @@ export default class Router
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'text/html, application/xhtml+xml'
             },
-            // cancelToken: new CancelToken(function (cancel) {}),
+            // cancelToken: new CancelToken(token => {}),
         });
 
         this.dispatcher = new Dispatcher;
 
         window.addEventListener('popstate', event => {
-            // If bazar...
-            this.dispatcher.dispatchEvent('success', event.state);
+            if (event.state.bazar) {
+                this.dispatcher.dispatchEvent('success', event.state);
+            }
         });
     }
 
@@ -36,7 +37,7 @@ export default class Router
      */
     visit(url, { method = 'GET', data = {}, headers = {}, replace = false } = {})
     {
-        // this.dispatcher.dispatchEvent('before', state);
+        this.dispatcher.dispatchEvent('before');
 
         this.http({ url, method, data, headers }).then(response => {
             const state = {
@@ -52,38 +53,83 @@ export default class Router
 
             this.dispatcher.dispatchEvent('success', state);
         }).catch(error => {
-            // this.dispatcher.dispatchEvent('error', state);
+            this.dispatcher.dispatchEvent('error', error);
         }).finally(() => {
-            // this.dispatcher.dispatchEvent('after', state);
+            this.dispatcher.dispatchEvent('after');
         });
     }
 
+    /**
+     * Push a state to the history.
+     *
+     * @param  {string}  url
+     * @param  {string|null}  title
+     * @param  {object|null}  state
+     * @return {void}
+     */
     push(url, title = null, state = null)
     {
-        window.history.pushState(state, title, url);
+        window.history.pushState(
+            { bazar: true, ...state }, title, url
+        );
     }
 
+    /**
+     * Replace a state in the history.
+     *
+     * @param  {string}  url
+     * @param  {string|null}  title
+     * @param  {object|null}  state
+     * @return {void}
+     */
     replace(url, title = null, state = null)
     {
-        window.history.replaceState(state, title, url);
+        window.history.replaceState(
+            { bazar: true, ...state }, title, url
+        );
     }
 
+    /**
+     * Go to the given state in the history.
+     *
+     * @param  {int|null}  to
+     * @return {void}
+     */
     go(to = null)
     {
         window.history.go(to);
     }
 
+    /**
+     * Go forward in the history.
+     *
+     * @return {void}
+     */
     forward()
     {
         window.history.forward();
     }
 
+    /**
+     * Go back in the history.
+     *
+     * @return {void}
+     */
     back()
     {
         window.history.back();
     }
 
-    // reload()
+    /**
+     * Reload the currenct state.
+     *
+     * @return {void}
+     */
+    reload()
+    {
+        this.go();
+    }
+
     // cancel()
     // isBjaxResponse()
 
