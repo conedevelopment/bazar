@@ -9,7 +9,7 @@ export default {
 
     mounted() {
         window.addEventListener('keyup', event => {
-            if (this.closeOnEsc && this.isOpen && event.keyCode === 27) {
+            if (this.closeOnEsc && this.isOpen && event.code === 'Escape') {
                 this.close();
             }
         });
