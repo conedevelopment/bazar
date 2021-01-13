@@ -18,8 +18,7 @@
 
         data() {
             return {
-                title: null,
-                isSidebarOpen: false
+                title: null
             };
         },
 
@@ -39,15 +38,6 @@
                 this.title = title;
 
                 document.title = 'Bazar' + (title ? ` | ${title}` : '');
-            },
-            openSidebar() {
-                this.isSidebarOpen = true;
-            },
-            closeSidebar() {
-                this.isSidebarOpen = false;
-            },
-            toggleSidebar() {
-                this.isSidebarOpen = ! this.isSidebarOpen;
             }
         }
     }
@@ -55,15 +45,14 @@
 
 <template>
     <div class="app">
-        <div class="modal app-sidebar-overlay" v-cloak v-show="isSidebarOpen" @click.self="closeSidebar"></div>
-        <app-sidebar></app-sidebar>
+        <app-sidebar ref="sidebar"></app-sidebar>
         <div class="app__main">
             <div class="app__body">
                 <div class="app-mobile-header">
                     <inertia-link href="/bazar" class="app-mobile-header__logo">
                         <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
                     </inertia-link>
-                    <button type="button" class="app-mobile-header__menu-toggle" @click.prevent="toggleSidebar">
+                    <button type="button" class="app-mobile-header__menu-toggle" @click.prevent="$refs.sidebar.toggle">
                         <icon icon="menu"></icon>
                     </button>
                 </div>
