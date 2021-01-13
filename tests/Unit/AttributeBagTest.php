@@ -32,7 +32,7 @@ class AttributeBagTest extends TestCase
         );
         $this->assertNull((new Inventory)->formattedDimensions());
 
-        $this->assertSame(sprintf('%s g', $inventory->weight), $inventory->formattedWeight('x'));
+        $this->assertSame(sprintf('%s g', $inventory->weight), $inventory->formattedWeight());
         $this->assertNull((new Inventory)->formattedWeight());
 
         $this->assertTrue($inventory->tracksQuantity());

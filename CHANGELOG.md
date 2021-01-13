@@ -5,7 +5,7 @@
 - Added `Inventory`, `Prices` and `Price` attribute bags
 - Added dynamic cart prices – recalculates prices, taxes and discounts when changing the cart's currency
 - Added `Stockable`, `Priceable` and `Inventoryable` interfaces
-- Addded `.editorconfig`
+- Added `.editorconfig`
 - Added cart locking mechanism
 
 ### Fixed
