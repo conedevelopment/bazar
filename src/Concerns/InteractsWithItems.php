@@ -2,6 +2,7 @@
 
 namespace Bazar\Concerns;
 
+use Bazar\Bazar;
 use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Shipping;
 use Bazar\Contracts\Taxable;
@@ -68,6 +69,17 @@ trait InteractsWithItems
     public function shipping(): MorphOne
     {
         return $this->morphOne(ShippingProxy::getProxiedClass(), 'shippable')->withDefault();
+    }
+
+    /**
+     * Get the currency attribute.
+     *
+     * @param  string|null
+     * @return string
+     */
+    public function getCurrencyAttribute(string $value = null): string
+    {
+        return $value ?: Bazar::currency();
     }
 
     /**

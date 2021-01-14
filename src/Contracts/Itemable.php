@@ -34,6 +34,14 @@ interface Itemable extends Shippable
     public function shipping(): MorphOne;
 
     /**
+     * Get the currency attribute.
+     *
+     * @param  string|null
+     * @return string
+     */
+    public function getCurrencyAttribute(string $value = null): string;
+
+    /**
      * Get the shipping attribute.
      *
      * @return \Bazar\Contracts\Models\Shipping
