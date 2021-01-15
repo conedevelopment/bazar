@@ -74,7 +74,7 @@ trait InteractsWithItems
     /**
      * Get the currency attribute.
      *
-     * @param  string|null
+     * @param  string|null  $value
      * @return string
      */
     public function getCurrencyAttribute(string $value = null): string

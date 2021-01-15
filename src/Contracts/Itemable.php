@@ -36,7 +36,7 @@ interface Itemable extends Shippable
     /**
      * Get the currency attribute.
      *
-     * @param  string|null
+     * @param  string|null  $value
      * @return string
      */
     public function getCurrencyAttribute(string $value = null): string;
