@@ -10,22 +10,32 @@ Vue.use(Bazar);
 Vue.use(Http);
 Vue.use(InertiaApp);
 Vue.use(Translator, {
-    translations: window.translations
+    translations: Bazar.translations
 });
 
-new Vue({
-    render: h => h(InertiaApp, {
-        props: {
-            initialPage: JSON.parse(app.dataset.page),
-            resolveComponent: name => {
-                return new Promise((resolve, reject) => {
-                    resolve(require(`./Pages/${name}`).default);
-                }).then(component => {
-                    return Object.assign({ layout: Layout }, component);
-                }).catch(error => {
-                    //
-                });
+window.Bazar.Vue = Vue;
+
+const el = document.getElementById('app');
+
+document.addEventListener('bazar:_boot_', event => {
+    event.detail.Bazar.app = new Vue({
+        render: h => h(InertiaApp, {
+            props: {
+                initialPage: JSON.parse(el.dataset.page),
+                resolveComponent: name => {
+                    const page = event.detail.Bazar.pages[name];
+
+                    if (! page) {
+                        throw 'Component is not registered.';
+                    } else if (page instanceof Promise) {
+                        return page.then(component => {
+                            return Object.assign({ layout: Layout }, component.default);
+                        });
+                    }
+
+                    return Object.assign({ layout: Layout }, page);
+                }
             }
-        }
-    })
-}).$mount(app);
+        })
+    }).$mount(el);
+});

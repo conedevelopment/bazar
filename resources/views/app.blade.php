@@ -18,16 +18,32 @@
 
     {{-- Scripts --}}
     <script>
-        window.translations = {!! json_encode($translations) !!};
+        window.Bazar = {
+            app: null,
+            pages: {},
+            translations: @json ($translations),
+            boot: function () {
+                ['booting', '_boot_', 'booted'].forEach(function (event) {
+                    document.dispatchEvent(new CustomEvent('bazar:'+event, {
+                        detail: { Bazar }
+                    }));
+                });
+            }
+        };
     </script>
     <script src="{{ URL::asset('vendor/bazar/app.js') }}" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', Bazar.boot);
+    </script>
 
     {{-- Title --}}
     <title>Bazar</title>
 </head>
 <body>
+    {{-- App --}}
     <div id="app" data-page="{{ json_encode($page) }}"></div>
 
+    {{-- SVG Icons --}}
     @include ('bazar::svg-icons')
 </body>
 </html>

@@ -52,5 +52,31 @@ export default {
         Vue.component('form-select', Select);
         Vue.component('form-downloads', Downloads);
         Vue.component('form-media', Media);
+
+        document.addEventListener('bazar:booting', event => {
+            Object.assign(event.detail.Bazar.pages, {
+                'Dashboard': import('./../Pages/Dashboard'),
+                'Support': import('./../Pages/Support'),
+                'Addresses/Index': import('./../Pages/Addresses/Index'),
+                'Addresses/Show': import('./../Pages/Addresses/Show'),
+                'Addresses/Create': import('./../Pages/Addresses/Create'),
+                'Categories/Index': import('./../Pages/Categories/Index'),
+                'Categories/Show': import('./../Pages/Categories/Show'),
+                'Categories/Create': import('./../Pages/Categories/Create'),
+                'Orders/Index': import('./../Pages/Orders/Index'),
+                'Orders/Show': import('./../Pages/Orders/Show'),
+                'Orders/Create': import('./../Pages/Orders/Create'),
+                'Products/Index': import('./../Pages/Products/Index'),
+                'Products/Show': import('./../Pages/Products/Show'),
+                'Products/Create': import('./../Pages/Products/Create'),
+                'Users/Index': import('./../Pages/Users/Index'),
+                'Users/Show': import('./../Pages/Users/Show'),
+                'Users/Create': import('./../Pages/Users/Create'),
+                'Variants/Index': import('./../Pages/Variants/Index'),
+                'Variants/Show': import('./../Pages/Variants/Show'),
+                'Variants/Create': import('./../Pages/Variants/Create'),
+            });
+        });
+
     }
 }
