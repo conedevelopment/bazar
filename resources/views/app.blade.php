@@ -32,9 +32,7 @@
         };
     </script>
     <script src="{{ URL::asset('vendor/bazar/app.js') }}" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', Bazar.boot);
-    </script>
+    <script>document.addEventListener('DOMContentLoaded', Bazar.boot);</script>
 
     {{-- Title --}}
     <title>Bazar</title>

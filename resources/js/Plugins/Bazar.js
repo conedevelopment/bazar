@@ -77,6 +77,5 @@ export default {
                 'Variants/Create': import('./../Pages/Variants/Create'),
             });
         });
-
     }
 }
