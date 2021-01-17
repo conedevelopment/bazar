@@ -39,7 +39,7 @@ class ShippingDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_can_check_if_the_diven_driver_is_registered()
+    public function it_can_check_if_the_given_driver_is_registered()
     {
         $this->assertTrue($this->manager->has('local-pickup'));
         $this->assertTrue($this->manager->has('custom-driver'));
