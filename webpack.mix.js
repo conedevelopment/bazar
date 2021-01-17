@@ -9,6 +9,9 @@ mix.webpackConfig({
         alias: {
             'vue$': 'vue/dist/vue.runtime.esm.js'
         }
+    },
+    externals: {
+        moment: 'moment'
     }
 });
 

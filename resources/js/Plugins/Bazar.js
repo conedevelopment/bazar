@@ -1,4 +1,7 @@
+// Directives
 import debounce from './../Directives/Debounce';
+
+// Components
 import Manager from './../Components/Media/Manager';
 import Card from './../Components/Card';
 import Icon from './../Components/Icon';
@@ -20,6 +23,28 @@ import Textarea from './../Components/Form/Textarea';
 import Select from './../Components/Form/Select';
 import Downloads from './../Components/Form/Downloads';
 import Media from './../Components/Form/Media';
+
+// Pages
+import Dashboard from './../Pages/Dashboard';
+import Support from './../Pages/Support';
+import AddressesIndex from './../Pages/Addresses/Index';
+import AddressesShow from './../Pages/Addresses/Show';
+import AddressesCreate from './../Pages/Addresses/Create';
+import CategoriesIndex from './../Pages/Categories/Index';
+import CategoriesShow from './../Pages/Categories/Show';
+import CategoriesCreate from './../Pages/Categories/Create';
+import OrdersIndex from './../Pages/Orders/Index';
+import OrdersShow from './../Pages/Orders/Show';
+import OrdersCreate from './../Pages/Orders/Create';
+import ProductsIndex from './../Pages/Products/Index';
+import ProductsShow from './../Pages/Products/Show';
+import ProductsCreate from './../Pages/Products/Create';
+import UsersIndex from './../Pages/Users/Index';
+import UsersShow from './../Pages/Users/Show';
+import UsersCreate from './../Pages/Users/Create';
+import VariantsIndex from './../Pages/Variants/Index';
+import VariantsShow from './../Pages/Variants/Show';
+import VariantsCreate from './../Pages/Variants/Create';
 
 export default {
     install(Vue) {
@@ -53,28 +78,29 @@ export default {
         Vue.component('form-downloads', Downloads);
         Vue.component('form-media', Media);
 
+        // Pages
         document.addEventListener('bazar:booting', event => {
             Object.assign(event.detail.Bazar.pages, {
-                'Dashboard': import('./../Pages/Dashboard'),
-                'Support': import('./../Pages/Support'),
-                'Addresses/Index': import('./../Pages/Addresses/Index'),
-                'Addresses/Show': import('./../Pages/Addresses/Show'),
-                'Addresses/Create': import('./../Pages/Addresses/Create'),
-                'Categories/Index': import('./../Pages/Categories/Index'),
-                'Categories/Show': import('./../Pages/Categories/Show'),
-                'Categories/Create': import('./../Pages/Categories/Create'),
-                'Orders/Index': import('./../Pages/Orders/Index'),
-                'Orders/Show': import('./../Pages/Orders/Show'),
-                'Orders/Create': import('./../Pages/Orders/Create'),
-                'Products/Index': import('./../Pages/Products/Index'),
-                'Products/Show': import('./../Pages/Products/Show'),
-                'Products/Create': import('./../Pages/Products/Create'),
-                'Users/Index': import('./../Pages/Users/Index'),
-                'Users/Show': import('./../Pages/Users/Show'),
-                'Users/Create': import('./../Pages/Users/Create'),
-                'Variants/Index': import('./../Pages/Variants/Index'),
-                'Variants/Show': import('./../Pages/Variants/Show'),
-                'Variants/Create': import('./../Pages/Variants/Create'),
+                'Dashboard': Dashboard,
+                'Support': Support,
+                'Addresses/Index': AddressesIndex,
+                'Addresses/Show': AddressesShow,
+                'Addresses/Create': AddressesCreate,
+                'Categories/Index': CategoriesIndex,
+                'Categories/Show': CategoriesShow,
+                'Categories/Create': CategoriesCreate,
+                'Orders/Index': OrdersIndex,
+                'Orders/Show': OrdersShow,
+                'Orders/Create': OrdersCreate,
+                'Products/Index': ProductsIndex,
+                'Products/Show': ProductsShow,
+                'Products/Create': ProductsCreate,
+                'Users/Index': UsersIndex,
+                'Users/Show': UsersShow,
+                'Users/Create': UsersCreate,
+                'Variants/Index': VariantsIndex,
+                'Variants/Show': VariantsShow,
+                'Variants/Create': VariantsCreate,
             });
         });
     }
