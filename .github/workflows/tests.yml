@@ -5,17 +5,18 @@ on:
   pull_request:
 
 jobs:
-  linux_tests:
+  unit_tests:
 
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
       matrix:
         os: ["ubuntu-18.04", "windows-latest"]
         php: ["7.3", "7.4", "8.0"]
-        stability: [prefer-stable]
+        stability: ["prefer-stable"]
 
-    name: PHP ${{ matrix.os }} - ${{ matrix.php }} - ${{ matrix.stability }}
+    name: "${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
+
+    runs-on: "${{ matrix.os }}"
 
     steps:
       - name: Checkout code
