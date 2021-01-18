@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.4.0 (2021-01-18)
+### Added
+- Added front-end boot events
+
+### Fixed
+- Fixed alert re-rendering issue
+
+### Removed
+- Removed moment.js integration from chart.js
+- Removed and refactored some small codes
+
 ## v0.3.0 (2020-12-21)
 ### Added
 - Added `Inventory`, `Prices` and `Price` attribute bags

@@ -1,24 +1,8 @@
 export default {
     data() {
         return {
-            isOpen: false,
-            closeOnEsc: true,
-            closeOnClick: true
+            isOpen: false
         };
-    },
-
-    mounted() {
-        window.addEventListener('keyup', event => {
-            if (this.closeOnEsc && this.isOpen && event.code === 'Escape') {
-                this.close();
-            }
-        });
-
-        window.addEventListener('click', event => {
-            if (this.closeOnClick && this.isOpen && ! this.$el.contains(event.target)) {
-                this.close();
-            }
-        });
     },
 
     methods: {

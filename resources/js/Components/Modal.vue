@@ -11,6 +11,14 @@
             }
         },
 
+        mounted() {
+            window.addEventListener('keyup', event => {
+                if (this.isOpen && event.code === 'Escape') {
+                    this.close();
+                }
+            });
+        },
+
         watch: {
             isOpen(n, o) {
                 if (n) {
@@ -19,12 +27,6 @@
                     this.$root.$el.classList.remove('has-modal-open');
                 }
             }
-        },
-
-        data() {
-            return {
-                closeOnClick: false
-            };
         },
 
         computed: {

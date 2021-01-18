@@ -37,6 +37,12 @@
 
         mounted() {
             this.$once('open', this.fetch);
+
+            window.addEventListener('keyup', event => {
+                if (this.isOpen && event.code === 'Escape') {
+                    this.close();
+                }
+            });
         },
 
         watch: {
@@ -53,7 +59,6 @@
             return {
                 queue: [],
                 dragging: false,
-                closeOnClick: false,
                 selection: Array.from(this.value || []),
                 query: {
                     type: 'all'

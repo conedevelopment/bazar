@@ -13,6 +13,20 @@
                 type: String,
                 default: 'left'
             }
+        },
+
+        mounted() {
+            window.addEventListener('keyup', event => {
+                if (this.isOpen && event.code === 'Escape') {
+                    this.close();
+                }
+            });
+
+            window.addEventListener('click', event => {
+                if (this.isOpen && ! this.$el.contains(event.target)) {
+                    this.close();
+                }
+            });
         }
     }
 </script>

@@ -1,17 +1,15 @@
 <script>
+    import Closable from './../Mixins/Closable';
+
     export default {
+        mixins: [Closable],
+
         mounted() {
             this.setActiveLinks();
 
             this.$inertia.on('success', event => {
                 this.setActiveLinks();
             });
-        },
-
-        data() {
-            return {
-                isOpen: false
-            };
         },
 
         methods: {
@@ -33,15 +31,6 @@
                         el.classList.remove('is-active');
                     }
                 });
-            },
-            open() {
-                this.isOpen = true;
-            },
-            close() {
-                this.isOpen = false;
-            },
-            toggle() {
-                this.isOpen = ! this.isOpen;
             }
         }
     }

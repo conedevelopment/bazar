@@ -57,8 +57,10 @@
                     </button>
                 </div>
                 <app-header></app-header>
-                <alert v-if="message" closable>{{ message }}</alert>
-                <alert v-if="error" type="danger" closable>{{ error }}</alert>
+                <div class="app__messages">
+                    <alert v-if="message" :key="`message-${$parent.key}`" closable>{{ message }}</alert>
+                    <alert v-if="error" type="danger" :key="`error-${$parent.key}`" closable>{{ error }}</alert>
+                </div>
                 <slot></slot>
             </div>
         </div>

@@ -13,14 +13,6 @@
                 type: Boolean,
                 default: false
             }
-        },
-
-        data() {
-            return {
-                isOpen: true,
-                closeOnEsc: false,
-                closeOnClick: false
-            };
         }
     }
 </script>
