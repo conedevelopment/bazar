@@ -23,7 +23,7 @@
     },
     "require": {
         "php": "^7.3 || ^8.0",
-        "laravel/framework": "^8.0"
+        "laravel/framework": "^8.22.1"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.9.1",
