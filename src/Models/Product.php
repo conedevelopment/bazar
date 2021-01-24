@@ -182,7 +182,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
                 }
             }
 
-            return empty(array_diff(array_intersect_key($variant->option, $option), $option));
+            return empty(array_diff_assoc(array_intersect_key($variant->option, $option), $option));
         });
     }
 
