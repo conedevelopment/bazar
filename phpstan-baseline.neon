@@ -41,84 +41,34 @@ parameters:
 			path: src/Models/Shipping.php
 
 		-
-			message: "#^Access to an undefined property \\$this\\(Bazar\\\\Models\\\\Item\\)&Bazar\\\\Contracts\\\\Models\\\\Shipping\\:\\:\\$shippable\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Bazar\\\\Models\\\\Address\\>\\:\\:withTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Models/Item.php
+			path: src/Models/Address.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:variant\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Models/Item.php
+			path: src/Models/Address.php
 
 		-
-			message: "#^Method Bazar\\\\Gateway\\\\Driver\\:\\:transaction\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Transaction but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Gateway/Driver.php
+			path: src/Models/Address.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:filter\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Http/Controllers/AddressesController.php
+			path: src/Models/Category.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:withTrashed\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Http/Controllers/BatchVariantsController.php
+			path: src/Models/Medium.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:onlyTrashed\\(\\)\\.$#"
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
 			count: 1
-			path: src/Http/Controllers/BatchVariantsController.php
-
-		-
-			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/CategoriesController.php
-
-		-
-			message: "#^Anonymous function should return Bazar\\\\Contracts\\\\Models\\\\Product but returns Bazar\\\\Proxies\\\\Product\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
-			count: 1
-			path: src/Http/Controllers/OrdersController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:name\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/OrdersController.php
-
-		-
-			message: "#^Access to an undefined property Bazar\\\\Proxies\\\\Order\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$address\\.$#"
-			count: 1
-			path: src/Http/Controllers/OrdersController.php
-
-		-
-			message: "#^Access to an undefined property Bazar\\\\Proxies\\\\Order\\|Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$shipping\\.$#"
-			count: 2
-			path: src/Http/Controllers/OrdersController.php
-
-		-
-			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:categories\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/ProductsController.php
-
-		-
-			message: "#^Call to an undefined method TModelClass of Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/ProductsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/VariantsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/VariantsController.php
-
-		-
-			message: "#^Call to an undefined method Bazar\\\\Contracts\\\\Stockable\\:\\:save\\(\\)\\.$#"
-			count: 1
-			path: src/Listeners/RefreshInventory.php
+			path: src/Models/Medium.php
 
 		-
 			message: "#^Call to an undefined static method Bazar\\\\Support\\\\Facades\\\\Conversion\\:\\:keys\\(\\)\\.$#"
@@ -131,14 +81,29 @@ parameters:
 			path: src/Models/Medium.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Order.php
+
+		-
 			message: "#^Method Bazar\\\\Models\\\\Order\\:\\:createFrom\\(\\) should return static\\(Bazar\\\\Models\\\\Order\\) but returns Bazar\\\\Models\\\\Order\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Product.php
+
+		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withTrashed\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Product.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Models/User.php
 
 		-
 			message: "#^Access to an undefined property Bazar\\\\Models\\\\User\\:\\:\\$email\\.$#"
@@ -151,6 +116,11 @@ parameters:
 			path: src/Models/User.php
 
 		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Variant.php
+
+		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$options\\.$#"
 			count: 1
 			path: src/Models/Variant.php
@@ -159,6 +129,196 @@ parameters:
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:price\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Variant.php
+
+		-
+			message: "#^Access to an undefined property \\$this\\(Bazar\\\\Models\\\\Item\\)&Bazar\\\\Contracts\\\\Models\\\\Shipping\\:\\:\\$shippable\\.$#"
+			count: 1
+			path: src/Models/Item.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:variant\\(\\)\\.$#"
+			count: 1
+			path: src/Models/Item.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:expired\\(\\)\\.$#"
+			count: 3
+			path: src/Console/Commands/ClearCartsCommand.php
+
+		-
+			message: "#^Method Bazar\\\\Gateway\\\\Driver\\:\\:transaction\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Transaction but returns Illuminate\\\\Database\\\\Eloquent\\\\Model\\.$#"
+			count: 1
+			path: src/Gateway/Driver.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/AddressesController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Address\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/AddressesController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchCategoriesController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchCategoriesController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchOrdersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchOrdersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchProductsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchProductsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchUsersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchUsersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:withTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchVariantsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:onlyTrashed\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/BatchVariantsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/CategoriesController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Category\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/CategoriesController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Category\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/CategoriesController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/MediaController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Order\\:\\:make\\(\\)\\.$#"
+			count: 2
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\User\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Address\\:\\:make\\(\\)\\.$#"
+			count: 2
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Product\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Support\\\\HigherOrderCollectionProxy\\:\\:name\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/OrdersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/ProductsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Product\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/ProductsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Product\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/ProductsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/UsersController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\User\\:\\:create\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/UsersController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:filter\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/VariantsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Variant\\:\\:make\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/VariantsController.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:media\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/VariantsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Order\\:\\:latest\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/WidgetsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Order\\:\\:count\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/WidgetsController.php
+
+		-
+			message: "#^Call to an undefined static method Bazar\\\\Proxies\\\\Product\\:\\:count\\(\\)\\.$#"
+			count: 1
+			path: src/Http/Controllers/WidgetsController.php
+
+		-
+			message: "#^Call to an undefined method Bazar\\\\Contracts\\\\Stockable\\:\\:save\\(\\)\\.$#"
+			count: 1
+			path: src/Listeners/RefreshInventory.php
 
 		-
 			message: "#^Result of \\|\\| is always true\\.$#"

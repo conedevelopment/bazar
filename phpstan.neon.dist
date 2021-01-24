@@ -1,8 +1,6 @@
 # Installation
 #$ composer require --dev nunomaduro/larastan orchestra/testbench
 #$ cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
-# Add Str::startsWith($classReflection->getName(), ['Illuminate\\Contracts\\', 'Bazar\\Contracts\\'])
-# to vendor/nunomaduro/larastan/src/Methods/Pipes/Contracts.php
 
 includes:
     - phpstan-baseline.neon
