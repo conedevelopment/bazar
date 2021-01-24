@@ -33,3 +33,6 @@ jobs:
 
       - name: Run static analysis
         run: vendor/bin/phpstan analyse
+        # FIXME No application encryption key has been specified.
+        env:
+          APP_KEY: "base64:8WQ2S3IXjxCHxUdtzpY3JQmM00OKgSJTOVf+rqQ8fh0="
