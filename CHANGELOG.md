@@ -2,7 +2,7 @@
 
 ## v0.4.1 (2021-01-24)
 ### Fixed
-- Checking differences between variant and selected option is too permissive (#83)[https://github.com/conedevelopment/bazar/pull/83]
+- Checking differences between variant and selected option is too permissive [#83](https://github.com/conedevelopment/bazar/pull/83)
 
 ## v0.4.0 (2021-01-18)
 ### Added
