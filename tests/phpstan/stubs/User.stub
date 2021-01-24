@@ -1,0 +1,12 @@
+<?php
+
+namespace Bazar\Models;
+
+/**
+ * @property string  $email
+ * @property string  $password
+ * @property string  $name
+ */
+class User
+{
+}

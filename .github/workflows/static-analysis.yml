@@ -1,0 +1,35 @@
+name: Static Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpstan:
+    name: Larastan
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+
+      - name: Install Larastan
+        run: |
+          composer require --dev 'nunomaduro/larastan:^0.6.10 !=0.6.11' orchestra/testbench
+          # https://github.com/nunomaduro/larastan/issues/655#issuecomment-689160382
+          cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
+
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse
