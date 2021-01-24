@@ -82,11 +82,13 @@ class ProductTest extends TestCase
     {
         $variant = $this->product->variants()->save(
             VariantFactory::new()->make([
-                'option' => ['Size' => 'S', 'Material' => 'Gold'],
+                'option' => ['Height' => 100, 'Width' => 100],
             ])
         );
 
         $this->assertTrue($this->product->variants->pluck('id')->contains($variant->id));
+        $this->assertSame($variant->id, $this->product->variant(['Height' => 100, 'Width' => 100])->id);
+        $this->assertNull($this->product->variant(['Height' => 100, 'Width' => 200]));
     }
 
     /** @test */
