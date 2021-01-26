@@ -2,7 +2,9 @@
 
 namespace Bazar\Repositories;
 
-class AssetRepository extends Repository
+use Bazar\Contracts\Repositories\AssetRepository as Contract;
+
+class AssetRepository extends Repository implements Contract
 {
     /**
      * Register a new asset.
