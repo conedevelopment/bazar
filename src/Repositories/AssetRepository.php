@@ -40,7 +40,7 @@ class AssetRepository extends Repository implements Contract
      */
     public function style(string $name, string $path): void
     {
-        $this->register($name, $path, 'script');
+        $this->register($name, $path, 'style');
     }
 
     /**
