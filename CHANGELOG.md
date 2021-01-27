@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.2 (2021-01-27)
+### Fixed
+- Fix image publishing [#86](https://github.com/conedevelopment/bazar/issues/86)
+
 ## v0.4.1 (2021-01-24)
 ### Fixed
 - Checking differences between variant and selected option is too permissive [#83](https://github.com/conedevelopment/bazar/pull/83)

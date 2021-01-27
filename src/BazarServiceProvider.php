@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route as RouteFactory;
@@ -140,17 +141,16 @@ class BazarServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/bazar.php' => config_path('bazar.php'),
+                __DIR__.'/../config/bazar.php' => App::configPath('bazar.php'),
             ], 'bazar-config');
 
             $this->publishes([
-                __DIR__.'/../resources/img' => public_path('vendor/bazar/img'),
-                __DIR__.'/../resources/js' => resource_path('js/vendor/bazar'),
-                __DIR__.'/../resources/sass' => resource_path('sass/vendor/bazar'),
+                __DIR__.'/../resources/js' => App::resourcePath('js/vendor/bazar'),
+                __DIR__.'/../resources/sass' => App::resourcePath('sass/vendor/bazar'),
             ], 'bazar-assets');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/bazar'),
+                __DIR__.'/../resources/views' => App::resourcePath('views/vendor/bazar'),
             ], 'bazar-views');
         }
     }

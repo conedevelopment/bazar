@@ -12,7 +12,7 @@
 [![GitHub Actions](https://github.com/conedevelopment/bazar/workflows/tests/badge.svg)](https://github.com/conedevelopment/bazar/actions?query=workflow%3Atests)
 [![Coverage Status](https://coveralls.io/repos/github/conedevelopment/bazar/badge.svg?branch=master)](https://coveralls.io/github/conedevelopment/bazar?branch=master)
 
-**Bazar is a powerful "headless" e-commerce system. Built on Laravel and Vue.**
+**Bazar is a powerful "[headless](https://bazar.conedevelopment.com/docs/core-concepts#headless)" e-commerce system. Built on Laravel and Vue.**
 
 Bazar provides a flexible and easily extensible system, respecting the Laravel conventions.
 
