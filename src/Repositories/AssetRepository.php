@@ -66,4 +66,14 @@ class AssetRepository extends Repository implements Contract
             return preg_match('/style$/', $name);
         })->toArray();
     }
+
+    /**
+     * Symlink the registered assets.
+     *
+     * @return void
+     */
+    public function link(): void
+    {
+        //
+    }
 }
