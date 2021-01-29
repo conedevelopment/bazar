@@ -39,6 +39,9 @@ class CommandsTest extends TestCase
     {
         $this->artisan('bazar:install')
             ->assertExitCode(Command::SUCCESS);
+
+        $this->artisan('bazar:install', ['--seed' => true])
+            ->assertExitCode(Command::SUCCESS);
     }
 
     /** @test */
