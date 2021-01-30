@@ -4,6 +4,8 @@ namespace Bazar\Console\Commands;
 
 use Bazar\BazarServiceProvider;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
 
 class PublishCommand extends Command
 {
@@ -13,6 +15,8 @@ class PublishCommand extends Command
      * @var string
      */
     protected $signature = 'bazar:publish {--force : Overwrite any existing files}
+                                          {--mix : Update the "webpack.mix.js" file}
+                                          {--packages : "Update the packages.json" file}
                                           {--tag=* : One or many tags that have assets you want to publish}';
 
     /**
@@ -29,10 +33,65 @@ class PublishCommand extends Command
      */
     public function handle(): int
     {
+        if ($this->option('mix')) {
+            $this->mix();
+        }
+
+        if ($this->option('packages')) {
+            $this->packages();
+        }
+
         return $this->call('vendor:publish', array_merge(
             ['--provider' => BazarServiceProvider::class],
             $this->option('force') ? ['--force' => true] : [],
             ['--tag' => $this->option('tag') ?: ['bazar-assets', 'bazar-config']]
         ));
+    }
+
+    /**
+     * Update the "packages.json" file.
+     *
+     * @return void
+     */
+    protected function packages(): void
+    {
+        $bazarPackages = json_decode(file_get_contents(__DIR__.'/../../../package.json'), true);
+
+        if (file_exists(App::basePath('package.json'))) {
+            $packages = json_decode(file_get_contents(App::basePath('package.json')), true);
+
+            $packages['devDependencies'] = array_replace(
+                ($packages['devDependencies'] ?? []), $bazarPackages['devDependencies']
+            );
+
+            ksort($packages['devDependencies']);
+        }
+
+        file_put_contents(
+            App::basePath('package.json'),
+            json_encode($packages ?? $bazarPackages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL
+        );
+    }
+
+    /**
+     * Update the "webpack.mix.js" file.
+     *
+     * @return void
+     */
+    protected function mix(): void
+    {
+        if (! file_exists(App::basePath('webpack.mix.js'))) {
+            return;
+        }
+
+        $script = file_get_contents(__DIR__.'/../../../resources/stubs/webpack.mix.js');
+
+        if (! Str::contains(file_get_contents(App::basePath('webpack.mix.js')), $script)) {
+            file_put_contents(
+                App::basePath('webpack.mix.js'),
+                PHP_EOL.$script,
+                FILE_APPEND
+            );
+        }
     }
 }
