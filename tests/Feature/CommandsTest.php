@@ -6,6 +6,7 @@ use Bazar\Tests\TestCase;
 use Illuminate\Console\Command;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -39,6 +40,8 @@ class CommandsTest extends TestCase
     /** @test */
     public function it_can_install_bazar()
     {
+        Queue::fake();
+
         $this->artisan('bazar:install')
             ->assertExitCode(Command::SUCCESS);
 

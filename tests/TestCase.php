@@ -30,12 +30,12 @@ abstract class TestCase extends BaseTestCase
         $this->registerPolicies();
 
         $this->app['config']->set('auth.providers.users.model', User::class);
-        $this->app['config']->set('bazar.admins', ['admin@bazar.test']);
+        $this->app['config']->set('bazar.admins', ['test@bazar.test']);
 
         Storage::fake('local');
         Storage::fake('public');
 
-        $this->admin = UserFactory::new()->create(['email' => 'admin@bazar.test']);
+        $this->admin = UserFactory::new()->create(['email' => 'test@bazar.test']);
         $this->user = UserFactory::new()->create();
     }
 

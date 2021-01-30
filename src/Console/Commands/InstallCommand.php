@@ -31,7 +31,7 @@ class InstallCommand extends Command
     {
         $status = $this->call('migrate');
 
-        if ($this->option('seed') && $this->laravel->environment('local')) {
+        if ($this->option('seed') && $this->laravel->environment(['local', 'testing'])) {
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
 
