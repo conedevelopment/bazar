@@ -52,18 +52,18 @@ class CommandsTest extends TestCase
         $this->artisan('bazar:publish')
             ->assertExitCode(Command::SUCCESS);
 
+        $this->artisan('bazar:publish', ['--packages' => true])
+            ->assertExitCode(Command::SUCCESS);
+
         $bazarPackages = json_decode(file_get_contents(__DIR__.'/../../package.json'), true);
         $packages = json_decode(file_get_contents(App::basePath('package.json')), true);
+
+        $this->assertEmpty(array_diff_key($bazarPackages['devDependencies'], $packages['devDependencies']));
 
         $this->artisan('bazar:publish', ['--mix' => true])
             ->assertExitCode(Command::SUCCESS);
 
-        $this->assertEmpty(array_diff_key($bazarPackages['devDependencies'], $packages['devDependencies']));
-
         $script = file_get_contents(__DIR__.'/../../resources/stubs/webpack.mix.js');
-
-        $this->artisan('bazar:publish', ['--packages' => true])
-            ->assertExitCode(Command::SUCCESS);
 
         $this->assertTrue(
             Str::contains(file_get_contents(App::basePath('webpack.mix.js')), $script)
