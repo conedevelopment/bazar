@@ -4,7 +4,6 @@ namespace Bazar\Console\Commands;
 
 use Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 
 class InstallCommand extends Command
@@ -36,10 +35,10 @@ class InstallCommand extends Command
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
 
-        File::ensureDirectoryExists(App::publicPath('vendor'));
+        File::ensureDirectoryExists(public_path('vendor'));
 
-        if (! is_dir(App::publicPath('vendor/bazar'))) {
-            symlink(__DIR__.'/../../../public', App::publicPath('vendor/bazar'));
+        if (! is_dir(public_path('vendor/bazar'))) {
+            symlink(__DIR__.'/../../../public', public_path('vendor/bazar'));
         }
 
         return $status;

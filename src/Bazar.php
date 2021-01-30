@@ -7,7 +7,6 @@ use Bazar\Http\Middleware\ComponentMiddleware;
 use Bazar\Http\Middleware\ShareComponentData;
 use Closure;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -44,7 +43,7 @@ abstract class Bazar
      */
     public static function assetVersion(): ?string
     {
-        $path = App::publicPath('mix-manifest.json');
+        $path = public_path('mix-manifest.json');
 
         return is_file($path) ? md5_file($path) : null;
     }
