@@ -22,6 +22,8 @@
         }
     },
     "require": {
+        "ext-gd": "*",
+        "ext-exif": "*",
         "php": "^7.3 || ^8.0",
         "laravel/framework": "^8.22.1"
     },
