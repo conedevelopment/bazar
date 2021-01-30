@@ -2,7 +2,7 @@
 
 ## v0.4.3 (2021-01-30)
 ### Added
-- Added the `--package` option to the `bazar:publish` command, that syncs the NPM `devDependecies` in the `packages.json`
+- Added the `--packages` option to the `bazar:publish` command, that syncs the NPM `devDependecies` in the `packages.json`
 - Added the `--mix` option to the `bazar:publish` command, that appends the proper webpack tasks to compile Bazar assets
 
 ### Fixed
