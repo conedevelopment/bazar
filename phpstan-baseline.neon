@@ -106,16 +106,6 @@ parameters:
 			path: src/Models/User.php
 
 		-
-			message: "#^Access to an undefined property Bazar\\\\Models\\\\User\\:\\:\\$email\\.$#"
-			count: 1
-			path: src/Models/User.php
-
-		-
-			message: "#^Access to an undefined property Bazar\\\\Models\\\\User\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Models/User.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Variant.php
