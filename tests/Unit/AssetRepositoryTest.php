@@ -12,9 +12,9 @@ class AssetRepositoryTest extends TestCase
     {
         $this->assertEmpty(Asset::scripts());
 
-        Asset::script('fake', 'fake-path');
+        Asset::register('fake-script.js');
 
-        $this->assertSame(['fake-script' => 'fake-path'], Asset::scripts());
+        $this->assertSame(['fake-script.js'], Asset::scripts());
     }
 
     /** @test */
@@ -22,8 +22,8 @@ class AssetRepositoryTest extends TestCase
     {
         $this->assertEmpty(Asset::styles());
 
-        Asset::style('fake', 'fake-path');
+        Asset::register('fake-style.css');
 
-        $this->assertSame(['fake-style' => 'fake-path'], Asset::styles());
+        $this->assertSame(['fake-style.css'], Asset::styles());
     }
 }
