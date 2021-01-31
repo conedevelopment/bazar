@@ -41,21 +41,6 @@ parameters:
 			path: src/Models/Shipping.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Address.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Category.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Medium.php
-
-		-
 			message: "#^Call to an undefined static method Bazar\\\\Support\\\\Facades\\\\Conversion\\:\\:keys\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Medium.php
@@ -66,34 +51,14 @@ parameters:
 			path: src/Models/Medium.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Order.php
-
-		-
 			message: "#^Method Bazar\\\\Models\\\\Order\\:\\:createFrom\\(\\) should return static\\(Bazar\\\\Models\\\\Order\\) but returns Bazar\\\\Models\\\\Order\\.$#"
 			count: 1
 			path: src/Models/Order.php
 
 		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Product.php
-
-		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\<Illuminate\\\\Database\\\\Eloquent\\\\Model\\>\\:\\:withTrashed\\(\\)\\.$#"
 			count: 1
 			path: src/Models/Product.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/User.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Variant.php
 
 		-
 			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$options\\.$#"
@@ -129,46 +94,6 @@ parameters:
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\MorphMany\\:\\:filter\\(\\)\\.$#"
 			count: 1
 			path: src/Http/Controllers/AddressesController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchCategoriesController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchCategoriesController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchOrdersController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchOrdersController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchProductsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchProductsController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:withTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchUsersController.php
-
-		-
-			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Builder\\:\\:onlyTrashed\\(\\)\\.$#"
-			count: 1
-			path: src/Http/Controllers/BatchUsersController.php
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Relations\\\\HasMany\\:\\:withTrashed\\(\\)\\.$#"
