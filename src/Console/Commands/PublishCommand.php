@@ -16,7 +16,7 @@ class PublishCommand extends Command
      */
     protected $signature = 'bazar:publish {--force : Overwrite any existing files}
                                           {--mix : Update the "webpack.mix.js" file}
-                                          {--packages : "Update the packages.json" file}
+                                          {--packages : Update the "packages.json" file}
                                           {--tag=* : One or many tags that have assets you want to publish}';
 
     /**
