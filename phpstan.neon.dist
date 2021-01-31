@@ -24,3 +24,5 @@ parameters:
         - '#^Call to an undefined method Illuminate\\Support\\Fluent::(cascadeOnDelete|nullOnDelete)\(\)\.$#'
         # TODO Properties of Contracts
         - '#^Access to an undefined property Bazar\\Contracts\\#'
+        # TODO Proxy mixins
+        - '#^Call to an undefined static method Bazar\\Proxies\\[A-Za-z]+::(make|create|count|latest)\(\)\.$#'
