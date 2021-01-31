@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.4 (2021-01-31)
+### Fixed
+- Fixed Vue compiling error [#91](https://github.com/conedevelopment/bazar/issues/91)
+
 ## v0.4.3 (2021-01-30)
 ### Added
 - Added the `--packages` option to the `bazar:publish` command, that syncs the NPM `devDependecies` in the `packages.json`
