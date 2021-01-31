@@ -17,6 +17,7 @@ mix.webpackConfig({
 
 mix.setPublicPath('./public')
     .js('resources/js/app.js', 'app.js')
+    .vue({ version: 2 })
     .sass('resources/sass/app.scss', 'app.css')
     .options({ processCssUrls: false })
     .sourceMaps()

@@ -1,12 +1,26 @@
 # Changelog
 
+## v0.4.4 (2021-01-31)
+### Fixed
+- Fixed Vue compiling error [#91](https://github.com/conedevelopment/bazar/issues/91)
+
+## v0.4.3 (2021-01-30)
+### Added
+- Added the `--packages` option to the `bazar:publish` command, that syncs the NPM `devDependecies` in the `packages.json`
+- Added the `--mix` option to the `bazar:publish` command, that appends the proper webpack tasks to compile Bazar assets
+
+### Fixed
+- Fixed the `it_can_install_bazar` test with the `--seed` option
+- Fixed the `409` error when `Bazar::assetVersion()` is `null`
+- Fixed the wrong usage of `App::publicPath()`
+
 ## v0.4.2 (2021-01-27)
 ### Fixed
-- Fix image publishing [#86](https://github.com/conedevelopment/bazar/issues/86)
+- Fixed image publishing [#86](https://github.com/conedevelopment/bazar/issues/86)
 
 ## v0.4.1 (2021-01-24)
 ### Fixed
-- Checking differences between variant and selected option is too permissive [#83](https://github.com/conedevelopment/bazar/pull/83)
+- Fixed checking differences between variant and selected option is too permissive [#83](https://github.com/conedevelopment/bazar/pull/83)
 
 ## v0.4.0 (2021-01-18)
 ### Added
