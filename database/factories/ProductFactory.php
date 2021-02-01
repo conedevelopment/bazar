@@ -24,6 +24,7 @@ class ProductFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
+            'slug' => Str::random(),
             'description' => $this->faker->sentences(3, true),
             'options' => ['Size' => ['XS', 'S', 'M', 'L']],
             'prices' => [
