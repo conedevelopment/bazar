@@ -111,10 +111,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $order->products()->attach(array_combine(
-            array_column($data['products'], 'id'),
-            array_column($data['products'], 'item')
-        ));
+        $order->products()->attach(array_column($data['products'], 'item', 'id'));
 
         return Redirect::route('bazar.orders.show', $order)->with(
             'message', __('The order has been created.')
