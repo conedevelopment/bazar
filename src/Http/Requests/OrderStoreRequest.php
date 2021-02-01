@@ -24,8 +24,8 @@ class OrderStoreRequest extends FormRequest
             ],
             'products' => ['required', 'array'],
             'products.*.id' => ['required'],
-            'products.*.item_tax' => ['required', 'numeric', 'min:0'],
-            'products.*.item_quantity' => ['required', 'numeric', 'gt:0'],
+            'products.*.item_tax' => ['nullable', 'numeric', 'min:0'],
+            'products.*.item_quantity' => ['nullable', 'numeric', 'gt:0'],
             'discount' => ['nullable', 'numeric', 'min:0'],
             'currency' => [
                 'required',

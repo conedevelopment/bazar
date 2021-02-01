@@ -102,7 +102,7 @@ trait InteractsWithItems
     public function getItemsAttribute(): Collection
     {
         return $this->products->map(function (Product $product): Item {
-            return $product->item
+            return ($product->item instanceof Item ? $product->item : new Item)
                 ->setRelation('product', $product)
                 ->setRelation('itemable', $this);
         });

@@ -13,6 +13,12 @@
                 type: Boolean,
                 default: false
             }
+        },
+
+        data() {
+            return {
+                isOpen: true
+            };
         }
     }
 </script>
