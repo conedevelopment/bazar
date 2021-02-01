@@ -17,7 +17,7 @@ abstract class Bazar
      *
      * @var string
      */
-    public const VERSION = '0.4.4';
+    public const VERSION = '0.4.5';
 
     /**
      * The default currency.

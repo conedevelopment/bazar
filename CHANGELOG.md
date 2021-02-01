@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.5 (2021-02-01)
+### Fixed
+- Fixed Order creation error [#100](https://github.com/conedevelopment/bazar/issues/100)
+- Fixed hidden Alert
+
 ## v0.4.4 (2021-01-31)
 ### Fixed
 - Fixed Vue compiling error [#91](https://github.com/conedevelopment/bazar/issues/91)
