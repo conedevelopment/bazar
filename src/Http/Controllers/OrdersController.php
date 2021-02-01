@@ -111,15 +111,10 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $products = Collection::make($data['products'])->mapWithKeys(static function (array $product) use ($data): array {
-            return [$product['id'] => [
-                'tax' => $product['item_tax'] ?? 0,
-                'quantity' => $product['item_quantity'] ?? 1,
-                'price' => $product['prices'][$data['currency']]['default'] ?? 0,
-            ]];
-        });
-
-        $order->products()->attach($products);
+        $order->products()->attach(array_combine(
+            array_column($data['products'], 'id'),
+            array_column($data['products'], 'item')
+        ));
 
         return Redirect::route('bazar.orders.show', $order)->with(
             'message', __('The order has been created.')

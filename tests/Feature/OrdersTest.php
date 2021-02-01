@@ -71,11 +71,13 @@ class OrdersTest extends TestCase
         $order->setRelation('address', AddressFactory::new()->make());
         $order->shipping->setRelation('address', AddressFactory::new()->make());
 
+        $product = Product::first();
+
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.store'),
-            array_merge($order->toArray(), [
-                'products' => [Product::first()->toArray() + ['item_quantity' => 1, 'item_tax' => 10]],
-            ])
+            array_merge($order->toArray(), ['products' => [
+                $product->toArray() + ['item' => ['price' => $product->price, 'quantity' => 1, 'tax' => 10]],
+            ]])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 
         $this->assertDatabaseHas('bazar_orders', $order->only(['discount', 'currency']));

@@ -10,6 +10,12 @@
             formatDate(date) {
                 return date.substr(0, 16).replace('T', ' ');
             }
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            }
         }
     }
 </script>
@@ -17,14 +23,14 @@
 <template>
     <card :title="title">
         <template #header>
-            <inertia-link :href="`${$inertia.page.url}/create`" class="btn btn-primary btn-sm">
+            <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Address') }}
             </inertia-link>
         </template>
         <data-table :response="$page.results" searchable>
             <data-column :label="__('Alias')" sort="alias">
                 <template #default="item">
-                    <inertia-link :href="`${$inertia.page.url}/${item.id}`">
+                    <inertia-link :href="`${url}/${item.id}`">
                         {{ item.alias }}
                     </inertia-link>
                 </template>
