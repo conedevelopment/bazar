@@ -26,14 +26,15 @@ class SupportTest extends TestCase
     /** @test */
     public function support_has_country_lookup()
     {
+        $this->assertCount(58, Countries::africa());
+        $this->assertCount(5, Countries::antarctica());
+        $this->assertCount(54, Countries::asia());
+        $this->assertCount(51, Countries::europe());
+        $this->assertCount(41, Countries::northAmerica());
+        $this->assertCount(14, Countries::southAmerica());
+        $this->assertCount(26, Countries::oceania());
         $this->assertCount(249, Countries::all());
         $this->assertSame('Hungary', Countries::name('HU'));
-        $this->assertSame([], Countries::africa());
-        $this->assertSame([], Countries::asia());
-        $this->assertSame([], Countries::europe());
-        $this->assertSame([], Countries::northAmerica());
-        $this->assertSame([], Countries::southAmerica());
-        $this->assertSame([], Countries::oceania());
     }
 
     /** @test */
