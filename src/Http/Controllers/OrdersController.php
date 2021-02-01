@@ -79,8 +79,6 @@ class OrdersController extends Controller
             })
         );
 
-        // dd($order);
-
         $order->shipping->fill($request->old('shipping', []))->setRelation(
             'address', AddressProxy::make($request->old('shipping.address', []))
         );
