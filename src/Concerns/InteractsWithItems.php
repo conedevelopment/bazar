@@ -102,9 +102,12 @@ trait InteractsWithItems
     public function getItemsAttribute(): Collection
     {
         return $this->products->map(function (Product $product): Item {
-            return ($product->item instanceof Item ? $product->item : new Item)
-                ->setRelation('product', $product)
-                ->setRelation('itemable', $this);
+            return (
+                $product->item instanceof Item
+                    ? $product->item
+                    : new Item((array) $product->item)
+            )->setRelation('product', $product)
+             ->setRelation('itemable', $this);
         });
     }
 

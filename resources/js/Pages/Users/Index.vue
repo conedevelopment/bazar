@@ -10,6 +10,12 @@
             formatDate(date) {
                 return date.substr(0, 16).replace('T', ' ');
             }
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            }
         }
     }
 </script>
@@ -17,7 +23,7 @@
 <template>
     <card :title="title">
         <template #header>
-            <inertia-link :href="`${$inertia.page.url}/create`" class="btn btn-primary btn-sm">
+            <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create User') }}
             </inertia-link>
         </template>
@@ -29,7 +35,7 @@
             </data-column>
             <data-column :label="__('Name')" sort="name">
                 <template #default="item">
-                    <inertia-link :href="`${$inertia.page.url}/${item.id}`">
+                    <inertia-link :href="`${url}/${item.id}`">
                         {{ item.name }}
                     </inertia-link>
                 </template>
