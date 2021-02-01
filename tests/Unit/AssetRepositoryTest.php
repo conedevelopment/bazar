@@ -12,9 +12,9 @@ class AssetRepositoryTest extends TestCase
     {
         $this->assertEmpty(Asset::scripts());
 
-        Asset::register('fake-script.js');
+        Asset::script('fake', 'fake-script.js');
 
-        $this->assertSame(['fake-script.js'], Asset::scripts());
+        $this->assertSame([['path' => 'fake-script.js', 'type' => 'script']], Asset::scripts());
     }
 
     /** @test */
@@ -22,8 +22,18 @@ class AssetRepositoryTest extends TestCase
     {
         $this->assertEmpty(Asset::styles());
 
-        Asset::register('fake-style.css');
+        Asset::style('fake', 'fake-style.css');
 
-        $this->assertSame(['fake-style.css'], Asset::styles());
+        $this->assertSame([['path' => 'fake-style.css', 'type' => 'style']], Asset::styles());
+    }
+
+    /** @test */
+    public function it_can_register_icons()
+    {
+        $this->assertEmpty(Asset::icons());
+
+        Asset::icon('fake', 'fake-icon.svg');
+
+        $this->assertSame([['path' => 'fake-icon.svg', 'type' => 'icon']], Asset::icons());
     }
 }
