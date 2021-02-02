@@ -7,42 +7,43 @@ interface AssetRepository
     /**
      * Register a new asset.
      *
-     * @param  string  $path
+     * @param  string  $name
+     * @param  string  $source
      * @param  string  $type
      * @param  string  $options
      * @return void
      */
-    public function register(string $name, string $path, string $type, array $options = []): void;
+    public function register(string $name, string $source, string $type, array $options = []): void;
 
     /**
      * Register a new script.
      *
      * @param  string  $name
-     * @param  string  $path
+     * @param  string  $source
      * @param  array  $options
      * @return void
      */
-    public function script(string $name, string $path, array $options = []): void;
+    public function script(string $name, string $source, array $options = []): void;
 
     /**
      * Register a new style.
      *
      * @param  string  $name
-     * @param  string  $path
+     * @param  string  $source
      * @param  array  $options
      * @return void
      */
-    public function style(string $name, string $path, array $options = []): void;
+    public function style(string $name, string $source, array $options = []): void;
 
     /**
      * Register a new icon.
      *
      * @param  string  $name
-     * @param  string  $path
+     * @param  string  $source
      * @param  array  $options
      * @return void
      */
-    public function icon(string $name, string $path, array $options = []): void;
+    public function icon(string $name, string $source, array $options = []): void;
 
     /**
      * Get all the registerd scripts.

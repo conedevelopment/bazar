@@ -166,6 +166,7 @@ class BazarServiceProvider extends ServiceProvider
             $this->commands([
                 Console\Commands\InstallCommand::class,
                 Console\Commands\PublishCommand::class,
+                Console\Commands\LinkAssetsCommand::class,
                 Console\Commands\ClearCartsCommand::class,
                 Console\Commands\ClearChunksCommand::class,
             ]);
