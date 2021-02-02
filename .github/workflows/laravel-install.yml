@@ -1,0 +1,48 @@
+name: "Install in Laravel"
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+
+jobs:
+  laravel_install:
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ["ubuntu-18.04", "windows-latest"]
+        php: ["7.3", "7.4", "8.0"]
+        stability: ["prefer-stable"]
+
+    name: "${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+
+      - name: "Setup PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+          tools: "composer:v2"
+
+      - name: "Checkout code"
+        uses: "actions/checkout@v2"
+
+      - name: "Install Bazar in Laravel"
+        run: |
+          git clone -b 8.x https://github.com/laravel/laravel.git laravel
+          cd laravel/
+          sed -i -e 's#"type": "project",#&\n"repositories": [ { "type": "path", "url": "../" } ],#' composer.json
+          composer require --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress conedevelopment/bazar
+          cp .env.example .env
+          sed -i -e 's#^DB_CONNECTION=.*$#DB_CONNECTION=sqlite#' .env
+          sed -i -e 's#^DB_DATABASE=.*$#DB_DATABASE=:memory:#' .env
+          php artisan key:generate
+          php artisan bazar:install --seed
+          php artisan bazar:publish --packages --mix
+          npm install
+          npm run dev
