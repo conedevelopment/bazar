@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.4.6 (2021-02-03)
 ### Added
 - Added `AssetRepository` and `Asset` facade
 - Added `LinkAssetsCommand` command
