@@ -132,9 +132,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
     {
         $currency = $currency ?: Bazar::currency();
 
-        $price = $this->prices[$currency][$type];
-
-        return $price ?: $this->product->price($type, $currency);
+        return $this->prices[$currency][$type] ?: $this->product->price($type, $currency);
     }
 
     /**
