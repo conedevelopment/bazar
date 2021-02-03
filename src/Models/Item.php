@@ -95,7 +95,7 @@ class Item extends MorphPivot implements Taxable
     protected static function booted(): void
     {
         static::creating(static function (self $item): void {
-            $item->id = Uuid::uuid4();
+            $item->id = (int)Uuid::uuid4()->toString();
         });
 
         static::saving(static function (self $item): void {
