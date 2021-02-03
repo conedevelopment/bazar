@@ -27,4 +27,4 @@ parameters:
         # TODO Proxy mixins
         - '#^Call to an undefined static method Bazar\\Proxies\\[A-Za-z]+::(make|create|count|latest)\(\)\.$#'
         # TODO Proxied models
-        - '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::(with|only)Trashed\(\)\.$#'
+        - '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::(withTrashed|onlyTrashed)\(\)\.$#'
