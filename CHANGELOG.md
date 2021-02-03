@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+### Added
+- Added `AssetRepository` and `Asset` facade
+- Added `LinkAssetsCommand` command
+
+### Changed
+- Changed product addtion when creating orders manually
+
+### Fixed
+- Fixed order creation error [#100](https://github.com/conedevelopment/bazar/issues/100)
+
 ## v0.4.5 (2021-02-01)
 ### Fixed
 - Fixed Order creation error [#100](https://github.com/conedevelopment/bazar/issues/100)
