@@ -2,13 +2,25 @@
     export default {
         inject: ['form'],
 
+        watch: {
+            'form.fields.products'(n) {
+                n.filter(product => ! product.item).forEach(product => {
+                    this.$set(product, 'item', {
+                        tax: 0,
+                        quantity: 1,
+                        price: this.price(product)
+                    });
+                });
+            }
+        },
+
         methods: {
             price(product) {
                 return product.prices[this.form.fields.currency].default || 0;
             },
             total(product) {
-                let total = (this.price(product) + Number(product.item_tax || 0))
-                    * Number(product.item_quantity || 1);
+                let total = (Number(product.item.price) + Number(product.item.tax || 0))
+                    * Number(product.item.quantity || 1);
 
                 return Number(total).toFixed(2);
             },
@@ -43,7 +55,6 @@
             <tbody>
                 <tr v-for="(product, index) in form.fields.products" :key="index">
                     <td>{{ product.name }}</td>
-                    <td>{{ price(product) }}</td>
                     <td>
                         <form-input
                             class="mb-0 form-group-sm"
@@ -52,7 +63,18 @@
                             step="0.01"
                             min="0"
                             size="3"
-                            v-model="product.item_tax"
+                            v-model="product.item.price"
+                        ></form-input>
+                    </td>
+                    <td>
+                        <form-input
+                            class="mb-0 form-group-sm"
+                            type="number"
+                            placeholder="0"
+                            step="0.01"
+                            min="0"
+                            size="3"
+                            v-model="product.item.tax"
                         ></form-input>
                     </td>
                     <td>
@@ -63,7 +85,7 @@
                             step="0.01"
                             min="0"
                             size="3"
-                            v-model="product.item_quantity"
+                            v-model="product.item.quantity"
                         ></form-input>
                     </td>
                     <td>{{ total(product) }}</td>

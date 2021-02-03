@@ -27,6 +27,8 @@ import Media from './../Components/Form/Media';
 // Pages
 import Dashboard from './../Pages/Dashboard';
 import Support from './../Pages/Support';
+import Profile from './../Pages/Profile';
+import Password from './../Pages/Password';
 import AddressesIndex from './../Pages/Addresses/Index';
 import AddressesShow from './../Pages/Addresses/Show';
 import AddressesCreate from './../Pages/Addresses/Create';
@@ -83,6 +85,8 @@ export default {
             Object.assign(event.detail.Bazar.pages, {
                 'Dashboard': Dashboard,
                 'Support': Support,
+                'Profile': Profile,
+                'Password': Password,
                 'Addresses/Index': AddressesIndex,
                 'Addresses/Show': AddressesShow,
                 'Addresses/Create': AddressesCreate,
