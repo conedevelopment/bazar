@@ -133,6 +133,12 @@ return [
     'media' => [
         'disk' => 'public',
         'chunk_expiration' => 1440,
+        'conversion' => [
+            'default' => 'gd',
+            'drivers' => [
+                'gd' => [],
+            ],
+        ],
     ],
 
 ];
