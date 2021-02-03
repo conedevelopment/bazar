@@ -10,7 +10,7 @@ interface AssetRepository
      * @param  string  $name
      * @param  string  $source
      * @param  string  $type
-     * @param  string  $options
+     * @param  array  $options
      * @return void
      */
     public function register(string $name, string $source, string $type, array $options = []): void;
