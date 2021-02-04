@@ -111,6 +111,8 @@ class BazarServiceProvider extends ServiceProvider
                 $key = strtolower(class_basename($contract));
 
                 RouteFactory::bind($key, function (string $value, Route $route) use ($key, $contract): ?Model {
+                    // check route!!!
+
                     return $this->app->make($contract)->resolveRouteBinding(
                         $value, $route->bindingFieldFor($key)
                     );
