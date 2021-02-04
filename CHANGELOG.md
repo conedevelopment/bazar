@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+### Added
+- Added the new `Bazar\Conversion\Manager` class that allows to add custom image conversion drives (like intervension)
+
+### Changed
+- Changed the `Bazar\Services\Checkout` class to `Bazar\Cart\Checkout`
+
+### Fixed
+- Fixed the compression when performing conversions on PNG, that drastically reduces the file size, now it's set to `1`
+
+### Removed
+- Removed the `Bazar\Repositories\Conversion` class
+- Removed the `Bazar\Services\Image` class
+
 ## v0.4.6 (2021-02-03)
 ### Added
 - Added `AssetRepository` and `Asset` facade

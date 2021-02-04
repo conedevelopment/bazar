@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Services;
+namespace Bazar\Cart;
 
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Order;
