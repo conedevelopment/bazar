@@ -41,11 +41,6 @@ parameters:
 			path: src/Models/Shipping.php
 
 		-
-			message: "#^Call to an undefined static method Bazar\\\\Support\\\\Facades\\\\Conversion\\:\\:keys\\(\\)\\.$#"
-			count: 1
-			path: src/Models/Medium.php
-
-		-
 			message: "#^Method Bazar\\\\Models\\\\Medium\\:\\:convert\\(\\) should return \\$this\\(Bazar\\\\Models\\\\Medium\\) but returns Bazar\\\\Contracts\\\\Models\\\\Medium\\.$#"
 			count: 1
 			path: src/Models/Medium.php
@@ -161,7 +156,6 @@ parameters:
 			path: src/Repositories/TaxRepository.php
 
 		-
-			message: "#^Method Bazar\\\\Services\\\\Checkout\\:\\:prepare\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Order but returns Bazar\\\\Proxies\\\\Order\\.$#"
+			message: "#^Method Bazar\\\\Cart\\\\Checkout\\:\\:prepare\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Order but returns Bazar\\\\Proxies\\\\Order\\.$#"
 			count: 1
-			path: src/Services/Checkout.php
-
+			path: src/Cart/Checkout.php
