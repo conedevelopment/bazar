@@ -25,7 +25,7 @@ abstract class Image
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)
