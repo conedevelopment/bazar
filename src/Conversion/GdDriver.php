@@ -26,7 +26,7 @@ class GdDriver extends Driver
 
         File::ensureDirectoryExists(Storage::disk('local')->path('bazar-tmp'));
 
-        foreach (Conversion::getConversions() as $conversion => $callback) {
+        foreach (Conversion::all() as $conversion => $callback) {
             $image = $this->createImage($medium);
 
             call_user_func_array($callback, [$image]);
