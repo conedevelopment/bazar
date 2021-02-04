@@ -2,15 +2,16 @@
 
 namespace Bazar\Support\Facades;
 
-use Bazar\Contracts\Repositories\ConversionRepository;
+use Bazar\Contracts\Conversion\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static void register(string $name, \Closure $callback)
- * @method static void remove(string $name)
+ * @method static void registerConversion(string $name, \Closure $callback)
+ * @method static void removeConversion(string $name)
+ * @method static array getConversions()
  * @method static \Bazar\Contracts\Models\Medium perform(\Bazar\Contracts\Models\Medium $medium)
  *
- * @see \Bazar\Contracts\Repositories\ConversionRepository
+ * @see \Bazar\Contracts\Conversion\Manager
  */
 class Conversion extends Facade
 {
@@ -21,6 +22,6 @@ class Conversion extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return ConversionRepository::class;
+        return Manager::class;
     }
 }

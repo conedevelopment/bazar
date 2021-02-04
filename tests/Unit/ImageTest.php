@@ -2,13 +2,21 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Conversion\GdImage;
 use Bazar\Database\Factories\MediumFactory;
-use Bazar\Services\Image;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-class ImageTest extends TestCase
+class GdImageTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        File::ensureDirectoryExists(Storage::disk('local')->path('bazar-tmp'));
+    }
+
     /** @test */
     public function jpeg_can_be_converted()
     {
@@ -20,28 +28,28 @@ class ImageTest extends TestCase
         imagejpeg($i, $medium->fullPath());
         imagedestroy($i);
 
-        Image::make($medium)->quality(70)->resize(400)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->quality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 200], [$w, $h]);
 
-        Image::make($medium)->resize(400, 100)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->resize(400, 100)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->width(400)->height(100)->resize()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->crop(400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(100, 400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(100, 400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([100, 400], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->width(400)->height(100)->crop()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -58,28 +66,28 @@ class ImageTest extends TestCase
         imagepng($i, $medium->fullPath());
         imagedestroy($i);
 
-        Image::make($medium)->quality(70)->resize(400)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->quality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 200], [$w, $h]);
 
-        Image::make($medium)->resize(400, 100)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->resize(400, 100)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->width(400)->height(100)->resize()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->crop(400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(100, 400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(100, 400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([100, 400], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->width(400)->height(100)->crop()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -94,28 +102,28 @@ class ImageTest extends TestCase
         imagegif($i, $medium->fullPath());
         imagedestroy($i);
 
-        Image::make($medium)->quality(70)->resize(400)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->quality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 200], [$w, $h]);
 
-        Image::make($medium)->resize(400, 100)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->resize(400, 100)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->width(400)->height(100)->resize()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->crop(400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(100, 400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(100, 400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([100, 400], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->width(400)->height(100)->crop()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -130,28 +138,28 @@ class ImageTest extends TestCase
         imagewebp($i, $medium->fullPath());
         imagedestroy($i);
 
-        Image::make($medium)->quality(70)->resize(400)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->quality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 200], [$w, $h]);
 
-        Image::make($medium)->resize(400, 100)->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->resize(400, 100)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->resize()->save('resized');
-        [$w, $h] = getimagesize($medium->fullPath('resized'));
+        ($image = new GdImage($medium))->width(400)->height(100)->resize()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([200, 100], [$w, $h]);
 
-        Image::make($medium)->crop(400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 400], [$w, $h]);
 
-        Image::make($medium)->crop(100, 400)->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->crop(100, 400)->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([100, 400], [$w, $h]);
 
-        Image::make($medium)->width(400)->height(100)->crop()->save('cropped');
-        [$w, $h] = getimagesize($medium->fullPath('cropped'));
+        ($image = new GdImage($medium))->width(400)->height(100)->crop()->save();
+        [$w, $h] = getimagesize($image->path());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -167,6 +175,6 @@ class ImageTest extends TestCase
         imagedestroy($i);
 
         $this->expectExceptionMessage('The file type is not supported');
-        Image::make($medium)->quality(70)->resize(400)->save('resized');
+        ($image = new GdImage($medium))->quality(70)->resize(400)->save();
     }
 }

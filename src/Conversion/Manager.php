@@ -3,6 +3,7 @@
 namespace Bazar\Conversion;
 
 use Bazar\Contracts\Conversion\Manager as Contract;
+use Closure;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract
@@ -25,15 +26,47 @@ class Manager extends BaseManager implements Contract
     }
 
     /**
+     * Register a new conversion.
+     *
+     * @param  string  $name
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function registerConversion(string $name, Closure $callback): void
+    {
+        $this->conversions[$name] = $callback;
+    }
+
+    /**
+     * Remove the given conversion.
+     *
+     * @param  string  $name
+     * @return void
+     */
+    public function removeConversion(string $name): void
+    {
+        unset($this->conversions[$name]);
+    }
+
+    /**
+     * Get all the registered conversions.
+     *
+     * @return array
+     */
+    public function getConversions(): array
+    {
+        return $this->conversions;
+    }
+
+    /**
      * Create the GD driver.
      *
      * @return \Bazar\Conversion\GdDriver
      */
     public function createGdDriver(): GdDriver
     {
-        return new GdDriver(array_merge(
-            $this->config->get('bazar.media.conversion.drivers.gd', []),
-            ['conversions' => $this->conversions]
-        ));
+        return new GdDriver(
+            $this->config->get('bazar.media.conversion.drivers.gd', [])
+        );
     }
 }

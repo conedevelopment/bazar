@@ -8,7 +8,7 @@ use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Item;
-use Bazar\Services\Checkout;
+use Bazar\Cart\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -214,7 +214,7 @@ abstract class Driver
     /**
      * Initialize a checkout instance.
      *
-     * @return \Bazar\Services\Checkout
+     * @return \Bazar\Cart\Checkout
      */
     public function checkout(): Checkout
     {

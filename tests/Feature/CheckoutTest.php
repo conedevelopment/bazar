@@ -7,7 +7,7 @@ use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
-use Bazar\Services\Checkout;
+use Bazar\Cart\Checkout;
 use Bazar\Tests\TestCase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;

@@ -3,6 +3,7 @@
 namespace Bazar\Conversion;
 
 use Bazar\Contracts\Models\Medium;
+use Bazar\Support\Facades\Conversion;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -31,12 +32,11 @@ abstract class Driver
      * Perform the registered conversions on the medium.
      *
      * @param  \Bazar\Contracts\Models\Medium  $medium
-     * @param  array  $conversions
-     * @return void
+     * @return \Bazar\Contracts\Models\Medium
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function perform(Medium $medium, array $conversions = []): void
+    public function perform(Medium $medium): Medium
     {
         if (! Storage::disk($medium->disk)->exists($medium->path())) {
             throw new FileNotFoundException("The file located at [{$medium->fullPath()}] is not found.");
@@ -44,7 +44,7 @@ abstract class Driver
 
         File::ensureDirectoryExists(Storage::disk('local')->path('bazar-tmp'));
 
-        foreach ($this->config['conversions'] as $conversion => $callback) {
+        foreach (Conversion::getConversions() as $conversion => $callback) {
             $image = $this->createImage($medium);
 
             call_user_func_array($callback, [$image, $conversion]);
@@ -57,6 +57,8 @@ abstract class Driver
 
             $image->destroy();
         }
+
+        return $medium;
     }
 
     /**
