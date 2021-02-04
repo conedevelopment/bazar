@@ -47,7 +47,7 @@ abstract class Driver
         foreach (Conversion::getConversions() as $conversion => $callback) {
             $image = $this->createImage($medium);
 
-            call_user_func_array($callback, [$image, $conversion]);
+            call_user_func_array($callback, [$image]);
 
             $image->save();
 
