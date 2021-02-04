@@ -136,7 +136,9 @@ return [
         'conversion' => [
             'default' => 'gd',
             'drivers' => [
-                'gd' => [],
+                'gd' => [
+                    'quality' => 70,
+                ],
             ],
         ],
     ],

@@ -31,8 +31,9 @@ class Manager extends BaseManager implements Contract
      */
     public function createGdDriver(): GdDriver
     {
-        return new GdDriver(
-            $this->config->get('bazar.media.conversion.drivers.gd', [])
-        );
+        return new GdDriver(array_merge(
+            $this->config->get('bazar.media.conversion.drivers.gd', []),
+            ['conversions' => $this->conversions]
+        ));
     }
 }
