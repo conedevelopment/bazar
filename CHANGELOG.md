@@ -13,6 +13,7 @@
 ### Removed
 - Removed the `Bazar\Repositories\Conversion` class
 - Removed the `Bazar\Services\Image` class
+- Removed the `Bazar\Shipping\WeightBasedShipping` class
 
 ## v0.4.6 (2021-02-03)
 ### Added

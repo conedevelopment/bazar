@@ -84,7 +84,7 @@ return [
     | In this section, you can specify the shipping driver that you want to use
     | to resolve the shipping instance, that is used by the shipping facade.
     |
-    | Supported drivers: "local-pickup", "weight-based-shipping"
+    | Supported drivers: "local-pickup"
     |
     */
 
@@ -92,7 +92,6 @@ return [
         'default' => 'local-pickup',
         'drivers' => [
             'local-pickup' => [],
-            'weight-based-shipping' => [],
         ],
     ],
 
@@ -127,6 +126,8 @@ return [
     |
     | You can specify the media settings here. Set the default disk to store
     | the media items. Also, you can specify the expiration of the chunks.
+    |
+    | Supported conversion drivers: "gd"
     |
     */
 

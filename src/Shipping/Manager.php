@@ -19,7 +19,6 @@ class Manager extends BaseManager implements Contract
         parent::__construct($container);
 
         $this->drivers['local-pickup'] = $this->createDriver('local-pickup');
-        $this->drivers['weight-based-shipping'] = $this->createDriver('weight-based-shipping');
     }
 
     /**
@@ -90,18 +89,6 @@ class Manager extends BaseManager implements Contract
     {
         return new LocalPickupDriver(
             $this->config->get('bazar.shipping.drivers.local-pickup', [])
-        );
-    }
-
-    /**
-     * Create the weight based shipping driver.
-     *
-     * @return \Bazar\Shipping\WeightBasedShippingDriver
-     */
-    public function createWeightBasedShippingDriver(): WeightBasedShippingDriver
-    {
-        return new WeightBasedShippingDriver(
-            $this->config->get('bazar.shipping.drivers.weight-based-shipping', [])
         );
     }
 }
