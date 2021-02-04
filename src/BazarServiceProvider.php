@@ -209,11 +209,11 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerConversions(): void
     {
-        Support\Facades\Conversion::registerConversion('thumb', static function (Conversion\Image $image): void {
+        Support\Facades\Conversion::register('thumb', static function (Conversion\Image $image): void {
             $image->crop(500, 500);
         });
 
-        Support\Facades\Conversion::registerConversion('medium', static function (Conversion\Image $image): void {
+        Support\Facades\Conversion::register('medium', static function (Conversion\Image $image): void {
             $image->resize(1400, 1000);
         });
     }

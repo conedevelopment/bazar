@@ -121,7 +121,7 @@ class Medium extends Model implements Contract
      */
     public function getUrlsAttribute(): array
     {
-        $conversions = array_keys(Conversion::getConversions());
+        $conversions = array_keys(Conversion::all());
 
         return array_reduce($conversions, function (array $urls, string $name): array {
             return $this->isImage ? array_merge($urls, [$name => $this->url($name)]) : $urls;

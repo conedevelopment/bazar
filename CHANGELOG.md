@@ -5,8 +5,6 @@
 - Added the new `Bazar\Conversion\Manager` class that allows to add custom image conversion drives (like intervension)
 
 ### Changed
-- Changed the `Conversion::register` method to `Coversion::registerConversion`
-- Changed the `Conversion::remove` method to `Coversion::removeConversion`
 - Changed the `Bazar\Services\Checkout` class to `Bazar\Cart\Checkout`
 
 ### Fixed
