@@ -49,7 +49,7 @@ class Image
     ];
 
     /**
-     * Create a new GD image instance.
+     * Create a new image instance.
      *
      * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return void
