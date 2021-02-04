@@ -64,7 +64,7 @@ abstract class Driver
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $meidum
+     * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return \Bazar\Conversion\Image
      */
     abstract public function createImage(Medium $medium): Image;
