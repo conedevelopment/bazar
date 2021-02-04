@@ -10,9 +10,9 @@ class GdDriver extends Driver
      * Create a new GD image instance.
      *
      * @param  \Bazar\Contracts\Models\Medium  $meidum
-     * @return \Bazar\Conversion\GdImage
+     * @return \Bazar\Conversion\Image
      */
-    public function createImage(Medium $medium): GdImage
+    public function createImage(Medium $medium): Image
     {
         $image = new GdImage($medium);
 
