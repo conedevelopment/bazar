@@ -7,7 +7,6 @@ use Bazar\Contracts\Shipping\Manager;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Shipping\Driver;
 use Bazar\Shipping\LocalPickupDriver;
-use Bazar\Shipping\WeightBasedShippingDriver;
 use Bazar\Tests\TestCase;
 
 class ShippingDriverTest extends TestCase
@@ -30,11 +29,11 @@ class ShippingDriverTest extends TestCase
     public function it_can_list_enabled_drivers()
     {
         $this->manager->driver('local-pickup')->disable();
-        $this->assertEquals(['weight-based-shipping', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['custom-driver'], array_keys($this->manager->enabled()));
         $this->assertEquals(['local-pickup'], array_keys($this->manager->disabled()));
 
         $this->manager->driver('local-pickup')->enable();
-        $this->assertEquals(['local-pickup', 'weight-based-shipping', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['local-pickup', 'custom-driver'], array_keys($this->manager->enabled()));
         $this->assertEmpty(array_keys($this->manager->disabled()));
     }
 
@@ -53,17 +52,6 @@ class ShippingDriverTest extends TestCase
         $this->assertInstanceOf(LocalPickupDriver::class, $driver);
         $this->assertSame('Local Pickup', $driver->name());
         $this->assertSame('local-pickup', $driver->id());
-
-        $this->assertEquals(0, $driver->calculate($this->order));
-    }
-
-    /** @test */
-    public function it_has_weight_based_shipping_driver()
-    {
-        $driver = $this->manager->driver('weight-based-shipping');
-        $this->assertInstanceOf(WeightBasedShippingDriver::class, $driver);
-        $this->assertSame('Weight Based Shipping', $driver->name());
-        $this->assertSame('weight-based-shipping', $driver->id());
 
         $this->assertEquals(0, $driver->calculate($this->order));
     }
