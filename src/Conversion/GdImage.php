@@ -209,6 +209,7 @@ class GdImage extends Image
      */
     public function destroy(): void
     {
+        unlink($this->path);
         imagedestroy($this->resource);
     }
 }
