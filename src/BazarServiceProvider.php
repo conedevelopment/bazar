@@ -44,10 +44,10 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Cart\Manager::class => Cart\Manager::class,
         Contracts\Gateway\Manager::class => Gateway\Manager::class,
         Contracts\Shipping\Manager::class => Shipping\Manager::class,
+        Contracts\Conversion\Manager::class => Conversion\Manager::class,
         Contracts\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
         Contracts\Repositories\AssetRepository::class => Repositories\AssetRepository::class,
         Contracts\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
-        Contracts\Repositories\ConversionRepository::class => Repositories\ConversionRepository::class,
     ];
 
     /**
@@ -77,6 +77,7 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerPublishes();
         $this->registerComposers();
+        $this->registerConversions();
         $this->registerRouteBindings();
     }
 
@@ -198,6 +199,22 @@ class BazarServiceProvider extends ServiceProvider
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
+        });
+    }
+
+    /**
+     * Register the image conversions.
+     *
+     * @return void
+     */
+    protected function registerConversions(): void
+    {
+        Support\Facades\Conversion::register('thumb', static function (Conversion\Image $image): void {
+            $image->crop(500, 500);
+        });
+
+        Support\Facades\Conversion::register('medium', static function (Conversion\Image $image): void {
+            $image->resize(1400, 1000);
         });
     }
 

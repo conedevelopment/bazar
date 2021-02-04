@@ -1,35 +1,52 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Bazar\Tests\Feature;
 
+use Bazar\Contracts\Conversion\Manager;
+use Bazar\Contracts\Models\Medium;
+use Bazar\Conversion\GdDriver;
 use Bazar\Database\Factories\MediumFactory;
-use Bazar\Models\Medium;
 use Bazar\Support\Facades\Conversion;
 use Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-class ConversionRepositoryTest extends TestCase
+class ConversionDriverTest extends TestCase
 {
+    protected $manager;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->manager = $this->app->make(Manager::class);
+    }
+
+    /** @test */
+    public function it_has_gd_driver()
+    {
+        $this->assertInstanceOf(GdDriver::class, $this->manager->driver('gd'));
+    }
+
     /** @test */
     public function it_can_register_conversions()
     {
-        Conversion::register('4k', function (Medium $medium) {
+        Conversion::registerConversion('4k', function (Medium $medium) {
             //
         });
 
-        $this->assertTrue(Conversion::has('4k'));
+        $this->assertTrue(array_key_exists('4k', Conversion::getConversions()));
     }
 
     /** @test */
     public function it_can_remove_conversions()
     {
-        $this->assertTrue(Conversion::has('thumb'));
+        $this->assertTrue(array_key_exists('thumb', Conversion::getConversions()));
 
-        Conversion::remove('thumb');
+        Conversion::removeConversion('thumb');
 
-        $this->assertFalse(Conversion::has('thumb'));
+        $this->assertFalse(array_key_exists('thumb', Conversion::getConversions()));
     }
 
     /** @test */

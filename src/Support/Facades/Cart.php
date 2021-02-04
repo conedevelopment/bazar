@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static float count()
  * @method static bool isEmpty()
  * @method static bool isNotEmpty()
- * @method static \Bazar\Services\Checkout checkout()
+ * @method static \Bazar\Cart\Checkout checkout()
  *
  * @see \Bazar\Cart\Driver
  */

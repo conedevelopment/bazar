@@ -49,8 +49,9 @@ class CustomerNewOrder extends Notification implements ShouldQueue
      */
     public function toMail($notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->markdown('bazar::emails.customer-new-order');
+        return (new MailMessage)->markdown('bazar::emails.customer-new-order', [
+            'order' => $this->order,
+        ]);
     }
 
     /**

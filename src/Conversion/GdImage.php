@@ -1,43 +1,25 @@
 <?php
 
-namespace Bazar\Services;
+namespace Bazar\Conversion;
 
 use Bazar\Contracts\Models\Medium;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
-class Image
+class GdImage extends Image
 {
     /**
-     * The medium instance.
-     *
-     * @var \Bazar\Contracts\Models\Medium
-     */
-    protected $medium;
-
-    /**
-     * The original file type.
+     * The file type.
      *
      * @var int
      */
     protected $type;
 
     /**
-     * The source.
+     * The resource.
      *
      * @var resource
      */
-    protected $source;
-
-    /**
-     * The target.
-     *
-     * @var resource
-     */
-    protected $target;
+    protected $resource;
 
     /**
      * The attributes.
@@ -47,33 +29,22 @@ class Image
     protected $attributes = [
         'width' => 0,
         'height' => 0,
-        'quality' => 80,
+        'quality' => 70,
     ];
 
     /**
-     * Create a new image instance.
+     * Create a new GD image instance.
      *
      * @param  \Bazar\Contracts\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)
     {
-        $this->medium = $medium;
+        parent::__construct($medium);
+
         $this->type = exif_imagetype($medium->fullPath());
-        $this->source = $this->create();
 
-        File::ensureDirectoryExists(Storage::disk('local')->path('bazar-tmp'));
-    }
-
-    /**
-     * Make a new image instance.
-     *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
-     * @return static
-     */
-    public static function make(Medium $medium): Image
-    {
-        return new static($medium);
+        $this->create();
     }
 
     /**
@@ -82,7 +53,7 @@ class Image
      * @param  int  $width
      * @return $this
      */
-    public function width(int $width): Image
+    public function width(int $width): GdImage
     {
         $this->attributes['width'] = $width;
 
@@ -95,7 +66,7 @@ class Image
      * @param  int  $height
      * @return $this
      */
-    public function height(int $height): Image
+    public function height(int $height): GdImage
     {
         $this->attributes['height'] = $height;
 
@@ -108,7 +79,7 @@ class Image
      * @param  int  $quality
      * @return $this
      */
-    public function quality(int $quality): Image
+    public function quality(int $quality): GdImage
     {
         $this->attributes['quality'] = $quality;
 
@@ -122,7 +93,7 @@ class Image
      * @param  int|null  $height
      * @return $this
      */
-    public function crop(int $width = null, int $height = null): Image
+    public function crop(int $width = null, int $height = null): GdImage
     {
         $this->resize($width, $height, true);
 
@@ -137,7 +108,7 @@ class Image
      * @param  bool  $crop
      * @return $this
      */
-    public function resize(int $width = null, int $height = null, bool $crop = false): Image
+    public function resize(int $width = null, int $height = null, bool $crop = false): GdImage
     {
         $x = $y = 0;
         [$originalWidth, $originalHeight] = getimagesize($this->medium->fullPath());
@@ -160,80 +131,72 @@ class Image
             $originalWidth = $originalHeight;
         }
 
-        $this->target = imagecreatetruecolor($width, $height);
+        $resource = imagecreatetruecolor($width, $height);
 
         if (in_array($this->type, [IMAGETYPE_PNG, IMAGETYPE_WEBP])) {
-            imagealphablending($this->target, false);
-            imagesavealpha($this->target, true);
-            imagefill($this->target, 0, 0, imagecolorallocatealpha($this->target, 0, 0, 0, 127));
+            imagealphablending($resource, false);
+            imagesavealpha($resource, true);
+            imagefill($resource, 0, 0, imagecolorallocatealpha($resource, 0, 0, 0, 127));
         }
 
-        imagecopyresampled(
-            $this->target, $this->source, 0, 0, $x, $y, $width, $height, $originalWidth, $originalHeight
-        );
+        imagecopyresampled($resource, $this->resource, 0, 0, $x, $y, $width, $height, $originalWidth, $originalHeight);
+
+        imagedestroy($this->resource);
+        $this->resource = $resource;
+        unset($resource);
 
         return $this;
     }
 
     /**
-     * Save the image with the given conversion.
+     * Save the resouce.
      *
-     * @param  string  $conversion
      * @return void
      *
      * @throws \Exception
      */
-    public function save(string $conversion): void
+    public function save(): void
     {
-        $path = Storage::disk('local')->path('bazar-tmp/'.Str::random(40));
-
         switch ($this->type) {
             case IMAGETYPE_GIF:
-                imagegif($this->target, $path);
+                imagegif($this->resource, $this->path);
                 break;
             case IMAGETYPE_JPEG:
-                imagejpeg($this->target, $path, $this->attributes['quality']);
+                imagejpeg($this->resource, $this->path, $this->attributes['quality']);
                 break;
             case IMAGETYPE_PNG:
-                imagepng($this->target, $path, (int) min($this->attributes['quality'] / 100, 9));
+                imagepng($this->resource, $this->path, 1);
                 break;
             case IMAGETYPE_WEBP:
-                imagewebp($this->target, $path, $this->attributes['quality']);
+                imagewebp($this->resource, $this->path, $this->attributes['quality']);
                 break;
             default:
                 throw new Exception('The file type is not supported.');
         }
-
-        Storage::disk($this->medium->disk)->put(
-            $this->medium->path($conversion), File::get($path)
-        );
-
-        $this->destroy($path);
     }
 
     /**
      * Create the resource.
      *
-     * @return resource
+     * @return void
      *
      * @throws \Exception
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-     protected function create() //: resource
+     protected function create(): void
     {
-        if (! Storage::disk($this->medium->disk)->exists($this->medium->path())) {
-            throw new FileNotFoundException("The file located at [{$this->medium->fullPath()}] is not found.");
-        }
-
         switch ($this->type) {
             case IMAGETYPE_GIF:
-                return imagecreatefromgif($this->medium->fullPath());
+                $this->resource = imagecreatefromgif($this->medium->fullPath());
+                break;
             case IMAGETYPE_JPEG:
-                return imagecreatefromjpeg($this->medium->fullPath());
+                $this->resource = imagecreatefromjpeg($this->medium->fullPath());
+                break;
             case IMAGETYPE_PNG:
-                return imagecreatefrompng($this->medium->fullPath());
+                $this->resource = imagecreatefrompng($this->medium->fullPath());
+                break;
             case IMAGETYPE_WEBP:
-                return imagecreatefromwebp($this->medium->fullPath());
+                $this->resource = imagecreatefromwebp($this->medium->fullPath());
+                break;
             default:
                 throw new Exception('The file type is not supported.');
         }
@@ -242,13 +205,11 @@ class Image
     /**
      * Destroy the resource.
      *
-     * @param  string  $path
      * @return void
      */
-    protected function destroy(string $path): void
+    public function destroy(): void
     {
-        File::delete($path);
-        imagedestroy($this->source);
-        imagedestroy($this->target);
+        unlink($this->path);
+        imagedestroy($this->resource);
     }
 }
