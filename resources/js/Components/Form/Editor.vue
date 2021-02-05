@@ -54,7 +54,11 @@
                 this.$emit('input', this.editor.root.innerHTML === '<p><br></p>' ? '' : this.editor.root.innerHTML);
             },
             mediaHandler() {
+                this.$emit('media-open');
                 this.$refs.media.open();
+            },
+            mediaClose() {
+                this.$emit('media-close');
             },
             insertMedia(values) {
                 const range = this.editor.getSelection() || 0;
@@ -84,6 +88,6 @@
         <span v-if="help || invalid" class="form-text" :class="{ 'text-danger': invalid }">
             {{ error || help }}
         </span>
-        <media-manager ref="media" multiple @input="insertMedia"></media-manager>
+        <media-manager ref="media" multiple @close="mediaClose" @input="insertMedia"></media-manager>
     </div>
 </template>

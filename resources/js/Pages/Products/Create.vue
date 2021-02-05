@@ -4,6 +4,17 @@
             return {
                 title: this.__('Create Product')
             };
+        },
+        methods: {
+          mediaClose() {
+            let form = this.$vnode.elm.querySelector('div.form__body');
+            form.style.zIndex = 10;
+          },
+
+          mediaOpen() {
+            const form = this.$vnode.elm.querySelector('div.form__body');
+            form.style.zIndex = 11;
+          }
         }
     }
 </script>
@@ -14,7 +25,7 @@
             <card :title="__('General')" class="mb-5">
                 <form-input name="name" :label="__('Name')" v-model="form.fields.name"></form-input>
                 <form-input name="slug" :label="__('Slug')" v-model="form.fields.slug"></form-input>
-                <form-editor name="description" :label="__('Description')" v-model="form.fields.description"></form-editor>
+                <form-editor @media-open="mediaOpen" @media-close="mediaClose" name="description" :label="__('Description')" v-model="form.fields.description"></form-editor>
             </card>
             <card :title="__('Options')" class="mb-5">
                 <form-options name="options" v-model="form.fields.options" :schema="[]">
