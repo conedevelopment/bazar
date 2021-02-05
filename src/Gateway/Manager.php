@@ -112,6 +112,6 @@ class Manager extends BaseManager implements Contract
      */
     public function createManualDriver(): ManualDriver
     {
-        return new ManualDriver;
+        return new ManualDriver();
     }
 }

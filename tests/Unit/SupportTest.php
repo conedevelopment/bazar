@@ -40,7 +40,7 @@ class SupportTest extends TestCase
     /** @test */
     public function support_has_inventory_manager()
     {
-        $inventory = new Inventory;
+        $inventory = new Inventory();
 
         $this->assertNull($inventory->formattedDimensions());
         $this->assertNull($inventory->formattedWeight());
