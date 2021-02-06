@@ -11,6 +11,7 @@
 - Fixed the compression when performing conversions on PNG, that drastically reduces the file size, now it's set to `1`
 - Fixed undefined variable in `customer-new-order.blade.php`
 - Fixed automatic route-model binding for non-Bazar routes
+- Fixed media modal z-index issue
 
 ### Removed
 - Removed the `Bazar\Repositories\Conversion` class
