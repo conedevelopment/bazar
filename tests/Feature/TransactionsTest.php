@@ -35,7 +35,7 @@ class TransactionsTest extends TestCase
         ]));
 
         Gateway::extend('fake', function ($app) {
-            return new FakeGateway;
+            return new FakeGateway();
         });
     }
 
@@ -138,13 +138,13 @@ class FakeGateway extends Driver
     {
         throw new TransactionFailedException('Payment failed');
 
-        return new Transaction;
+        return new Transaction();
     }
 
     public function refund(Order $order, float $amount = null): Transaction
     {
         throw new TransactionFailedException('Refund failed');
 
-        return new Transaction;
+        return new Transaction();
     }
 }

@@ -31,7 +31,7 @@ class GatewayDriverTest extends TestCase
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {
-            return new CustomGatewayDriver;
+            return new CustomGatewayDriver();
         });
     }
 

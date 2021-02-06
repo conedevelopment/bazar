@@ -31,21 +31,42 @@
         }
     }
 
-        &__body {
-            padding: 1.5rem;
-            max-width: $body-max-width;
-            margin: 0 auto;
+    &__body {
+        padding: 1.5rem;
+        max-width: $body-max-width;
+        margin: 0 auto;
 
-            @include media-breakpoint-up(lg) {
-                padding: 2.5rem;
-            }
+        @include media-breakpoint-up(lg) {
+            padding: 2.5rem;
         }
+    }
 
 
-    &.has-modal-open {
+    &.has-modal-open--body,
+    &.has-modal-open--sidebar {
         .app__main {
             position: relative;
             z-index: 100;
+        }
+    }
+
+    &.has-modal-open--body {
+        .form__body {
+            z-index: 10;
+        }
+
+        .form__sidebar {
+            z-index: 5;
+        }
+    }
+
+    &.has-modal-open--sidebar {
+        .form__body {
+            z-index: 5;
+        }
+
+        .form__sidebar {
+            z-index: 10;
         }
     }
 }

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.4.7 (2021-02-06)
 ### Added
 - Added the new `Bazar\Conversion\Manager` class that allows to add custom image conversion drives (like intervension)
 
@@ -9,6 +9,9 @@
 
 ### Fixed
 - Fixed the compression when performing conversions on PNG, that drastically reduces the file size, now it's set to `1`
+- Fixed undefined variable in `customer-new-order.blade.php`
+- Fixed automatic route-model binding for non-Bazar routes
+- Fixed media modal z-index issue
 
 ### Removed
 - Removed the `Bazar\Repositories\Conversion` class

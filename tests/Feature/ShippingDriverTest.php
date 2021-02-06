@@ -21,7 +21,7 @@ class ShippingDriverTest extends TestCase
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {
-            return new CustomShippingDriver;
+            return new CustomShippingDriver();
         });
     }
 

@@ -47,10 +47,12 @@
 
         watch: {
             isOpen(n, o) {
+                const className = this.$el.closest('.form__sidebar') ? 'sidebar' : 'body';
+
                 if (n) {
-                    this.$root.$el.classList.add('has-modal-open');
+                    this.$root.$el.classList.add(`has-modal-open--${className}`);
                 } else {
-                    this.$root.$el.classList.remove('has-modal-open');
+                    this.$root.$el.classList.remove(`has-modal-open--${className}`);
                 }
             }
         },
