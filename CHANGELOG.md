@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.4.7 (2021-02-06)
 ### Added
 - Added the new `Bazar\Conversion\Manager` class that allows to add custom image conversion drives (like intervension)
 
