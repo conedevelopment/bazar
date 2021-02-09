@@ -3,8 +3,8 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Http\Requests\PasswordUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
-use Bazar\Support\Facades\Component;
+use Inertia\Response;
+use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -15,11 +15,11 @@ class PasswordController extends Controller
     /**
      * Display the specified resource.
      *
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function show(): Response
     {
-        return Component::render('Password', [
+        return Inertia::render('Password', [
             'action' => URL::route('bazar.password.update'),
         ]);
     }

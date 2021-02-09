@@ -8,7 +8,6 @@ use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 
 class BazarTest extends TestCase
 {
@@ -39,12 +38,6 @@ class BazarTest extends TestCase
     }
 
     /** @test */
-    public function it_has_asset_version()
-    {
-        $this->assertNull(Bazar::assetVersion());
-    }
-
-    /** @test */
     public function it_can_route_bind_soft_deleted_only_for_bazar_routes()
     {
         Route::middleware('web')->get('shop/products/{product}', function (Product $product) {
@@ -58,28 +51,5 @@ class BazarTest extends TestCase
         $product->delete();
 
         $this->get('shop/products/'.$product->id)->assertNotFound();
-    }
-
-    /** @test */
-    public function it_handles_inertia_requests()
-    {
-        $this->actingAs($this->admin)
-            ->get(URL::route('bazar.support'), [
-                'X-Inertia' => true,
-                'X-Inertia-Version' => Bazar::assetVersion(),
-            ])
-            ->assertOk()
-            ->assertJson([
-                'props' => [
-                    'version' => Bazar::version(),
-                ],
-            ]);
-
-        $this->actingAs($this->admin)
-            ->get(URL::route('bazar.support'), [
-                'X-Inertia' => true,
-                'X-Inertia-Version' => 'fake',
-            ])
-            ->assertStatus(409);
     }
 }

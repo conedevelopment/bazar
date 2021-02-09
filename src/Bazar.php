@@ -3,8 +3,7 @@
 namespace Bazar;
 
 use Bazar\Exceptions\InvalidCurrencyException;
-use Bazar\Http\Middleware\ComponentMiddleware;
-use Bazar\Http\Middleware\ShareComponentData;
+use Bazar\Http\Middleware\HandleInertiaRequests;
 use Closure;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
@@ -34,18 +33,6 @@ abstract class Bazar
     public static function version(): string
     {
         return static::VERSION;
-    }
-
-    /**
-     * Get the asset version.
-     *
-     * @return string|null
-     */
-    public static function assetVersion(): ?string
-    {
-        $path = public_path('mix-manifest.json');
-
-        return is_file($path) ? md5_file($path) : null;
     }
 
     /**
@@ -92,8 +79,7 @@ abstract class Bazar
             'auth',
             'verified',
             'can:manage-bazar',
-            ComponentMiddleware::class,
-            ShareComponentData::class,
+            HandleInertiaRequests::class,
         ])->group(static function (Router $router) use ($callback): void {
             $callback($router);
         });

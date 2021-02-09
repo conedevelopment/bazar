@@ -6,10 +6,10 @@ use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\User;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
+use Inertia\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Support\Countries;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -35,7 +35,7 @@ class AddressesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request, User $user): Response
     {
@@ -43,7 +43,7 @@ class AddressesController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Addresses/Index', [
+        return Inertia::render('Addresses/Index', [
             'user' => $user,
             'results' => $addresses,
         ]);
@@ -53,13 +53,13 @@ class AddressesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request, User $user): Response
     {
         $address = AddressProxy::make($request->old());
 
-        return Component::render('Addresses/Create', [
+        return Inertia::render('Addresses/Create', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
@@ -88,11 +88,11 @@ class AddressesController extends Controller
      *
      * @param  \Bazar\Contracts\Models\User  $user
      * @param  \Bazar\Contracts\Models\Address  $address
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function show(User $user, Address $address): Response
     {
-        return Component::render('Addresses/Show', [
+        return Inertia::render('Addresses/Show', [
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),

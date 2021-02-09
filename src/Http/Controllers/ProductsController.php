@@ -8,7 +8,7 @@ use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
 use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Product as ProductProxy;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,7 +37,7 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response|\Illuminate\Http\JsonResponse
+     * @return \Inertia\Response|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request) //: Response
     {
@@ -47,7 +47,7 @@ class ProductsController extends Controller
 
         return $request->expectsJson()
             ? Response::json($products)
-            : Component::render('Products/Index', [
+            : Inertia::render('Products/Index', [
                 'results' => $products,
                 'filters' => ProductProxy::filters(),
             ]);
@@ -66,7 +66,7 @@ class ProductsController extends Controller
             ->setAttribute('categories', [])
             ->forceFill($request->old());
 
-        return Component::render('Products/Create', [
+        return Inertia::render('Products/Create', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.products.store'),
@@ -107,7 +107,7 @@ class ProductsController extends Controller
     {
         $product->loadMissing(['media', 'categories:id,name']);
 
-        return Component::render('Products/Show', [
+        return Inertia::render('Products/Show', [
             'product' => $product,
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.products.update', $product),
