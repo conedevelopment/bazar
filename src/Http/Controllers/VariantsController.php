@@ -7,9 +7,9 @@ use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Variant;
 use Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
+use Inertia\Response;
 use Bazar\Proxies\Variant as VariantProxy;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -37,7 +37,7 @@ class VariantsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request, Product $product): Response
     {
@@ -51,7 +51,7 @@ class VariantsController extends Controller
             );
         });
 
-        return Component::render('Variants/Index', [
+        return Inertia::render('Variants/Index', [
             'product' => $product,
             'results' => $variants,
             'filters' => VariantProxy::filters(),
@@ -63,7 +63,7 @@ class VariantsController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request, Product $product): Response
     {
@@ -73,7 +73,7 @@ class VariantsController extends Controller
                 'product', $product->withoutRelations()->makeHidden('variant')
             );
 
-        return Component::render('Variants/Create', [
+        return Inertia::render('Variants/Create', [
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),
@@ -106,7 +106,7 @@ class VariantsController extends Controller
      *
      * @param  \Bazar\Contracts\Models\Product  $product
      * @param  \Bazar\Contracts\Models\Variant  $variant
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Product $product, Variant $variant): Response
     {
@@ -114,7 +114,7 @@ class VariantsController extends Controller
             'product', $product->withoutRelations()->makeHidden('variant')
         )->loadMissing('media');
 
-        return Component::render('Variants/Show', [
+        return Inertia::render('Variants/Show', [
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),

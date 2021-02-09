@@ -5,9 +5,9 @@ namespace Bazar\Http\Controllers;
 use Bazar\Contracts\Models\Category;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
+use Inertia\Response;
 use Bazar\Proxies\Category as CategoryProxy;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -34,7 +34,7 @@ class CategoriesController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request): Response
     {
@@ -42,7 +42,7 @@ class CategoriesController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Categories/Index', [
+        return Inertia::render('Categories/Index', [
             'results' => $categories,
             'filters' => CategoryProxy::filters(),
         ]);
@@ -52,7 +52,7 @@ class CategoriesController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request): Response
     {
@@ -60,7 +60,7 @@ class CategoriesController extends Controller
             ->setAttribute('media', [])
             ->forceFill($request->old());
 
-        return Component::render('Categories/Create', [
+        return Inertia::render('Categories/Create', [
             'category' => $category,
             'action' => URL::route('bazar.categories.store'),
         ]);
@@ -89,13 +89,13 @@ class CategoriesController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\Category  $category
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Category $category): Response
     {
         $category->loadMissing('media');
 
-        return Component::render('Categories/Show', [
+        return Inertia::render('Categories/Show', [
             'category' => $category,
             'action' => URL::route('bazar.categories.update', $category),
         ]);

@@ -6,7 +6,7 @@ use Bazar\Contracts\Models\User as User;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
 use Bazar\Proxies\User as Proxy;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class UsersController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response|\Illuminate\Http\JsonResponse
+     * @return \Inertia\Response|\Illuminate\Http\JsonResponse
      */
     public function index(Request $request) //: Response
     {
@@ -44,7 +44,7 @@ class UsersController extends Controller
 
         return $request->expectsJson()
             ? Response::json($users)
-            : Component::render('Users/Index', [
+            : Inertia::render('Users/Index', [
                 'results' => $users,
                 'filters' => Proxy::filters(),
             ]);
@@ -61,7 +61,7 @@ class UsersController extends Controller
     {
         $user->setAttribute('addresses', [])->forceFill($request->old());
 
-        return Component::render('Users/Create', [
+        return Inertia::render('Users/Create', [
             'user' => $user,
             'action' => URL::route('bazar.users.store'),
         ]);
@@ -90,7 +90,7 @@ class UsersController extends Controller
      */
     public function show(User $user): Responsable
     {
-        return Component::render('Users/Show', [
+        return Inertia::render('Users/Show', [
             'user' => $user,
             'action' => URL::route('bazar.users.update', $user),
         ]);

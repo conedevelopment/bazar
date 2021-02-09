@@ -32,7 +32,6 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Models\Category::class => Models\Category::class,
         Contracts\Models\Shipping::class => Models\Shipping::class,
         Contracts\Models\Transaction::class => Models\Transaction::class,
-        Contracts\Http\ResponseFactory::class => Http\ResponseFactory::class,
     ];
 
     /**

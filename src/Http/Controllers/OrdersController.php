@@ -7,13 +7,13 @@ use Bazar\Contracts\Models\Order;
 use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
-use Bazar\Http\Response;
+use Inertia\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Proxies\Product as ProductProxy;
 use Bazar\Proxies\User as UserProxy;
 use Bazar\Support\Countries;
-use Bazar\Support\Facades\Component;
+use Inertia\Inertia;
 use Bazar\Support\Facades\Discount;
 use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
@@ -42,7 +42,7 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request): Response
     {
@@ -52,7 +52,7 @@ class OrdersController extends Controller
             $request->input('per_page')
         );
 
-        return Component::render('Orders/Index', [
+        return Inertia::render('Orders/Index', [
             'results' => $orders,
             'filters' => OrderProxy::filters(),
         ]);
@@ -62,7 +62,7 @@ class OrdersController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request): Response
     {
@@ -83,7 +83,7 @@ class OrdersController extends Controller
             'address', AddressProxy::make($request->old('shipping.address', []))
         );
 
-        return Component::render('Orders/Create', [
+        return Inertia::render('Orders/Create', [
             'order' => $order,
             'countries' => Countries::all(),
             'statuses' => OrderProxy::statuses(),
@@ -122,13 +122,13 @@ class OrdersController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\Order  $order
-     * @return \Bazar\Http\Response
+     * @return \Inertia\Response
      */
     public function show(Order $order): Response
     {
         $order->loadMissing(['address', 'products', 'transactions', 'shipping', 'shipping.address']);
 
-        return Component::render('Orders/Show', [
+        return Inertia::render('Orders/Show', [
             'order' => $order,
             'statuses' => OrderProxy::statuses(),
             'action' => URL::route('bazar.orders.update', $order),

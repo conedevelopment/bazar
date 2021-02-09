@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Added the `intertiajs/inertia-laravel` package instead of the custom implementation
+
 ## v0.4.7 (2021-02-06)
 ### Added
 - Added the new `Bazar\Conversion\Manager` class that allows to add custom image conversion drives (like intervension)
