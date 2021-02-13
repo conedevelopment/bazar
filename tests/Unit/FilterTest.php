@@ -36,7 +36,7 @@ class FilterTest extends TestCase
           });
 
         $this->assertSame(
-            Product::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Product::filter($request)->toSql()
         );
     }
 
@@ -64,7 +64,7 @@ class FilterTest extends TestCase
           });
 
         $this->assertSame(
-            Order::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Order::filter($request)->toSql()
         );
     }
 
@@ -85,7 +85,7 @@ class FilterTest extends TestCase
           ->where('mime_type', 'like', 'image%');
 
         $this->assertSame(
-            Medium::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Medium::filter($request)->toSql()
         );
     }
 
@@ -103,7 +103,7 @@ class FilterTest extends TestCase
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
-            Address::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Address::filter($request)->toSql()
         );
     }
 
@@ -121,7 +121,7 @@ class FilterTest extends TestCase
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
-            Category::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Category::filter($request)->toSql()
         );
     }
 
@@ -142,7 +142,7 @@ class FilterTest extends TestCase
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
-            User::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), User::filter($request)->toSql()
         );
     }
 
@@ -162,7 +162,7 @@ class FilterTest extends TestCase
           ->orderBy('created_at', 'desc');
 
         $this->assertSame(
-            Variant::filter($request)->toSql(), $query->toSql()
+            $query->toSql(), Variant::filter($request)->toSql()
         );
     }
 }

@@ -21,7 +21,6 @@ class MediaTest extends TestCase
         parent::setUp();
 
         $this->withHeaders([
-            'X-Bazar' => true,
             'Accept' => 'application/json',
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
