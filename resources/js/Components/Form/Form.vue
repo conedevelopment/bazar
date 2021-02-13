@@ -42,6 +42,10 @@
             }
         },
 
+        remember: {
+            data: ['fields'],
+        },
+
         provide() {
             return {
                 form: this.form
@@ -84,7 +88,7 @@
                 if (this.json) {
                     this.submitJson();
                 } else {
-                    this.$inertia.visit(this.action, this.config);
+                    this.$inertia.visit(this.action, Object.assign(this.config, { preserveState: true }));
                 }
             },
             submitJson() {

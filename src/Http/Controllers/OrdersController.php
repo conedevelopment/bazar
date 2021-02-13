@@ -4,16 +4,12 @@ namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
 use Bazar\Contracts\Models\Order;
-use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
-use Inertia\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Proxies\Order as OrderProxy;
-use Bazar\Proxies\Product as ProductProxy;
 use Bazar\Proxies\User as UserProxy;
 use Bazar\Support\Countries;
-use Inertia\Inertia;
 use Bazar\Support\Facades\Discount;
 use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
@@ -23,6 +19,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class OrdersController extends Controller
 {
@@ -46,11 +44,11 @@ class OrdersController extends Controller
      */
     public function index(Request $request): Response
     {
-        $orders = OrderProxy::query()->with([
-            'address', 'products', 'transactions', 'shipping',
-        ])->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $orders = OrderProxy::query()
+                    ->with(['address', 'products', 'transactions', 'shipping'])
+                    ->filter($request)
+                    ->latest()
+                    ->paginate($request->input('per_page'));
 
         return Inertia::render('Orders/Index', [
             'results' => $orders,
@@ -61,27 +59,15 @@ class OrdersController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
-    public function create(Request $request): Response
+    public function create(): Response
     {
-        $order = OrderProxy::make()->setAttribute(
-            'user',
-            UserProxy::make()->setAttribute('addresses', [])->forceFill($request->old('user', []))
-        )->setRelation(
-            'address',
-            AddressProxy::make($request->old('address', []))
-        )->setRelation(
-            'products',
-            Collection::make($request->old('products'))->map(function (array $product): Product {
-                return ProductProxy::make()->forceFill($product);
-            })
-        );
+        $order = OrderProxy::make()
+                    ->setAttribute('user', UserProxy::make()->setAttribute('addresses', []))
+                    ->setRelation('address', AddressProxy::make());
 
-        $order->shipping->fill($request->old('shipping', []))->setRelation(
-            'address', AddressProxy::make($request->old('shipping.address', []))
-        );
+        $order->shipping->setRelation('address', AddressProxy::make());
 
         return Inertia::render('Orders/Create', [
             'order' => $order,
