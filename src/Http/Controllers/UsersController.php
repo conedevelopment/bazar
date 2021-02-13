@@ -5,15 +5,15 @@ namespace Bazar\Http\Controllers;
 use Bazar\Contracts\Models\User as User;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
-use Bazar\Proxies\User as Proxy;
-use Inertia\Inertia;
-use Illuminate\Contracts\Support\Responsable;
+use Bazar\Proxies\User as UserProxy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response as ResponseFactory;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class UsersController extends Controller
 {
@@ -24,7 +24,7 @@ class UsersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = Proxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = UserProxy::getProxiedClass())) {
             $this->authorizeResource($class);
             $this->middleware('can:update,user')->only('restore');
         }
@@ -38,28 +38,29 @@ class UsersController extends Controller
      */
     public function index(Request $request) //: Response
     {
-        $users = Proxy::query()->with('addresses')->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $users = UserProxy::query()
+                    ->with('addresses')
+                    ->filter($request)
+                    ->latest()
+                    ->paginate($request->input('per_page'));
 
         return $request->expectsJson()
-            ? Response::json($users)
+            ? ResponseFactory::json($users)
             : Inertia::render('Users/Index', [
                 'results' => $users,
-                'filters' => Proxy::filters(),
+                'filters' => UserProxy::filters(),
             ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Inertia\Response
      */
-    public function create(Request $request, User $user): Responsable
+    public function create(User $user): Response
     {
-        $user->setAttribute('addresses', [])->forceFill($request->old());
+        $user->setAttribute('addresses', []);
 
         return Inertia::render('Users/Create', [
             'user' => $user,
@@ -75,7 +76,7 @@ class UsersController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $user = Proxy::create($request->validated());
+        $user = UserProxy::create($request->validated());
 
         return Redirect::route('bazar.users.show', $user)->with(
             'message', __('The user has been created.')
@@ -86,9 +87,9 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\User  $user
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Inertia\Response
      */
-    public function show(User $user): Responsable
+    public function show(User $user): Response
     {
         return Inertia::render('Users/Show', [
             'user' => $user,

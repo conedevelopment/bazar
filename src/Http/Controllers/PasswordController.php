@@ -3,12 +3,12 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Http\Requests\PasswordUpdateRequest as UpdateRequest;
-use Inertia\Response;
-use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PasswordController extends Controller
 {

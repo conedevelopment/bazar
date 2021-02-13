@@ -6,15 +6,15 @@ use Bazar\Contracts\Models\Address;
 use Bazar\Contracts\Models\User;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
-use Inertia\Response;
 use Bazar\Proxies\Address as AddressProxy;
 use Bazar\Support\Countries;
-use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AddressesController extends Controller
 {
@@ -39,9 +39,10 @@ class AddressesController extends Controller
      */
     public function index(Request $request, User $user): Response
     {
-        $addresses = $user->addresses()->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $addresses = $user->addresses()
+                        ->filter($request)
+                        ->latest()
+                        ->paginate($request->input('per_page'));
 
         return Inertia::render('Addresses/Index', [
             'user' => $user,
@@ -55,9 +56,9 @@ class AddressesController extends Controller
      * @param  \Bazar\Contracts\Models\User  $user
      * @return \Inertia\Response
      */
-    public function create(Request $request, User $user): Response
+    public function create(User $user): Response
     {
-        $address = AddressProxy::make($request->old());
+        $address = AddressProxy::make();
 
         return Inertia::render('Addresses/Create', [
             'user' => $user,

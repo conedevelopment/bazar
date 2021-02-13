@@ -8,15 +8,15 @@ use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
 use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Product as ProductProxy;
-use Inertia\Inertia;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response as ResponseFactory;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductsController extends Controller
 {
@@ -41,12 +41,13 @@ class ProductsController extends Controller
      */
     public function index(Request $request) //: Response
     {
-        $products = ProductProxy::query()->with('media')->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $products = ProductProxy::query()
+                        ->with('media')
+                        ->filter($request)->latest()
+                        ->paginate($request->input('per_page'));
 
         return $request->expectsJson()
-            ? Response::json($products)
+            ? ResponseFactory::json($products)
             : Inertia::render('Products/Index', [
                 'results' => $products,
                 'filters' => ProductProxy::filters(),
@@ -56,15 +57,13 @@ class ProductsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Inertia\Response
      */
-    public function create(Request $request): Responsable
+    public function create(): Response
     {
         $product = ProductProxy::make()
-            ->setAttribute('media', [])
-            ->setAttribute('categories', [])
-            ->forceFill($request->old());
+                    ->setAttribute('media', [])
+                    ->setAttribute('categories', []);
 
         return Inertia::render('Products/Create', [
             'product' => $product,
@@ -101,9 +100,9 @@ class ProductsController extends Controller
      * Display the specified resource.
      *
      * @param  \Bazar\Contracts\Models\Product  $product
-     * @return \Illuminate\Contracts\Support\Responsable
+     * @return \Inertia\Response
      */
-    public function show(Product $product): Responsable
+    public function show(Product $product): Response
     {
         $product->loadMissing(['media', 'categories:id,name']);
 

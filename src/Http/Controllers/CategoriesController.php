@@ -5,15 +5,15 @@ namespace Bazar\Http\Controllers;
 use Bazar\Contracts\Models\Category;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
-use Inertia\Response;
 use Bazar\Proxies\Category as CategoryProxy;
-use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CategoriesController extends Controller
 {
@@ -38,9 +38,11 @@ class CategoriesController extends Controller
      */
     public function index(Request $request): Response
     {
-        $categories = CategoryProxy::query()->with('media')->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $categories = CategoryProxy::query()
+                        ->with('media')
+                        ->filter($request)
+                        ->latest()
+                        ->paginate($request->input('per_page'));
 
         return Inertia::render('Categories/Index', [
             'results' => $categories,
@@ -51,14 +53,11 @@ class CategoriesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Inertia\Response
      */
-    public function create(Request $request): Response
+    public function create(): Response
     {
-        $category = CategoryProxy::make()
-            ->setAttribute('media', [])
-            ->forceFill($request->old());
+        $category = CategoryProxy::make()->setAttribute('media', []);
 
         return Inertia::render('Categories/Create', [
             'category' => $category,

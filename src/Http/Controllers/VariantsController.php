@@ -7,15 +7,15 @@ use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Variant;
 use Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
-use Inertia\Response;
 use Bazar\Proxies\Variant as VariantProxy;
-use Inertia\Inertia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class VariantsController extends Controller
 {
@@ -41,9 +41,11 @@ class VariantsController extends Controller
      */
     public function index(Request $request, Product $product): Response
     {
-        $variants = $product->variants()->with('media')->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $variants = $product->variants()
+                        ->with('media')
+                        ->filter($request)
+                        ->latest()
+                        ->paginate($request->input('per_page'));
 
         $variants->getCollection()->each(static function (Variant $variant) use ($product): void {
             $variant->setRelation(
@@ -61,17 +63,14 @@ class VariantsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \Bazar\Contracts\Models\Product  $product
      * @return \Inertia\Response
      */
-    public function create(Request $request, Product $product): Response
+    public function create(Product $product): Response
     {
-        $variant = VariantProxy::make($request->old())
-            ->setAttribute('media', [])
-            ->setRelation(
-                'product', $product->withoutRelations()->makeHidden('variant')
-            );
+        $variant = VariantProxy::make()
+                    ->setAttribute('media', [])
+                    ->setRelation('product', $product->withoutRelations()->makeHidden('variant'));
 
         return Inertia::render('Variants/Create', [
             'product' => $product,
