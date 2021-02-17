@@ -3,7 +3,6 @@
 namespace Bazar\Repositories;
 
 use Bazar\Contracts\Repositories\AssetRepository as Contract;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 
 class AssetRepository extends Repository implements Contract
@@ -118,11 +117,11 @@ class AssetRepository extends Repository implements Contract
     }
 
     /**
-     * Symlink the registered scripts and styles.
+     * Publish the registered scripts and styles.
      *
      * @return void
      */
-    public function link(): void
+    public function publish(): void
     {
         $this->items->each(static function (array $assets, string $name): void {
             $assets = array_filter($assets, static function (array $asset): bool {
@@ -131,11 +130,7 @@ class AssetRepository extends Repository implements Contract
                     && ! file_exists($asset['target']);
             });
 
-            File::ensureDirectoryExists(public_path("vendor/{$name}"));
-
-            foreach ($assets as $asset) {
-                symlink($asset['source'], $asset['target']);
-            }
+            //
         });
     }
 }

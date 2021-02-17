@@ -72,11 +72,4 @@ class CommandsTest extends TestCase
             Str::contains(file_get_contents(App::basePath('webpack.mix.js')), $script)
         );
     }
-
-    /** @test */
-    public function it_can_link_assets()
-    {
-        $this->artisan('bazar:link-assets')
-            ->assertExitCode(Command::SUCCESS);
-    }
 }
