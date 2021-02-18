@@ -2,6 +2,7 @@
 
 namespace Bazar\Repositories;
 
+use Bazar\BazarServiceProvider;
 use Bazar\Contracts\Repositories\AssetRepository as Contract;
 use Illuminate\Support\Facades\URL;
 
@@ -39,8 +40,11 @@ class AssetRepository extends Repository implements Contract
 
         $this->register($name, $source, 'script', array_replace([
             'url' => URL::asset($path),
-            'target' => public_path($path),
+            'target' => $path = public_path($path),
         ], $options));
+
+        BazarServiceProvider::$publishes[BazarServiceProvider::class][$source] = $path;
+        BazarServiceProvider::$publishGroups['bazar-assets'][$source] = $path;
     }
 
     /**
@@ -57,8 +61,11 @@ class AssetRepository extends Repository implements Contract
 
         $this->register($name, $source, 'style', array_replace([
             'url' => URL::asset($path),
-            'target' => public_path($path),
+            'target' => $path = public_path($path),
         ], $options));
+
+        BazarServiceProvider::$publishes[BazarServiceProvider::class][$source] = $path;
+        BazarServiceProvider::$publishGroups['bazar-assets'][$source] = $path;
     }
 
     /**
@@ -114,23 +121,5 @@ class AssetRepository extends Repository implements Contract
                 return $asset['type'] === 'icon';
             });
         })->toArray();
-    }
-
-    /**
-     * Publish the registered scripts and styles.
-     *
-     * @return void
-     */
-    public function publish(): void
-    {
-        $this->items->each(static function (array $assets, string $name): void {
-            $assets = array_filter($assets, static function (array $asset): bool {
-                return $asset['type'] !== 'icon'
-                    && file_exists($asset['source'])
-                    && ! file_exists($asset['target']);
-            });
-
-            //
-        });
     }
 }

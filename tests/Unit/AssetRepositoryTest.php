@@ -4,7 +4,6 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Support\Facades\Asset;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 class AssetRepositoryTest extends TestCase
@@ -47,13 +46,5 @@ class AssetRepositoryTest extends TestCase
         Asset::icon('fake', 'fake-icon.svg');
 
         $this->assertSame([['source' => 'fake-icon.svg', 'type' => 'icon']], Asset::icons());
-    }
-
-    /** @test */
-    public function it_can_publish_assets()
-    {
-        Storage::fake('local');
-
-        $this->assertTrue(true);
     }
 }
