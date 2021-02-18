@@ -139,7 +139,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
                 'trashed' => __('Trashed')
             ],
             'status' => static::statuses(),
-            'category' => UserProxy::query()->pluck('name', 'id')->toArray(),
+            'user' => UserProxy::query()->pluck('name', 'id')->toArray(),
         ];
     }
 

@@ -3,7 +3,6 @@
     import Heading from './Heading';
     import Filters from './Filters';
     import Pagination from './Pagination';
-    import Queryable from './../../Mixins/Queryable';
 
     export default {
         components: {
@@ -28,21 +27,30 @@
             }
         },
 
+        remember: {
+            data: ['query'],
+        },
+
         created() {
             if (window.location.search) {
-                this.query = Object.assign(
-                    {}, this.query, Object.fromEntries(new URLSearchParams(window.location.search))
+                Object.assign(
+                    this.query, Object.fromEntries(new URLSearchParams(window.location.search))
                 );
             }
         },
 
         mounted() {
             this.columns = (this.$slots.default || []).filter(column => {
-                return column.componentInstance && column.componentOptions.tag === 'data-column';
+                return column.componentInstance
+                    && column.componentOptions.tag === 'data-column';
             }).map(column => column.componentInstance);
 
             this.$watch('query', (n, o) => {
-                this.$inertia.visit(this.url);
+                this.$inertia.get(window.location.pathname, n, {
+                    replace: true,
+                    only: ['results'],
+                    preserveState: true
+                });
             }, { deep: true })
         },
 
@@ -61,20 +69,6 @@
             hasFilters() {
                 return Object.keys(this.filters || {}).length > 0;
             },
-            url() {
-                let query = Object.assign({}, this.query);
-
-                for (let key in query) {
-                    if (query[key] === '' || query[key] === null || query[key] === undefined) {
-                        delete query[key];
-                    }
-                }
-
-                let url = new URL(window.location.href);
-                url.search = new URLSearchParams(query);
-
-                return url;
-            }
         },
 
         methods: {

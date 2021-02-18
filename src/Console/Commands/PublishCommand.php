@@ -35,10 +35,14 @@ class PublishCommand extends Command
     {
         if ($this->option('mix')) {
             $this->mix();
+
+            $this->info('The webpack.mix.js file has been updated.');
         }
 
         if ($this->option('packages')) {
             $this->packages();
+
+            $this->info('The packages.json file has been updated.');
         }
 
         return $this->call('vendor:publish', array_merge(

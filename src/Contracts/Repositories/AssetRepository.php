@@ -65,11 +65,4 @@ interface AssetRepository
      * @return array
      */
     public function icons(): array;
-
-    /**
-     * Symlink the registered scripts and styles.
-     *
-     * @return void
-     */
-    public function link(): void;
 }
