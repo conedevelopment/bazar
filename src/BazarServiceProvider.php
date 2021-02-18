@@ -147,6 +147,7 @@ class BazarServiceProvider extends ServiceProvider
             ], 'bazar-config');
 
             $this->publishes([
+                __DIR__.'/../public' => public_path('vendor/bazar'),
                 __DIR__.'/../resources/js' => App::resourcePath('js/vendor/bazar'),
                 __DIR__.'/../resources/sass' => App::resourcePath('sass/vendor/bazar'),
             ], 'bazar-assets');
