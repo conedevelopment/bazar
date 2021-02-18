@@ -4,7 +4,6 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Support\Facades\Asset;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 class AssetRepositoryTest extends TestCase
@@ -47,23 +46,5 @@ class AssetRepositoryTest extends TestCase
         Asset::icon('fake', 'fake-icon.svg');
 
         $this->assertSame([['source' => 'fake-icon.svg', 'type' => 'icon']], Asset::icons());
-    }
-
-    /** @test */
-    public function it_can_link_assets()
-    {
-        Storage::fake('local');
-
-        Storage::disk('local')->put('asset-repostory/fake-script.js', '');
-        Storage::disk('local')->put('asset-repostory/fake-style.css', '');
-
-        Asset::script('fake', Storage::disk('local')->path('asset-repostory/fake-script.js'));
-        Asset::style('fake', Storage::disk('local')->path('asset-repostory/fake-style.css'));
-        Asset::icon('fake', 'fake-icon.svg');
-
-        Asset::link();
-
-        $this->assertTrue(is_link(public_path('vendor/fake/fake-script.js')));
-        $this->assertTrue(is_link(public_path('vendor/fake/fake-style.css')));
     }
 }
