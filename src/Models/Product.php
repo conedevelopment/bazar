@@ -2,6 +2,8 @@
 
 namespace Bazar\Models;
 
+use Bazar\Casts\Inventory;
+use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
@@ -15,8 +17,6 @@ use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Proxies\Category as CategoryProxy;
 use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Proxies\Variant as VariantProxy;
-use Bazar\Support\Bags\Inventory;
-use Bazar\Support\Bags\Prices;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
