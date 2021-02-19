@@ -3,23 +3,22 @@
 namespace Bazar\Casts;
 
 use Bazar\Bazar;
-use Bazar\Support\AttributeBag;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Prices extends AttributeBag
 {
     /**
-     * Create a new bag instance.
+     * Create a new attribute bag instance.
      *
      * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
     {
-        $items = array_replace_recursive(
-            array_fill_keys(array_keys(Bazar::currencies()), ['default' => null]),
-            $items
+        $this->defaults = array_fill_keys(
+            array_keys(Bazar::currencies()),
+            ['default' => null]
         );
 
         parent::__construct($items);

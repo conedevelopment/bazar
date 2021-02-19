@@ -2,13 +2,12 @@
 
 namespace Bazar\Casts;
 
-use Bazar\Support\AttributeBag;
 use Illuminate\Support\Facades\Config;
 
 class Inventory extends AttributeBag
 {
     /**
-     * The bag items.
+     * The default values.
      *
      * @var array
      */

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Support;
+namespace Bazar\Casts;
 
 use ArrayObject;
 use Illuminate\Contracts\Database\Eloquent\Castable;
@@ -14,21 +14,21 @@ use Stringable;
 abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, Jsonable, JsonSerializable, Stringable
 {
     /**
-     * The bag items.
+     * The default values.
      *
      * @var array
      */
     protected $defaults = [];
 
     /**
-     * Create a new bag instance.
+     * Create a new attribute bag instance.
      *
      * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
     {
-        parent::__construct(array_replace($this->defaults, $items));
+        parent::__construct(array_replace_recursive($this->defaults, $items));
     }
 
     /**
