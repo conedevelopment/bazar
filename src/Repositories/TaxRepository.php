@@ -78,7 +78,7 @@ class TaxRepository extends Repository implements Contract
             return call_user_func_array($tax, [$model]);
         }
 
-        if ((is_string($tax) || is_object($tax)) && in_array(Tax::class, class_implements($tax))) {
+        if (is_callable([$tax, 'calculate']) && in_array(Tax::class, class_implements($tax))) {
             return call_user_func_array(
                 [is_string($tax) ? new $tax : $tax, 'calculate'], [$model]
             );

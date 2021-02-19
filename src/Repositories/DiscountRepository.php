@@ -56,9 +56,11 @@ class DiscountRepository extends Repository implements Contract
      */
     public function calculate(Discountable $model): float
     {
-        return ! $this->disabled ? $this->items->sum(function ($discount) use ($model): float {
-            return $this->process($model, $discount);
-        }) : $model->discount;
+        return $this->disabled
+            ? $model->discount
+            : $this->items->sum(function ($discount) use ($model): float {
+                return $this->process($model, $discount);
+            });
     }
 
     /**
@@ -78,7 +80,7 @@ class DiscountRepository extends Repository implements Contract
             return call_user_func_array($discount, [$model]);
         }
 
-        if ((is_string($discount) || is_object($discount)) && in_array(Discount::class, class_implements($discount))) {
+        if (is_callable([$discount, 'calculate']) && in_array(Discount::class, class_implements($discount))) {
             return call_user_func_array(
                 [is_string($discount) ? new $discount : $discount, 'calculate'], [$model]
             );
