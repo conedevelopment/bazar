@@ -4,7 +4,7 @@
 ### Added
 - Added the `intertiajs/inertia-laravel` package instead of the custom implementation
 
-### Changes
+### Changed
 - Changed the symlinking logic to the native publishing logic that the `ServiceProvider` class offers
 
 ## v0.4.7 (2021-02-06)
