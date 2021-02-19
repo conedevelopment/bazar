@@ -80,7 +80,7 @@ class DiscountRepository extends Repository implements Contract
             return call_user_func_array($discount, [$model]);
         }
 
-        if (is_callable([$discount, 'calculate']) && in_array(Discount::class, class_implements($discount))) {
+        if (is_callable([$discount, 'calculate'], true) && in_array(Discount::class, class_implements($discount))) {
             return call_user_func_array(
                 [is_string($discount) ? new $discount : $discount, 'calculate'], [$model]
             );
