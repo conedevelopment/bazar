@@ -46,15 +46,15 @@ class SupportTest extends TestCase
         $this->assertNull($inventory->formattedWeight());
 
         $this->assertFalse($inventory->virtual());
-        $inventory->virtual = true;
+        $inventory['virtual'] = true;
         $this->assertTrue($inventory->virtual());
 
         $this->assertFalse($inventory->downloadable());
-        $inventory->downloadable = true;
+        $inventory['downloadable'] = true;
         $this->assertTrue($inventory->downloadable());
 
         $this->assertFalse($inventory->tracksQuantity());
-        $inventory->quantity = 10;
+        $inventory['quantity'] = 10;
         $this->assertTrue($inventory->tracksQuantity());
 
         $this->assertFalse($inventory->available(11));
@@ -62,9 +62,9 @@ class SupportTest extends TestCase
         $this->assertTrue($inventory->available());
 
         $inventory->incrementQuantity(5);
-        $this->assertSame(15, (int) $inventory->quantity);
+        $this->assertSame(15, (int) $inventory['quantity']);
         $inventory->decrementQuantity(5);
-        $this->assertSame(10, (int) $inventory->quantity);
+        $this->assertSame(10, (int) $inventory['quantity']);
 
         $inventory[] = 'test';
         $this->assertSame('test', $inventory[0]);

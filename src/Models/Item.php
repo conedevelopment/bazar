@@ -282,7 +282,7 @@ class Item extends MorphPivot implements Taxable
             $this->price = $stockable->price('sale', $this->itemable->currency)
                         ?: $stockable->price('default', $this->itemable->currency);
 
-            $stock = $stockable->inventory->quantity;
+            $stock = $stockable->inventory['quantity'] ?? null;
 
             $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
         }

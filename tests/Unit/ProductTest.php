@@ -95,7 +95,7 @@ class ProductTest extends TestCase
     {
         $this->assertInstanceOf(Inventory::class, $this->product->inventory);
 
-        $this->product->inventory->sku = 'fake';
+        $this->product->inventory['sku'] = 'fake';
         $this->product->save();
         $this->assertDatabaseHas('bazar_products', ['inventory->sku' => 'fake']);
     }
@@ -104,10 +104,10 @@ class ProductTest extends TestCase
     public function it_manages_prices()
     {
         $this->assertInstanceOf(Prices::class, $this->product->prices);
-        $this->assertEquals($this->product->prices->usd['default'], $this->product->price('default', 'usd'));
+        $this->assertEquals($this->product->prices['usd']['default'], $this->product->price('default', 'usd'));
         $this->assertSame($this->product->price(), $this->product->price);
         $this->assertSame(
-            Str::currency($this->product->prices->usd['default'], 'usd'), $this->product->formattedPrice('default', 'usd')
+            Str::currency($this->product->prices['usd']['default'], 'usd'), $this->product->formattedPrice('default', 'usd')
         );
         $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());

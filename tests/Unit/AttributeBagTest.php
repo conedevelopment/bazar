@@ -25,7 +25,7 @@ class AttributeBagTest extends TestCase
         ]);
 
         $this->assertSame(
-            sprintf('%s mm', implode('x', [$inventory->length, $inventory->width, $inventory->height])),
+            sprintf('%s mm', implode('x', [$inventory['length'], $inventory['width'], $inventory['height']])),
             $inventory->formattedDimensions('x')
         );
         $this->assertNull((new Inventory)->formattedDimensions());
@@ -36,20 +36,20 @@ class AttributeBagTest extends TestCase
         $this->assertTrue($inventory->tracksQuantity());
         $this->assertTrue($inventory->available());
         $this->assertFalse($inventory->available(600));
-        $this->assertSame(20, $inventory->quantity);
+        $this->assertSame(20, $inventory['quantity']);
         $inventory->incrementQuantity(10);
-        $this->assertSame(30, (int) $inventory->quantity);
+        $this->assertSame(30, (int) $inventory['quantity']);
         $inventory->decrementQuantity(6);
-        $this->assertSame(24, (int) $inventory->quantity);
+        $this->assertSame(24, (int) $inventory['quantity']);
 
         $this->assertFalse($inventory->virtual());
         $this->assertFalse($inventory->downloadable());
 
-        $inventory->foo = 'bar';
-        $inventory->bar = 'foo';
-        $this->assertTrue(isset($inventory->foo, $inventory->bar));
-        unset($inventory->foo);
-        $this->assertFalse(isset($inventory->foo));
+        $inventory['foo'] = 'bar';
+        $inventory['bar'] = 'foo';
+        $this->assertTrue(isset($inventory['foo'], $inventory['bar']));
+        unset($inventory['foo']);
+        $this->assertFalse(isset($inventory['foo']));
     }
 
     /** @test */
@@ -62,8 +62,8 @@ class AttributeBagTest extends TestCase
             ],
         ]);
 
-        $this->assertSame(100, $prices->usd['default']);
-        $this->assertSame(80, $prices->usd['sale']);
+        $this->assertSame(100, $prices['usd']['default']);
+        $this->assertSame(80, $prices['usd']['sale']);
         $this->assertSame('100.00 USD', $prices->format());
     }
 }
