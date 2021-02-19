@@ -3,6 +3,8 @@
 namespace Bazar\Models;
 
 use Bazar\Bazar;
+use Bazar\Casts\Inventory;
+use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
@@ -11,8 +13,6 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Variant as Contract;
 use Bazar\Contracts\Stockable;
 use Bazar\Proxies\Product as ProductProxy;
-use Bazar\Support\Bags\Inventory;
-use Bazar\Support\Bags\Prices;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -132,7 +132,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
     {
         $currency = $currency ?: Bazar::currency();
 
-        return $this->prices[$currency][$type] ?: $this->product->price($type, $currency);
+        return $this->prices->get("{$currency}.{$type}") ?: $this->product->price($type, $currency);
     }
 
     /**

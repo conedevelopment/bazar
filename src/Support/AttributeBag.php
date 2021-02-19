@@ -1,25 +1,24 @@
 <?php
 
-namespace Bazar\Support\Bags;
+namespace Bazar\Support;
 
-use ArrayAccess;
-use ArrayIterator;
+use ArrayObject;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use IteratorAggregate;
+use Illuminate\Support\Arr;
 use JsonSerializable;
 use Stringable;
 
-abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregate, Jsonable, JsonSerializable, Stringable
+abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, Jsonable, JsonSerializable, Stringable
 {
     /**
      * The bag items.
      *
      * @var array
      */
-    protected $items = [];
+    protected $defaults = [];
 
     /**
      * Create a new bag instance.
@@ -29,7 +28,7 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
      */
     public function __construct(array $items = [])
     {
-        $this->items = array_replace($this->items, $items);
+        parent::__construct(array_replace($this->defaults, $items));
     }
 
     /**
@@ -39,9 +38,13 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
      * @param  mixed  $value
      * @return $this
      */
-    public function set(string $key, $value): Bag
+    public function set(string $key, $value): AttributeBag
     {
-        $this->offsetSet($key, $value);
+        $items = $this->toArray();
+
+        Arr::set($items, $key, $value);
+
+        $this->exchangeArray($items);
 
         return $this;
     }
@@ -55,18 +58,7 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
      */
     public function get(string $key, $default = null)
     {
-        return $this->offsetGet($key) ?: $default;
-    }
-
-    /**
-     * Remove the given key from the items.
-     *
-     * @param  string  $key
-     * @return void
-     */
-    public function remove(string $key): void
-    {
-        $this->offsetUnset($key);
+        return Arr::get($this->toArray(), $key, $default);
     }
 
     /**
@@ -76,9 +68,7 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
      */
     public function toArray(): array
     {
-        return array_map(static function ($item) {
-            return $item instanceof Arrayable ? $item->toArray() : $item;
-        }, $this->items);
+        return $this->getArrayCopy();
     }
 
     /**
@@ -103,66 +93,7 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
     }
 
     /**
-     * Determine if the offset exists in the items.
-     *
-     * @param  string|int  $key
-     * @return bool
-     */
-    public function offsetExists($key): bool
-    {
-        return isset($this->items[$key]);
-    }
-
-    /**
-     * Get the value of the given offset.
-     *
-     * @param  string|int  $key
-     * @return mixed
-     */
-    public function offsetGet($key)
-    {
-        return $this->items[$key] ?? null;
-    }
-
-    /**
-     * Get the value of the given offset.
-     *
-     * @param  string|int|null  $key
-     * @param  mixed  $value
-     * @return void
-     */
-    public function offsetSet($key, $value): void
-    {
-        if (is_null($key)) {
-            $this->items[] = $value;
-        } else {
-            $this->items[$key] = $value;
-        }
-    }
-
-    /**
-     * Unset the value of the given offset.
-     *
-     * @param  string|int  $key
-     * @return void
-     */
-    public function offsetUnset($key): void
-    {
-        unset($this->items[$key]);
-    }
-
-    /**
-     * Get the iterator for the items.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator(): ArrayIterator
-    {
-        return new ArrayIterator($this->items);
-    }
-
-    /**
-     * Convert the object to its string representation.
+     * Convert the object to its JSON representation.
      *
      * @return string
      */
@@ -233,7 +164,7 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
                 $this->class = $class;
             }
 
-            public function get($model, string $key, $value, array $attributes): Bag
+            public function get($model, string $key, $value, array $attributes): AttributeBag
             {
                 $class = $this->class;
 
@@ -245,6 +176,11 @@ abstract class Bag implements Arrayable, ArrayAccess, Castable, IteratorAggregat
             public function set($model, string $key, $value, array $attributes): string
             {
                 return json_encode($value, JSON_NUMERIC_CHECK);
+            }
+
+            public function serialize($model, string $key, $value, array $attributes): array
+            {
+                return $value->getArrayCopy();
             }
         };
     }

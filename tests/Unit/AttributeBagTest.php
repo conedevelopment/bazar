@@ -2,12 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Support\Bags\Inventory;
-use Bazar\Support\Bags\Price;
-use Bazar\Support\Bags\Prices;
+use Bazar\Casts\Inventory;
+use Bazar\Casts\Prices;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
-use InvalidArgumentException;
 
 class AttributeBagTest extends TestCase
 {
@@ -32,7 +30,7 @@ class AttributeBagTest extends TestCase
         );
         $this->assertNull((new Inventory)->formattedDimensions());
 
-        $this->assertSame(sprintf('%s g', $inventory->weight), $inventory->formattedWeight());
+        $this->assertSame(sprintf('%s g', $inventory['weight']), $inventory->formattedWeight());
         $this->assertNull((new Inventory)->formattedWeight());
 
         $this->assertTrue($inventory->tracksQuantity());
@@ -51,8 +49,7 @@ class AttributeBagTest extends TestCase
         $inventory->bar = 'foo';
         $this->assertTrue(isset($inventory->foo, $inventory->bar));
         unset($inventory->foo);
-        $inventory->remove('bar');
-        $this->assertFalse(isset($inventory->foo, $inventory->bar));
+        $this->assertFalse(isset($inventory->foo));
     }
 
     /** @test */
@@ -65,16 +62,8 @@ class AttributeBagTest extends TestCase
             ],
         ]);
 
-        $this->assertInstanceOf(Price::class, $prices->usd);
-        $this->assertSame(100, $prices->usd->default);
-        $this->assertSame(80, $prices->usd->sale);
-        $this->assertSame('100.00 USD', $prices->usd->format());
-        $this->assertSame('usd', $prices->usd->getCurrency());
-
-        $prices->chf = new Price('chf');
-        $this->assertInstanceOf(Price::class, $prices->chf);
-
-        $this->expectException(InvalidArgumentException::class);
-        $prices->huf = [];
+        $this->assertSame(100, $prices->usd['default']);
+        $this->assertSame(80, $prices->usd['sale']);
+        $this->assertSame('100.00 USD', $prices->format());
     }
 }
