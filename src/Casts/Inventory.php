@@ -1,17 +1,18 @@
 <?php
 
-namespace Bazar\Support\Bags;
+namespace Bazar\Casts;
 
+use Bazar\Support\AttributeBag;
 use Illuminate\Support\Facades\Config;
 
-class Inventory extends Bag
+class Inventory extends AttributeBag
 {
     /**
      * The bag items.
      *
      * @var array
      */
-    protected $items = [
+    protected $defaults = [
         'files' => [],
         'sku' => null,
         'width' => null,

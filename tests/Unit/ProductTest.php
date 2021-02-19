@@ -2,6 +2,8 @@
 
 namespace Bazar\Tests\Unit;
 
+use Bazar\Casts\Inventory;
+use Bazar\Casts\Prices;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Database\Factories\CartFactory;
 use Bazar\Database\Factories\CategoryFactory;
@@ -9,9 +11,6 @@ use Bazar\Database\Factories\MediumFactory;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Database\Factories\VariantFactory;
-use Bazar\Support\Bags\Inventory;
-use Bazar\Support\Bags\Price;
-use Bazar\Support\Bags\Prices;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -105,17 +104,16 @@ class ProductTest extends TestCase
     public function it_manages_prices()
     {
         $this->assertInstanceOf(Prices::class, $this->product->prices);
-        $this->assertInstanceOf(Price::class, $this->product->prices->usd);
-        $this->assertEquals($this->product->prices->usd->default, $this->product->price('default', 'usd'));
+        $this->assertEquals($this->product->prices->usd['default'], $this->product->price('default', 'usd'));
         $this->assertSame($this->product->price(), $this->product->price);
         $this->assertSame(
-            Str::currency($this->product->prices->usd->default, 'usd'), $this->product->formattedPrice('default', 'usd')
+            Str::currency($this->product->prices->usd['default'], 'usd'), $this->product->formattedPrice('default', 'usd')
         );
         $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());
         $this->assertTrue($this->product->onSale());
 
-        $this->product->prices->usd->sale = 10;
+        $this->product->prices['usd']['sale'] = 10;
         $this->product->save();
         $this->assertDatabaseHas('bazar_products', ['prices->usd->sale' => 10]);
     }

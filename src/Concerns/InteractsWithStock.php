@@ -37,7 +37,7 @@ trait InteractsWithStock
     {
         $currency = $currency ?: Bazar::currency();
 
-        return $this->prices[$currency][$type];
+        return $this->prices->get("{$currency}.{$type}");
     }
 
     /**
@@ -51,9 +51,7 @@ trait InteractsWithStock
     {
         $currency = $currency ?: Bazar::currency();
 
-        $price = $this->prices[$currency];
-
-        return $price ? $price->format($type) : null;
+        return $this->prices->format("{$currency}.{$type}");
     }
 
     /**
