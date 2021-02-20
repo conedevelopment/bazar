@@ -169,10 +169,10 @@ class BazarServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\Commands\InstallCommand::class,
-                Console\Commands\PublishCommand::class,
-                Console\Commands\ClearCartsCommand::class,
-                Console\Commands\ClearChunksCommand::class,
+                Console\Commands\Install::class,
+                Console\Commands\Publish::class,
+                Console\Commands\ClearCarts::class,
+                Console\Commands\ClearChunks::class,
             ]);
         }
     }

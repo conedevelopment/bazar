@@ -39,6 +39,7 @@
     <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
         <div
             class="media-item"
+            style="cursor: pointer;"
             :class="{ 'is-image': item.is_image, 'is-document': ! item.is_image, 'is-selected': selected }"
             @click.prevent="toggle"
         >

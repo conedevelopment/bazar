@@ -9,6 +9,7 @@
 
         data() {
             return {
+                busy: false,
                 isOpen: false
             };
         },
@@ -41,8 +42,8 @@
                 );
             },
             destroy() {
-                this.$refs.form.busy = true;
-                this.$http.delete(this.$refs.form.action).then(response => {
+                this.busy = true;
+                this.$http.delete(this.action).then(response => {
                     this.$parent.$parent.response.data.splice(
                         this.$parent.$parent.response.data.findIndex(item => item.id === this.item.id), 1
                     );
@@ -50,7 +51,7 @@
                 }).catch(error => {
                     //
                 }).finally(() => {
-                    this.$refs.form.busy = false;
+                    this.busy = false;
                 });
             }
         }
@@ -77,32 +78,9 @@
                 <li>{{ size }}</li>
                 <li v-if="item.is_image" v-html="dimensions"></li>
             </ul>
-            <data-form json ref="form" :action="action" :model="item">
-                <template #default="form">
-                    <form-input
-                        class="form-group-sm"
-                        name="properties.alt"
-                        v-model="form.fields.properties.alt"
-                        :label="__('Alt Text')"
-                        :disabled="form.busy"
-                    ></form-input>
-                    <form-input
-                        class="form-group-sm"
-                        name="properties.title"
-                        v-model="form.fields.properties.title"
-                        :label="__('Title')"
-                        :disabled="form.busy"
-                    ></form-input>
-                    <div class="form-group d-flex justify-content-between">
-                        <button type="button" class="btn btn-sm btn-outline-danger" :disabled="form.busy" @click.prevent="destroy">
-                            {{ __('Delete') }}
-                        </button>
-                        <button type="submit" class="btn btn-sm btn-primary" :disabled="form.busy">
-                            {{ __('Save') }}
-                        </button>
-                    </div>
-                </template>
-            </data-form>
+            <button type="button" class="btn btn-sm btn-outline-danger" :disabled="busy" @click.prevent="destroy">
+                {{ __('Delete') }}
+            </button>
         </div>
     </div>
 </template>

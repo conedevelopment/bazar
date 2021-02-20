@@ -44,6 +44,7 @@
 
         remember: {
             data: ['fields'],
+            key: window.location.pathname
         },
 
         provide() {

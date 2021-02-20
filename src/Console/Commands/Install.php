@@ -5,7 +5,7 @@ namespace Bazar\Console\Commands;
 use Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
 
-class InstallCommand extends Command
+class Install extends Command
 {
     /**
      * The name and signature of the console command.
