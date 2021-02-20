@@ -1,9 +1,7 @@
 <script>
     import Closable from './../Mixins/Closable';
-import Icon from './Icon.vue';
 
     export default {
-  components: { Icon },
         mixins: [Closable],
 
         props: {
