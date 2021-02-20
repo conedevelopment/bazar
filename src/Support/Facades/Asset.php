@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static array scripts()
  * @method static array styles()
  * @method static array icons()
- * @method static void link()
  *
  * @see \Bazar\Contracts\Repositories\AssetRepository
  */

@@ -70,7 +70,7 @@
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-primary p-0" type="button" @click.prevent="toggle">
-                            <icon :icon="icon"></icon>
+                            <icon :name="icon"></icon>
                         </button>
                     </div>
                 </div>

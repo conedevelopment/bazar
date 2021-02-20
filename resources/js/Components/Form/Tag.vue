@@ -49,7 +49,7 @@
             <span v-for="(tag, index) in tags" :key="index" class="tag is-small">
                 <span class="tag__label">{{ tag }}</span>
                 <button type="button" class="tag__remove" @click.prevent="remove(index)">
-                    <icon icon="close"></icon>
+                    <icon name="close"></icon>
                 </button>
             </span>
             <input

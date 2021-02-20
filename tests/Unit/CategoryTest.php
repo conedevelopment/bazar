@@ -45,7 +45,7 @@ class CategoryTest extends TestCase
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->category);
-        $this->assertSame($this->category->name, $this->category->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame($this->category->name, $this->category->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

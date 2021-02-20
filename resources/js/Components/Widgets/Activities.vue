@@ -33,7 +33,7 @@
                 <div v-for="(activity, index) in activities" :key="index" class="activity">
                     <div class="activity__icon-helper">
                         <div class="activity__icon">
-                            <icon :icon="activity.icon"></icon>
+                            <icon :name="activity.icon"></icon>
                         </div>
                     </div>
                     <div class="activity__content">

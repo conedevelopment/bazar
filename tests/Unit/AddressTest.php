@@ -130,7 +130,7 @@ class AddressTest extends TestCase
         $address = $this->user->addresses()->save(AddressFactory::new()->make());
 
         $this->assertInstanceOf(Breadcrumbable::class, $address);
-        $this->assertSame($address->alias, $address->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame($address->alias, $address->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

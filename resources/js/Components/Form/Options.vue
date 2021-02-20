@@ -67,7 +67,7 @@
             <div class="d-flex">
                 <label :for="`${name}.${key}`" class="mr-3">{{ __(key) }}</label>
                 <button type="button" class="icon-btn icon-btn-danger" :aria-label="__('Remove')" @click.prevent="remove(key)">
-                    <icon icon="close"></icon>
+                    <icon name="close"></icon>
                 </button>
             </div>
             <slot v-bind="{ key, option }"></slot>

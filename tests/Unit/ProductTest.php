@@ -122,7 +122,7 @@ class ProductTest extends TestCase
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->product);
-        $this->assertSame($this->product->name, $this->product->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame($this->product->name, $this->product->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

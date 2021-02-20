@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0 (2021-02-20)
+### Added
+- Added the menu repository that allows to easily register custom menu items in the admin UI
+
 ## v0.4.8 (2021-02-18)
 ### Added
 - Added the `intertiajs/inertia-laravel` package instead of the custom implementation
