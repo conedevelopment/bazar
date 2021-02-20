@@ -9,6 +9,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route as RouteFactory;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -44,6 +45,7 @@ class BazarServiceProvider extends ServiceProvider
         Contracts\Shipping\Manager::class => Shipping\Manager::class,
         Contracts\Conversion\Manager::class => Conversion\Manager::class,
         Contracts\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
+        Contracts\Repositories\MenuRepository::class => Repositories\MenuRepository::class,
         Contracts\Repositories\AssetRepository::class => Repositories\AssetRepository::class,
         Contracts\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
     ];
@@ -75,6 +77,7 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerCommands();
         $this->registerPublishes();
         $this->registerComposers();
+        $this->registerMenuItems();
         $this->registerConversions();
         $this->registerRouteBindings();
     }
@@ -92,8 +95,8 @@ class BazarServiceProvider extends ServiceProvider
             });
 
             RouteFactory::get('bazar/download', Http\Controllers\DownloadController::class)
-                ->middleware('signed')
-                ->name('bazar.download');
+                ->name('bazar.download')
+                ->middleware('signed');
         }
     }
 
@@ -199,6 +202,8 @@ class BazarServiceProvider extends ServiceProvider
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
+
+            $view->with('menu', Support\Facades\Menu::items());
         });
     }
 
@@ -244,5 +249,23 @@ class BazarServiceProvider extends ServiceProvider
         Event::listen(Events\OrderPlaced::class, Listeners\SendNewOrderNotifications::class);
         Event::listen(Events\CheckoutFailing::class, Listeners\HandleFailingCheckout::class);
         Event::listen(Events\CheckoutProcessing::class, Listeners\HandleProcessingCheckout::class);
+    }
+
+    /**
+     * Register the menu items.
+     *
+     * @return void
+     */
+    public function registerMenuItems(): void
+    {
+        Support\Facades\Menu::resource(URL::to('bazar/orders'), __('Orders'), ['icon' => 'shop-basket']);
+        Support\Facades\Menu::resource(URL::to('bazar/products'), __('Products'), ['icon' => 'product']);
+        Support\Facades\Menu::resource(URL::to('bazar/categories'), __('Categories'), ['icon' => 'category']);
+        Support\Facades\Menu::resource(URL::to('bazar/users'), __('Users'), ['icon' => 'customer']);
+
+        Support\Facades\Menu::register(URL::to('bazar/support'), __('Support'), [
+            'icon' => 'support',
+            'group' => __('Tools'),
+        ]);
     }
 }

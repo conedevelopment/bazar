@@ -68,7 +68,7 @@
                 </span>
             </h3>
             <button type="button" class="icon-btn icon-btn-danger" :aria-label="__('Remove')" @click.prevent="remove">
-                <icon icon="close"></icon>
+                <icon name="close"></icon>
             </button>
         </div>
         <div class="media-accordion__content" :class="{ 'is-open': isOpen }">

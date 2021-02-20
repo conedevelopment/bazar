@@ -70,7 +70,7 @@ class Breadcrumbs implements Arrayable
             $item = $this->request->route($match[0]);
 
             if ($item instanceof Breadcrumbable) {
-                return $item->getBreadcrumbLabel($this->request);
+                return $item->toBreadcrumb($this->request);
             }
         }
 

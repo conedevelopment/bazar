@@ -46,7 +46,7 @@ class VariantTest extends TestCase
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->variant);
-        $this->assertSame($this->variant->alias, $this->variant->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame($this->variant->alias, $this->variant->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

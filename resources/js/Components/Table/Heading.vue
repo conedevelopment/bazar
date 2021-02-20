@@ -77,7 +77,7 @@
         >
             <span>{{ column.label }}</span>
             <button type="button" class="table-sort-btn" v-if="column.sort && $parent.query['sort[by]'] === column.sort">
-                <icon :icon="icon"></icon>
+                <icon :name="icon"></icon>
             </button>
         </th>
         <th scope="col" style="width: 40px;"></th>

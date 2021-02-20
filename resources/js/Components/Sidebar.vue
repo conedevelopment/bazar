@@ -12,6 +12,12 @@
             });
         },
 
+        computed: {
+            groups() {
+                return window.Bazar.menu;
+            },
+        },
+
         methods: {
             setActiveLinks() {
                 const path = window.location.pathname.replace(/\/$/, '');
@@ -50,97 +56,27 @@
                     <ul class="app-sidebar-menu">
                         <li class="app-sidebar-menu-item">
                             <inertia-link href="/bazar" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="dashboard"></icon></span>
+                                <span class="app-sidebar-menu-link__icon"><icon name="dashboard"></icon></span>
                                 <span class="app-sidebar-menu-link__caption">{{ __('Dashboard') }}</span>
                             </inertia-link>
                         </li>
                     </ul>
                 </section>
-                <section class="mt-4">
-                    <h2 class="app-sidebar__title">{{ __('Shop') }}</h2>
+                <section v-for="(items, group) in groups" :key="group" class="mt-4">
+                    <h2 class="app-sidebar__title">{{ group }}</h2>
                     <ul class="app-sidebar-menu">
-                        <li class="app-sidebar-menu-item">
-                            <inertia-link href="/bazar/orders" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="shop-basket"></icon></span>
-                                <span class="app-sidebar-menu-link__caption">{{ __('Orders') }}</span>
+                        <li v-for="(item, route) in items" :key="route" class="app-sidebar-menu-item">
+                            <inertia-link :href="route" class="app-sidebar-menu-link">
+                                <span class="app-sidebar-menu-link__icon"><icon :name="item.icon"></icon></span>
+                                <span class="app-sidebar-menu-link__caption">{{ item.label }}</span>
                             </inertia-link>
-                            <ul class="app-sidebar-submenu">
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/orders" class="app-sidebar-submenu-link">
-                                        {{ __('All Orders') }}
-                                    </inertia-link>
-                                </li>
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/orders/create" class="app-sidebar-submenu-link">
-                                        {{ __('Create Order') }}
+                            <ul v-if="Object.keys(item.items).length > 0" class="app-sidebar-submenu">
+                                <li v-for="(label, route) in item.items" :key="route" class="app-sidebar-submenu-item">
+                                    <inertia-link :href="route" class="app-sidebar-submenu-link">
+                                        {{ label }}
                                     </inertia-link>
                                 </li>
                             </ul>
-                        </li>
-                        <li class="app-sidebar-menu-item">
-                            <inertia-link href="/bazar/products" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="product"></icon></span>
-                                <span class="app-sidebar-menu-link__caption">{{ __('Products') }}</span>
-                            </inertia-link>
-                            <ul class="app-sidebar-submenu">
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/products" class="app-sidebar-submenu-link">
-                                        {{ __('All Products') }}
-                                    </inertia-link>
-                                </li>
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/products/create" class="app-sidebar-submenu-link">
-                                        {{ __('Create Product') }}
-                                    </inertia-link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="app-sidebar-menu-item">
-                            <inertia-link href="/bazar/categories" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="category"></icon></span>
-                                <span class="app-sidebar-menu-link__caption">{{ __('Categories') }}</span>
-                            </inertia-link>
-                            <ul class="app-sidebar-submenu">
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/categories" class="app-sidebar-submenu-link">
-                                        {{ __('All Categories') }}
-                                    </inertia-link>
-                                </li>
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/categories/create" class="app-sidebar-submenu-link">
-                                        {{ __('Create Category') }}
-                                    </inertia-link>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="app-sidebar-menu-item">
-                            <inertia-link href="/bazar/users" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="customer"></icon></span>
-                                <span class="app-sidebar-menu-link__caption">{{ __('Users') }}</span>
-                            </inertia-link>
-                            <ul class="app-sidebar-submenu">
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/users" class="app-sidebar-submenu-link">
-                                        {{ __('All Users') }}
-                                    </inertia-link>
-                                </li>
-                                <li class="app-sidebar-submenu-item">
-                                    <inertia-link href="/bazar/users/create" class="app-sidebar-submenu-link">
-                                        {{ __('Create User') }}
-                                    </inertia-link>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </section>
-                <section class="mt-4">
-                    <h2 class="app-sidebar__title">{{ __('Tools') }}</h2>
-                    <ul class="app-sidebar-menu">
-                        <li class="app-sidebar-menu-item">
-                            <inertia-link href="/bazar/support" class="app-sidebar-menu-link">
-                                <span class="app-sidebar-menu-link__icon"><icon icon="support"></icon></span>
-                                <span class="app-sidebar-menu-link__caption">{{ __('Support') }}</span>
-                            </inertia-link>
                         </li>
                     </ul>
                 </section>

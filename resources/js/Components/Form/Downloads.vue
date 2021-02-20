@@ -1,7 +1,9 @@
 <script>
+import Icon from '../Icon.vue';
     import Field from './../../Mixins/Field';
 
     export default {
+  components: { Icon },
         mixins: [Field],
 
         inheritAttrs: false,
@@ -104,9 +106,7 @@
                                 :aria-label="__('Remove')"
                                 @click.prevent="remove(index)"
                             >
-                                <svg aria-hidden="true" role="img" fill="currentColor" class="icon icon-close">
-                                    <use href="#icon-close" xlink:href="#icon-close"></use>
-                                </svg>
+                                <icon name="close"></icon>
                             </button>
                         </td>
                     </tr>

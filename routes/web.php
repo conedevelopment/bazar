@@ -39,7 +39,7 @@ Route::patch('users/{user}/restore', [UsersController::class, 'restore'])->name(
 Route::resource('users', UsersController::class)->except('edit');
 
 // Addresses
-Route::as('users.addresses.')->prefix('users/{user}/addresses')->group(function () {
+Route::as('users.addresses.')->prefix('users/{user}/addresses')->group(static function (): void {
     Route::patch('batch-update', [BatchAddressesController::class, 'update'])->name('batch-update');
     Route::delete('batch-destroy', [BatchAddressesController::class, 'destroy'])->name('batch-destroy');
 });
@@ -60,7 +60,7 @@ Route::patch('products/{product}/restore', [ProductsController::class, 'restore'
 Route::resource('products', ProductsController::class)->except('edit');
 
 // Variants
-Route::as('products.variants.')->prefix('products/{product}/variants')->group(function () {
+Route::as('products.variants.')->prefix('products/{product}/variants')->group(static function (): void {
     Route::patch('batch-update', [BatchVariantsController::class, 'update'])->name('batch-update');
     Route::delete('batch-destroy', [BatchVariantsController::class, 'destroy'])->name('batch-destroy');
     Route::patch('batch-restore', [BatchVariantsController::class, 'restore'])->name('batch-restore');

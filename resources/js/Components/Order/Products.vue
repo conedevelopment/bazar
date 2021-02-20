@@ -96,7 +96,7 @@
                             :aria-label="__('Remove')"
                             @click.prevent="remove(index)"
                         >
-                            <icon icon="close"></icon>
+                            <icon name="close"></icon>
                         </button>
                     </td>
                 </tr>

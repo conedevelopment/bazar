@@ -74,7 +74,7 @@ class UserTest extends TestCase
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->user);
-        $this->assertSame($this->user->name, $this->user->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame($this->user->name, $this->user->toBreadcrumb($this->app['request']));
     }
 
     /** @test */
