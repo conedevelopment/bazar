@@ -53,7 +53,7 @@
                         <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
                     </inertia-link>
                     <button type="button" class="app-mobile-header__menu-toggle" @click.prevent="$refs.sidebar.toggle">
-                        <icon icon="menu"></icon>
+                        <icon name="menu"></icon>
                     </button>
                 </div>
                 <app-header></app-header>

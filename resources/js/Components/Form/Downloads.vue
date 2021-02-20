@@ -104,7 +104,7 @@
                                 :aria-label="__('Remove')"
                                 @click.prevent="remove(index)"
                             >
-                                <svg aria-hidden="true" role="img" fill="currentColor" class="icon icon-close">
+                                <svg aria-hidden="true" role="img" fill="currentColor" class="icon name-close">
                                     <use href="#icon-close" xlink:href="#icon-close"></use>
                                 </svg>
                             </button>

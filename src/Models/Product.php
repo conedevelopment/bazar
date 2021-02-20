@@ -187,12 +187,12 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     }
 
     /**
-     * Get the breadcrumb label.
+     * Get the breadcrumb representation of the object.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    public function getBreadcrumbLabel(Request $request): string
+    public function toBreadcrumb(Request $request): string
     {
         return $this->name;
     }

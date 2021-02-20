@@ -36,7 +36,7 @@
         <div @click="toggle">
             <slot name="trigger">
                 <button type="button" class="btn btn-link dropdown-ellipses px-0 py-0" @click.prevent>
-                    <svg class="icon icon-more-vertical" aria-hidden="true" role="img" fill="currentColor">
+                    <svg class="icon name-more-vertical" aria-hidden="true" role="img" fill="currentColor">
                         <use href="#icon-more-vertical" xlink:href="#icon-more-vertical"></use>
                     </svg>
                 </button>

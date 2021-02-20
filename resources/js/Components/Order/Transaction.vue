@@ -91,7 +91,7 @@
                     :aria-label="completed ? __('Mark pending') : __('Mark completed')"
                     @click.prevent="update"
                 >
-                    <icon :icon="icon"></icon>
+                    <icon :name="icon"></icon>
                 </button>
                 <button
                     type="button"
@@ -100,7 +100,7 @@
                     :aria-label="__('Delete transaction')"
                     @click.prevent="destroy"
                 >
-                    <icon icon="close"></icon>
+                    <icon name="close"></icon>
                 </button>
             </div>
         </td>

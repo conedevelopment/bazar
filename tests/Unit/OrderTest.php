@@ -100,7 +100,7 @@ class OrderTest extends TestCase
     public function it_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->order);
-        $this->assertSame("#{$this->order->id}", $this->order->getBreadcrumbLabel($this->app['request']));
+        $this->assertSame("#{$this->order->id}", $this->order->toBreadcrumb($this->app['request']));
     }
 
     /** @test */
