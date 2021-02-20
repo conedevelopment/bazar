@@ -146,16 +146,6 @@ parameters:
 			path: src/Listeners/RefreshInventory.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
-			count: 1
-			path: src/Repositories/DiscountRepository.php
-
-		-
-			message: "#^Result of \\|\\| is always true\\.$#"
-			count: 1
-			path: src/Repositories/TaxRepository.php
-
-		-
 			message: "#^Method Bazar\\\\Cart\\\\Checkout\\:\\:prepare\\(\\) should return Bazar\\\\Contracts\\\\Models\\\\Order but returns Bazar\\\\Proxies\\\\Order\\.$#"
 			count: 1
 			path: src/Cart/Checkout.php
