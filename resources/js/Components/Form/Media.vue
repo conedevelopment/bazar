@@ -57,15 +57,11 @@
             >
                 <div class="selected-media-item">
                     <button type="button" class="selected-media-item__remove" @click.prevent="remove(index)">
-                        <svg aria-hidden="true" role="img" fill="currentColor" class="icon name-close">
-                            <use href="#icon-close" xlink:href="#icon-close"></use>
-                        </svg>
+                        <icon name="close"></icon>
                     </button>
                     <img v-if="medium.is_image" class="img-fluid rounded" :src="medium.urls.thumb" alt="">
                     <span v-else class="selected-media-item__document" :title="medium.file_name">
-                        <svg aria-hidden="true" role="img" fill="currentColor" class="icon name-file">
-                            <use href="#icon-file" xlink:href="#icon-file"></use>
-                        </svg>
+                        <icon name="file"></icon>
                     </span>
                 </div>
             </div>

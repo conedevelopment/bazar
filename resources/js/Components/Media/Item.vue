@@ -44,9 +44,7 @@
         >
             <img v-if="item.is_image" :src="item.urls.thumb" :alt="item.name">
             <span v-else class="media-item__caption">
-                <svg aria-hidden="true" role="img" fill="currentColor" class="icon name-file">
-                    <use href="#icon-file" xlink:href="#icon-file"></use>
-                </svg>
+                <icon name="file"></icon>
                 <span style="text-overflow: ellipsis;">{{ item.file_name }}</span>
             </span>
         </div>
