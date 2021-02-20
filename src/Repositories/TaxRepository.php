@@ -56,9 +56,11 @@ class TaxRepository extends Repository implements Contract
      */
     public function calculate(Taxable $model): float
     {
-        return ! $this->disabled ? $this->items->sum(function ($tax) use ($model): float {
-            return $this->process($model, $tax);
-        }) : $model->tax;
+        return $this->disabled
+            ? $model->tax
+            : $this->items->sum(function ($tax) use ($model): float {
+                return $this->process($model, $tax);
+            });
     }
 
     /**
@@ -78,7 +80,7 @@ class TaxRepository extends Repository implements Contract
             return call_user_func_array($tax, [$model]);
         }
 
-        if ((is_string($tax) || is_object($tax)) && in_array(Tax::class, class_implements($tax))) {
+        if (is_callable([$tax, 'calculate'], true) && in_array(Tax::class, class_implements($tax))) {
             return call_user_func_array(
                 [is_string($tax) ? new $tax : $tax, 'calculate'], [$model]
             );

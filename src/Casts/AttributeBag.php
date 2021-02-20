@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Support;
+namespace Bazar\Casts;
 
 use ArrayObject;
 use Illuminate\Contracts\Database\Eloquent\Castable;
@@ -14,21 +14,21 @@ use Stringable;
 abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, Jsonable, JsonSerializable, Stringable
 {
     /**
-     * The bag items.
+     * The default values.
      *
      * @var array
      */
     protected $defaults = [];
 
     /**
-     * Create a new bag instance.
+     * Create a new attribute bag instance.
      *
      * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
     {
-        parent::__construct(array_replace($this->defaults, $items));
+        parent::__construct(array_replace_recursive($this->defaults, $items));
     }
 
     /**
@@ -100,51 +100,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
     public function __toString(): string
     {
         return $this->toJson();
-    }
-
-    /**
-     * Dynamically get the given property.
-     *
-     * @param  string  $key
-     * @return mixed
-     */
-    public function __get(string $key)
-    {
-        return $this->offsetGet($key);
-    }
-
-    /**
-     * Dynamically set the given property value.
-     *
-     * @param  string  $key
-     * @param  mixed  $value
-     * @return void
-     */
-    public function __set(string $key, $value): void
-    {
-        $this->offsetSet($key, $value);
-    }
-
-    /**
-     * Determine if an offset exists on the items.
-     *
-     * @param  string|int  $key
-     * @return bool
-     */
-    public function __isset($key): bool
-    {
-        return $this->offsetExists($key);
-    }
-
-    /**
-     * Unset an value on the items.
-     *
-     * @param  string|int  $key
-     * @return void
-     */
-    public function __unset($key): void
-    {
-        $this->offsetUnset($key);
     }
 
     /**

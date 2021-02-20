@@ -2,13 +2,12 @@
 
 namespace Bazar\Casts;
 
-use Bazar\Support\AttributeBag;
 use Illuminate\Support\Facades\Config;
 
 class Inventory extends AttributeBag
 {
     /**
-     * The bag items.
+     * The default values.
      *
      * @var array
      */
@@ -32,7 +31,7 @@ class Inventory extends AttributeBag
      */
     public function formattedDimensions(string $glue = 'x'): ?string
     {
-        $dimensions = array_filter([$this->get('length'), $this->get('width'), $this->get('height')]);
+        $dimensions = array_filter([$this['length'], $this['width'], $this['height']]);
 
         if (empty($dimensions)) {
             return null;
@@ -48,7 +47,7 @@ class Inventory extends AttributeBag
      */
     public function formattedWeight(): ?string
     {
-        if (! $weight = $this->get('weight')) {
+        if (! $weight = $this['weight']) {
             return null;
         }
 
@@ -62,7 +61,7 @@ class Inventory extends AttributeBag
      */
     public function virtual(): bool
     {
-        return (bool) $this->get('virtual', false);
+        return (bool) $this['virtual'];
     }
 
     /**
