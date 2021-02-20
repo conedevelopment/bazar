@@ -86,6 +86,6 @@ class TaxRepository extends Repository implements Contract
             );
         }
 
-        return 0;
+        return 0.0;
     }
 }

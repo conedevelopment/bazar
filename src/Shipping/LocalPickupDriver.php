@@ -14,6 +14,6 @@ class LocalPickupDriver extends Driver
      */
     public function calculate(Shippable $model): float
     {
-        return 0;
+        return 0.0;
     }
 }
