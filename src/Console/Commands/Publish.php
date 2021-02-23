@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
-class PublishCommand extends Command
+class Publish extends Command
 {
     /**
      * The name and signature of the console command.

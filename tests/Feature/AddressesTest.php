@@ -116,7 +116,7 @@ class AddressesTest extends TestCase
 
         $this->actingAs($this->admin)->patch(
             URL::route('bazar.users.addresses.batch-update', $this->user),
-            ['ids' => [$this->address->id], 'first_name' => 'Batch Update']
+            ['id' => [$this->address->id], 'first_name' => 'Batch Update']
         )->assertStatus(302);
 
         $this->assertEquals('Batch Update', $this->address->fresh()->first_name);
@@ -131,7 +131,7 @@ class AddressesTest extends TestCase
 
         $this->actingAs($this->admin)->delete(
             URL::route('bazar.users.addresses.batch-destroy', $this->user),
-            ['ids' => [$this->address->id]]
+            ['id' => [$this->address->id]]
         )->assertStatus(302);
 
         $this->assertDatabaseMissing('bazar_addresses', ['id' => $this->address->id]);

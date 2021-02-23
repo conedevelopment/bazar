@@ -36,18 +36,18 @@ class BatchVariantsController extends Controller
      */
     public function update(Request $request, Product $product): RedirectResponse
     {
-        $data = Arr::dot($request->except('ids'));
+        $data = Arr::dot($request->except('id'));
 
         $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
         $product->variants()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count variants have been updated.', ['count' => count($ids)])
+            'message', __(':count variants have been updated.', ['count' => count($id)])
         );
     }
 
@@ -61,13 +61,13 @@ class BatchVariantsController extends Controller
     public function destroy(Request $request, Product $product): RedirectResponse
     {
         $variants = $product->variants()->withTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         );
 
         $request->has('force') ? $variants->forceDelete() : $variants->delete();
 
         return Redirect::back()->with(
-            'message', __(':count variants have been deleted.', ['count' => count($ids)])
+            'message', __(':count variants have been deleted.', ['count' => count($id)])
         );
     }
 
@@ -81,11 +81,11 @@ class BatchVariantsController extends Controller
     public function restore(Request $request, Product $product): RedirectResponse
     {
         $product->variants()->onlyTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->restore();
 
         return Redirect::back()->with(
-            'message', __(':count variants have been restored.', ['count' => count($ids)])
+            'message', __(':count variants have been restored.', ['count' => count($id)])
         );
     }
 }

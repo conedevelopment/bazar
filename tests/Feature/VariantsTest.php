@@ -147,7 +147,7 @@ class VariantsTest extends TestCase
         $this->actingAs($this->admin)
             ->patch(
                 URL::route('bazar.products.variants.batch-update', $this->product),
-                ['ids' => [$this->variant->id], 'option' => ['Size' => 'L']]
+                ['id' => [$this->variant->id], 'option' => ['Size' => 'L']]
             )->assertStatus(302);
 
         $this->assertEquals('L', $this->variant->fresh()->option['Size']);
@@ -161,7 +161,7 @@ class VariantsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.products.variants.batch-destroy', $this->product), ['ids' => [$this->variant->id]])
+            ->delete(URL::route('bazar.products.variants.batch-destroy', $this->product), ['id' => [$this->variant->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->variant->fresh()->trashed());
@@ -169,7 +169,7 @@ class VariantsTest extends TestCase
         $this->actingAs($this->admin)
             ->delete(
                 URL::route('bazar.products.variants.batch-destroy', [$this->product, 'force']),
-                ['ids' => [$this->variant->id]]
+                ['id' => [$this->variant->id]]
             )->assertStatus(302);
 
         $this->assertDatabaseMissing('bazar_variants', ['id' => $this->variant->id]);
@@ -185,7 +185,7 @@ class VariantsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.products.variants.batch-restore', $this->product), ['ids' => [$this->variant->id]])
+            ->patch(URL::route('bazar.products.variants.batch-restore', $this->product), ['id' => [$this->variant->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->variant->fresh()->trashed());

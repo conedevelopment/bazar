@@ -14,7 +14,7 @@
                     return item.hasOwnProperty('deleted_at') && item.deleted_at;
                 });
             },
-            ids() {
+            id() {
                 return this.$parent.$parent.selection.map(item => item.id);
             }
         },
@@ -23,14 +23,14 @@
             destroy() {
                 this.$inertia.visit(`${this.url}/batch-destroy`, {
                     method: 'DELETE',
-                    data: { ids: this.ids },
+                    data: { id: this.id },
                     only: ['results', 'message']
                 });
             },
             restore() {
                 this.$inertia.visit(`${this.url}/batch-restore`, {
                     method: 'PATCH',
-                    data: { ids: this.ids },
+                    data: { id: this.id },
                     only: ['results', 'message']
                 });
             }
@@ -41,7 +41,7 @@
 <template>
     <dropdown ref="dropdown">
         <h6 class="dropdown-header">
-            {{ __(':items selected', { items: this.ids.length }) }}
+            {{ __(':items selected', { items: this.id.length }) }}
         </h6>
         <button type="button" class="dropdown-item" :disabled="! deletable" @click.prevent="destroy">
             {{ __('Delete') }}

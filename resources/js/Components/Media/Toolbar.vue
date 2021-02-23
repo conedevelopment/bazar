@@ -7,7 +7,7 @@
         },
 
         computed: {
-            ids() {
+            id() {
                 return this.$parent.selection.map(item => item.id);
             }
         },
@@ -20,7 +20,7 @@
             destroy() {
                 this.busy = true;
                 this.$http.delete('/bazar/media/batch-destroy', {
-                    data: { ids: this.ids }
+                    data: { id: this.id }
                 }).then(response => {
                     this.refresh();
                 }).catch(error => {
@@ -40,11 +40,11 @@
 <template>
     <div class="d-flex justify-content-between w-100">
         <div>
-            <button type="button" class="btn btn-danger" :disabled="! ids.length || busy" @click.prevent="destroy">
+            <button type="button" class="btn btn-danger" :disabled="! id.length || busy" @click.prevent="destroy">
                 {{ __('Delete') }}
             </button>
-            <span v-show="ids.length" class="modal-help-text ml-3">
-                {{ __(':files file(s) are selected', { files: ids.length }) }}
+            <span v-show="id.length" class="modal-help-text ml-3">
+                {{ __(':files file(s) are selected', { files: id.length }) }}
             </span>
         </div>
         <div>

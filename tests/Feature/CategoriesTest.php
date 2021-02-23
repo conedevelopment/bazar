@@ -149,7 +149,7 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.categories.batch-update'), ['ids' => [$this->category->id], 'name' => 'Updated'])
+            ->patch(URL::route('bazar.categories.batch-update'), ['id' => [$this->category->id], 'name' => 'Updated'])
             ->assertStatus(302);
 
         $this->assertEquals('Updated', $this->category->fresh()->name);
@@ -163,13 +163,13 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.categories.batch-destroy'), ['ids' => [$this->category->id]])
+            ->delete(URL::route('bazar.categories.batch-destroy'), ['id' => [$this->category->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->category->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.categories.batch-destroy', ['force']), ['ids' => [$this->category->id]])
+            ->delete(URL::route('bazar.categories.batch-destroy', ['force']), ['id' => [$this->category->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('bazar_categories', ['id' => $this->category->id]);
@@ -185,7 +185,7 @@ class CategoriesTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.categories.batch-restore'), ['ids' => [$this->category->id]])
+            ->patch(URL::route('bazar.categories.batch-restore'), ['id' => [$this->category->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->category->fresh()->trashed());

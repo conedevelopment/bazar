@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Route as RouteFactory;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\View as ViewFactory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -94,9 +92,9 @@ class BazarServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
-            RouteFactory::get('bazar/download', Http\Controllers\DownloadController::class)
-                ->name('bazar.download')
-                ->middleware('signed');
+            $this->app['router']->get('bazar/download', Http\Controllers\DownloadController::class)
+                                ->name('bazar.download')
+                                ->middleware('signed');
         }
     }
 
@@ -111,7 +109,7 @@ class BazarServiceProvider extends ServiceProvider
             if (is_subclass_of($abstract, Model::class)) {
                 $key = strtolower(class_basename($contract));
 
-                RouteFactory::bind($key, function (string $value, Route $route) use ($key, $contract) {
+                $this->app['router']->bind($key, function (string $value, Route $route) use ($key, $contract) {
                     return Str::is('bazar.*', $route->getName())
                         ? $this->app->make($contract)->resolveRouteBinding(
                             $value, $route->bindingFieldFor($key)
@@ -169,10 +167,10 @@ class BazarServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                Console\Commands\InstallCommand::class,
-                Console\Commands\PublishCommand::class,
-                Console\Commands\ClearCartsCommand::class,
-                Console\Commands\ClearChunksCommand::class,
+                Console\Commands\Install::class,
+                Console\Commands\Publish::class,
+                Console\Commands\ClearCarts::class,
+                Console\Commands\ClearChunks::class,
             ]);
         }
     }
@@ -198,7 +196,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerComposers(): void
     {
-        ViewFactory::composer('bazar::*', function (View $view): void {
+        $this->app['view']->composer('bazar::*', function (View $view): void {
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
@@ -262,7 +260,6 @@ class BazarServiceProvider extends ServiceProvider
         Support\Facades\Menu::resource(URL::to('bazar/products'), __('Products'), ['icon' => 'product']);
         Support\Facades\Menu::resource(URL::to('bazar/categories'), __('Categories'), ['icon' => 'category']);
         Support\Facades\Menu::resource(URL::to('bazar/users'), __('Users'), ['icon' => 'customer']);
-
         Support\Facades\Menu::register(URL::to('bazar/support'), __('Support'), [
             'icon' => 'support',
             'group' => __('Tools'),

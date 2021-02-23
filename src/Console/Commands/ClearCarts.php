@@ -7,7 +7,7 @@ use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Proxies\Shipping as ShippingProxy;
 use Illuminate\Console\Command;
 
-class ClearCartsCommand extends Command
+class ClearCarts extends Command
 {
     /**
      * The name and signature of the console command.

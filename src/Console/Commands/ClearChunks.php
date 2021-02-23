@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use SplFileInfo;
 
-class ClearChunksCommand extends Command
+class ClearChunks extends Command
 {
     /**
      * The name and signature of the console command.

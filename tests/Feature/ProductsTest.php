@@ -148,7 +148,7 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.products.batch-update'), ['ids' => [$this->product->id], 'name' => 'Cat'])
+            ->patch(URL::route('bazar.products.batch-update'), ['id' => [$this->product->id], 'name' => 'Cat'])
             ->assertStatus(302);
 
         $this->assertEquals('Cat', $this->product->fresh()->name);
@@ -162,13 +162,13 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.products.batch-destroy'), ['ids' => [$this->product->id]])
+            ->delete(URL::route('bazar.products.batch-destroy'), ['id' => [$this->product->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->product->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.products.batch-destroy', ['force']), ['ids' => [$this->product->id]])
+            ->delete(URL::route('bazar.products.batch-destroy', ['force']), ['id' => [$this->product->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('bazar_products', ['id' => $this->product->id]);
@@ -184,7 +184,7 @@ class ProductsTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.products.batch-restore'), ['ids' => [$this->product->id]])
+            ->patch(URL::route('bazar.products.batch-restore'), ['id' => [$this->product->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->product->fresh()->trashed());
