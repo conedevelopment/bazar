@@ -169,7 +169,7 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.orders.batch-update'), ['ids' => [$this->order->id], 'status' => 'cancelled'])
+            ->patch(URL::route('bazar.orders.batch-update'), ['id' => [$this->order->id], 'status' => 'cancelled'])
             ->assertStatus(302);
 
         $this->assertEquals('cancelled', $this->order->fresh()->status);
@@ -183,13 +183,13 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.orders.batch-destroy'), ['ids' => [$this->order->id]])
+            ->delete(URL::route('bazar.orders.batch-destroy'), ['id' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->order->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.orders.batch-destroy', ['force']), ['ids' => [$this->order->id]])
+            ->delete(URL::route('bazar.orders.batch-destroy', ['force']), ['id' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('bazar_orders', ['id' => $this->order->id]);
@@ -205,7 +205,7 @@ class OrdersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.orders.batch-restore'), ['ids' => [$this->order->id]])
+            ->patch(URL::route('bazar.orders.batch-restore'), ['id' => [$this->order->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->order->fresh()->trashed());

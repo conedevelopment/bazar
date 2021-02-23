@@ -40,7 +40,7 @@ abstract class FormRequest extends BaseFormRequest
      *
      * @throws \Bazar\Exceptions\ValidationException
      */
-    protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator): void
     {
         throw (new ValidationException($validator))
                     ->errorBag($this->errorBag)

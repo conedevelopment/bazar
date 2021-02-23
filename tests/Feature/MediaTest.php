@@ -136,7 +136,7 @@ class MediaTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.media.batch-destroy'), ['ids' => [$this->medium->id]])
+            ->delete(URL::route('bazar.media.batch-destroy'), ['id' => [$this->medium->id]])
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 

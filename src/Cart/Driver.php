@@ -112,11 +112,11 @@ abstract class Driver
      */
     public function remove($item): void
     {
-        $ids = array_map(static function ($item): string {
+        $id = array_map(static function ($item): string {
             return $item instanceof Item ? $item->id : $item;
         }, Arr::wrap($item));
 
-        $this->model()->products()->wherePivotIn('id', $ids)->detach();
+        $this->model()->products()->wherePivotIn('id', $id)->detach();
 
         CartTouched::dispatch($this->model());
     }

@@ -34,18 +34,18 @@ class BatchUsersController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $data = Arr::dot($request->except('ids'));
+        $data = Arr::dot($request->except('id'));
 
         $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
         UserProxy::query()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count users have been updated.', ['count' => count($ids)])
+            'message', __(':count users have been updated.', ['count' => count($id)])
         );
     }
 
@@ -58,13 +58,13 @@ class BatchUsersController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $users = UserProxy::query()->withTrashed()->whereIn(
-            'id', $ids = array_diff($request->input('ids', []), [$request->user()->id])
+            'id', $id = array_diff($request->input('id', []), [$request->user()->id])
         );
 
         $request->has('force') ? $users->forceDelete() : $users->delete();
 
         return Redirect::back()->with(
-            'message', __(':count users have been deleted.', ['count' => count($ids)])
+            'message', __(':count users have been deleted.', ['count' => count($id)])
         );
     }
 
@@ -77,11 +77,11 @@ class BatchUsersController extends Controller
     public function restore(Request $request): RedirectResponse
     {
         UserProxy::query()->onlyTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->restore();
 
         return Redirect::back()->with(
-            'message', __(':count users have been restored.', ['count' => count($ids)])
+            'message', __(':count users have been restored.', ['count' => count($id)])
         );
     }
 }

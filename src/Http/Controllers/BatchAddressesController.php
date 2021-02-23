@@ -35,18 +35,18 @@ class BatchAddressesController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
-        $data = Arr::dot($request->except('ids'));
+        $data = Arr::dot($request->except('id'));
 
         $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
         $user->addresses()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count address have been updated.', ['count' => count($ids)])
+            'message', __(':count address have been updated.', ['count' => count($id)])
         );
     }
 
@@ -60,11 +60,11 @@ class BatchAddressesController extends Controller
     public function destroy(Request $request, User $user): RedirectResponse
     {
         $user->addresses()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->delete();
 
         return Redirect::back()->with(
-            'message', __(':count addresses have been deleted.', ['count' => count($ids)])
+            'message', __(':count addresses have been deleted.', ['count' => count($id)])
         );
     }
 }

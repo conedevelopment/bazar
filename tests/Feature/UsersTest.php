@@ -145,7 +145,7 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.users.batch-update'), ['ids' => [$this->user->id], 'name' => 'Cat'])
+            ->patch(URL::route('bazar.users.batch-update'), ['id' => [$this->user->id], 'name' => 'Cat'])
             ->assertStatus(302);
 
         $this->assertEquals('Cat', $this->user->fresh()->name);
@@ -159,13 +159,13 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.users.batch-destroy'), ['ids' => [$this->user->id]])
+            ->delete(URL::route('bazar.users.batch-destroy'), ['id' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertTrue($this->user->fresh()->trashed());
 
         $this->actingAs($this->admin)
-            ->delete(URL::route('bazar.users.batch-destroy', ['force']), ['ids' => [$this->user->id]])
+            ->delete(URL::route('bazar.users.batch-destroy', ['force']), ['id' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('users', ['id' => $this->user->id]);
@@ -181,7 +181,7 @@ class UsersTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->patch(URL::route('bazar.users.batch-restore'), ['ids' => [$this->user->id]])
+            ->patch(URL::route('bazar.users.batch-restore'), ['id' => [$this->user->id]])
             ->assertStatus(302);
 
         $this->assertFalse($this->user->fresh()->trashed());

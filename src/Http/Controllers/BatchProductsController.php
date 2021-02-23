@@ -34,18 +34,18 @@ class BatchProductsController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $data = Arr::dot($request->except('ids'));
+        $data = Arr::dot($request->except('id'));
 
         $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
         ProductProxy::query()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count products have been updated.', ['count' => count($ids)])
+            'message', __(':count products have been updated.', ['count' => count($id)])
         );
     }
 
@@ -58,13 +58,13 @@ class BatchProductsController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $products = ProductProxy::query()->withTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         );
 
         $request->has('force') ? $products->forceDelete() : $products->delete();
 
         return Redirect::back()->with(
-            'message', __(':count products have been deleted.', ['count' => count($ids)])
+            'message', __(':count products have been deleted.', ['count' => count($id)])
         );
     }
 
@@ -77,11 +77,11 @@ class BatchProductsController extends Controller
     public function restore(Request $request): RedirectResponse
     {
         ProductProxy::query()->onlyTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->restore();
 
         return Redirect::back()->with(
-            'message', __(':count products have been restored.', ['count' => count($ids)])
+            'message', __(':count products have been restored.', ['count' => count($id)])
         );
     }
 }

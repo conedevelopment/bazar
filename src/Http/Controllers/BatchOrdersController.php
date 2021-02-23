@@ -34,18 +34,18 @@ class BatchOrdersController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $data = Arr::dot($request->except('ids'));
+        $data = Arr::dot($request->except('id'));
 
         $data = Collection::make($data)->filter()->mapWithKeys(static function ($item, string $key): array {
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
         OrderProxy::query()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->update($data);
 
         return Redirect::back()->with(
-            'message', __(':count orders have been updated.', ['count' => count($ids)])
+            'message', __(':count orders have been updated.', ['count' => count($id)])
         );
     }
 
@@ -58,13 +58,13 @@ class BatchOrdersController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $orders = OrderProxy::query()->withTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         );
 
         $request->has('force') ? $orders->forceDelete() : $orders->delete();
 
         return Redirect::back()->with(
-            'message', __(':count orders have been deleted.', ['count' => count($ids)])
+            'message', __(':count orders have been deleted.', ['count' => count($id)])
         );
     }
 
@@ -77,11 +77,11 @@ class BatchOrdersController extends Controller
     public function restore(Request $request): RedirectResponse
     {
         OrderProxy::query()->onlyTrashed()->whereIn(
-            'id', $ids = $request->input('ids', [])
+            'id', $id = $request->input('id', [])
         )->restore();
 
         return Redirect::back()->with(
-            'message', __(':count orders have been restored.', ['count' => count($ids)])
+            'message', __(':count orders have been restored.', ['count' => count($id)])
         );
     }
 }
