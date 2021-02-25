@@ -111,19 +111,20 @@ class CartTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->cart->newQuery()->where('locked', true)->toSql(),
+            $this->cart->newQuery()->where('bazar_carts.locked', true)->toSql(),
             $this->cart->newQuery()->locked()->toSql()
         );
 
         $this->assertSame(
-            $this->cart->newQuery()->where('locked', false)->toSql(),
+            $this->cart->newQuery()->where('bazar_carts.locked', false)->toSql(),
             $this->cart->newQuery()->unlocked()->toSql()
         );
 
         $this->assertSame(
-            $this->cart->newQuery()->whereNull('user_id')->where(
-                'updated_at', '<', Carbon::now()->subDays(3)
-            )->toSql(),
+            $this->cart->newQuery()
+                ->whereNull('bazar_carts.user_id')
+                ->where('bazar_carts.updated_at', '<', Carbon::now()->subDays(3))
+                ->toSql(),
             $this->cart->newQuery()->expired()->toSql()
         );
     }

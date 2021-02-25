@@ -162,7 +162,7 @@ class Transaction extends Model implements Contract
      */
     public function scopePayment(Builder $query): Builder
     {
-        return $query->where('type', 'payment');
+        return $query->where($query->qualifyColumn('type'), 'payment');
     }
 
     /**
@@ -173,7 +173,7 @@ class Transaction extends Model implements Contract
      */
     public function scopeRefund(Builder $query): Builder
     {
-        return $query->where('type', 'refund');
+        return $query->where($query->qualifyColumn('type'), 'refund');
     }
 
     /**
@@ -184,7 +184,7 @@ class Transaction extends Model implements Contract
      */
     public function scopeCompleted(Builder $query): Builder
     {
-        return $query->whereNotNull('completed_at');
+        return $query->whereNotNull($query->qualifyColumn('completed_at'));
     }
 
     /**
@@ -195,6 +195,6 @@ class Transaction extends Model implements Contract
      */
     public function scopePending(Builder $query): Builder
     {
-        return $query->whereNull('completed_at');
+        return $query->whereNull($query->qualifyColumn('completed_at'));
     }
 }

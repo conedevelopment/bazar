@@ -188,7 +188,7 @@ class Medium extends Model implements Contract
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where('name', 'like', "{$value}%");
+        return $query->where($query->qualifyColumn('name'), 'like', "{$value}%");
     }
 
     /**
@@ -202,9 +202,9 @@ class Medium extends Model implements Contract
     {
         switch ($value) {
             case 'image':
-                return $query->where('mime_type', 'like', 'image%');
+                return $query->where($query->qualifyColumn('mime_type'), 'like', 'image%');
             case 'file':
-                return $query->where('mime_type', 'not like', 'image%');
+                return $query->where($query->qualifyColumn('mime_type'), 'not like', 'image%');
             default:
                 return $query;
         }

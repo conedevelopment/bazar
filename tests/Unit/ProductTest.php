@@ -130,8 +130,8 @@ class ProductTest extends TestCase
     {
         $this->assertSame(
             $this->product->newQuery()->where(function ($q) {
-                $q->where('name', 'like', 'test%')
-                    ->orWhere('inventory->sku', 'like', 'test%');
+                $q->where('bazar_products.name', 'like', 'test%')
+                    ->orWhere('bazar_products.inventory->sku', 'like', 'test%');
             })->toSql(),
             $this->product->newQuery()->search('test')->toSql()
         );
@@ -141,6 +141,16 @@ class ProductTest extends TestCase
                 $q->where('bazar_categories.id', 1);
             })->toSql(),
             $this->product->newQuery()->category(1)->toSql()
+        );
+
+        $this->assertSame(
+            $this->product->newQuery()->where('bazar_products.inventory->quantity', '=', 0)->toSql(),
+            $this->product->newQuery()->outOfStock()->toSql()
+        );
+
+        $this->assertSame(
+            $this->product->newQuery()->where('bazar_products.inventory->quantity', '>', 0)->toSql(),
+            $this->product->newQuery()->inStock()->toSql()
         );
     }
 }

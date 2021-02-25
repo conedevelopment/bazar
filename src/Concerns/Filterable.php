@@ -35,7 +35,7 @@ trait Filterable
     {
         foreach ($request->except('filter') as $name => $value) {
             if ($this->hasNamedScope($name) && ! is_null($value)) {
-                $query = $this->callNamedScope($name, [$query, $value]);
+                $this->callNamedScope($name, [$query, $value]);
             }
         }
 
@@ -46,12 +46,12 @@ trait Filterable
      * Exclude the given models from the query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int|string|array  $value
+     * @param  array  $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeExclude(Builder $query, $value): Builder
+    public function scopeExclude(Builder $query, array $value): Builder
     {
-        return $query->whereNotIn('id', (array) $value);
+        return $query->whereNotIn($query->qualifyColumn('id'), $value);
     }
 
     /**
@@ -87,7 +87,8 @@ trait Filterable
     public function scopeSort(Builder $query, array $value = []): Builder
     {
         return $query->orderBy(
-            $value['by'] ?? 'created_at', $value['order'] ?? 'desc'
+            $query->qualifyColumn($value['by'] ?? 'created_at'),
+            $value['order'] ?? 'desc'
         );
     }
 }

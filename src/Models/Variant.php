@@ -144,6 +144,6 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where('alias', 'like', "{$value}%");
+        return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
     }
 }

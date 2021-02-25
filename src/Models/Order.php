@@ -288,12 +288,12 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      * Scope a query to only include orders with the given status.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  array|string  $status
+     * @param  string  $status
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeStatus(Builder $query, $status): Builder
+    public function scopeStatus(Builder $query, string $status): Builder
     {
-        return $query->whereIn('status', (array) $status);
+        return $query->where($query->qualifyColumn('status'), $status);
     }
 
     /**

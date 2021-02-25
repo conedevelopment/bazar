@@ -82,8 +82,8 @@ class UserTest extends TestCase
     {
         $this->assertSame(
             $this->user->newQuery()->where(function ($q) {
-                $q->where('name', 'like', 'test%')
-                    ->orWhere('email', 'like', 'test%');
+                $q->where('users.name', 'like', 'test%')
+                    ->orWhere('users.email', 'like', 'test%');
             })->toSql(),
             $this->user->newQuery()->search('test')->toSql()
         );

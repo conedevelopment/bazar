@@ -226,8 +226,8 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->where(static function (Builder $query) use ($value): Builder {
-            return $query->where('name', 'like', "{$value}%")
-                        ->orWhere('inventory->sku', 'like', "{$value}%");
+            return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
+                        ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
         });
     }
 
@@ -243,5 +243,27 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
         return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
+    }
+
+    /**
+     * Scope the query only to the models that are out of stock.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOutOfStock(Builder $query): Builder
+    {
+        return $query->where($query->qualifyColumn('inventory->quantity'), '=', 0);
+    }
+
+    /**
+     * Scope the query only to the models that are in stock.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInStock(Builder $query): Builder
+    {
+        return $query->where($query->qualifyColumn('inventory->quantity'), '>', 0);
     }
 }
