@@ -87,7 +87,7 @@ trait Filterable
     public function scopeSort(Builder $query, array $value = []): Builder
     {
         return $query->orderBy(
-            $query->qualifyColumn($value['by'] ?? 'created_at'),
+            $query->qualifyColumn(str_replace('.', '->', $value['by'] ?? 'created_at')),
             $value['order'] ?? 'desc'
         );
     }
