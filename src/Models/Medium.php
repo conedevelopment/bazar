@@ -87,7 +87,7 @@ class Medium extends Model implements Contract
      */
     public static function createFrom(string $path): Medium
     {
-        $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.part'));
+        $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.chunk'));
 
         if (Str::is('image/*', $type = mime_content_type($path))) {
             [$width, $height] = getimagesize($path);

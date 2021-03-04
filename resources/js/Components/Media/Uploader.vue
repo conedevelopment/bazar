@@ -37,7 +37,7 @@
                 let formData = new FormData;
 
                 formData.set('is_last', this.chunks.length === 1);
-                formData.set('file', this.chunks[0], `${this.hash}__${this.file.name}.part`);
+                formData.set('file', this.chunks[0], `${this.hash}__${this.file.name}.chunk`);
 
                 return formData;
             },
