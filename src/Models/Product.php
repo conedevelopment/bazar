@@ -206,7 +206,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function resolveChildRouteBinding($childType, $value, $field): ?Model
     {
-        if ($childType === 'variant' && preg_match('/^bazar\..*/', Route::getCurrentRoute()->getName())) {
+        if ($childType === 'variant' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
             return $this->variants()
                         ->where($field ?: $this->variants()->getRelated()->getRouteKeyName(), $value)
                         ->withTrashed()
