@@ -3,12 +3,12 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
+use Bazar\Cart\Checkout;
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Product;
 use Bazar\Contracts\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Item;
-use Bazar\Cart\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -86,17 +86,19 @@ abstract class Driver
     public function add(Product $product, float $quantity = 1, array $properties = []): Item
     {
         if ($item = $this->item($product, $properties)) {
-            $item->update(compact('properties') + [
+            $item->update([
+                'properties' => $properties,
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            $item = tap(Item::make(compact('quantity', 'properties')), function (Item $item) use ($product): void {
-                $item->product()
-                    ->associate($product)
-                    ->itemable()
-                    ->associate($this->model())
-                    ->save();
-            });
+            $item = Item::make(['quantity' => $quantity, 'properties' => $properties])
+                        ->tap(function (Item $item) use ($product): void {
+                            $item->product()
+                                ->associate($product)
+                                ->itemable()
+                                ->associate($this->model())
+                                ->save();
+                        });
         }
 
         CartTouched::dispatch($this->model());

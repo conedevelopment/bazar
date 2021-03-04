@@ -157,9 +157,8 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     public function getVariantsAttribute(): Collection
     {
         return $this->getRelationValue('variants')->each(function (Variant $variant): void {
-            $variant->setRelation(
-                'product', $this->withoutRelations()->makeHidden('variants')
-            )->makeHidden('product');
+            $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
+                    ->makeHidden('product');
         });
     }
 
@@ -228,7 +227,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     {
         return $query->where(static function (Builder $query) use ($value): Builder {
             return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
-                        ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
+                         ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
         });
     }
 

@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Tappable;
 use Ramsey\Uuid\Uuid;
 
 class Item extends MorphPivot implements Taxable
 {
-    use InteractsWithTaxes;
+    use InteractsWithTaxes, Tappable;
 
     /**
      * The accessors to append to the model's array form.

@@ -139,7 +139,8 @@ abstract class Driver
 
         $total = $type === 'payment' ? $order->totalPayable() : $order->totalRefundable();
 
-        $transaction = $order->transactions()->make(compact('type') + [
+        $transaction = $order->transactions()->make([
+            'type' => $type,
             'driver' => $this->id(),
             'amount' => is_null($amount) ? $total : min($amount, $total),
         ]);

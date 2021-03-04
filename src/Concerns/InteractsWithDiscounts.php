@@ -38,7 +38,7 @@ trait InteractsWithDiscounts
         $discount = Discount::calculate($this);
 
         if ($this->exists && $update) {
-            $this->update(compact('discount'));
+            $this->update(['discount' => $discount]);
         }
 
         return $this->discount = $discount;

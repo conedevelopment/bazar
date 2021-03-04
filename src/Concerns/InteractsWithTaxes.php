@@ -51,7 +51,7 @@ trait InteractsWithTaxes
         $tax = Tax::calculate($this);
 
         if ($this->exists && $update) {
-            $this->update(compact('tax'));
+            $this->update(['tax' => $tax]);
         }
 
         return $this->tax = $tax;

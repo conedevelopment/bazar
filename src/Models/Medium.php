@@ -148,9 +148,11 @@ class Medium extends Model implements Contract
     {
         $path = "{$this->id}/{$this->file_name}";
 
-        return is_null($conversion) ? $path : substr_replace(
-            $path, "-{$conversion}", -(mb_strlen(Str::afterLast($path, '.')) + 1), -mb_strlen("-{$conversion}")
-        );
+        return is_null($conversion)
+            ? $path
+            : substr_replace(
+                $path, "-{$conversion}", -(mb_strlen(Str::afterLast($path, '.')) + 1), -mb_strlen("-{$conversion}")
+            );
     }
 
     /**

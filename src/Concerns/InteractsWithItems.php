@@ -272,9 +272,12 @@ trait InteractsWithItems
         })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 
-            return array_replace($file, compact('expiration') + ['url' => URL::signedRoute(
-                'bazar.download', ['url' => Crypt::encryptString($file['url'])], $expiration
-            )]);
+            return array_replace($file, [
+                'expiration' => $expiration,
+                'url' => URL::signedRoute(
+                    'bazar.download', ['url' => Crypt::encryptString($file['url'])], $expiration
+                ),
+            ]);
         });
     }
 

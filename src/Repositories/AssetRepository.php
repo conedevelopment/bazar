@@ -19,7 +19,7 @@ class AssetRepository extends Repository implements Contract
      */
     public function register(string $name, string $source, string $type, array $options = []): void
     {
-        $options = array_replace($options, compact('source', 'type'));
+        $options = array_replace($options, ['source' => $source, 'type' => $type]);
 
         $this->items->put(
             $name, array_merge($this->items->get($name, []), [$options])

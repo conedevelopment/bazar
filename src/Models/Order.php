@@ -253,7 +253,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      */
     public function status(string $status): Contract
     {
-        $this->update(compact('status'));
+        $this->update(['status' => $status]);
 
         return $this;
     }
@@ -266,7 +266,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      */
     public function toBreadcrumb(Request $request): string
     {
-        return "#{$this->id}";
+        return sprintf('#%d', $this->id);
     }
 
     /**
@@ -280,7 +280,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     {
         return $query->whereHas('address', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('first_name'), 'like', "{$value}%")
-                        ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
+                         ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
         });
     }
 

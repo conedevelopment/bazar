@@ -103,11 +103,12 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function getOptionAttribute(string $value): array
     {
-        $value = $this->castAttribute('option', $value);
-
-        return $this->relationLoaded('product') ? array_replace(
-            array_fill_keys(array_keys($this->product->options), '*'), $value
-        ) : $value;
+        return $this->relationLoaded('product')
+            ? array_replace(
+                array_fill_keys(array_keys($this->product->options), '*'),
+                $this->castAttribute('option', $value)
+            )
+            : $this->castAttribute('option', $value);
     }
 
     /**
