@@ -7,6 +7,13 @@
             }
         },
 
+        data() {
+            return {
+                tries: 0,
+                url: this.item.urls.thumb,
+            };
+        },
+
         computed: {
             selected() {
                 return this.$parent.selection.some(item => item.id === this.item.id);
@@ -30,7 +37,24 @@
                 if (! this.$parent.busy) {
                     this.selected ? this.deselect() : this.select();
                 }
-            }
+            },
+            reload() {
+                if (this.tries >= 5) {
+                    return;
+                }
+
+                const interval = setInterval(() => {
+                    const url = new URL(this.url);
+
+                    url.searchParams.set('key', (new Date).getTime());
+
+                    this.url = url.toString();
+
+                    this.tries++;
+
+                    clearInterval(interval);
+                }, 5000);
+            },
         }
     }
 </script>
@@ -43,7 +67,7 @@
             :class="{ 'is-image': item.is_image, 'is-document': ! item.is_image, 'is-selected': selected }"
             @click.prevent="toggle"
         >
-            <img v-if="item.is_image" :src="item.urls.thumb" :alt="item.name">
+            <img v-if="item.is_image" :src="url" :alt="item.name" @error="reload">
             <span v-else class="media-item__caption">
                 <icon name="file"></icon>
                 <span style="text-overflow: ellipsis;">{{ item.file_name }}</span>
