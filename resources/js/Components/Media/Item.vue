@@ -45,11 +45,9 @@
 
                 const interval = setInterval(() => {
                     const url = new URL(this.url);
-
                     url.searchParams.set('key', (new Date).getTime());
 
                     this.url = url.toString();
-
                     this.tries++;
 
                     clearInterval(interval);
