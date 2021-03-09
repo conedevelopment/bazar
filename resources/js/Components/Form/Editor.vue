@@ -43,7 +43,7 @@
                         }
                     },
                     theme: 'snow',
-                    formats: ['header', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
+                    formats: ['header', 'align', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
                     placeholder: this.$attrs.placeholder || ''
                 };
             }
