@@ -2,6 +2,7 @@
 
 namespace Bazar\Models;
 
+use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Stockable;
@@ -12,11 +13,10 @@ use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Tappable;
-use Ramsey\Uuid\Uuid;
 
 class Item extends MorphPivot implements Taxable
 {
-    use InteractsWithTaxes, Tappable;
+    use InteractsWithTaxes, HasUuid, Tappable;
 
     /**
      * The accessors to append to the model's array form.
@@ -65,6 +65,13 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -75,18 +82,18 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
-     * The registered property resolver callbacks.
-     *
-     * @var array
-     */
-    protected static $propertyResolvers = [];
-
-    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'bazar_items';
+
+    /**
+     * The registered property resolver callbacks.
+     *
+     * @var array
+     */
+    protected static $propertyResolvers = [];
 
     /**
      * The "booted" method of the model.
@@ -95,12 +102,6 @@ class Item extends MorphPivot implements Taxable
      */
     protected static function booted(): void
     {
-        static::creating(static function (self $item): void {
-            if (! $item->getKey()) {
-                $item->setAttribute($item->getKeyName(), Uuid::uuid4());
-            }
-        });
-
         static::saving(static function (self $item): void {
             if (in_array(Cart::class, class_implements($item->itemable_type))) {
                 $item->fillFromStockable()->resolveProperties()->tax(false);

@@ -16,7 +16,7 @@ class ClearCookies
     public function handle(Logout $event): void
     {
         Cookie::queue(
-            Cookie::forget('cart_token')
+            Cookie::forget('cart_id')
         );
     }
 }

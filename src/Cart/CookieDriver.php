@@ -20,7 +20,7 @@ class CookieDriver extends Driver
         $user = $request->user();
 
         $cart = CartProxy::query()
-                    ->firstOrCreate(['token' => $request->cookie('cart_token')])
+                    ->firstOrCreate(['id' => $request->cookie('cart_id')])
                     ->setRelation('user', $user)
                     ->loadMissing(['shipping', 'products', 'products.media', 'products.variants']);
 
@@ -30,7 +30,7 @@ class CookieDriver extends Driver
             $cart->user()->associate($user)->save();
         }
 
-        Cookie::queue('cart_token', $cart->token, $this->config['expiration'] ?? 4320);
+        Cookie::queue('cart_id', $cart->id, $this->config['expiration'] ?? 4320);
 
         return $cart;
     }
