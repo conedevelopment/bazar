@@ -24,7 +24,7 @@
     "require": {
         "ext-gd": "*",
         "ext-exif": "*",
-        "php": "^7.3 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "laravel/framework": "^8.22.1",
         "inertiajs/inertia-laravel": "^0.3.6"
     },
