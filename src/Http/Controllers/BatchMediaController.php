@@ -2,8 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Medium;
-use Bazar\Proxies\Medium as MediumProxy;
+use Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -19,7 +18,7 @@ class BatchMediaController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = MediumProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Medium::getProxiedClass())) {
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
         }
     }
@@ -32,7 +31,7 @@ class BatchMediaController extends Controller
      */
     public function destroy(Request $request): JsonResponse
     {
-        $media = MediumProxy::query()->whereIn('id', $request->input('id', []));
+        $media = Medium::proxy()->newQuery()->whereIn('id', $request->input('id', []));
 
         $media->each(static function (Medium $medium): void {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);

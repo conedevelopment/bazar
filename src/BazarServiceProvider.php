@@ -109,11 +109,9 @@ class BazarServiceProvider extends ServiceProvider
             if (is_subclass_of($abstract, Model::class)) {
                 $key = strtolower(class_basename($contract));
 
-                $this->app['router']->bind($key, function (string $value, Route $route) use ($key, $contract) {
+                $this->app['router']->bind($key, static function (string $value, Route $route) use ($key, $abstract) {
                     return Str::is('bazar.*', $route->getName())
-                        ? $this->app->make($contract)->resolveRouteBinding(
-                            $value, $route->bindingFieldFor($key)
-                        )
+                        ? $abstract::proxy()->resolveRouteBinding($value, $route->bindingFieldFor($key))
                         : $value;
                 });
             }

@@ -4,6 +4,7 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Address as Contract;
 use Bazar\Support\Countries;
@@ -14,7 +15,7 @@ use Illuminate\Http\Request;
 
 class Address extends Model implements Breadcrumbable, Contract
 {
-    use BazarRoutable, Filterable;
+    use BazarRoutable, Filterable, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -86,6 +87,16 @@ class Address extends Model implements Breadcrumbable, Contract
      * @var string
      */
     protected $table = 'bazar_addresses';
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
 
     /**
      * Get the addressable model for the address.

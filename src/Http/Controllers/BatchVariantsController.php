@@ -2,8 +2,8 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Product;
-use Bazar\Proxies\Variant as VariantProxy;
+use Bazar\Models\Product;
+use Bazar\Models\Variant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -20,7 +20,7 @@ class BatchVariantsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = VariantProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Variant::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -31,7 +31,7 @@ class BatchVariantsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Product $product): RedirectResponse
@@ -42,9 +42,7 @@ class BatchVariantsController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        $product->variants()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        $product->variants()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()->with(
             'message', __(':count variants have been updated.', ['count' => count($id)])
@@ -55,14 +53,12 @@ class BatchVariantsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, Product $product): RedirectResponse
     {
-        $variants = $product->variants()->withTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        );
+        $variants = $product->variants()->withTrashed()->whereIn('id', $id = $request->input('id', []));
 
         $request->has('force') ? $variants->forceDelete() : $variants->delete();
 
@@ -75,14 +71,12 @@ class BatchVariantsController extends Controller
      * Restore the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Request $request, Product $product): RedirectResponse
     {
-        $product->variants()->onlyTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->restore();
+        $product->variants()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
         return Redirect::back()->with(
             'message', __(':count variants have been restored.', ['count' => count($id)])

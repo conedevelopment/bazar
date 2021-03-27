@@ -3,11 +3,11 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\HasUuid;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
-use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -128,7 +128,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductProxy::getProxiedClass());
+        return $this->belongsTo(Product::getProxiedClass());
     }
 
     /**

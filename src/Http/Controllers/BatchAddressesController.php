@@ -2,8 +2,8 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\User;
-use Bazar\Proxies\Address as AddressProxy;
+use Bazar\Models\Address;
+use Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -20,7 +20,7 @@ class BatchAddressesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = AddressProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Address::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
         }
@@ -30,7 +30,7 @@ class BatchAddressesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user): RedirectResponse
@@ -41,9 +41,7 @@ class BatchAddressesController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        $user->addresses()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        $user->addresses()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()->with(
             'message', __(':count address have been updated.', ['count' => count($id)])
@@ -54,14 +52,12 @@ class BatchAddressesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, User $user): RedirectResponse
     {
-        $user->addresses()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->delete();
+        $user->addresses()->whereIn('id', $id = $request->input('id', []))->delete();
 
         return Redirect::back()->with(
             'message', __(':count addresses have been deleted.', ['count' => count($id)])

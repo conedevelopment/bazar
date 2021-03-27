@@ -3,6 +3,7 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\Filterable;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Medium as Contract;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 
 class Medium extends Model implements Contract
 {
-    use Filterable;
+    use Filterable, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -77,6 +78,16 @@ class Medium extends Model implements Contract
         static::deleting(static function (self $medium): void {
             Storage::disk($medium->disk)->deleteDirectory($medium->id);
         });
+    }
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
     }
 
     /**

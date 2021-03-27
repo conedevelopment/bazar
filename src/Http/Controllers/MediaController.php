@@ -2,12 +2,11 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Medium;
 use Bazar\Http\Requests\MediumStoreRequest as StoreRequest;
 use Bazar\Http\Requests\MediumUpdateRequest as UpdateRequest;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
-use Bazar\Proxies\Medium as MediumProxy;
+use Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -26,7 +25,7 @@ class MediaController extends Controller
     {
         File::ensureDirectoryExists(Storage::disk('local')->path('chunks'));
 
-        if (Gate::getPolicyFor($class = MediumProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Medium::getProxiedClass())) {
             $this->authorizeResource($class);
         }
     }
@@ -39,7 +38,7 @@ class MediaController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $media = MediumProxy::query()->filter($request)->latest()->paginate(
+        $media = Medium::proxy()->newQuery()->filter($request)->latest()->paginate(
             $request->input('per_page')
         );
 
@@ -64,7 +63,7 @@ class MediaController extends Controller
             return Response::json(['uploaded' => true]);
         }
 
-        $medium = MediumProxy::createFrom($path);
+        $medium = Medium::proxy()::createFrom($path);
 
         MoveFile::withChain(
             $medium->isImage ? [new PerformConversions($medium)] : []
@@ -76,7 +75,7 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Medium $medium): JsonResponse
@@ -88,7 +87,7 @@ class MediaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\MediumUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateRequest $request, Medium $medium): JsonResponse
@@ -101,7 +100,7 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Medium $medium): JsonResponse

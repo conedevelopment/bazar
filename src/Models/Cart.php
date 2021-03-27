@@ -7,6 +7,7 @@ use Bazar\Concerns\Addressable;
 use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Cart as Contract;
@@ -16,7 +17,7 @@ use Illuminate\Support\Carbon;
 
 class Cart extends Model implements Contract, Discountable, Itemable
 {
-    use Addressable, HasUuid, InteractsWithDiscounts, InteractsWithItems;
+    use Addressable, HasUuid, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy;
 
     /**
      * The attributes that should have default values.
@@ -89,6 +90,16 @@ class Cart extends Model implements Contract, Discountable, Itemable
                 $cart->discount(false);
             }
         });
+    }
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
     }
 
     /**

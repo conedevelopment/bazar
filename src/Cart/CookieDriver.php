@@ -2,8 +2,7 @@
 
 namespace Bazar\Cart;
 
-use Bazar\Contracts\Models\Cart;
-use Bazar\Proxies\Cart as CartProxy;
+use Bazar\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
@@ -19,13 +18,14 @@ class CookieDriver extends Driver
     {
         $user = $request->user();
 
-        $cart = CartProxy::query()
+        $cart = Cart::proxy()
+                    ->newQuery()
                     ->firstOrCreate(['id' => $request->cookie('cart_id')])
                     ->setRelation('user', $user)
                     ->loadMissing(['shipping', 'products', 'products.media', 'products.variants']);
 
         if ($user && $cart->user_id !== $user->id) {
-            CartProxy::query()->where('user_id', $user->id)->delete();
+            Cart::proxy()->newQuery()->where('user_id', $user->id)->delete();
 
             $cart->user()->associate($user)->save();
         }

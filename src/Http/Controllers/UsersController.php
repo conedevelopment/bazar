@@ -2,10 +2,9 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\User as User;
 use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
 use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
-use Bazar\Proxies\User as UserProxy;
+use Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -24,7 +23,7 @@ class UsersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = UserProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = User::getProxiedClass())) {
             $this->authorizeResource($class);
             $this->middleware('can:update,user')->only('restore');
         }
@@ -38,7 +37,8 @@ class UsersController extends Controller
      */
     public function index(Request $request) //: Response
     {
-        $users = UserProxy::query()
+        $users = User::proxy()
+                    ->newQuery()
                     ->with('addresses')
                     ->filter($request)
                     ->latest()
@@ -48,14 +48,14 @@ class UsersController extends Controller
             ? ResponseFactory::json($users)
             : Inertia::render('Users/Index', [
                 'results' => $users,
-                'filters' => UserProxy::filters(),
+                'filters' => User::proxy()::filters(),
             ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function create(User $user): Response
@@ -76,7 +76,7 @@ class UsersController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $user = UserProxy::create($request->validated());
+        $user = User::proxy()->newQuery()->create($request->validated());
 
         return Redirect::route('bazar.users.show', $user)->with(
             'message', __('The user has been created.')
@@ -86,7 +86,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function show(User $user): Response
@@ -101,7 +101,7 @@ class UsersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\UserUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, User $user): RedirectResponse
@@ -116,7 +116,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -138,7 +138,7 @@ class UsersController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(User $user): RedirectResponse

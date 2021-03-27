@@ -3,13 +3,11 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Shipping;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
-use Bazar\Proxies\Product as ProductProxy;
-use Bazar\Proxies\Shipping as ShippingProxy;
-use Bazar\Proxies\User as UserProxy;
+use Bazar\Models\Product;
+use Bazar\Models\Shipping;
+use Bazar\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -44,7 +42,7 @@ trait InteractsWithItems
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(UserProxy::getProxiedClass());
+        return $this->belongsTo(User::getProxiedClass());
     }
 
     /**
@@ -54,7 +52,7 @@ trait InteractsWithItems
      */
     public function products(): MorphToMany
     {
-        return $this->morphToMany(ProductProxy::getProxiedClass(), 'itemable', 'bazar_items')
+        return $this->morphToMany(Product::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -68,7 +66,7 @@ trait InteractsWithItems
      */
     public function shipping(): MorphOne
     {
-        return $this->morphOne(ShippingProxy::getProxiedClass(), 'shippable')->withDefault();
+        return $this->morphOne(Shipping::getProxiedClass(), 'shippable')->withDefault();
     }
 
     /**
@@ -85,13 +83,13 @@ trait InteractsWithItems
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Contracts\Models\Shipping
+     * @return \Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping
     {
-        return $this->getRelationValue('shipping')->setRelation(
-            'shippable', $this->withoutRelations()->makeHidden('shipping')
-        )->makeHidden('shippable');
+        return $this->getRelationValue('shipping')
+                    ->setRelation('shippable', $this->withoutRelations()->makeHidden('shipping'))
+                    ->makeHidden('shippable');
     }
 
     /**

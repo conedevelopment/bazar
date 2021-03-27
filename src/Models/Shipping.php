@@ -3,11 +3,10 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\Addressable;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Models\Shipping as Contract;
 use Bazar\Contracts\Taxable;
-use Bazar\Proxies\Cart as CartProxy;
 use Bazar\Support\Facades\Shipping as Manager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -16,7 +15,7 @@ use Throwable;
 
 class Shipping extends Model implements Contract, Taxable
 {
-    use Addressable, InteractsWithTaxes;
+    use Addressable, InteractsWithProxy, InteractsWithTaxes;
 
     /**
      * The accessors to append to the model's array form.
@@ -68,6 +67,16 @@ class Shipping extends Model implements Contract, Taxable
     protected $table = 'bazar_shippings';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the shippable model for the shipping.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -75,7 +84,7 @@ class Shipping extends Model implements Contract, Taxable
     public function shippable(): MorphTo
     {
         return $this->morphTo()->withDefault(static function (): Cart {
-            return CartProxy::getProxiedInstance();
+            return Cart::proxy()->newInstance();
         });
     }
 

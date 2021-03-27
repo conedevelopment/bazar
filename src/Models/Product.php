@@ -7,16 +7,12 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Contracts\Models\Variant;
 use Bazar\Contracts\Stockable;
-use Bazar\Proxies\Cart as CartProxy;
-use Bazar\Proxies\Category as CategoryProxy;
-use Bazar\Proxies\Order as OrderProxy;
-use Bazar\Proxies\Variant as VariantProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -29,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Breadcrumbable, Contract, Stockable
 {
-    use BazarRoutable, Filterable, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -85,6 +81,16 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     protected $table = 'bazar_products';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the filter options for the model.
      *
      * @return array
@@ -97,7 +103,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
                 'available' => __('Available'),
                 'trashed' => __('Trashed')
             ],
-            'category' => array_map('__', CategoryProxy::query()->pluck('name', 'id')->toArray()),
+            'category' => array_map('__', Category::proxy()->newQuery()->pluck('name', 'id')->toArray()),
         ];
     }
 
@@ -108,7 +114,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function orders(): MorphToMany
     {
-        return $this->morphedByMany(OrderProxy::getProxiedClass(), 'itemable', 'bazar_items')
+        return $this->morphedByMany(Order::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -122,7 +128,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function carts(): MorphToMany
     {
-        return $this->morphedByMany(CartProxy::getProxiedClass(), 'itemable', 'bazar_items')
+        return $this->morphedByMany(Cart::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -136,7 +142,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(CategoryProxy::getProxiedClass(), 'bazar_category_product');
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
     }
 
     /**
@@ -146,7 +152,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function variants(): HasMany
     {
-        return $this->hasMany(VariantProxy::getProxiedClass());
+        return $this->hasMany(Variant::getProxiedClass());
     }
 
     /**

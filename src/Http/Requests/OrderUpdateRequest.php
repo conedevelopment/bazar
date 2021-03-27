@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Requests;
 
-use Bazar\Proxies\Order as OrderProxy;
+use Bazar\Models\Order;
 use Illuminate\Validation\Rule;
 
 class OrderUpdateRequest extends FormRequest
@@ -17,7 +17,7 @@ class OrderUpdateRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in(array_keys(OrderProxy::statuses())),
+                Rule::in(array_keys(Order::proxy()::statuses())),
             ],
         ];
     }
