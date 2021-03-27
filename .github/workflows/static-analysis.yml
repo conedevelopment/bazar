@@ -1,0 +1,38 @@
+name: Static Analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  phpstan:
+    name: Larastan
+
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
+          tools: composer:v2
+          coverage: none
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+
+      - name: Install Larastan
+        run: |
+          composer require --dev 'nunomaduro/larastan:^0.7.0' orchestra/testbench
+          # https://github.com/nunomaduro/larastan/issues/655#issuecomment-689160382
+          cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
+
+      - name: Run static analysis
+        # FIXME No application encryption key has been specified.
+        env:
+          APP_KEY: "base64:8WQ2S3IXjxCHxUdtzpY3JQmM00OKgSJTOVf+rqQ8fh0="
+        run: vendor/bin/phpstan analyse

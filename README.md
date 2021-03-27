@@ -9,6 +9,7 @@
   </a>
 </p>
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=szepeviktor_bazar&metric=alert_status)](https://sonarcloud.io/dashboard?id=szepeviktor_bazar)
 [![GitHub Actions](https://github.com/conedevelopment/bazar/workflows/tests/badge.svg)](https://github.com/conedevelopment/bazar/actions?query=workflow%3Atests)
 [![Coverage Status](https://coveralls.io/repos/github/conedevelopment/bazar/badge.svg?branch=master)](https://coveralls.io/github/conedevelopment/bazar?branch=master)
 

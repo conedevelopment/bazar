@@ -1,12 +1,30 @@
+# Installation
+#$ composer require --dev nunomaduro/larastan orchestra/testbench
+#$ cp -a database/migrations/* vendor/orchestra/testbench-core/laravel/database/migrations/
+
 includes:
+    - phpstan-baseline.neon
     - vendor/nunomaduro/larastan/extension.neon
 parameters:
-    level: 5
-    checkMissingIterableValueType: false
+    level: 4
+    bootstrapFiles:
+        - tests/phpstan/override-larastan-Contracts.php
+        - tests/phpstan/override-larastan-Facades.php
+    stubFiles:
+        - tests/phpstan/stubs/User.stub
     paths:
         - src/
         - config/
         - database/
         - routes/
     ignoreErrors:
-        - '#^Unsafe usage of new static#'
+        # TODO Consider making static things final.
+        #- '#^Unsafe usage of new static#'
+        # TODO These methods are of ForeignKeyDefinition, see return type of constrained()
+        - '#^Call to an undefined method Illuminate\\Support\\Fluent::(cascadeOnDelete|nullOnDelete)\(\)\.$#'
+        # TODO Properties of Contracts
+        - '#^Access to an undefined property Bazar\\Contracts\\#'
+        # TODO Proxy mixins
+        - '#^Call to an undefined static method Bazar\\Proxies\\[A-Za-z]+::(make|create|count|latest)\(\)\.$#'
+        # TODO Proxied models
+        - '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder::(withTrashed|onlyTrashed)\(\)\.$#'
