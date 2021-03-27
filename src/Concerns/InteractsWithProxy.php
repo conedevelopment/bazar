@@ -23,7 +23,7 @@ trait InteractsWithProxy
     /**
      * Resolve and get the proxy instance.
      *
-     * @return string
+     * @return object
      */
     public static function proxy(): object
     {
