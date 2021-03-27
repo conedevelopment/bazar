@@ -25,9 +25,9 @@ trait InteractsWithProxy
      *
      * @return string
      */
-    public static function proxy(bool $flush = false): object
+    public static function proxy(): object
     {
-        if ($flush || is_null(static::$proxy)) {
+        if (is_null(static::$proxy)) {
             static::$proxy = Container::getInstance()->make(
                 static::getProxiedContract()
             );
