@@ -25,15 +25,16 @@ class FilterTest extends TestCase
             'category' => 1,
         ]);
 
-        $query = Product::query()->where(function ($query) {
-            $query->where('name', 'like', 'test%')
-                ->orWhere('inventory->sku', 'like', 'test%');
-        })->withTrashed()
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc')
-          ->whereHas('categories', function ($query) {
-              return $query->where('bazar_categories.id', 1);
-          });
+        $query = Product::query()
+            ->where(function ($query) {
+                $query->where('bazar_products.name', 'like', 'test%')
+                    ->orWhere('bazar_products.inventory->sku', 'like', 'test%');
+            })->withTrashed()
+              ->whereNotIn('bazar_products.id', [1, 2])
+              ->orderBy('bazar_products.created_at', 'desc')
+              ->whereHas('categories', function ($query) {
+                  return $query->where('bazar_categories.id', 1);
+              });
 
         $this->assertSame(
             $query->toSql(), Product::filter($request)->toSql()
@@ -52,16 +53,17 @@ class FilterTest extends TestCase
             'user' => 1,
         ]);
 
-        $query = Order::query()->whereHas('address', function ($query) {
-            $query->where('bazar_addresses.first_name', 'like', 'test%')
-                ->orWhere('bazar_addresses.last_name', 'like', 'test%');
-        })->withTrashed()
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc')
-          ->whereIn('status', ['in_progress'])
-          ->whereHas('user', function ($query) {
-              return $query->where('users.id', 1);
-          });
+        $query = Order::query()
+            ->whereHas('address', function ($query) {
+                $query->where('bazar_addresses.first_name', 'like', 'test%')
+                    ->orWhere('bazar_addresses.last_name', 'like', 'test%');
+            })->withTrashed()
+              ->whereNotIn('bazar_orders.id', [1, 2])
+              ->orderBy('bazar_orders.created_at', 'desc')
+              ->where('bazar_orders.status', 'in_progress')
+              ->whereHas('user', function ($query) {
+                  return $query->where('users.id', 1);
+              });
 
         $this->assertSame(
             $query->toSql(), Order::filter($request)->toSql()
@@ -79,10 +81,11 @@ class FilterTest extends TestCase
             'type' => 'image',
         ]);
 
-        $query = Medium::query()->where('name', 'like', 'test%')
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc')
-          ->where('mime_type', 'like', 'image%');
+        $query = Medium::query()
+            ->where('bazar_media.name', 'like', 'test%')
+            ->whereNotIn('bazar_media.id', [1, 2])
+            ->orderBy('bazar_media.created_at', 'desc')
+            ->where('bazar_media.mime_type', 'like', 'image%');
 
         $this->assertSame(
             $query->toSql(), Medium::filter($request)->toSql()
@@ -98,9 +101,10 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Address::query()->where('alias', 'like', 'test%')
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc');
+        $query = Address::query()
+            ->where('bazar_addresses.alias', 'like', 'test%')
+            ->whereNotIn('bazar_addresses.id', [1, 2])
+            ->orderBy('bazar_addresses.created_at', 'desc');
 
         $this->assertSame(
             $query->toSql(), Address::filter($request)->toSql()
@@ -116,9 +120,10 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Category::query()->where('name', 'like', 'test%')
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc');
+        $query = Category::query()
+            ->where('bazar_categories.name', 'like', 'test%')
+            ->whereNotIn('bazar_categories.id', [1, 2])
+            ->orderBy('bazar_categories.created_at', 'desc');
 
         $this->assertSame(
             $query->toSql(), Category::filter($request)->toSql()
@@ -135,11 +140,12 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = User::query()->where(function ($query) {
-            $query->where('name', 'like', 'test%')
-                ->orWhere('email', 'like', 'test%');
-        })->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc');
+        $query = User::query()
+            ->where(function ($query) {
+                $query->where('users.name', 'like', 'test%')
+                    ->orWhere('users.email', 'like', 'test%');
+            })->whereNotIn('users.id', [1, 2])
+              ->orderBy('users.created_at', 'desc');
 
         $this->assertSame(
             $query->toSql(), User::filter($request)->toSql()
@@ -156,10 +162,11 @@ class FilterTest extends TestCase
             'sort' => ['by' => 'created_at', 'order' => 'desc'],
         ]);
 
-        $query = Variant::query()->where('alias', 'like', 'test%')
-          ->onlyTrashed()
-          ->whereNotIn('id', [1, 2])
-          ->orderBy('created_at', 'desc');
+        $query = Variant::query()
+            ->where('bazar_variants.alias', 'like', 'test%')
+            ->onlyTrashed()
+            ->whereNotIn('bazar_variants.id', [1, 2])
+            ->orderBy('bazar_variants.created_at', 'desc');
 
         $this->assertSame(
             $query->toSql(), Variant::filter($request)->toSql()

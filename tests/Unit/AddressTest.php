@@ -141,7 +141,7 @@ class AddressTest extends TestCase
         $address->addressable()->associate($this->user)->save();
 
         $this->assertSame(
-            $address->newQuery()->where('alias', 'like', 'test%')->toSql(),
+            $address->newQuery()->where('bazar_addresses.alias', 'like', 'test%')->toSql(),
             $address->newQuery()->search('test')->toSql()
         );
     }

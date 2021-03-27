@@ -72,17 +72,17 @@ class MediumTest extends TestCase
     public function it_has_query_scopes()
     {
         $this->assertSame(
-            $this->medium->newQuery()->where('name', 'like', 'test%')->toSql(),
+            $this->medium->newQuery()->where('bazar_media.name', 'like', 'test%')->toSql(),
             $this->medium->newQuery()->search('test')->toSql()
         );
 
         $this->assertSame(
-            $this->medium->newQuery()->where('mime_type', 'not like', 'image%')->toSql(),
+            $this->medium->newQuery()->where('bazar_media.mime_type', 'not like', 'image%')->toSql(),
             $this->medium->newQuery()->type('file')->toSql()
         );
 
         $this->assertSame(
-            $this->medium->newQuery()->where('mime_type', 'like', 'image%')->toSql(),
+            $this->medium->newQuery()->where('bazar_media.mime_type', 'like', 'image%')->toSql(),
             $this->medium->newQuery()->type('image')->toSql()
         );
 

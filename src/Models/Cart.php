@@ -118,7 +118,7 @@ class Cart extends Model implements Contract, Discountable, Itemable
      */
     public function scopeLocked(Builder $query): Builder
     {
-        return $query->where('locked', true);
+        return $query->where($query->qualifyColumn('locked'), true);
     }
 
     /**
@@ -129,7 +129,7 @@ class Cart extends Model implements Contract, Discountable, Itemable
      */
     public function scopeUnlocked(Builder $query): Builder
     {
-        return $query->where('locked', false);
+        return $query->where($query->qualifyColumn('locked'), false);
     }
 
     /**
@@ -140,8 +140,7 @@ class Cart extends Model implements Contract, Discountable, Itemable
      */
     public function scopeExpired(Builder $query): Builder
     {
-        return $query->whereNull('user_id')->where(
-            'updated_at', '<', Carbon::now()->subDays(3)
-        );
+        return $query->whereNull($query->qualifyColumn('user_id'))
+                     ->where($query->qualifyColumn('updated_at'), '<', Carbon::now()->subDays(3));
     }
 }

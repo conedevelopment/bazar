@@ -115,7 +115,7 @@ class OrderTest extends TestCase
         );
 
         $this->assertSame(
-            $this->order->newQuery()->whereIn('status', ['pending'])->toSql(),
+            $this->order->newQuery()->where('bazar_orders.status', 'pending')->toSql(),
             $this->order->newQuery()->status('pending')->toSql()
         );
 

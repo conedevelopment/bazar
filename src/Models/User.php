@@ -187,8 +187,8 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->where(static function (Builder $query) use ($value): Builder {
-            return $query->where('name', 'like', "{$value}%")
-                        ->orWhere('email', 'like', "{$value}%");
+            return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
+                        ->orWhere($query->qualifyColumn('email'), 'like', "{$value}%");
         });
     }
 }

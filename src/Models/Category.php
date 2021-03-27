@@ -76,6 +76,6 @@ class Category extends Model implements Breadcrumbable, Contract
      */
     public function scopeSearch(Builder $query, string $value): Builder
     {
-        return $query->where('name', 'like', "{$value}%");
+        return $query->where($query->qualifyColumn('name'), 'like', "{$value}%");
     }
 }
