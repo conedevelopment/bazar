@@ -108,7 +108,7 @@ class OrdersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @return \Inertia\Response
      */
     public function show(Order $order): Response
@@ -126,7 +126,7 @@ class OrdersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\OrderUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Order $order): RedirectResponse
@@ -141,7 +141,7 @@ class OrdersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Order $order): RedirectResponse
@@ -156,7 +156,7 @@ class OrdersController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Order $order): RedirectResponse

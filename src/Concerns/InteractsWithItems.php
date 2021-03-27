@@ -282,7 +282,7 @@ trait InteractsWithItems
     /**
      * Get an item by its parent product and properties.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */

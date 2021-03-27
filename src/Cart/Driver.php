@@ -4,9 +4,9 @@ namespace Bazar\Cart;
 
 use Bazar\Bazar;
 use Bazar\Cart\Checkout;
-use Bazar\Contracts\Models\Cart;
-use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Cart;
+use Bazar\Models\Product;
+use Bazar\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Item;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ abstract class Driver
     /**
      * The cart instance.
      *
-     * @var \Bazar\Contracts\Models\Cart|null
+     * @var \Bazar\Models\Cart|null
      */
     protected $cart;
 
@@ -44,7 +44,7 @@ abstract class Driver
     /**
      * Get the cart model.
      *
-     * @return \Bazar\Contracts\Models\Cart
+     * @return \Bazar\Models\Cart
      */
     public function model(): Cart
     {
@@ -66,7 +66,7 @@ abstract class Driver
     /**
      * Get the item by the product and its properties.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */
@@ -78,7 +78,7 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Bazar\Models\Item
@@ -176,7 +176,7 @@ abstract class Driver
     /**
      * Get the shipping that belongs to the cart.
      *
-     * @return \Bazar\Contracts\Models\Shipping
+     * @return \Bazar\Models\Shipping
      */
     public function shipping(): Shipping
     {
@@ -227,7 +227,7 @@ abstract class Driver
      * Resolve the cart instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Contracts\Models\Cart
+     * @return \Bazar\Models\Cart
      */
     abstract protected function resolve(Request $request): Cart;
 

@@ -100,7 +100,7 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function show(Product $product): Response
@@ -119,7 +119,7 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\ProductUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product): RedirectResponse
@@ -142,7 +142,7 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product): RedirectResponse
@@ -157,7 +157,7 @@ class ProductsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product): RedirectResponse

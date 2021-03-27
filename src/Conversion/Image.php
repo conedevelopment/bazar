@@ -2,7 +2,7 @@
 
 namespace Bazar\Conversion;
 
-use Bazar\Contracts\Models\Medium;
+use Bazar\Models\Medium;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,7 +12,7 @@ class Image
     /**
      * The medium instance.
      *
-     * @var \Bazar\Contracts\Models\Medium
+     * @var \Bazar\Models\Medium
      */
     protected $medium;
 
@@ -51,7 +51,7 @@ class Image
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)

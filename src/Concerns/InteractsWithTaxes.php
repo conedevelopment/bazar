@@ -3,7 +3,7 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Shipping;
 use Bazar\Models\Item;
 use Bazar\Support\Facades\Tax;
 use Illuminate\Support\Str;

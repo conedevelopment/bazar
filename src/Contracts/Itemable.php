@@ -2,7 +2,7 @@
 
 namespace Bazar\Contracts;
 
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Shipping;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -44,7 +44,7 @@ interface Itemable extends Shippable
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Contracts\Models\Shipping
+     * @return \Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping;
 

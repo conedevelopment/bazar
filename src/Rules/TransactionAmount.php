@@ -2,7 +2,7 @@
 
 namespace Bazar\Rules;
 
-use Bazar\Contracts\Models\Order;
+use Bazar\Models\Order;
 use Illuminate\Contracts\Validation\Rule;
 
 class TransactionAmount implements Rule
@@ -24,7 +24,7 @@ class TransactionAmount implements Rule
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @param  string|null  $type
      * @return void
      */

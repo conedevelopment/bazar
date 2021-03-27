@@ -2,8 +2,8 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Contracts\Models\Order;
-use Bazar\Contracts\Models\Transaction;
+use Bazar\Models\Order;
+use Bazar\Models\Transaction;
 use Bazar\Database\Factories\OrderFactory;
 use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\TransactionFailedException;

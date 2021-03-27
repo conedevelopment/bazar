@@ -146,7 +146,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     /**
      * Get the address attribute.
      *
-     * @return \Bazar\Contracts\Models\Address|null
+     * @return \Bazar\Models\Address|null
      */
     public function getAddressAttribute(): ?Address
     {

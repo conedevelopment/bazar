@@ -12,7 +12,7 @@ class CookieDriver extends Driver
      * Resolve the cart instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Contracts\Models\Cart
+     * @return \Bazar\Models\Cart
      */
     protected function resolve(Request $request): Cart
     {

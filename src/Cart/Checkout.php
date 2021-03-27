@@ -2,8 +2,8 @@
 
 namespace Bazar\Cart;
 
-use Bazar\Contracts\Models\Cart;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Cart;
+use Bazar\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Events\CheckoutFailed;
 use Bazar\Events\CheckoutFailing;
@@ -18,7 +18,7 @@ class Checkout
     /**
      * The cart instance.
      *
-     * @var \Bazar\Contracts\Models\Cart
+     * @var \Bazar\Models\Cart
      */
     protected $cart;
 
@@ -46,7 +46,7 @@ class Checkout
     /**
      * Create a new checkout instance.
      *
-     * @param  \Bazar\Contracts\Models\Cart  $cart
+     * @param  \Bazar\Models\Cart  $cart
      * @return void
      */
     public function __construct(Cart $cart)

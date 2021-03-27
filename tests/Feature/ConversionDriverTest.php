@@ -3,7 +3,7 @@
 namespace Bazar\Tests\Feature;
 
 use Bazar\Contracts\Conversion\Manager;
-use Bazar\Contracts\Models\Medium;
+use Bazar\Models\Medium;
 use Bazar\Conversion\GdDriver;
 use Bazar\Database\Factories\MediumFactory;
 use Bazar\Support\Facades\Conversion;

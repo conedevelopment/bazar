@@ -3,9 +3,7 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\HasUuid;
-use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -103,7 +101,7 @@ class Item extends MorphPivot implements Taxable
     protected static function booted(): void
     {
         static::saving(static function (self $item): void {
-            if (in_array(Cart::class, class_implements($item->itemable_type))) {
+            if ($item->itemable_type === Cart::class || is_subclass_of($item->itemable_type, Cart::class)) {
                 $item->fillFromStockable()->resolveProperties()->tax(false);
             }
         });
