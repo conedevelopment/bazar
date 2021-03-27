@@ -23,7 +23,7 @@ interface Medium
      *
      * @return $this
      */
-    public function convert(): Medium;
+    public function convert(): self;
 
     /**
      * Get the path to the conversion.

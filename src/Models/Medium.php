@@ -96,7 +96,7 @@ class Medium extends Model implements Contract
      * @param  string  $path
      * @return self
      */
-    public static function createFrom(string $path): Medium
+    public static function createFrom(string $path): self
     {
         $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.chunk'));
 
@@ -144,7 +144,7 @@ class Medium extends Model implements Contract
      *
      * @return $this
      */
-    public function convert(): Contract
+    public function convert(): self
     {
         return Conversion::perform($this);
     }

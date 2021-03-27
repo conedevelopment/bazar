@@ -48,14 +48,14 @@ interface Transaction
      * @param \DateTimeInterface|null  $date
      * @return $this
      */
-    public function markAsCompleted(DateTimeInterface $date = null): Transaction;
+    public function markAsCompleted(DateTimeInterface $date = null): self;
 
     /**
      * Mark the transaction as pending.
      *
      * @return $this
      */
-    public function markAsPending(): Transaction;
+    public function markAsPending(): self;
 
     /**
      * Set the driver.
@@ -63,5 +63,5 @@ interface Transaction
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Transaction;
+    public function driver(string $driver): self;
 }

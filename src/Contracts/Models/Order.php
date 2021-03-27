@@ -83,5 +83,5 @@ interface Order
      * @param  string  $status
      * @return $this
      */
-    public function status(string $status): Order;
+    public function status(string $status): self;
 }

@@ -128,7 +128,7 @@ class Transaction extends Model implements Contract
      * @param \DateTimeInterface|null  $date
      * @return $this
      */
-    public function markAsCompleted(DateTimeInterface $date = null): Contract
+    public function markAsCompleted(DateTimeInterface $date = null): self
     {
         $date = $date ?: Carbon::now();
 
@@ -144,7 +144,7 @@ class Transaction extends Model implements Contract
      *
      * @return $this
      */
-    public function markAsPending(): Contract
+    public function markAsPending(): self
     {
         if (! is_null($this->completed_at)) {
             $this->forceFill(['completed_at' => null])->save();
@@ -159,7 +159,7 @@ class Transaction extends Model implements Contract
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Contract
+    public function driver(string $driver): self
     {
         $this->driver = $driver;
 

@@ -104,7 +104,7 @@ interface Shipping
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Shipping;
+    public function driver(string $driver): self;
 
     /**
      * Calculate the cost.
