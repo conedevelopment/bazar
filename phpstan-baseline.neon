@@ -26,7 +26,7 @@ parameters:
 			path: src/Models/Product.php
 
 		-
-			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$options\\.$#"
+			message: "#^Access to an undefined property Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:\\$properties\\.$#"
 			count: 1
 			path: src/Models/Variant.php
 
