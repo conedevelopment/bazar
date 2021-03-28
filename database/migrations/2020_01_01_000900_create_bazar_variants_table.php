@@ -17,7 +17,7 @@ class CreateBazarVariantsTable extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();
             $table->string('alias')->nullable();
-            $table->json('option');
+            $table->json('variation');
             $table->json('prices')->nullable();
             $table->json('inventory')->nullable();
             $table->timestamps();

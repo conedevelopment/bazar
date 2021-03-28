@@ -23,12 +23,12 @@ class VariantStoreRequest extends FormRequest
                     return $query->where('product_id', $this->route('product')->id);
                 }),
             ],
-            'option' => [
+            'variation' => [
                 'required',
                 'array',
                 new Option($this->route('product')),
             ],
-            'option.*' => ['required', 'string'],
+            'variation.*' => ['required', 'string'],
             'prices' => ['array'],
             'prices.*' => ['array'],
             'prices.*.*' => ['nullable', 'numeric', 'min:0'],

@@ -39,9 +39,9 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $attributes = [
-        'option' => '[]',
         'prices' => '[]',
         'inventory' => '[]',
+        'variation' => '[]',
     ];
 
     /**
@@ -50,7 +50,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $casts = [
-        'option' => 'json',
+        'variation' => 'json',
         'prices' => Prices::class,
         'inventory' => Inventory::class,
     ];
@@ -62,7 +62,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      */
     protected $fillable = [
         'alias',
-        'option',
+        'variation',
         'prices',
         'inventory',
     ];
@@ -106,19 +106,19 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
     }
 
     /**
-     * Get the option attribute.
+     * Get the variation attribute.
      *
      * @param  string  $value
      * @return array
      */
-    public function getOptionAttribute(string $value): array
+    public function getVariationAttribute(string $value): array
     {
         return $this->relationLoaded('product')
             ? array_replace(
-                array_fill_keys(array_keys($this->product->options), '*'),
-                $this->castAttribute('option', $value)
+                array_fill_keys(array_keys($this->product->properties), '*'),
+                $this->castAttribute('variation', $value)
             )
-            : $this->castAttribute('option', $value);
+            : $this->castAttribute('variation', $value);
     }
 
     /**

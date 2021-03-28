@@ -16,15 +16,15 @@
                 <form-input name="slug" :label="__('Slug')" v-model="form.fields.slug"></form-input>
                 <form-editor name="description" :label="__('Description')" v-model="form.fields.description"></form-editor>
             </card>
-            <card :title="__('Options')" class="mb-5">
+            <card :title="__('Properties')" class="mb-5">
                 <template #header>
                     <inertia-link :href="`${$page.action}/variants`" class="btn btn-sm btn-primary">
                         {{ __('Variants') }}
                     </inertia-link>
                 </template>
-                <form-options name="options" v-model="form.fields.options" :schema="[]">
+                <form-options name="properties" v-model="form.fields.properties" :schema="[]">
                     <template #default="{ key }">
-                        <form-tag :name="`options.${key}`" v-model="form.fields.options[key]"></form-tag>
+                        <form-tag :name="`properties.${key}`" v-model="form.fields.properties[key]"></form-tag>
                     </template>
                 </form-options>
             </card>

@@ -47,9 +47,9 @@ class Option implements Rule
         return $this->product->variants->reject(function (Variant $variant): bool {
             return $this->variant && $variant->id === $this->variant->id;
         })->filter(function (Variant $variant) use ($value): bool {
-            $value = array_replace(array_fill_keys(array_keys($this->product->options), '*'), $value);
+            $value = array_replace(array_fill_keys(array_keys($this->product->properties), '*'), $value);
 
-            return empty(array_diff($value, $variant->option));
+            return empty(array_diff($value, $variant->variation));
         })->isEmpty();
     }
 

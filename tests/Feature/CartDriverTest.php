@@ -25,12 +25,12 @@ class CartDriverTest extends TestCase
         $this->manager = $this->app->make(Manager::class);
         $this->product = ProductFactory::new()->create(['prices' => ['usd' => ['default' => 100]]]);
         $this->variant = $this->product->variants()->save(VariantFactory::new()->make([
-            'option' => ['Size' => 'S'],
+            'variation' => ['Size' => 'S'],
             'prices' => ['usd' => ['default' => 150]],
         ]));
 
-        $this->manager->add($this->product, 2, ['option' => ['Size' => 'L']]);
-        $this->manager->add($this->product, 1, ['option' => ['Size' => 'S']]);
+        $this->manager->add($this->product, 2, ['Size' => 'L']);
+        $this->manager->add($this->product, 1, ['Size' => 'S']);
     }
 
     /** @test */
@@ -57,17 +57,17 @@ class CartDriverTest extends TestCase
     {
         Event::fake(CartTouched::class);
 
-        $this->manager->add($this->product, 2, ['option' => ['Size' => 'L']]);
+        $this->manager->add($this->product, 2, ['Size' => 'L']);
 
         $this->assertEquals(5, $this->manager->count());
         $this->assertEquals(2, $this->manager->items()->count());
         $this->assertEquals(2, $this->manager->products()->count());
 
-        $product = $this->manager->item($this->product, ['option' => ['Size' => 'L']]);
+        $product = $this->manager->item($this->product, ['Size' => 'L']);
         $this->assertEquals(100, $product->price);
         $this->assertEquals(4, $product->quantity);
 
-        $variant = $this->manager->item($this->product, ['option' => ['Size' => 'S']]);
+        $variant = $this->manager->item($this->product, ['Size' => 'S']);
         $this->assertEquals(150, $variant->price);
         $this->assertEquals(1, $variant->quantity);
 
@@ -79,7 +79,7 @@ class CartDriverTest extends TestCase
     /** @test */
     public function it_can_remove_items()
     {
-        $item = $this->manager->item($this->product, ['option' => ['Size' => 'L']]);
+        $item = $this->manager->item($this->product, ['Size' => 'L']);
         $this->manager->remove($item);
 
         $this->assertEquals(1, $this->manager->count());
@@ -89,7 +89,7 @@ class CartDriverTest extends TestCase
     /** @test */
     public function it_can_be_updated()
     {
-        $item = $this->manager->item($this->product, ['option' => ['Size' => 'L']]);
+        $item = $this->manager->item($this->product, ['Size' => 'L']);
         $this->manager->update([$item->id => ['quantity' => 10]]);
 
         $this->assertEquals(11, $this->manager->count());

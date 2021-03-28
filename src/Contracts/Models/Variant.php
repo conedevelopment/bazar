@@ -22,10 +22,10 @@ interface Variant
     public function getAliasAttribute(string $value = null): ?string;
 
     /**
-     * Get the option attribute.
+     * Get the variation attribute.
      *
      * @param  string  $value
      * @return array
      */
-    public function getOptionAttribute(string $value): array;
+    public function getVariationAttribute(string $value): array;
 }
