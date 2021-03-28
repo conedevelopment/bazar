@@ -5,7 +5,6 @@ namespace Bazar\Models;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\User as Contract;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,7 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
+class User extends Authenticatable implements Contract, MustVerifyEmail
 {
     use BazarRoutable, Filterable, InteractsWithProxy, Notifiable, SoftDeletes;
 

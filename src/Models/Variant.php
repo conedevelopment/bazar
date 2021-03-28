@@ -10,16 +10,14 @@ use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Variant as Contract;
-use Bazar\Contracts\Stockable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Variant extends Model implements Breadcrumbable, Contract, Stockable
+class Variant extends Model implements Contract
 {
     use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, SoftDeletes;
 

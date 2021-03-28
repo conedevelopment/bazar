@@ -6,14 +6,13 @@ use Bazar\Concerns\Addressable;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Shipping as Contract;
-use Bazar\Contracts\Taxable;
 use Bazar\Support\Facades\Shipping as Manager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 use Throwable;
 
-class Shipping extends Model implements Contract, Taxable
+class Shipping extends Model implements Contract
 {
     use Addressable, InteractsWithProxy, InteractsWithTaxes;
 

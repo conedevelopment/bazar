@@ -2,7 +2,10 @@
 
 namespace Bazar\Contracts\Models;
 
-interface Cart
+use Bazar\Contracts\Discountable;
+use Bazar\Contracts\Itemable;
+
+interface Cart extends Discountable, Itemable
 {
     /**
      * Lock the cart.
