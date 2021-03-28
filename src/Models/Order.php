@@ -9,9 +9,6 @@ use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Order as Contract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable
+class Order extends Model implements Contract
 {
     use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes;
 

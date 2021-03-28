@@ -2,9 +2,10 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Taxable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-interface Shipping
+interface Shipping extends Taxable
 {
         /**
      * Get the shippable model for the shipping.

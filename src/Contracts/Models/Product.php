@@ -2,13 +2,15 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Stockable;
 use Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
-interface Product
+interface Product extends Breadcrumbable, Stockable
 {
     /**
      * Get the orders for the product.

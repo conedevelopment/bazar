@@ -2,11 +2,12 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Breadcrumbable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface User
+interface User extends Breadcrumbable
 {
     /**
      * Get the cart for the user.

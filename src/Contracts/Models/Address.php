@@ -2,9 +2,10 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Breadcrumbable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-interface Address
+interface Address extends Breadcrumbable
 {
     /**
      * Get the addressable model for the address.

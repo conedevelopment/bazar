@@ -10,9 +10,7 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Contracts\Stockable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -23,7 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
-class Product extends Model implements Breadcrumbable, Contract, Stockable
+class Product extends Model implements Contract
 {
     use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
 
