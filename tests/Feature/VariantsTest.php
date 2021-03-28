@@ -60,10 +60,10 @@ class VariantsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.products.variants.store', $this->product),
-            VariantFactory::new()->make(['option' => ['Size' => 'M']])->toArray()
+            VariantFactory::new()->make(['variation' => ['Size' => 'M']])->toArray()
         )->assertRedirect(URL::route('bazar.products.variants.show', [$this->product, Variant::find(2)]));
 
-        $this->assertDatabaseHas('bazar_variants', ['option->Size' => 'M']);
+        $this->assertDatabaseHas('bazar_variants', ['variation->Size' => 'M']);
     }
 
     /** @test */
@@ -93,10 +93,10 @@ class VariantsTest extends TestCase
 
         $this->actingAs($this->admin)->patch(
             URL::route('bazar.products.variants.update', [$this->product, $this->variant]),
-            array_replace_recursive($this->variant->toArray(), ['option' => ['Size' => 'L']])
+            array_replace_recursive($this->variant->toArray(), ['variation' => ['Size' => 'L']])
         )->assertRedirect(URL::route('bazar.products.variants.show', [$this->product, $this->variant]));
 
-        $this->assertDatabaseHas('bazar_variants', ['option->Size' => 'L']);
+        $this->assertDatabaseHas('bazar_variants', ['variation->Size' => 'L']);
     }
 
     /** @test */
@@ -147,10 +147,10 @@ class VariantsTest extends TestCase
         $this->actingAs($this->admin)
             ->patch(
                 URL::route('bazar.products.variants.batch-update', $this->product),
-                ['id' => [$this->variant->id], 'option' => ['Size' => 'L']]
+                ['id' => [$this->variant->id], 'variation' => ['Size' => 'L']]
             )->assertStatus(302);
 
-        $this->assertEquals('L', $this->variant->fresh()->option['Size']);
+        $this->assertEquals('L', $this->variant->fresh()->variation['Size']);
     }
 
     /** @test */

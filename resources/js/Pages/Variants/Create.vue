@@ -7,15 +7,15 @@
         },
 
         computed: {
-            hasOptions() {
-                return Object.keys(this.$page.variant.product.options).length;
+            hasProperties() {
+                return Object.keys(this.$page.variant.product.properties).length;
             }
         },
 
         methods: {
-            selection(options) {
-                return options.reduce((stack, option) => {
-                    return Object.assign(stack, { [option]: this.__(option) });
+            selection(properties) {
+                return properties.reduce((stack, property) => {
+                    return Object.assign(stack, { [property]: this.__(property) });
                 }, { '*': this.__('Any') });
             }
         }
@@ -25,28 +25,28 @@
 <template>
     <data-form :action="$page.action" :model="$page.variant">
         <template #default="form">
-            <card :title="__('Options')" class="mb-5">
-                <div v-if="hasOptions">
+            <card :title="__('Variation')" class="mb-5">
+                <div v-if="hasProperties">
                     <div class="row">
-                        <div v-for="(options, name) in $page.variant.product.options" :key="name" class="col">
+                        <div v-for="(values, name) in $page.variant.product.properties" :key="name" class="col">
                             <form-select
-                                :name="`option.${name}`"
+                                :name="`variation.${name}`"
                                 :label="__(name)"
-                                :options="selection(options)"
-                                v-model="form.fields.option[name]"
+                                :options="selection(values)"
+                                v-model="form.fields.variation[name]"
                             ></form-select>
                         </div>
                     </div>
-                    <div v-if="form.errors.has('option')" class="row">
+                    <div v-if="form.errors.has('variation')" class="row">
                         <div class="col">
                             <span class="form-text text-danger">
-                                {{ form.errors.get('option') }}
+                                {{ form.errors.get('variation') }}
                             </span>
                         </div>
                     </div>
                 </div>
                 <div v-else class="alert alert-info mb-0">
-                    {{ __('No variable options are available for the product.') }}
+                    {{ __('No variable properties are available for the product.') }}
                 </div>
             </card>
             <card :title="__('Pricing')" class="mb-5">

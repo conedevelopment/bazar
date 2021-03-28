@@ -44,7 +44,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     protected $attributes = [
         'prices' => '[]',
-        'options' => '[]',
+        'properties' => '[]',
         'inventory' => '[]',
     ];
 
@@ -54,7 +54,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $casts = [
-        'options' => 'json',
+        'properties' => 'json',
         'prices' => Prices::class,
         'inventory' => Inventory::class,
     ];
@@ -68,7 +68,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
         'name',
         'slug',
         'prices',
-        'options',
+        'properties',
         'inventory',
         'description',
     ];
@@ -171,23 +171,23 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     /**
      * Get the variant of the given option.
      *
-     * @param  array  $option
+     * @param  array  $variation
      * @return \Bazar\Models\Variant|null
      */
-    public function variant(array $option): ?Variant
+    public function variant(array $variation): ?Variant
     {
         return $this->variants->sortBy(static function (Variant $variant): int {
-            return array_count_values($variant->option)['*'] ?? 0;
-        })->first(function (Variant $variant) use ($option): bool {
-            $option = array_replace(array_fill_keys(array_keys($this->options), '*'), $option);
+            return array_count_values($variant->variation)['*'] ?? 0;
+        })->first(function (Variant $variant) use ($variation): bool {
+            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
 
-            foreach ($variant->option as $key => $value) {
+            foreach ($variant->variation as $key => $value) {
                 if ($value === '*') {
-                    $option[$key] = $value;
+                    $variation[$key] = $value;
                 }
             }
 
-            return empty(array_diff_assoc(array_intersect_key($variant->option, $option), $option));
+            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
         });
     }
 

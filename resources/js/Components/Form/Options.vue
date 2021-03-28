@@ -13,7 +13,7 @@
             },
             name: {
                 type: String,
-                default: 'options'
+                default: 'properties'
             },
             schema: {
                 type: [Array, Object],

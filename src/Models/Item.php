@@ -35,7 +35,7 @@ class Item extends MorphPivot implements Taxable
         'tax' => 0,
         'price' => 0,
         'quantity' => 0,
-        'properties' => '{"option": {}}',
+        'properties' => '[]',
     ];
 
     /**
@@ -147,10 +147,10 @@ class Item extends MorphPivot implements Taxable
     public function getStockableAttribute(): ?Stockable
     {
         if (! $product = $this->product) {
-            return $product;
+            return null;
         }
 
-        return $product->variant($this->option) ?: $product;
+        return $product->variant((array) $this->properties) ?: $product;
     }
 
     /**
@@ -201,16 +201,6 @@ class Item extends MorphPivot implements Taxable
     public function getFormattedNetTotalAttribute(): string
     {
         return $this->formattedNetTotal();
-    }
-
-    /**
-     * Get the option property of the item.
-     *
-     * @return array
-     */
-    public function getOptionAttribute(): array
-    {
-        return $this->properties['option'] ?? [];
     }
 
     /**
