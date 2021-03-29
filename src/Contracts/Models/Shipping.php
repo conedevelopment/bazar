@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 interface Shipping extends Taxable
 {
-        /**
+    /**
      * Get the shippable model for the shipping.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
