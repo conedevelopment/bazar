@@ -80,7 +80,7 @@ class Shipping extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return \Bazar\Database\Factories\ShippingFactory
      */
     protected static function newFactory(): ShippingFactory
     {
