@@ -5,7 +5,6 @@ namespace Bazar;
 use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Http\Middleware\HandleInertiaRequests;
 use Closure;
-use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -21,9 +20,9 @@ abstract class Bazar
     /**
      * The default currency.
      *
-     * @var string|null
+     * @var string
      */
-    protected static $currency = null;
+    protected static $currency;
 
     /**
      * Get the version.
@@ -74,14 +73,15 @@ abstract class Bazar
      */
     public static function routes(Closure $callback): void
     {
-        Route::as('bazar.')->prefix('bazar')->middleware([
-            'web',
-            'auth',
-            'verified',
-            'can:manage-bazar',
-            HandleInertiaRequests::class,
-        ])->group(static function (Router $router) use ($callback): void {
-            $callback($router);
-        });
+        Route::as('bazar.')
+            ->prefix('bazar')
+            ->middleware([
+                'web',
+                'auth',
+                'verified',
+                'can:manage-bazar',
+                HandleInertiaRequests::class,
+            ])
+            ->group($callback);
     }
 }
