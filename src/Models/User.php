@@ -101,7 +101,7 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return \Bazar\Database\Factories\UserFactory
      */
     protected static function newFactory(): UserFactory
     {

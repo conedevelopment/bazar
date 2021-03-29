@@ -102,7 +102,7 @@ class Address extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return \Bazar\Database\Factories\AddressFactory
      */
     protected static function newFactory(): AddressFactory
     {
