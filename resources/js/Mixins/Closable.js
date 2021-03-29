@@ -1,7 +1,7 @@
 export default {
     data() {
         return {
-            isOpen: false
+            isOpen: false,
         };
     },
 
@@ -9,17 +9,17 @@ export default {
         open() {
             if (! this.isOpen) {
                 this.isOpen = true;
-                this.$emit('open');
+                this.$dispatcher.emit('open');
             }
         },
         close() {
             if (this.isOpen) {
                 this.isOpen = false;
-                this.$emit('close');
+                this.$dispatcher.emit('close');
             }
         },
         toggle() {
             this.isOpen ? this.close() : this.open();
-        }
-    }
+        },
+    },
 }

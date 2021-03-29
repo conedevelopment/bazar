@@ -5,11 +5,6 @@ mix.webpackConfig({
         publicPath: '/vendor/bazar/',
         chunkFilename: '[name].js',
     },
-    resolve: {
-        alias: {
-            'vue$': 'vue/dist/vue.runtime.esm.js',
-        },
-    },
     externals: {
         moment: 'moment',
     },

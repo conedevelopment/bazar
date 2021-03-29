@@ -3,7 +3,7 @@
 
     export default {
         components: {
-            DataChart
+            DataChart,
         },
 
         mounted() {
@@ -13,30 +13,35 @@
         data() {
             return {
                 busy: false,
-                sales: {}
+                sales: {},
             };
         },
 
         methods: {
             fetch() {
                 this.busy = true;
-                this.$http.get('/bazar/widgets/sales').then(response => {
+                this.$http.get('/bazar/widgets/sales').then((response) => {
                     this.sales = response.data;
-                }).catch(error => {
+                }).catch((error) => {
                     //
                 }).finally(() => {
                     this.busy = false;
                 });
-            }
-        }
+            },
+        },
     }
 </script>
 
 <template>
-    <card :title="__('Sales')">
-        <div v-if="busy" class="alert alert-light mb-0">
-            {{ __('Loading...') }}
+    <section class="card">
+        <div class="card__header">
+            <h2 class="card__title">{{ __('Sales') }}</h2>
         </div>
-        <data-chart v-else :labels="sales.labels" :data="sales.data"></data-chart>
-    </card>
+        <div class="card__inner">
+            <div v-if="busy" class="alert alert-light mb-0">
+                {{ __('Loading') }}...
+            </div>
+            <data-chart v-else :labels="sales.labels" :data="sales.data"></data-chart>
+        </div>
+    </section>
 </template>

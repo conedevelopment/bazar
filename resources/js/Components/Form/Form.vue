@@ -1,146 +1,65 @@
+<template>
+    <form @submit.prevent="submit" @reset.prevent="reset" @keydown.enter.prevent>
+        <slot v-bind="{ data: fields, errors, busy }"></slot>
+    </form>
+</template>
+
 <script>
-    import Errors from './../../Support/Errors';
+    import Errors from './Errors';
 
     export default {
         props: {
             action: {
                 type: String,
-                required: true
-            },
-            json: {
-                type: Boolean,
-                default: false
+                required: true,
             },
             method: {
                 type: String,
-                default: function () {
-                    return this.$options.propsData.model.id ? 'PATCH' : 'POST';
-                }
+                default: 'POST',
             },
-            model: {
+            data: {
                 type: Object,
-                required: true
+                default: () => {},
             },
-            custom: {
+            preserveState: {
                 type: Boolean,
-                default: false
-            }
-        },
-
-        watch: {
-            model: {
-                handler(n, o) {
-                    Object.assign(this.fields, n);
-                },
-                deep: true
+                default: true,
             },
-            fields: {
-                handler(n, o) {
-                    this.$emit('change', n);
-                },
-                deep: true
-            }
         },
 
-        remember: {
-            data: ['fields'],
-            key: window.location.pathname
-        },
-
-        provide() {
-            return {
-                form: this.form
-            };
-        },
+        // remember: {
+        //     data: ['fields'],
+        //     key: window.location.pathname,
+        // },
 
         data() {
             return {
                 busy: false,
-                success: false,
-                fields: this.model || {},
-                errors: new Errors(Array.isArray(this.$page.errors) ? {} : this.$page.errors)
+                errors: new Errors(this.$page.props.errors),
+                fields: JSON.parse(JSON.stringify(this.data)),
             };
-        },
-
-        computed: {
-            form() {
-                return this;
-            },
-            trashed() {
-                return !! this.model.deleted_at;
-            },
-            config() {
-                return {
-                    data: this.fields,
-                    method: this.method,
-                    headers: this.json ? {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    } : {}
-                };
-            }
         },
 
         methods: {
             submit() {
-                this.errors.clear();
-                this.$emit('submit');
-
-                if (this.json) {
-                    this.submitJson();
-                } else {
-                    this.$inertia.visit(this.action, Object.assign(this.config, { preserveState: true }));
-                }
-            },
-            submitJson() {
-                this.busy = true;
-                this.success = false;
-                this.$http(Object.assign({ url: this.action }, this.config)).then(response => {
-                    this.success = true;
-                    this.$emit('success', response.data);
-                }).catch(error => {
-                    this.success = false;
-                    this.errors.set(error.response.data.errors || {});
-                    this.$emit('fail', this.errors);
-                }).finally(() => {
-                    this.busy = false;
+                this.$inertia.visit(this.action, {
+                    data: this.fields,
+                    preserveState: this.preserveState,
+                    method: this.method.toLowerCase(),
+                    onStart: (event) => {
+                        this.busy = true;
+                    },
+                    onFinish: (event) => {
+                        this.errors.fill(this.$page.props.errors);
+                        this.busy = false;
+                    },
                 });
             },
             reset() {
-                this.busy = this.success = false;
                 this.errors.clear();
-                this.fields = this.model;
-                this.$emit('reset');
-            }
-        }
+                this.busy = false;
+                this.fields = JSON.parse(JSON.stringify(this.data));
+            },
+        },
     }
 </script>
-
-<template>
-    <form class="form" @submit.prevent="submit" @reset.prevent="reset" @keydown.enter.prevent>
-        <div v-if="! json && ! custom" class="row">
-            <div class="col-12 col-lg-7 col-xl-8 form__body">
-                <slot v-bind="form"></slot>
-            </div>
-            <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
-                <div class="sticky-helper">
-                    <slot name="aside" v-bind="form"></slot>
-                    <card :title="__('Actions')">
-                        <div class="form-group d-flex justify-content-between mb-0">
-                            <inertia-link v-if="model.id" :href="action" method="DELETE" class="btn btn-outline-danger">
-                                {{ trashed ? __('Delete Permanently') : __('Trash') }}
-                            </inertia-link>
-                            <inertia-link v-if="trashed" :href="`${action}/restore`" method="PATCH" class="btn btn-warning">
-                                {{ __('Restore') }}
-                            </inertia-link>
-                            <button v-else type="submit" class="btn btn-primary">
-                                {{ model.id ? __('Update') : __('Save') }}
-                            </button>
-                        </div>
-                    </card>
-                </div>
-            </div>
-        </div>
-        <slot v-else v-bind="form"></slot>
-    </form>
-</template>

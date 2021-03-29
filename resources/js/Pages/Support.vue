@@ -1,13 +1,3 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Support')
-            };
-        }
-    }
-</script>
-
 <template>
     <div class="row">
         <div class="col-12">
@@ -20,7 +10,7 @@
                         <tr>
                             <th>{{ __('Version') }}:</th>
                             <td>
-                                <span class="badge badge-light">v{{ $page.version }}</span>
+                                <span class="badge badge-light">v{{ $page.props.version }}</span>
                             </td>
                         </tr>
                         <tr>
@@ -45,3 +35,9 @@
         </div>
     </div>
 </template>
+
+<script>
+    export default {
+        inheritAttrs: false,
+    }
+</script>

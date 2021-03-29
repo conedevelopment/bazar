@@ -1,15 +1,11 @@
 import Translator from './../Support/Translator';
 
 export default {
-    install(Vue, options) {
-        let translator;
+    install(app, options) {
+        const translator = new Translator(options.translations);
 
-        Vue.prototype.__ = function (string, replace = {}) {
-            if (! translator) {
-                translator = new Translator(options.translations);
-            }
-
+        app.config.globalProperties.__ = (string, replace = {}) => {
             return translator.__(string, replace);
-        }
-    }
+        };
+    },
 }

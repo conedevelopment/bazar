@@ -46,9 +46,6 @@ class HandleInertiaRequests extends Middleware
                     'dimension_unit' => Config::get('bazar.dimension_unit'),
                 ];
             },
-            'admin' => static function () use ($request): ?User {
-                return $request->user();
-            },
             'breadcrumbs' => static function () use ($request): Breadcrumbs {
                 return new Breadcrumbs($request);
             },

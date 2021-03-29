@@ -192,11 +192,11 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerComposers(): void
     {
         $this->app['view']->composer('bazar::*', function (View $view): void {
+            $view->with('menu', Support\Facades\Menu::items());
+            $view->with('user', $this->app['request']->user());
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
-
-            $view->with('menu', Support\Facades\Menu::items());
         });
     }
 

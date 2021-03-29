@@ -1,87 +1,90 @@
+<template>
+    <div>
+        <div ref="input" class="editor" spellcheck="false"></div>
+        <media-manager ref="media" multiple @update:modelValue="insertMedia"></media-manager>
+    </div>
+</template>
+
 <script>
     import Quill from 'quill';
-    import Field from './../../Mixins/Field';
 
     export default {
-        mixins: [Field],
-
         props: {
-            value: {
+            modelValue: {
                 type: String,
-                default: ''
-            }
+                default: '',
+            },
         },
 
+        inheritAttrs: false,
+
+        emits: ['update:modelValue'],
+
         mounted() {
-            this.editor = new Quill(this.$refs.input, this.config);
-            this.editor.root.innerHTML = this.value;
-            this.editor.enable(! this.attrs.disabled);
-            this.editor.on('text-change', () => this.update());
+            const editor = new Quill(this.$refs.input, {
+                modules: {
+                    toolbar: {
+                        container: [
+                            [{ header: [1, 2, 3, 4, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ list: 'ordered'}, { list: 'bullet' }, { align: [] }],
+                            ['link', 'image'],
+                            ['clean'],
+                        ],
+                        handlers: {
+                            image: this.mediaHandler,
+                        },
+                    },
+                    clipboard: {
+                        matchVisual: false,
+                    },
+                },
+                theme: 'snow',
+                formats: ['header', 'align', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
+                placeholder: this.$attrs.placeholder || '',
+            });
+
+            editor.root.innerHTML = this.modelValue;
+            editor.enable(! this.$attrs.disabled);
+            editor.on('text-change', this.update);
+
+            this.$dispatcher.on('insertMedia', (event) => {
+                const range = editor.getSelection(true);
+
+                event.detail.forEach((value) => {
+                    if (value.is_image) {
+                        editor.insertEmbed(range.index, 'image', value.urls.thumb, Quill.sources.USER)
+                        editor.setSelection(range.index + 1, 0, Quill.sources.SILENT);
+                    } else {
+                        editor.insertText(range.index, value.name, 'link', value.urls.original, Quill.sources.USER);
+                        editor.setSelection(range.index + value.name.length, 0, Quill.sources.SILENT);
+                    }
+                });
+
+                this.$refs.media.selection = [];
+            });
+
+            this.quill = editor;
         },
 
         data() {
             return {
-                editor: null
+                quill: null,
             };
-        },
-
-        computed: {
-            config() {
-                return {
-                    modules: {
-                        toolbar: {
-                            container: [
-                                [{ header: [1, 2, 3, 4, false] }],
-                                ['bold', 'italic', 'underline'],
-                                [{ list: 'ordered'}, { list: 'bullet' }, { align: [] }],
-                                ['link', 'image'],
-                                ['clean']
-                            ],
-                            handlers: {
-                                image: this.mediaHandler
-                            }
-                        }
-                    },
-                    theme: 'snow',
-                    formats: ['header', 'align', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
-                    placeholder: this.$attrs.placeholder || ''
-                };
-            }
         },
 
         methods: {
             update() {
-                this.$emit('input', this.editor.root.innerHTML === '<p><br></p>' ? '' : this.editor.root.innerHTML);
+                const value = this.quill.root.innerHTML === '<p><br></p>' ? '' : this.quill.root.innerHTML;
+
+                this.$emit('update:modelValue', value);
             },
             mediaHandler() {
                 this.$refs.media.open();
             },
             insertMedia(values) {
-                const range = this.editor.getSelection(true);
-
-                values.forEach(value => {
-                    if (value.is_image) {
-                        this.editor.insertEmbed(range.index, 'image', value.urls.original, Quill.sources.USER);
-                        this.editor.setSelection(range.index + 1, 0, Quill.sources.SILENT);
-                    } else {
-                        this.editor.insertText(range.index, value.name, 'link', value.urls.original, Quill.sources.USER);
-                        this.editor.setSelection(range.index + value.name.length, 0, Quill.sources.SILENT);
-                    }
-                });
-
-                this.$refs.media.selection = [];
-            }
-        }
+                this.$dispatcher.emit('insertMedia', values);
+            },
+        },
     }
 </script>
-
-<template>
-    <div class="form-group">
-        <label v-if="label" :for="name">{{ label }}</label>
-        <div ref="input" class="editor form-control" :class="{ 'is-invalid': invalid }"></div>
-        <span v-if="help || invalid" class="form-text" :class="{ 'text-danger': invalid }">
-            {{ error || help }}
-        </span>
-        <media-manager ref="media" multiple @input="insertMedia"></media-manager>
-    </div>
-</template>
