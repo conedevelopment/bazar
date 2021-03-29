@@ -5,11 +5,11 @@ namespace Bazar\Tests\Feature;
 use Bazar\Cart\Checkout;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariantFactory;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
+use Bazar\Models\Product;
 use Bazar\Models\Shipping;
+use Bazar\Models\Variant;
 use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
@@ -23,8 +23,8 @@ class CartDriverTest extends TestCase
         parent::setUp();
 
         $this->manager = $this->app->make(Manager::class);
-        $this->product = ProductFactory::new()->create(['prices' => ['usd' => ['default' => 100]]]);
-        $this->variant = $this->product->variants()->save(VariantFactory::new()->make([
+        $this->product = Product::factory()->create(['prices' => ['usd' => ['default' => 100]]]);
+        $this->variant = $this->product->variants()->save(Variant::factory()->make([
             'variation' => ['Size' => 'S'],
             'prices' => ['usd' => ['default' => 150]],
         ]));

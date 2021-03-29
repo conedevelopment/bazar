@@ -3,10 +3,10 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\TransactionFactory;
+use Bazar\Models\Address;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
+use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -17,9 +17,9 @@ class OrderTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = OrderFactory::new()->create();
+        $this->order = Order::factory()->create();
 
-        $this->products = ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
+        $this->products = Product::factory()->count(3)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['quantity' => mt_rand(1, 5), 'tax' => 0, 'price' => $product->price]];
         });
 
@@ -42,7 +42,7 @@ class OrderTest extends TestCase
     public function it_has_transactions()
     {
         $transactions = $this->order->transactions()->saveMany(
-            TransactionFactory::new()->count(3)->make()
+            Transaction::factory()->count(3)->make()
         );
 
         $this->assertSame(
@@ -54,7 +54,7 @@ class OrderTest extends TestCase
     public function it_has_address()
     {
         $address = $this->order->address()->save(
-            AddressFactory::new()->make()
+            Address::factory()->make()
         );
 
         $this->assertSame($address->id, $this->order->address->id);
@@ -63,7 +63,7 @@ class OrderTest extends TestCase
     /** @test */
     public function it_has_products()
     {
-        $product = ProductFactory::new()->create();
+        $product = Product::factory()->create();
 
         $this->order->products()->attach($product, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
 

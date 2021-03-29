@@ -4,9 +4,11 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Transaction as Contract;
+use Bazar\Database\Factories\TransactionFactory;
 use Bazar\Support\Facades\Gateway;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -14,7 +16,7 @@ use Throwable;
 
 class Transaction extends Model implements Contract
 {
-    use InteractsWithProxy;
+    use HasFactory, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -62,6 +64,16 @@ class Transaction extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): TransactionFactory
+    {
+        return TransactionFactory::new();
     }
 
     /**

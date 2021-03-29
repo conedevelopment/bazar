@@ -2,13 +2,11 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\TransactionFactory;
 use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Gateway\Driver;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
+use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
@@ -27,9 +25,9 @@ class TransactionsTest extends TestCase
             'X-Requested-With' => 'XMLHttpRequest',
         ]);
 
-        $this->order = $this->admin->orders()->save(OrderFactory::new()->make());
+        $this->order = $this->admin->orders()->save(Order::factory()->make());
 
-        $this->transaction = $this->order->transactions()->save(TransactionFactory::new()->make([
+        $this->transaction = $this->order->transactions()->save(Transaction::factory()->make([
             'amount' => 0,
             'type' => 'payment',
         ]));
@@ -43,11 +41,11 @@ class TransactionsTest extends TestCase
     public function an_admin_can_store_transaction()
     {
         $this->order->transactions()->save(
-            TransactionFactory::new()->make(['driver' => 'fake', 'amount' => 0])
+            Transaction::factory()->make(['driver' => 'fake', 'amount' => 0])
         );
 
         $this->order->products()->attach(
-            $product = ProductFactory::new()->create(),
+            $product = Product::factory()->create(),
             ['quantity' => 1, 'tax' => 0, 'price' => $product->price],
         );
 
@@ -61,7 +59,7 @@ class TransactionsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.transactions.store', $this->order),
-            $payment = TransactionFactory::new()->make([
+            $payment = Transaction::factory()->make([
                 'type' => 'refund',
                 'driver' => 'fake',
                 'amount' => null,
@@ -70,7 +68,7 @@ class TransactionsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.transactions.store', $this->order),
-            $payment = TransactionFactory::new()->make([
+            $payment = Transaction::factory()->make([
                 'type' => 'payment',
                 'driver' => 'manual',
                 'amount' => $this->order->fresh()->totalPayable(),
@@ -80,7 +78,7 @@ class TransactionsTest extends TestCase
 
          $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.transactions.store', $this->order),
-            $refund = TransactionFactory::new()->make([
+            $refund = Transaction::factory()->make([
                 'type' => 'refund',
                 'driver' => 'manual',
                 'amount' => $this->order->totalRefundable(),

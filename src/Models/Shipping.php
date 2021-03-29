@@ -6,7 +6,9 @@ use Bazar\Concerns\Addressable;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Shipping as Contract;
+use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Support\Facades\Shipping as Manager;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
@@ -14,7 +16,7 @@ use Throwable;
 
 class Shipping extends Model implements Contract
 {
-    use Addressable, InteractsWithProxy, InteractsWithTaxes;
+    use Addressable, HasFactory, InteractsWithProxy, InteractsWithTaxes;
 
     /**
      * The accessors to append to the model's array form.
@@ -73,6 +75,16 @@ class Shipping extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): ShippingFactory
+    {
+        return ShippingFactory::new();
     }
 
     /**

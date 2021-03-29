@@ -2,8 +2,8 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\TransactionFactory;
+use Bazar\Models\Order;
+use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use Bazar\Tests\TestCase;
 
@@ -15,8 +15,8 @@ class TransactionTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = $this->admin->orders()->save(OrderFactory::new()->make());
-        $this->transaction = TransactionFactory::new()->make();
+        $this->order = $this->admin->orders()->save(Order::factory()->make());
+        $this->transaction = Transaction::factory()->make();
         $this->transaction->order()->associate($this->order)->save();
     }
 

@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Database\Factories\MediumFactory;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
 use Bazar\Models\Medium;
@@ -33,7 +32,7 @@ class JobTest extends TestCase
     /** @test */
     public function a_job_can_perform_conversions()
     {
-        $medium = MediumFactory::new()->create();
+        $medium = Medium::factory()->create();
         Storage::disk('public')->put(
             $medium->path(),  UploadedFile::fake()->image('test.png')->get()
         );

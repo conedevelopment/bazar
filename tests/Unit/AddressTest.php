@@ -3,10 +3,7 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ShippingFactory;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Shipping;
@@ -18,7 +15,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_belongs_to_user()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
         $address->addressable()->associate($this->user)->save();
 
@@ -31,9 +28,9 @@ class AddressTest extends TestCase
     /** @test */
     public function it_belongs_to_cart()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
-        $cart = CartFactory::new()->create();
+        $cart = Cart::factory()->create();
 
         $address->addressable()->associate($cart)->save();
 
@@ -46,9 +43,9 @@ class AddressTest extends TestCase
     /** @test */
     public function it_belongs_to_order()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
-        $order = OrderFactory::new()->create();
+        $order = Order::factory()->create();
 
         $address->addressable()->associate($order)->save();
 
@@ -61,12 +58,12 @@ class AddressTest extends TestCase
     /** @test */
     public function it_belongs_to_shipping()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
-        $order = OrderFactory::new()->create();
+        $order = Order::factory()->create();
 
         $shipping = $order->shipping()->save(
-            ShippingFactory::new()->make()
+            Shipping::factory()->make()
         );
 
         $address->addressable()->associate($shipping)->save();
@@ -80,7 +77,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_has_name_attribute()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
         $this->assertSame(
             sprintf('%s %s', $address->first_name, $address->last_name),
@@ -91,7 +88,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_has_country_name_attribute()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
         $this->assertSame(
             Countries::name($address->country), $address->countryName
@@ -101,7 +98,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_has_alias_attribute()
     {
-        $address = AddressFactory::new()->make(['alias' => 'Fake']);
+        $address = Address::factory()->make(['alias' => 'Fake']);
 
         $this->assertSame('Fake', $address->alias);
 
@@ -115,7 +112,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_has_custom_attribute()
     {
-        $address = AddressFactory::new()->make(['custom' => [
+        $address = Address::factory()->make(['custom' => [
             'key' => 'value',
         ]]);
 
@@ -127,7 +124,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_is_breadcrumbable()
     {
-        $address = $this->user->addresses()->save(AddressFactory::new()->make());
+        $address = $this->user->addresses()->save(Address::factory()->make());
 
         $this->assertInstanceOf(Breadcrumbable::class, $address);
         $this->assertSame($address->alias, $address->toBreadcrumb($this->app['request']));
@@ -136,7 +133,7 @@ class AddressTest extends TestCase
     /** @test */
     public function it_has_query_scopes()
     {
-        $address = AddressFactory::new()->make();
+        $address = Address::factory()->make();
 
         $address->addressable()->associate($this->user)->save();
 

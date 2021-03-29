@@ -4,8 +4,8 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Discount as Contract;
 use Bazar\Contracts\Discountable;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\ProductFactory;
+use Bazar\Models\Cart;
+use Bazar\Models\Product;
 use Bazar\Support\Facades\Discount;
 use Bazar\Tests\TestCase;
 
@@ -17,11 +17,11 @@ class DiscountRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $products = ProductFactory::new()->count(2)->create()->mapWithKeys(function ($product) {
+        $products = Product::factory()->count(2)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['price' => $product->price, 'quantity' => 1]];
         })->toArray();
 
-        $this->cart = CartFactory::new()->create();
+        $this->cart = Cart::factory()->create();
         $this->cart->products()->attach($products);
 
         Discount::register('custom-30', 30);

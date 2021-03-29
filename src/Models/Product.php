@@ -11,7 +11,9 @@ use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Models\Product as Contract;
+use Bazar\Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -23,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Contract
 {
-    use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -42,8 +44,8 @@ class Product extends Model implements Contract
      */
     protected $attributes = [
         'prices' => '[]',
-        'properties' => '[]',
         'inventory' => '[]',
+        'properties' => '[]',
     ];
 
     /**
@@ -66,8 +68,8 @@ class Product extends Model implements Contract
         'name',
         'slug',
         'prices',
-        'properties',
         'inventory',
+        'properties',
         'description',
     ];
 
@@ -86,6 +88,16 @@ class Product extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): ProductFactory
+    {
+        return ProductFactory::new();
     }
 
     /**

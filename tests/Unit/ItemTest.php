@@ -4,8 +4,8 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
-use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Item;
+use Bazar\Models\Product;
 use Bazar\Support\Facades\Cart;
 use Bazar\Support\Facades\Tax;
 use Bazar\Tests\TestCase;
@@ -27,7 +27,7 @@ class ItemTest extends TestCase
             return $item->price * 0.1;
         });
 
-        $product = ProductFactory::new()->create();
+        $product = Product::factory()->create();
 
         $this->item = Cart::add($product, 3, ['text' => 'test-text']);
     }

@@ -6,8 +6,10 @@ use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\User as Contract;
+use Bazar\Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -22,7 +24,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable implements Contract, MustVerifyEmail
 {
-    use BazarRoutable, Filterable, InteractsWithProxy, Notifiable, SoftDeletes;
+    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy, Notifiable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -94,6 +96,16 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests;
 
-use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\Address;
 use Bazar\Models\Category;
 use Bazar\Models\Medium;
@@ -35,8 +34,8 @@ abstract class TestCase extends BaseTestCase
         Storage::fake('local');
         Storage::fake('public');
 
-        $this->admin = UserFactory::new()->create(['email' => 'test@bazar.test']);
-        $this->user = UserFactory::new()->create();
+        $this->admin = User::factory()->create(['email' => 'test@bazar.test']);
+        $this->user = User::factory()->create();
     }
 
     protected function registerPolicies(): void

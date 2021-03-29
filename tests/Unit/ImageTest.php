@@ -3,7 +3,7 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Conversion\Image;
-use Bazar\Database\Factories\MediumFactory;
+use Bazar\Models\Medium;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +20,7 @@ class ImageTest extends TestCase
     /** @test */
     public function jpeg_can_be_converted()
     {
-        $medium = MediumFactory::new()->create(['file_name' => 'test.jpg']);
+        $medium = Medium::factory()->create(['file_name' => 'test.jpg']);
 
         Storage::disk('public')->makeDirectory($medium->id);
 
@@ -56,7 +56,7 @@ class ImageTest extends TestCase
     /** @test */
     public function png_can_be_converted()
     {
-        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+        $medium = Medium::factory()->create(['file_name' => 'test.png']);
 
         Storage::disk('public')->makeDirectory($medium->id);
 
@@ -94,7 +94,7 @@ class ImageTest extends TestCase
     /** @test */
     public function gif_can_be_converted()
     {
-        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+        $medium = Medium::factory()->create(['file_name' => 'test.png']);
 
         Storage::disk('public')->makeDirectory($medium->id);
 
@@ -130,7 +130,7 @@ class ImageTest extends TestCase
     /** @test */
     public function webp_can_be_converted()
     {
-        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+        $medium = Medium::factory()->create(['file_name' => 'test.png']);
 
         Storage::disk('public')->makeDirectory($medium->id);
 
@@ -166,7 +166,7 @@ class ImageTest extends TestCase
     /** @test */
     public function not_supported_types_cannot_be_converted()
     {
-        $medium = MediumFactory::new()->create(['file_name' => 'test.png']);
+        $medium = Medium::factory()->create(['file_name' => 'test.png']);
 
         Storage::disk('public')->makeDirectory($medium->id);
 

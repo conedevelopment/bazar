@@ -5,8 +5,10 @@ namespace Bazar\Models;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Medium as Contract;
+use Bazar\Database\Factories\MediumFactory;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +17,7 @@ use Illuminate\Support\Str;
 
 class Medium extends Model implements Contract
 {
-    use Filterable, InteractsWithProxy;
+    use Filterable, HasFactory, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -88,6 +90,16 @@ class Medium extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): MediumFactory
+    {
+        return MediumFactory::new();
     }
 
     /**
