@@ -5,12 +5,12 @@ namespace Bazar\Tests\Unit;
 use Bazar\Casts\Inventory;
 use Bazar\Casts\Prices;
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\CategoryFactory;
-use Bazar\Database\Factories\MediumFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariantFactory;
+use Bazar\Models\Cart;
+use Bazar\Models\Category;
+use Bazar\Models\Medium;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
+use Bazar\Models\Variant;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -22,7 +22,7 @@ class ProductTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = ProductFactory::new()->create([
+        $this->product = Product::factory()->create([
             'properties' => [
                 'Size' => ['XS', 'S', 'M', 'L'],
                 'Material' => ['Gold', 'Silver'],
@@ -33,7 +33,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_belongs_to_orders()
     {
-        $order = OrderFactory::new()->create();
+        $order = Order::factory()->create();
 
         $this->product->orders()->attach($order, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
 
@@ -45,7 +45,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_belongs_to_carts()
     {
-        $cart = CartFactory::new()->create();
+        $cart = Cart::factory()->create();
 
         $this->product->carts()->attach($cart, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
 
@@ -57,7 +57,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_belongs_to_categories()
     {
-        $category = CategoryFactory::new()->create();
+        $category = Category::factory()->create();
 
         $this->product->categories()->attach($category);
 
@@ -69,7 +69,7 @@ class ProductTest extends TestCase
     /** @test */
     public function it_has_media()
     {
-        $medium = MediumFactory::new()->create();
+        $medium = Medium::factory()->create();
 
         $this->product->media()->attach($medium);
 
@@ -80,7 +80,7 @@ class ProductTest extends TestCase
     public function it_has_variants()
     {
         $variant = $this->product->variants()->save(
-            VariantFactory::new()->make([
+            Variant::factory()->make([
                 'variation' => ['Height' => 100, 'Width' => 100],
             ])
         );

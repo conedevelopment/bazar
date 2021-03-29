@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\CategoryFactory;
 use Bazar\Models\Category;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
@@ -15,7 +14,7 @@ class CategoriesTest extends TestCase
     {
         parent::setUp();
 
-        $this->category = CategoryFactory::new()->create();
+        $this->category = Category::factory()->create();
     }
 
     /** @test */
@@ -61,7 +60,7 @@ class CategoriesTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.categories.store'),
-            CategoryFactory::new()->make(['name' => 'Test'])->toArray()
+            Category::factory()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(URL::route('bazar.categories.show', Category::find(2)));
 
         $this->assertDatabaseHas('bazar_categories', ['name' => 'Test']);

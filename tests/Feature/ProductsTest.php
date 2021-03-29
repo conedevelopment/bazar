@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\ProductFactory;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
@@ -15,7 +14,7 @@ class ProductsTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = ProductFactory::new()->create();
+        $this->product = Product::factory()->create();
     }
 
     /** @test */
@@ -60,7 +59,7 @@ class ProductsTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.products.store'),
-            ProductFactory::new()->make(['name' => 'Test'])->toArray()
+            Product::factory()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(URL::route('bazar.products.show', Product::find(2)));
 
         $this->assertDatabaseHas('bazar_products', ['name' => 'Test']);

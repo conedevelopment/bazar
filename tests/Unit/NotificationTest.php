@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Database\Factories\OrderFactory;
+use Bazar\Models\Order;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
 use Bazar\Tests\TestCase;
@@ -14,7 +14,7 @@ class NotificationTest extends TestCase
     /** @test */
     public function admin_order_notification_can_be_sent_on_different_channels()
     {
-        $order = OrderFactory::new()->create();
+        $order = Order::factory()->create();
         $notification = new AdminNewOrder($order);
 
         $this->assertInstanceOf(MailMessage::class, $notification->toMail($this->admin));
@@ -27,7 +27,7 @@ class NotificationTest extends TestCase
     /** @test */
     public function customer_order_notification_can_be_sent_on_different_channels()
     {
-        $order = OrderFactory::new()->create();
+        $order = Order::factory()->create();
         $notification = new CustomerNewOrder($order);
 
         $this->assertInstanceOf(MailMessage::class, $notification->toMail($this->user));

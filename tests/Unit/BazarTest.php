@@ -3,7 +3,6 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Bazar;
-use Bazar\Database\Factories\ProductFactory;
 use Bazar\Exceptions\InvalidCurrencyException;
 use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
@@ -44,7 +43,7 @@ class BazarTest extends TestCase
             //
         });
 
-        $product = ProductFactory::new()->create();
+        $product = Product::factory()->create();
 
         $this->get('shop/products/'.$product->id)->assertOk();
 

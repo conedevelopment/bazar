@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Database\Factories\MediumFactory;
+use Bazar\Models\Medium;
 use Bazar\Support\Facades\Conversion;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +15,7 @@ class MediumTest extends TestCase
     {
         parent::setUp();
 
-        $this->medium = MediumFactory::new()->create();
+        $this->medium = Medium::factory()->create();
 
         $this->app['config']->set('filesystems.disks.fake', [
             'driver' => 'local',

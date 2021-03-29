@@ -11,7 +11,9 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Contracts\Models\Variant as Contract;
+use Bazar\Database\Factories\VariantFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +21,7 @@ use Illuminate\Http\Request;
 
 class Variant extends Model implements Contract
 {
-    use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, SoftDeletes;
+    use BazarRoutable, Filterable, HasFactory, HasMedia, InteractsWithProxy, InteractsWithStock, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -60,9 +62,9 @@ class Variant extends Model implements Contract
      */
     protected $fillable = [
         'alias',
-        'variation',
         'prices',
         'inventory',
+        'variation',
     ];
 
     /**
@@ -80,6 +82,16 @@ class Variant extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): VariantFactory
+    {
+        return VariantFactory::new();
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\VariantFactory;
+use Bazar\Models\Product;
+use Bazar\Models\Variant;
 use Bazar\Tests\TestCase;
 
 class VariantTest extends TestCase
@@ -15,9 +15,9 @@ class VariantTest extends TestCase
     {
         parent::setUp();
 
-        $this->product = ProductFactory::new()->create();
+        $this->product = Product::factory()->create();
 
-        $this->variant = VariantFactory::new()->make();
+        $this->variant = Variant::factory()->make();
         $this->variant->product()->associate($this->product);
         $this->variant->save();
     }
@@ -31,7 +31,7 @@ class VariantTest extends TestCase
     /** @test */
     public function it_has_alias_attribute()
     {
-        $variant = VariantFactory::new()->make(['alias' => 'Fake']);
+        $variant = Variant::factory()->make(['alias' => 'Fake']);
 
         $this->assertSame('Fake', $variant->alias);
 

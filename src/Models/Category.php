@@ -8,7 +8,9 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\Sluggable;
 use Bazar\Contracts\Models\Category as Contract;
+use Bazar\Database\Factories\CategoryFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +18,7 @@ use Illuminate\Http\Request;
 
 class Category extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasMedia, InteractsWithProxy, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, HasFactory, HasMedia, InteractsWithProxy, Sluggable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +55,16 @@ class Category extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): CategoryFactory
+    {
+        return CategoryFactory::new();
     }
 
     /**

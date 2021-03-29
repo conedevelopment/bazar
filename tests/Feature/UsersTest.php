@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\UserFactory;
 use Bazar\Models\User;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
@@ -51,7 +50,7 @@ class UsersTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.users.store'),
-            UserFactory::new()->make(['name' => 'Test'])->toArray()
+            User::factory()->make(['name' => 'Test'])->toArray()
         )->assertRedirect(URL::route('bazar.users.show', User::find(3)))
          ->assertSessionHas('message', 'The user has been created.');
 

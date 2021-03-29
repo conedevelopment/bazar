@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\MediumFactory;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
 use Bazar\Models\Medium;
@@ -27,7 +26,7 @@ class MediaTest extends TestCase
 
         Queue::fake();
 
-        $this->medium = MediumFactory::new()->create();
+        $this->medium = Medium::factory()->create();
 
         Storage::disk($this->medium->disk)->put($this->medium->path(), 'fake content');
     }

@@ -3,10 +3,7 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Taxable;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ShippingFactory;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Shipping;
@@ -27,8 +24,8 @@ class ShippingTest extends TestCase
             return $item->price * 0.1;
         });
 
-        $this->cart = CartFactory::new()->create();
-        $this->shipping = ShippingFactory::new()->make();
+        $this->cart = Cart::factory()->create();
+        $this->shipping = Shipping::factory()->make();
         $this->shipping->shippable()->associate($this->cart)->save();
     }
 
@@ -44,8 +41,8 @@ class ShippingTest extends TestCase
     /** @test */
     public function a_shipping_belongs_to_an_order()
     {
-        $order = $this->admin->orders()->save(OrderFactory::new()->make());
-        $shipping = ShippingFactory::new()->make();
+        $order = $this->admin->orders()->save(Order::factory()->make());
+        $shipping = Shipping::factory()->make();
         $shipping->shippable()->associate($order)->save();
 
         $this->assertSame(
@@ -57,12 +54,12 @@ class ShippingTest extends TestCase
     /** @test */
     public function a_shipping_has_address()
     {
-        $order = $this->admin->orders()->save(OrderFactory::new()->make());
-        $shipping = ShippingFactory::new()->make();
+        $order = $this->admin->orders()->save(Order::factory()->make());
+        $shipping = Shipping::factory()->make();
         $shipping->shippable()->associate($order)->save();
 
         $address = $shipping->address()->save(
-            AddressFactory::new()->make()
+            Address::factory()->make()
         );
 
         $this->assertSame($address->id, $shipping->address->id);

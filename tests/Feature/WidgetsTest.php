@@ -2,7 +2,7 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\OrderFactory;
+use Bazar\Models\Order;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\URL;
@@ -13,7 +13,7 @@ class WidgetsTest extends TestCase
     {
         parent::setUp();
 
-        OrderFactory::new()->count(3)->create();
+        Order::factory()->count(3)->create();
     }
 
     /** @test */

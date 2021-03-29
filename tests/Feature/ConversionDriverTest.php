@@ -3,9 +3,8 @@
 namespace Bazar\Tests\Feature;
 
 use Bazar\Contracts\Conversion\Manager;
-use Bazar\Models\Medium;
 use Bazar\Conversion\GdDriver;
-use Bazar\Database\Factories\MediumFactory;
+use Bazar\Models\Medium;
 use Bazar\Support\Facades\Conversion;
 use Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
@@ -52,7 +51,7 @@ class ConversionDriverTest extends TestCase
     /** @test */
     public function it_can_perform_conversions()
     {
-        $medium = MediumFactory::new()->create([
+        $medium = Medium::factory()->create([
             'name' => 'test',
             'file_name' => 'test.png',
             'mime_type' => 'image/png',

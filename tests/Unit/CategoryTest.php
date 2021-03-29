@@ -3,9 +3,9 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\CategoryFactory;
-use Bazar\Database\Factories\MediumFactory;
-use Bazar\Database\Factories\ProductFactory;
+use Bazar\Models\Category;
+use Bazar\Models\Medium;
+use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 
 class CategoryTest extends TestCase
@@ -16,13 +16,13 @@ class CategoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->category = CategoryFactory::new()->create();
+        $this->category = Category::factory()->create();
     }
 
     /** @test */
     public function it_belongs_to_products()
     {
-        $product = ProductFactory::new()->create();
+        $product = Product::factory()->create();
 
         $this->category->products()->attach($product);
 
@@ -34,7 +34,7 @@ class CategoryTest extends TestCase
     /** @test */
     public function it_has_media()
     {
-        $media = MediumFactory::new()->create();
+        $media = Medium::factory()->create();
 
         $this->category->media()->attach($media);
 

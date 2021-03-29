@@ -9,13 +9,15 @@ use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Cart as Contract;
+use Bazar\Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class Cart extends Model implements Contract
 {
-    use Addressable, HasUuid, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy;
+    use Addressable, HasFactory, HasUuid, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy;
 
     /**
      * The attributes that should have default values.
@@ -98,6 +100,16 @@ class Cart extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): CartFactory
+    {
+        return CartFactory::new();
     }
 
     /**

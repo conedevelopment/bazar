@@ -2,12 +2,12 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\ProductFactory;
+use Bazar\Cart\Checkout;
+use Bazar\Models\Address;
+use Bazar\Models\Cart;
+use Bazar\Models\Product;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
-use Bazar\Cart\Checkout;
 use Bazar\Tests\TestCase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
@@ -20,10 +20,10 @@ class CheckoutTest extends TestCase
     {
         parent::setUp();
 
-        $this->cart = CartFactory::new()->create();
+        $this->cart = Cart::factory()->create();
 
         $this->cart->products()->attach(
-            ProductFactory::new()->count(3)->create()->mapWithKeys(function ($product) {
+            Product::factory()->count(3)->create()->mapWithKeys(function ($product) {
                 [$quantity, $tax, $price] = [mt_rand(1, 5), 0, $product->price];
 
                 return [$product->id => compact('price', 'tax', 'quantity')];
@@ -37,9 +37,9 @@ class CheckoutTest extends TestCase
         Notification::fake();
 
         $response = (new Checkout($this->cart))->shipping(
-            'local-pickup', AddressFactory::new()->make()->toArray()
+            'local-pickup', Address::factory()->make()->toArray()
         )->billing(
-            AddressFactory::new()->make()->toArray()
+            Address::factory()->make()->toArray()
         )->gateway('cash')->onSuccess(function ($order) {
             return 'Success';
         })->onFailure(function ($e, $order) {
@@ -62,9 +62,9 @@ class CheckoutTest extends TestCase
     public function it_handles_failed_checkout()
     {
         $response = (new Checkout($this->cart))->shipping(
-            'local-pickup', AddressFactory::new()->make()->toArray()
+            'local-pickup', Address::factory()->make()->toArray()
         )->billing(
-            AddressFactory::new()->make()->toArray()
+            Address::factory()->make()->toArray()
         )->gateway('fake')->onSuccess(function ($order) {
             //
         })->onFailure(function ($e, $order) {

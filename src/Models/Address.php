@@ -6,15 +6,17 @@ use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Address as Contract;
+use Bazar\Database\Factories\AddressFactory;
 use Bazar\Support\Countries;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 
 class Address extends Model implements Contract
 {
-    use BazarRoutable, Filterable, InteractsWithProxy;
+    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -95,6 +97,16 @@ class Address extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): AddressFactory
+    {
+        return AddressFactory::new();
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Database\Factories\MediumFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ProductFactory;
+use Bazar\Models\Medium;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -17,10 +17,10 @@ class DownloadTest extends TestCase
     {
         parent::setUp();
 
-        $medium = MediumFactory::new()->create();
+        $medium = Medium::factory()->create();
         Storage::disk($medium->disk)->put($medium->path(), 'fake content');
 
-        $product = ProductFactory::new()->create([
+        $product = Product::factory()->create([
             'inventory' => [
                 'downloadable' => true,
                 'files' => [
@@ -30,7 +30,7 @@ class DownloadTest extends TestCase
             ],
         ]);
 
-        $this->order = OrderFactory::new()->create();
+        $this->order = Order::factory()->create();
         $this->order->products()->attach($product, ['quantity' => 1, 'tax' => 0, 'price' => $product->price]);
     }
 

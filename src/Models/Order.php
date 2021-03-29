@@ -10,7 +10,9 @@ use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Order as Contract;
+use Bazar\Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +21,7 @@ use Illuminate\Support\Collection;
 
 class Order extends Model implements Contract
 {
-    use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes;
+    use Addressable, BazarRoutable, Filterable, HasFactory, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -83,6 +85,16 @@ class Order extends Model implements Contract
     public static function getProxiedContract(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory(): OrderFactory
+    {
+        return OrderFactory::new();
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\CartFactory;
-use Bazar\Database\Factories\OrderFactory;
+use Bazar\Models\Address;
+use Bazar\Models\Cart;
+use Bazar\Models\Order;
 use Bazar\Tests\TestCase;
 
 class UserTest extends TestCase
@@ -16,7 +16,7 @@ class UserTest extends TestCase
         $this->assertNull($this->user->cart);
 
         $cart = $this->user->cart()->save(
-            CartFactory::new()->make()
+            Cart::factory()->make()
         );
 
         $this->user->refresh();
@@ -28,7 +28,7 @@ class UserTest extends TestCase
     public function it_has_orders()
     {
         $orders = $this->user->orders()->saveMany(
-            OrderFactory::new()->count(3)->make()
+            Order::factory()->count(3)->make()
         );
 
         $this->assertSame(
@@ -40,7 +40,7 @@ class UserTest extends TestCase
     public function it_has_addresses()
     {
         $addresses = $this->user->addresses()->saveMany(
-            AddressFactory::new()->count(3)->make()
+            Address::factory()->count(3)->make()
         );
 
         $this->assertSame($this->user->addresses->pluck('id')->all(), $addresses->pluck('id')->all());
