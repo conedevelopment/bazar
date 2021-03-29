@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Proxies\Category as CategoryProxy;
+use Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +19,7 @@ class BatchCategoriesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = CategoryProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Category::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -40,9 +40,7 @@ class BatchCategoriesController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        CategoryProxy::query()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        Category::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()->with(
             'message', __(':count categories have been updated.', ['count' => count($id)])
@@ -57,9 +55,10 @@ class BatchCategoriesController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $categories = CategoryProxy::query()->withTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        );
+        $categories = Category::proxy()
+                        ->newQuery()
+                        ->withTrashed()
+                        ->whereIn('id', $id = $request->input('id', []));
 
         $request->has('force') ? $categories->forceDelete() : $categories->delete();
 
@@ -76,9 +75,11 @@ class BatchCategoriesController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        CategoryProxy::query()->onlyTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->restore();
+        Category::proxy()
+            ->newQuery()
+            ->onlyTrashed()
+            ->whereIn('id', $id = $request->input('id', []))
+            ->restore();
 
         return Redirect::back()->with(
             'message', __(':count categories have been restored.', ['count' => count($id)])

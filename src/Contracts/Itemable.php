@@ -2,9 +2,9 @@
 
 namespace Bazar\Contracts;
 
-use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Shipping;
 use Bazar\Models\Item;
+use Bazar\Models\Product;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -44,7 +44,7 @@ interface Itemable extends Shippable
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Contracts\Models\Shipping
+     * @return \Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping;
 
@@ -157,7 +157,7 @@ interface Itemable extends Shippable
     /**
      * Get an item by its parent product and properties.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */

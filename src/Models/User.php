@@ -4,12 +4,8 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Models\Address;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\User as Contract;
-use Bazar\Proxies\Address as AddressProxy;
-use Bazar\Proxies\Cart as CartProxy;
-use Bazar\Proxies\Order as OrderProxy;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -24,9 +20,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
-class User extends Authenticatable implements Breadcrumbable, Contract, MustVerifyEmail
+class User extends Authenticatable implements Contract, MustVerifyEmail
 {
-    use BazarRoutable, Filterable, Notifiable, SoftDeletes;
+    use BazarRoutable, Filterable, InteractsWithProxy, Notifiable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -91,6 +87,16 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
     }
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the filter options for the model.
      *
      * @return array
@@ -113,7 +119,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function cart(): HasOne
     {
-        return $this->hasOne(CartProxy::getProxiedClass());
+        return $this->hasOne(Cart::getProxiedClass());
     }
 
     /**
@@ -123,7 +129,7 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function orders(): HasMany
     {
-        return $this->hasMany(OrderProxy::getProxiedClass());
+        return $this->hasMany(Order::getProxiedClass());
     }
 
     /**
@@ -133,13 +139,13 @@ class User extends Authenticatable implements Breadcrumbable, Contract, MustVeri
      */
     public function addresses(): MorphMany
     {
-        return $this->morphMany(AddressProxy::getProxiedClass(), 'addressable');
+        return $this->morphMany(Address::getProxiedClass(), 'addressable');
     }
 
     /**
      * Get the address attribute.
      *
-     * @return \Bazar\Contracts\Models\Address|null
+     * @return \Bazar\Models\Address|null
      */
     public function getAddressAttribute(): ?Address
     {

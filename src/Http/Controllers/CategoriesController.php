@@ -2,10 +2,9 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Category;
 use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
 use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
-use Bazar\Proxies\Category as CategoryProxy;
+use Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -24,7 +23,7 @@ class CategoriesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = CategoryProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Category::getProxiedClass())) {
             $this->authorizeResource($class);
             $this->middleware('can:update,category')->only('restore');
         }
@@ -38,7 +37,8 @@ class CategoriesController extends Controller
      */
     public function index(Request $request): Response
     {
-        $categories = CategoryProxy::query()
+        $categories = Category::proxy()
+                        ->newQuery()
                         ->with('media')
                         ->filter($request)
                         ->latest()
@@ -46,7 +46,7 @@ class CategoriesController extends Controller
 
         return Inertia::render('Categories/Index', [
             'results' => $categories,
-            'filters' => CategoryProxy::filters(),
+            'filters' => Category::proxy()::filters(),
         ]);
     }
 
@@ -57,7 +57,7 @@ class CategoriesController extends Controller
      */
     public function create(): Response
     {
-        $category = CategoryProxy::make()->setAttribute('media', []);
+        $category = Category::proxy()->newInstance()->setAttribute('media', []);
 
         return Inertia::render('Categories/Create', [
             'category' => $category,
@@ -73,7 +73,7 @@ class CategoriesController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $category = CategoryProxy::create($request->validated());
+        $category = Category::proxy()->newQuery()->create($request->validated());
 
         $category->media()->attach(
             Arr::pluck($request->input('media', []), 'id')
@@ -87,7 +87,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Category  $category
+     * @param  \Bazar\Models\Category  $category
      * @return \Inertia\Response
      */
     public function show(Category $category): Response
@@ -104,7 +104,7 @@ class CategoriesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\CategoryUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Category  $category
+     * @param  \Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Category $category): RedirectResponse
@@ -123,7 +123,7 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Category  $category
+     * @param  \Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Category $category): RedirectResponse
@@ -138,7 +138,7 @@ class CategoriesController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\Category  $category
+     * @param  \Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Category $category): RedirectResponse

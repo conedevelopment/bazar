@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Bazar\Contracts\Models\Medium perform(\Bazar\Contracts\Models\Medium $medium)
+ * @method static \Bazar\Models\Medium perform(\Bazar\Models\Medium $medium)
  *
  * @see \Bazar\Contracts\Conversion\Manager
  */

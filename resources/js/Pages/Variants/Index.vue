@@ -49,9 +49,9 @@
                     {{ item.price ? item.formatted_price : item.product.formatted_price }}
                 </template>
             </data-column>
-            <data-column :label="__('Option')">
+            <data-column :label="__('Variation')">
                 <template #default="item">
-                    <span v-for="(value, key) in item.option" :key="key" class="badge badge-primary mr-1">
+                    <span v-for="(value, key) in item.variation" :key="key" class="badge badge-primary mr-1">
                         {{ __(key) }}: {{ __(value) }}
                     </span>
                 </template>

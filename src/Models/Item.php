@@ -2,20 +2,19 @@
 
 namespace Bazar\Models;
 
+use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Cart;
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
-use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Traits\Tappable;
 
 class Item extends MorphPivot implements Taxable
 {
-    use InteractsWithTaxes;
+    use InteractsWithTaxes, HasUuid, Tappable;
 
     /**
      * The accessors to append to the model's array form.
@@ -36,7 +35,7 @@ class Item extends MorphPivot implements Taxable
         'tax' => 0,
         'price' => 0,
         'quantity' => 0,
-        'properties' => '{"option": {}}',
+        'properties' => '[]',
     ];
 
     /**
@@ -64,6 +63,13 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -74,18 +80,18 @@ class Item extends MorphPivot implements Taxable
     ];
 
     /**
-     * The registered property resolver callbacks.
-     *
-     * @var array
-     */
-    protected static $propertyResolvers = [];
-
-    /**
      * The table associated with the model.
      *
      * @var string
      */
     protected $table = 'bazar_items';
+
+    /**
+     * The registered property resolver callbacks.
+     *
+     * @var array
+     */
+    protected static $propertyResolvers = [];
 
     /**
      * The "booted" method of the model.
@@ -94,12 +100,8 @@ class Item extends MorphPivot implements Taxable
      */
     protected static function booted(): void
     {
-        static::creating(static function (self $item): void {
-            $item->id = Uuid::uuid4();
-        });
-
         static::saving(static function (self $item): void {
-            if (in_array(Cart::class, class_implements($item->itemable_type))) {
+            if ($item->itemable_type === Cart::class || is_subclass_of($item->itemable_type, Cart::class)) {
                 $item->fillFromStockable()->resolveProperties()->tax(false);
             }
         });
@@ -124,7 +126,7 @@ class Item extends MorphPivot implements Taxable
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductProxy::getProxiedClass());
+        return $this->belongsTo(Product::getProxiedClass());
     }
 
     /**
@@ -145,10 +147,10 @@ class Item extends MorphPivot implements Taxable
     public function getStockableAttribute(): ?Stockable
     {
         if (! $product = $this->product) {
-            return $product;
+            return null;
         }
 
-        return $product->variant($this->option) ?: $product;
+        return $product->variant((array) $this->properties) ?: $product;
     }
 
     /**
@@ -199,16 +201,6 @@ class Item extends MorphPivot implements Taxable
     public function getFormattedNetTotalAttribute(): string
     {
         return $this->formattedNetTotal();
-    }
-
-    /**
-     * Get the option property of the item.
-     *
-     * @return array
-     */
-    public function getOptionAttribute(): array
-    {
-        return $this->properties['option'] ?? [];
     }
 
     /**

@@ -33,7 +33,7 @@
                             container: [
                                 [{ header: [1, 2, 3, 4, false] }],
                                 ['bold', 'italic', 'underline'],
-                                [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
+                                [{ list: 'ordered'}, { list: 'bullet' }, { align: [] }],
                                 ['link', 'image'],
                                 ['clean']
                             ],
@@ -43,7 +43,7 @@
                         }
                     },
                     theme: 'snow',
-                    formats: ['header', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
+                    formats: ['header', 'align', 'bold', 'underline', 'italic', 'list', 'image', 'link'],
                     placeholder: this.$attrs.placeholder || ''
                 };
             }
@@ -57,17 +57,15 @@
                 this.$refs.media.open();
             },
             insertMedia(values) {
-                const range = this.editor.getSelection() || 0;
+                const range = this.editor.getSelection(true);
 
                 values.forEach(value => {
                     if (value.is_image) {
-                        this.editor.insertEmbed(
-                            range ? range.index : 0, 'image', value.urls.original, Quill.sources.USER
-                        );
+                        this.editor.insertEmbed(range.index, 'image', value.urls.original, Quill.sources.USER);
+                        this.editor.setSelection(range.index + 1, 0, Quill.sources.SILENT);
                     } else {
-                        this.editor.insertText(
-                            range ? range.index : 0, value.name, 'link', value.urls.original, Quill.sources.USER
-                        );
+                        this.editor.insertText(range.index, value.name, 'link', value.urls.original, Quill.sources.USER);
+                        this.editor.setSelection(range.index + value.name.length, 0, Quill.sources.SILENT);
                     }
                 });
 

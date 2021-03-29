@@ -2,9 +2,11 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Stockable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-interface Variant
+interface Variant extends Breadcrumbable, Stockable
 {
     /**
      * Get the product for the transaction.
@@ -22,10 +24,10 @@ interface Variant
     public function getAliasAttribute(string $value = null): ?string;
 
     /**
-     * Get the option attribute.
+     * Get the variation attribute.
      *
      * @param  string  $value
      * @return array
      */
-    public function getOptionAttribute(string $value): array;
+    public function getVariationAttribute(string $value): array;
 }

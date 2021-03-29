@@ -8,13 +8,8 @@ use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Itemable;
-use Bazar\Contracts\Models\Cart;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Order as Contract;
-use Bazar\Proxies\Transaction as TransactionProxy;
-use Bazar\Proxies\User as UserProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,9 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Breadcrumbable, Contract, Discountable, Itemable
+class Order extends Model implements Contract
 {
-    use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, SoftDeletes;
+    use Addressable, BazarRoutable, Filterable, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -81,9 +76,19 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     protected $table = 'bazar_orders';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Create a new order from the given cart.
      *
-     * @param  \Bazar\Contracts\Models\Cart  $cart
+     * @param  \Bazar\Models\Cart  $cart
      * @return static
      */
     public static function createFrom(Cart $cart): Order
@@ -139,7 +144,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
                 'trashed' => __('Trashed')
             ],
             'status' => static::statuses(),
-            'user' => UserProxy::query()->pluck('name', 'id')->toArray(),
+            'user' => User::proxy()->newQuery()->pluck('name', 'id')->toArray(),
         ];
     }
 
@@ -150,7 +155,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      */
     public function transactions(): HasMany
     {
-        return $this->hasMany(TransactionProxy::getProxiedClass());
+        return $this->hasMany(Transaction::getProxiedClass());
     }
 
     /**
@@ -251,9 +256,9 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      * @param  string  $status
      * @return $this
      */
-    public function status(string $status): Contract
+    public function status(string $status): self
     {
-        $this->update(compact('status'));
+        $this->update(['status' => $status]);
 
         return $this;
     }
@@ -266,7 +271,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
      */
     public function toBreadcrumb(Request $request): string
     {
-        return "#{$this->id}";
+        return sprintf('#%d', $this->id);
     }
 
     /**
@@ -280,7 +285,7 @@ class Order extends Model implements Breadcrumbable, Contract, Discountable, Ite
     {
         return $query->whereHas('address', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('first_name'), 'like', "{$value}%")
-                        ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
+                         ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
         });
     }
 

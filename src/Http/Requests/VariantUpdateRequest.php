@@ -23,12 +23,12 @@ class VariantUpdateRequest extends FormRequest
                     return $query->where('product_id', $this->route('product')->id);
                 })->ignoreModel($this->route('variant')),
             ],
-            'option' => [
+            'variation' => [
                 'required',
                 'array',
                 new Option($this->route('product'), $this->route('variant')),
             ],
-            'option.*' => ['required', 'string'],
+            'variation.*' => ['required', 'string'],
             'prices' => ['nullable', 'array'],
             'prices.*' => ['array'],
             'prices.*.*' => ['nullable', 'numeric', 'min:0'],

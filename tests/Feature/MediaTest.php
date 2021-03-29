@@ -67,7 +67,7 @@ class MediaTest extends TestCase
 
         $this->actingAs($this->admin)
             ->post(URL::route('bazar.media.store'), [
-                'file' => UploadedFile::fake()->image('test.png.part'),
+                'file' => UploadedFile::fake()->image('test.png.chunk'),
             ])
             ->assertCreated()
             ->assertJson(['name' => 'test']);
@@ -84,7 +84,7 @@ class MediaTest extends TestCase
     {
         $this->actingAs($this->admin)
             ->post(URL::route('bazar.media.store'), [
-                'file' => UploadedFile::fake()->create('test.pdf.part'),
+                'file' => UploadedFile::fake()->create('test.pdf.chunk'),
             ])
             ->assertCreated()
             ->assertJson(['name' => 'test']);

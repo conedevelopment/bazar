@@ -54,22 +54,22 @@ class ValidationTest extends TestCase
 
         $v = new Validator(
             $this->translator,
-            ['option' => ['Material' => 'Gold']],
-            ['option' => [new Option($product)]]
+            ['variation' => ['Material' => 'Gold']],
+            ['variation' => [new Option($product)]]
         );
         $this->assertTrue($v->passes());
 
         $v = new Validator(
             $this->translator,
-            ['option' => $variant->option],
-            ['option' => [new Option($product)]]
+            ['variation' => $variant->variation],
+            ['variation' => [new Option($product)]]
         );
         $this->assertFalse($v->passes());
 
         $v = new Validator(
             $this->translator,
-            ['option' => $variant->option],
-            ['option' => [new Option($product, $variant)]]
+            ['variation' => $variant->variation],
+            ['variation' => [new Option($product, $variant)]]
         );
         $this->assertTrue($v->passes());
     }

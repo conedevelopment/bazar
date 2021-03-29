@@ -2,7 +2,7 @@
 
 namespace Bazar\Notifications;
 
-use Bazar\Contracts\Models\Order;
+use Bazar\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -15,14 +15,14 @@ class CustomerNewOrder extends Notification implements ShouldQueue
     /**
      * The order instance.
      *
-     * @var \Bazar\Contracts\Models\Order
+     * @var \Bazar\Models\Order
      */
     protected $order;
 
     /**
      * Create a new notification instance.
      *
-     * @param  \Bazar\Contracts\Models\Order  $order
+     * @param  \Bazar\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)

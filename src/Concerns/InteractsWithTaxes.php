@@ -3,7 +3,7 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Shipping;
 use Bazar\Models\Item;
 use Bazar\Support\Facades\Tax;
 use Illuminate\Support\Str;
@@ -51,7 +51,7 @@ trait InteractsWithTaxes
         $tax = Tax::calculate($this);
 
         if ($this->exists && $update) {
-            $this->update(compact('tax'));
+            $this->update(['tax' => $tax]);
         }
 
         return $this->tax = $tax;

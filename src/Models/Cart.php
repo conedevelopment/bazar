@@ -4,19 +4,18 @@ namespace Bazar\Models;
 
 use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
+use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Itemable;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Cart as Contract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Ramsey\Uuid\Uuid;
 
-class Cart extends Model implements Contract, Discountable, Itemable
+class Cart extends Model implements Contract
 {
-    use Addressable, InteractsWithDiscounts, InteractsWithItems;
+    use Addressable, HasUuid, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy;
 
     /**
      * The attributes that should have default values.
@@ -45,19 +44,25 @@ class Cart extends Model implements Contract, Discountable, Itemable
      * @var array
      */
     protected $fillable = [
+        'id',
         'locked',
         'discount',
         'currency',
     ];
 
     /**
-     * The attributes that should be hidden for arrays.
+     * The "type" of the primary key ID.
      *
-     * @var array
+     * @var string
      */
-    protected $hidden = [
-        'token',
-    ];
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The table associated with the model.
@@ -74,7 +79,6 @@ class Cart extends Model implements Contract, Discountable, Itemable
     protected static function booted(): void
     {
         static::creating(static function (self $cart): void {
-            $cart->token = $cart->token ?: Uuid::uuid4();
             $cart->currency = $cart->currency ?: Bazar::currency();
         });
 
@@ -84,6 +88,16 @@ class Cart extends Model implements Contract, Discountable, Itemable
                 $cart->discount(false);
             }
         });
+    }
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
     }
 
     /**

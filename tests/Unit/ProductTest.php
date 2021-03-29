@@ -23,7 +23,7 @@ class ProductTest extends TestCase
         parent::setUp();
 
         $this->product = ProductFactory::new()->create([
-            'options' => [
+            'properties' => [
                 'Size' => ['XS', 'S', 'M', 'L'],
                 'Material' => ['Gold', 'Silver'],
             ],
@@ -81,7 +81,7 @@ class ProductTest extends TestCase
     {
         $variant = $this->product->variants()->save(
             VariantFactory::new()->make([
-                'option' => ['Height' => 100, 'Width' => 100],
+                'variation' => ['Height' => 100, 'Width' => 100],
             ])
         );
 

@@ -2,15 +2,14 @@
 
 namespace Bazar\Cart;
 
-use Bazar\Contracts\Models\Cart;
-use Bazar\Contracts\Models\Order;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Models\Cart;
+use Bazar\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Events\CheckoutFailed;
 use Bazar\Events\CheckoutFailing;
 use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
-use Bazar\Proxies\Order as OrderProxy;
+use Bazar\Models\Order;
 use Bazar\Support\Facades\Gateway;
 use Throwable;
 
@@ -19,7 +18,7 @@ class Checkout
     /**
      * The cart instance.
      *
-     * @var \Bazar\Contracts\Models\Cart
+     * @var \Bazar\Models\Cart
      */
     protected $cart;
 
@@ -47,7 +46,7 @@ class Checkout
     /**
      * Create a new checkout instance.
      *
-     * @param  \Bazar\Contracts\Models\Cart  $cart
+     * @param  \Bazar\Models\Cart  $cart
      * @return void
      */
     public function __construct(Cart $cart)
@@ -162,12 +161,12 @@ class Checkout
     /**
      * Prepare the order.
      *
-     * @return \Bazar\Contracts\Models\Order
+     * @return \Bazar\Models\Order
      */
     protected function prepare(): Order
     {
         CartTouched::dispatch($this->cart);
 
-        return OrderProxy::createFrom($this->cart);
+        return Order::proxy()::createFrom($this->cart);
     }
 }

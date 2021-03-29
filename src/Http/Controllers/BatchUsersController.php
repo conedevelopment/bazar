@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Proxies\User as UserProxy;
+use Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +19,7 @@ class BatchUsersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = UserProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = User::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -40,9 +40,7 @@ class BatchUsersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        UserProxy::query()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        User::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()->with(
             'message', __(':count users have been updated.', ['count' => count($id)])
@@ -57,7 +55,7 @@ class BatchUsersController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $users = UserProxy::query()->withTrashed()->whereIn(
+        $users = User::proxy()->newQuery()->withTrashed()->whereIn(
             'id', $id = array_diff($request->input('id', []), [$request->user()->id])
         );
 
@@ -76,9 +74,7 @@ class BatchUsersController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        UserProxy::query()->onlyTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->restore();
+        User::proxy()->newQuery()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
         return Redirect::back()->with(
             'message', __(':count users have been restored.', ['count' => count($id)])

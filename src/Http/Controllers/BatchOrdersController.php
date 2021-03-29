@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Proxies\Order as OrderProxy;
+use Bazar\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +19,7 @@ class BatchOrdersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = OrderProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Order::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -40,9 +40,7 @@ class BatchOrdersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        OrderProxy::query()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        Order::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()->with(
             'message', __(':count orders have been updated.', ['count' => count($id)])
@@ -57,9 +55,7 @@ class BatchOrdersController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $orders = OrderProxy::query()->withTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        );
+        $orders = Order::proxy()->newQuery()->withTrashed()->whereIn('id', $id = $request->input('id', []));
 
         $request->has('force') ? $orders->forceDelete() : $orders->delete();
 
@@ -76,9 +72,7 @@ class BatchOrdersController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        OrderProxy::query()->onlyTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->restore();
+        Order::proxy()->newQuery()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
         return Redirect::back()->with(
             'message', __(':count orders have been restored.', ['count' => count($id)])

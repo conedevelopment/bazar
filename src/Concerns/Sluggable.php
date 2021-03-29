@@ -2,7 +2,6 @@
 
 namespace Bazar\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 trait Sluggable

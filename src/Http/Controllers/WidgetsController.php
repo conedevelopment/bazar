@@ -2,10 +2,9 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Order;
-use Bazar\Proxies\Order as OrderProxy;
-use Bazar\Proxies\Product as ProductProxy;
-use Bazar\Proxies\User as UserProxy;
+use Bazar\Models\Order;
+use Bazar\Models\Product;
+use Bazar\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -22,7 +21,7 @@ class WidgetsController extends Controller
     public function activities(): JsonResponse
     {
         $orders = Cache::remember('bazar.activities', 3600, static function (): Collection {
-            return OrderProxy::latest()->take(3)->get()->map(static function (Order $order): array {
+            return Order::proxy()->newQuery()->latest()->take(3)->get()->map(static function (Order $order): array {
                 return [
                     'icon' => 'shop-basket',
                     'url' => route('bazar.orders.show', $order),
@@ -46,9 +45,9 @@ class WidgetsController extends Controller
     {
         $metrics = Cache::remember('bazar.metrics', 3600, static function (): array {
             return [
-                'orders' => OrderProxy::count(),
-                'products' => ProductProxy::count(),
-                'users' => UserProxy::query()->count(),
+                'users' => User::proxy()->newQuery()->count(),
+                'orders' => Order::proxy()->newQuery()->count(),
+                'products' => Product::proxy()->newQuery()->count(),
             ];
         });
 
@@ -67,7 +66,7 @@ class WidgetsController extends Controller
                 return array_merge($days, [Carbon::now()->subDays(count($days))->format('m-d')]);
             }, []));
 
-            $orders = OrderProxy::query()->whereNotIn(
+            $orders = Order::proxy()->newQuery()->whereNotIn(
                 'status', ['cancelled', 'failed']
             )->where(
                 'created_at', '>=', Carbon::now()->subDays(7)->startOfDay()

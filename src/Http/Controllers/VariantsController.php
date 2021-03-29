@@ -3,11 +3,10 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Variant;
 use Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
 use Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
-use Bazar\Proxies\Variant as VariantProxy;
+use Bazar\Models\Product;
+use Bazar\Models\Variant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -26,7 +25,7 @@ class VariantsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = VariantProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Variant::getProxiedClass())) {
             $this->authorizeResource($class);
             $this->middleware('can:update,variant')->only('restore');
         }
@@ -36,7 +35,7 @@ class VariantsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function index(Request $request, Product $product): Response
@@ -56,19 +55,20 @@ class VariantsController extends Controller
         return Inertia::render('Variants/Index', [
             'product' => $product,
             'results' => $variants,
-            'filters' => VariantProxy::filters(),
+            'filters' => Variant::proxy()::filters(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function create(Product $product): Response
     {
-        $variant = VariantProxy::make()
+        $variant = Variant::proxy()
+                    ->newInstance()
                     ->setAttribute('media', [])
                     ->setRelation('product', $product->withoutRelations()->makeHidden('variant'));
 
@@ -84,7 +84,7 @@ class VariantsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Bazar\Http\Requests\VariantStoreRequest  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request, Product $product): RedirectResponse
@@ -103,8 +103,8 @@ class VariantsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
-     * @param  \Bazar\Contracts\Models\Variant  $variant
+     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Models\Variant  $variant
      * @return \Inertia\Response
      */
     public function show(Product $product, Variant $variant): Response
@@ -125,8 +125,8 @@ class VariantsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\VariantUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
-     * @param  \Bazar\Contracts\Models\Variant  $variant
+     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product, Variant $variant): RedirectResponse
@@ -145,8 +145,8 @@ class VariantsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
-     * @param  \Bazar\Contracts\Models\Variant  $variant
+     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product, Variant $variant): RedirectResponse
@@ -161,8 +161,8 @@ class VariantsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
-     * @param  \Bazar\Contracts\Models\Variant  $variant
+     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product, Variant $variant): RedirectResponse

@@ -2,8 +2,8 @@
 
 namespace Bazar\Models;
 
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Transaction as Contract;
-use Bazar\Proxies\Order as OrderProxy;
 use Bazar\Support\Facades\Gateway;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,6 +14,8 @@ use Throwable;
 
 class Transaction extends Model implements Contract
 {
+    use InteractsWithProxy;
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -53,13 +55,23 @@ class Transaction extends Model implements Contract
     protected $table = 'bazar_transactions';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the order for the transaction.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(OrderProxy::getProxiedClass());
+        return $this->belongsTo(Order::getProxiedClass());
     }
 
     /**
@@ -116,7 +128,7 @@ class Transaction extends Model implements Contract
      * @param \DateTimeInterface|null  $date
      * @return $this
      */
-    public function markAsCompleted(DateTimeInterface $date = null): Contract
+    public function markAsCompleted(DateTimeInterface $date = null): self
     {
         $date = $date ?: Carbon::now();
 
@@ -132,7 +144,7 @@ class Transaction extends Model implements Contract
      *
      * @return $this
      */
-    public function markAsPending(): Contract
+    public function markAsPending(): self
     {
         if (! is_null($this->completed_at)) {
             $this->forceFill(['completed_at' => null])->save();
@@ -147,7 +159,7 @@ class Transaction extends Model implements Contract
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Contract
+    public function driver(string $driver): self
     {
         $this->driver = $driver;
 

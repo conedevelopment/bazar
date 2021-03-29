@@ -3,12 +3,12 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Cart;
-use Bazar\Contracts\Models\Product;
-use Bazar\Contracts\Models\Shipping;
+use Bazar\Cart\Checkout;
+use Bazar\Models\Cart;
+use Bazar\Models\Product;
+use Bazar\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Item;
-use Bazar\Cart\Checkout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -26,7 +26,7 @@ abstract class Driver
     /**
      * The cart instance.
      *
-     * @var \Bazar\Contracts\Models\Cart|null
+     * @var \Bazar\Models\Cart|null
      */
     protected $cart;
 
@@ -44,7 +44,7 @@ abstract class Driver
     /**
      * Get the cart model.
      *
-     * @return \Bazar\Contracts\Models\Cart
+     * @return \Bazar\Models\Cart
      */
     public function model(): Cart
     {
@@ -66,7 +66,7 @@ abstract class Driver
     /**
      * Get the item by the product and its properties.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  array  $properties
      * @return \Bazar\Models\Item|null
      */
@@ -78,7 +78,7 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Bazar\Models\Item
@@ -86,17 +86,19 @@ abstract class Driver
     public function add(Product $product, float $quantity = 1, array $properties = []): Item
     {
         if ($item = $this->item($product, $properties)) {
-            $item->update(compact('properties') + [
+            $item->update([
+                'properties' => $properties,
                 'quantity' => $item->quantity + $quantity,
             ]);
         } else {
-            $item = tap(Item::make(compact('quantity', 'properties')), function (Item $item) use ($product): void {
-                $item->product()
-                    ->associate($product)
-                    ->itemable()
-                    ->associate($this->model())
-                    ->save();
-            });
+            $item = Item::make(['quantity' => $quantity, 'properties' => $properties])
+                        ->tap(function (Item $item) use ($product): void {
+                            $item->product()
+                                ->associate($product)
+                                ->itemable()
+                                ->associate($this->model())
+                                ->save();
+                        });
         }
 
         CartTouched::dispatch($this->model());
@@ -174,7 +176,7 @@ abstract class Driver
     /**
      * Get the shipping that belongs to the cart.
      *
-     * @return \Bazar\Contracts\Models\Shipping
+     * @return \Bazar\Models\Shipping
      */
     public function shipping(): Shipping
     {
@@ -225,7 +227,7 @@ abstract class Driver
      * Resolve the cart instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Contracts\Models\Cart
+     * @return \Bazar\Models\Cart
      */
     abstract protected function resolve(Request $request): Cart;
 

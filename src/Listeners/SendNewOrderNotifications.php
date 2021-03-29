@@ -3,9 +3,9 @@
 namespace Bazar\Listeners;
 
 use Bazar\Events\OrderPlaced;
+use Bazar\Models\User;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
-use Bazar\Proxies\User as UserProxy;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Config;
@@ -23,7 +23,7 @@ class SendNewOrderNotifications implements ShouldQueue
      */
     public function handle(OrderPlaced $event): void
     {
-        $users = UserProxy::query()->whereIn('email', Config::get('bazar.admins', []))->get();
+        $users = User::proxy()->newQuery()->whereIn('email', Config::get('bazar.admins', []))->get();
 
         if ($users->isNotEmpty()) {
             Notification::send($users, new AdminNewOrder($event->order));

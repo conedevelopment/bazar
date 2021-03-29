@@ -4,7 +4,6 @@ namespace Bazar;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -106,17 +105,13 @@ class BazarServiceProvider extends ServiceProvider
     public function registerRouteBindings(): void
     {
         foreach ($this->bindings as $contract => $abstract) {
-            if (is_subclass_of($abstract, Model::class)) {
-                $key = strtolower(class_basename($contract));
+            $key = strtolower(class_basename($contract));
 
-                $this->app['router']->bind($key, function (string $value, Route $route) use ($key, $contract) {
-                    return Str::is('bazar.*', $route->getName())
-                        ? $this->app->make($contract)->resolveRouteBinding(
-                            $value, $route->bindingFieldFor($key)
-                        )
-                        : $value;
-                });
-            }
+            $this->app['router']->bind($key, static function (string $value, Route $route) use ($key, $abstract) {
+                return Str::is('bazar.*', $route->getName())
+                    ? $abstract::proxy()->resolveRouteBinding($value, $route->bindingFieldFor($key))
+                    : $value;
+            });
         }
     }
 

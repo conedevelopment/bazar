@@ -5,19 +5,18 @@ namespace Bazar\Models;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\Sluggable;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Category as Contract;
-use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Category extends Model implements Breadcrumbable, Contract
+class Category extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, HasMedia, InteractsWithProxy, Sluggable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -47,13 +46,23 @@ class Category extends Model implements Breadcrumbable, Contract
     protected $table = 'bazar_categories';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the products for the category.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(ProductProxy::getProxiedClass(), 'bazar_category_product');
+        return $this->belongsToMany(Product::getProxiedClass(), 'bazar_category_product');
     }
 
     /**

@@ -7,16 +7,10 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Contracts\Models\Variant;
-use Bazar\Contracts\Stockable;
-use Bazar\Proxies\Cart as CartProxy;
-use Bazar\Proxies\Category as CategoryProxy;
-use Bazar\Proxies\Order as OrderProxy;
-use Bazar\Proxies\Variant as VariantProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -27,9 +21,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 
-class Product extends Model implements Breadcrumbable, Contract, Stockable
+class Product extends Model implements Contract
 {
-    use BazarRoutable, Filterable, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -48,7 +42,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     protected $attributes = [
         'prices' => '[]',
-        'options' => '[]',
+        'properties' => '[]',
         'inventory' => '[]',
     ];
 
@@ -58,7 +52,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $casts = [
-        'options' => 'json',
+        'properties' => 'json',
         'prices' => Prices::class,
         'inventory' => Inventory::class,
     ];
@@ -72,7 +66,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
         'name',
         'slug',
         'prices',
-        'options',
+        'properties',
         'inventory',
         'description',
     ];
@@ -83,6 +77,16 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      * @var string
      */
     protected $table = 'bazar_products';
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
 
     /**
      * Get the filter options for the model.
@@ -97,7 +101,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
                 'available' => __('Available'),
                 'trashed' => __('Trashed')
             ],
-            'category' => array_map('__', CategoryProxy::query()->pluck('name', 'id')->toArray()),
+            'category' => array_map('__', Category::proxy()->newQuery()->pluck('name', 'id')->toArray()),
         ];
     }
 
@@ -108,7 +112,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function orders(): MorphToMany
     {
-        return $this->morphedByMany(OrderProxy::getProxiedClass(), 'itemable', 'bazar_items')
+        return $this->morphedByMany(Order::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -122,7 +126,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function carts(): MorphToMany
     {
-        return $this->morphedByMany(CartProxy::getProxiedClass(), 'itemable', 'bazar_items')
+        return $this->morphedByMany(Cart::getProxiedClass(), 'itemable', 'bazar_items')
                     ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
                     ->withTimestamps()
                     ->as('item')
@@ -136,7 +140,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(CategoryProxy::getProxiedClass(), 'bazar_category_product');
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
     }
 
     /**
@@ -146,7 +150,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
      */
     public function variants(): HasMany
     {
-        return $this->hasMany(VariantProxy::getProxiedClass());
+        return $this->hasMany(Variant::getProxiedClass());
     }
 
     /**
@@ -157,32 +161,31 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     public function getVariantsAttribute(): Collection
     {
         return $this->getRelationValue('variants')->each(function (Variant $variant): void {
-            $variant->setRelation(
-                'product', $this->withoutRelations()->makeHidden('variants')
-            )->makeHidden('product');
+            $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
+                    ->makeHidden('product');
         });
     }
 
     /**
      * Get the variant of the given option.
      *
-     * @param  array  $option
-     * @return \Bazar\Contracts\Models\Variant|null
+     * @param  array  $variation
+     * @return \Bazar\Models\Variant|null
      */
-    public function variant(array $option): ?Variant
+    public function variant(array $variation): ?Variant
     {
         return $this->variants->sortBy(static function (Variant $variant): int {
-            return array_count_values($variant->option)['*'] ?? 0;
-        })->first(function (Variant $variant) use ($option): bool {
-            $option = array_replace(array_fill_keys(array_keys($this->options), '*'), $option);
+            return array_count_values($variant->variation)['*'] ?? 0;
+        })->first(function (Variant $variant) use ($variation): bool {
+            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
 
-            foreach ($variant->option as $key => $value) {
+            foreach ($variant->variation as $key => $value) {
                 if ($value === '*') {
-                    $option[$key] = $value;
+                    $variation[$key] = $value;
                 }
             }
 
-            return empty(array_diff_assoc(array_intersect_key($variant->option, $option), $option));
+            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
         });
     }
 
@@ -208,9 +211,10 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     public function resolveChildRouteBinding($childType, $value, $field): ?Model
     {
         if ($childType === 'variant' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->variants()->where(
-                $field ?: $this->variants()->getRelated()->getRouteKeyName(), $value
-            )->withTrashed()->firstOrFail();
+            return $this->variants()
+                        ->where($field ?: $this->variants()->getRelated()->getRouteKeyName(), $value)
+                        ->withTrashed()
+                        ->firstOrFail();
         }
 
         return parent::resolveChildRouteBinding($childType, $value, $field);
@@ -227,7 +231,7 @@ class Product extends Model implements Breadcrumbable, Contract, Stockable
     {
         return $query->where(static function (Builder $query) use ($value): Builder {
             return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
-                        ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
+                         ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
         });
     }
 

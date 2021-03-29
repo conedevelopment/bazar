@@ -23,7 +23,7 @@ class VariantFactory extends Factory
     public function definition(): array
     {
         return [
-            'option' => ['Size' => 'XS'],
+            'variation' => ['Size' => 'XS'],
             'prices' => ['usd' => ['default' => mt_rand(10, 1000) / 10]],
             'inventory' => [
                 'files' => [],

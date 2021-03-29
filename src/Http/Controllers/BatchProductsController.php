@@ -2,7 +2,7 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Proxies\Product as ProductProxy;
+use Bazar\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -19,7 +19,7 @@ class BatchProductsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = ProductProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Product::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -40,9 +40,10 @@ class BatchProductsController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        ProductProxy::query()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->update($data);
+        Product::proxy()
+            ->newQuery()
+            ->whereIn('id', $id = $request->input('id', []))
+            ->update($data);
 
         return Redirect::back()->with(
             'message', __(':count products have been updated.', ['count' => count($id)])
@@ -57,9 +58,10 @@ class BatchProductsController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $products = ProductProxy::query()->withTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        );
+        $products = Product::proxy()
+                        ->newQuery()
+                        ->withTrashed()
+                        ->whereIn('id', $id = $request->input('id', []));
 
         $request->has('force') ? $products->forceDelete() : $products->delete();
 
@@ -76,9 +78,11 @@ class BatchProductsController extends Controller
      */
     public function restore(Request $request): RedirectResponse
     {
-        ProductProxy::query()->onlyTrashed()->whereIn(
-            'id', $id = $request->input('id', [])
-        )->restore();
+        Product::proxy()
+            ->newQuery()
+            ->onlyTrashed()
+            ->whereIn('id', $id = $request->input('id', []))
+            ->restore();
 
         return Redirect::back()->with(
             'message', __(':count products have been restored.', ['count' => count($id)])

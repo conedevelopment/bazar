@@ -2,11 +2,10 @@
 
 namespace Bazar\Http\Controllers;
 
-use Bazar\Contracts\Models\Address;
-use Bazar\Contracts\Models\User;
 use Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
-use Bazar\Proxies\Address as AddressProxy;
+use Bazar\Models\Address;
+use Bazar\Models\User;
 use Bazar\Support\Countries;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,7 +24,7 @@ class AddressesController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = AddressProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Address::getProxiedClass())) {
             $this->authorizeResource($class);
         }
     }
@@ -34,7 +33,7 @@ class AddressesController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function index(Request $request, User $user): Response
@@ -53,17 +52,15 @@ class AddressesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function create(User $user): Response
     {
-        $address = AddressProxy::make();
-
         return Inertia::render('Addresses/Create', [
             'user' => $user,
-            'address' => $address,
             'countries' => Countries::all(),
+            'address' => Address::proxy()->newInstance(),
             'action' => URL::route('bazar.users.addresses.store', $user),
         ]);
     }
@@ -72,7 +69,7 @@ class AddressesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Bazar\Http\Requests\AddressStoreRequest  $request
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request, User $user): RedirectResponse
@@ -87,8 +84,8 @@ class AddressesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Contracts\Models\Address  $address
+     * @param  \Bazar\Models\User  $user
+     * @param  \Bazar\Models\Address  $address
      * @return \Inertia\Response
      */
     public function show(User $user, Address $address): Response
@@ -105,8 +102,8 @@ class AddressesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\AddressUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Contracts\Models\Address  $address
+     * @param  \Bazar\Models\User  $user
+     * @param  \Bazar\Models\Address  $address
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, User $user, Address $address): RedirectResponse
@@ -121,8 +118,8 @@ class AddressesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
-     * @param  \Bazar\Contracts\Models\Address  $address
+     * @param  \Bazar\Models\User  $user
+     * @param  \Bazar\Models\Address  $address
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(User $user, Address $address): RedirectResponse

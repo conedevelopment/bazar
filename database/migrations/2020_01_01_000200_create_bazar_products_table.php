@@ -19,7 +19,7 @@ class CreateBazarProductsTable extends Migration
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->json('prices')->nullable();
-            $table->json('options')->nullable();
+            $table->json('properties')->nullable();
             $table->json('inventory')->nullable();
             $table->timestamps();
             $table->softDeletes();

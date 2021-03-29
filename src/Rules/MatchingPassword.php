@@ -2,7 +2,7 @@
 
 namespace Bazar\Rules;
 
-use Bazar\Contracts\Models\User;
+use Bazar\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,14 +11,14 @@ class MatchingPassword implements Rule
     /**
      * The user instance.
      *
-     * @var \Bazar\Contracts\Models\User
+     * @var \Bazar\Models\User
      */
     protected $user;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Contracts\Models\User  $user
+     * @param  \Bazar\Models\User  $user
      * @return void
      */
     public function __construct(User $user)

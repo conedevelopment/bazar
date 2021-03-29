@@ -2,7 +2,7 @@
 
 namespace Bazar\Jobs;
 
-use Bazar\Contracts\Models\Medium;
+use Bazar\Models\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,7 +19,7 @@ class MoveFile implements ShouldQueue
     /**
      * The medium instance.
      *
-     * @var \Bazar\Contracts\Models\Medium
+     * @var \Bazar\Models\Medium
      */
     public $medium;
 
@@ -47,7 +47,7 @@ class MoveFile implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @param  string  $path
      * @param  bool  $preserve
      * @return void

@@ -2,7 +2,7 @@
 
 namespace Bazar\Conversion;
 
-use Bazar\Contracts\Models\Medium;
+use Bazar\Models\Medium;
 
 abstract class Driver
 {
@@ -27,8 +27,8 @@ abstract class Driver
     /**
      * Perform the registered conversions on the medium.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
-     * @return \Bazar\Contracts\Models\Medium
+     * @param  \Bazar\Models\Medium  $medium
+     * @return \Bazar\Models\Medium
      */
     abstract public function perform(Medium $medium): Medium;
 }

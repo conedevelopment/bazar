@@ -3,11 +3,10 @@
 namespace Bazar\Http\Controllers;
 
 use Bazar\Bazar;
-use Bazar\Contracts\Models\Product;
 use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
 use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
-use Bazar\Proxies\Category as CategoryProxy;
-use Bazar\Proxies\Product as ProductProxy;
+use Bazar\Models\Category;
+use Bazar\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -27,7 +26,7 @@ class ProductsController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = ProductProxy::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Product::getProxiedClass())) {
             $this->authorizeResource($class);
             $this->middleware('can:update,product')->only('restore');
         }
@@ -41,7 +40,8 @@ class ProductsController extends Controller
      */
     public function index(Request $request) //: Response
     {
-        $products = ProductProxy::query()
+        $products = Product::proxy()
+                        ->newQuery()
                         ->with('media')
                         ->filter($request)->latest()
                         ->paginate($request->input('per_page'));
@@ -50,7 +50,7 @@ class ProductsController extends Controller
             ? ResponseFactory::json($products)
             : Inertia::render('Products/Index', [
                 'results' => $products,
-                'filters' => ProductProxy::filters(),
+                'filters' => Product::proxy()::filters(),
             ]);
     }
 
@@ -61,7 +61,8 @@ class ProductsController extends Controller
      */
     public function create(): Response
     {
-        $product = ProductProxy::make()
+        $product = Product::proxy()
+                    ->newInstance()
                     ->setAttribute('media', [])
                     ->setAttribute('categories', []);
 
@@ -69,7 +70,7 @@ class ProductsController extends Controller
             'product' => $product,
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.products.store'),
-            'categories' => CategoryProxy::query()->select(['id', 'name'])->get(),
+            'categories' => Category::proxy()->newQuery()->select(['id', 'name'])->get(),
         ]);
     }
 
@@ -81,7 +82,7 @@ class ProductsController extends Controller
      */
     public function store(StoreRequest $request): RedirectResponse
     {
-        $product = ProductProxy::create($request->validated());
+        $product = Product::proxy()->newQuery()->create($request->validated());
 
         $product->categories()->attach(
             Arr::pluck($request->input('categories', []), 'id')
@@ -99,7 +100,7 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function show(Product $product): Response
@@ -110,7 +111,7 @@ class ProductsController extends Controller
             'product' => $product,
             'currencies' => Bazar::currencies(),
             'action' => URL::route('bazar.products.update', $product),
-            'categories' => CategoryProxy::query()->select(['id', 'name'])->get(),
+            'categories' => Category::proxy()->newQuery()->select(['id', 'name'])->get(),
         ]);
     }
 
@@ -118,7 +119,7 @@ class ProductsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Bazar\Http\Requests\ProductUpdateRequest  $request
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product): RedirectResponse
@@ -141,7 +142,7 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product): RedirectResponse
@@ -156,7 +157,7 @@ class ProductsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Contracts\Models\Product  $product
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product): RedirectResponse

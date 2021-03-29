@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->company,
             'slug' => Str::random(),
             'description' => $this->faker->sentences(3, true),
-            'options' => ['Size' => ['XS', 'S', 'M', 'L']],
+            'properties' => ['Size' => ['XS', 'S', 'M', 'L']],
             'prices' => [
                 'usd' => [
                     'default' => $price = mt_rand(10, 1000) / 10,

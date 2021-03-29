@@ -3,6 +3,7 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\Filterable;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Medium as Contract;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 
 class Medium extends Model implements Contract
 {
-    use Filterable;
+    use Filterable, InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.
@@ -80,14 +81,24 @@ class Medium extends Model implements Contract
     }
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Create a new medium from the given path.
      *
      * @param  string  $path
      * @return self
      */
-    public static function createFrom(string $path): Medium
+    public static function createFrom(string $path): self
     {
-        $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.part'));
+        $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.chunk'));
 
         if (Str::is('image/*', $type = mime_content_type($path))) {
             [$width, $height] = getimagesize($path);
@@ -133,7 +144,7 @@ class Medium extends Model implements Contract
      *
      * @return $this
      */
-    public function convert(): Contract
+    public function convert(): self
     {
         return Conversion::perform($this);
     }
@@ -148,9 +159,11 @@ class Medium extends Model implements Contract
     {
         $path = "{$this->id}/{$this->file_name}";
 
-        return is_null($conversion) ? $path : substr_replace(
-            $path, "-{$conversion}", -(mb_strlen(Str::afterLast($path, '.')) + 1), -mb_strlen("-{$conversion}")
-        );
+        return is_null($conversion)
+            ? $path
+            : substr_replace(
+                $path, "-{$conversion}", -(mb_strlen(Str::afterLast($path, '.')) + 1), -mb_strlen("-{$conversion}")
+            );
     }
 
     /**

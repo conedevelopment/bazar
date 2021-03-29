@@ -8,20 +8,18 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
-use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Models\Variant as Contract;
-use Bazar\Contracts\Stockable;
-use Bazar\Proxies\Product as ProductProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 
-class Variant extends Model implements Breadcrumbable, Contract, Stockable
+class Variant extends Model implements Contract
 {
-    use BazarRoutable, Filterable, InteractsWithStock, HasMedia, SoftDeletes;
+    use BazarRoutable, Filterable, InteractsWithProxy, InteractsWithStock, HasMedia, SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.
@@ -39,9 +37,9 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $attributes = [
-        'option' => '[]',
         'prices' => '[]',
         'inventory' => '[]',
+        'variation' => '[]',
     ];
 
     /**
@@ -50,7 +48,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      * @var array
      */
     protected $casts = [
-        'option' => 'json',
+        'variation' => 'json',
         'prices' => Prices::class,
         'inventory' => Inventory::class,
     ];
@@ -62,7 +60,7 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
      */
     protected $fillable = [
         'alias',
-        'option',
+        'variation',
         'prices',
         'inventory',
     ];
@@ -75,13 +73,23 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
     protected $table = 'bazar_variants';
 
     /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the product for the transaction.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(ProductProxy::getProxiedClass());
+        return $this->belongsTo(Product::getProxiedClass());
     }
 
     /**
@@ -96,18 +104,19 @@ class Variant extends Model implements Breadcrumbable, Contract, Stockable
     }
 
     /**
-     * Get the option attribute.
+     * Get the variation attribute.
      *
      * @param  string  $value
      * @return array
      */
-    public function getOptionAttribute(string $value): array
+    public function getVariationAttribute(string $value): array
     {
-        $value = $this->castAttribute('option', $value);
-
-        return $this->relationLoaded('product') ? array_replace(
-            array_fill_keys(array_keys($this->product->options), '*'), $value
-        ) : $value;
+        return $this->relationLoaded('product')
+            ? array_replace(
+                array_fill_keys(array_keys($this->product->properties), '*'),
+                $this->castAttribute('variation', $value)
+            )
+            : $this->castAttribute('variation', $value);
     }
 
     /**

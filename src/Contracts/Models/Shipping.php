@@ -2,11 +2,12 @@
 
 namespace Bazar\Contracts\Models;
 
+use Bazar\Contracts\Taxable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-interface Shipping
+interface Shipping extends Taxable
 {
-        /**
+    /**
      * Get the shippable model for the shipping.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -104,7 +105,7 @@ interface Shipping
      * @param  string  $driver
      * @return $this
      */
-    public function driver(string $driver): Shipping;
+    public function driver(string $driver): self;
 
     /**
      * Calculate the cost.

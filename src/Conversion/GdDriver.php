@@ -2,7 +2,7 @@
 
 namespace Bazar\Conversion;
 
-use Bazar\Contracts\Models\Medium;
+use Bazar\Models\Medium;
 use Bazar\Support\Facades\Conversion;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
@@ -13,8 +13,8 @@ class GdDriver extends Driver
     /**
      * Perform the registered conversions on the medium.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
-     * @return \Bazar\Contracts\Models\Medium
+     * @param  \Bazar\Models\Medium  $medium
+     * @return \Bazar\Models\Medium
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -46,7 +46,7 @@ class GdDriver extends Driver
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Contracts\Models\Medium  $medium
+     * @param  \Bazar\Models\Medium  $medium
      * @return \Bazar\Conversion\Image
      */
     protected function createImage(Medium $medium): Image
