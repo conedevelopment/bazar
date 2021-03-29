@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.6.0 (2021-03-29)
+### Added
+- Added retries to the uploader component, to make sure, the image is loaded after the job is finished
+- Added the `HasUuid` trait
+- Added the `InteractsWithProxy` trait
+
+### Changed
+- Changed the minimum PHP version from `7.3` to `7.4`
+- Changed the cart ID to UUID, the `token` column is removed
+- Changed `fzaninotto/faker` to `fakerphp/faker` dependency
+- Changed the `uuid()` columns, made them primary key
+- Changed the `options` column to `properties` on the `bazar_products` table
+- Changed the `option` column to `variation` on the `bazar_variants` table
+
+### Fixed
+- Fixed Quill issues
+- Fixed Media Manager item keys
+
+### Removed
+- Removed the Proxy facades
+
 ## v0.5.0 (2021-02-20)
 ### Added
 - Added the menu repository that allows to easily register custom menu items in the admin UI
