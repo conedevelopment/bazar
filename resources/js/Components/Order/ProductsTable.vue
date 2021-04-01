@@ -1,20 +1,3 @@
-<script>
-    export default {
-        props: {
-            order: {
-                type: Object,
-                required: true
-            }
-        },
-
-        methods: {
-            total(total) {
-                return (new Number(total)).toFixed(2);
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="table-responsive">
         <table class="table table-hover has-filled-header mb-0">
@@ -48,3 +31,20 @@
         </table>
     </div>
 </template>
+
+<script>
+    export default {
+        props: {
+            order: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        methods: {
+            total(total) {
+                return (new Number(total)).toFixed(2);
+            },
+        },
+    }
+</script>

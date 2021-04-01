@@ -3,13 +3,15 @@
         props: {
             transaction: {
                 type: Object,
-                required: true
-            }
+                required: true,
+            },
         },
+
+        emits: ['delete'],
 
         data() {
             return {
-                busy: false
+                busy: false,
             };
         },
 
@@ -34,15 +36,15 @@
             },
             completedAt() {
                 return this.transaction.completed_at.substr(0, 16).replace('T', ' ');
-            }
+            },
         },
 
         methods: {
             update() {
                 this.busy = true;
-                this.$http.patch(this.action).then(response => {
+                this.$http.patch(this.action).then((response) => {
                     this.transaction.completed_at = this.completed ? null : (new Date).toISOString();
-                }).catch(error => {
+                }).catch((error) => {
                     //
                 }).finally(() => {
                     this.busy = false;
@@ -50,15 +52,15 @@
             },
             destroy() {
                 this.busy = true;
-                this.$http.delete(this.action).then(response => {
+                this.$http.delete(this.action).then((response) => {
                     this.$emit('delete');
-                }).catch(error => {
+                }).catch((error) => {
                     //
                 }).finally(() => {
                     this.busy = false;
                 });
-            }
-        }
+            },
+        },
     }
 </script>
 
@@ -89,7 +91,7 @@
                     :class="{ 'icon-btn-success': ! completed, 'icon-btn-warning': completed }"
                     :disabled="busy"
                     :aria-label="completed ? __('Mark pending') : __('Mark completed')"
-                    @click.prevent="update"
+                    @click="update"
                 >
                     <icon :name="icon"></icon>
                 </button>
@@ -97,8 +99,8 @@
                     type="button"
                     class="icon-btn icon-btn-danger ml-1"
                     :disabled="busy"
-                    :aria-label="__('Delete transaction')"
-                    @click.prevent="destroy"
+                    :aria-label="__('Delete')"
+                    @click="destroy"
                 >
                     <icon name="close"></icon>
                 </button>

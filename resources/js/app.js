@@ -51,6 +51,8 @@ import Alert from './Components/Alert';
 app.component('alert', Alert);
 import Card from './Components/Card';
 app.component('Card', Card);
+import Modal from './Components/Modal';
+app.component('Modal', Modal);
 
 import Form from './Components/Form/Form';
 app.component('data-form', Form);

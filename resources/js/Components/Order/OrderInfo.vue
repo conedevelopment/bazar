@@ -1,20 +1,3 @@
-<script>
-    export default {
-        props: {
-            order: {
-                type: Object,
-                required: true
-            }
-        },
-
-        computed: {
-            createdAt() {
-                return this.order.created_at.substr(0, 16).replace('T', ' ');
-            }
-        }
-    }
-</script>
-
 <template>
     <table class="table table-sm is-headless mb-0 vertical-align-top">
         <tr>
@@ -84,3 +67,20 @@
         </tr>
     </table>
 </template>
+
+<script>
+    export default {
+        props: {
+            order: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        computed: {
+            createdAt() {
+                return this.order.created_at.substr(0, 16).replace('T', ' ');
+            },
+        },
+    }
+</script>
