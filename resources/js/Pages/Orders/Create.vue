@@ -7,7 +7,6 @@
                     name="user"
                     endpoint="/bazar/users"
                     placeholder="Jane Doe"
-                    :label="__('User')"
                     :modelValue="form.data.user ? [form.data.user] : []"
                     @update:modelValue="$event => form.data.user = $event[0] || {}"
                     v-show="! form.data.user.id"

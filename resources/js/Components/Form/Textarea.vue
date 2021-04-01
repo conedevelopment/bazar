@@ -1,34 +1,13 @@
-<script>
-    import Field from './../../Mixins/Field';
-
-    export default {
-        mixins: [Field],
-
-        props: {
-            value: {
-                type: [String, Number],
-                default: null
-            }
-        },
-
-        methods: {
-            update(event) {
-                this.$emit('input', event.target.value);
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="form-group">
-        <label v-if="label" :for="name">{{ label }}</label>
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
         <textarea
             class="form-control"
-            v-bind="attrs"
-            :value="value"
-            :id="name"
-            :name="name"
-            :class="{ 'is-invalid': invalid }"
+            v-bind="$attrs"
+            :id="$attrs.name"
+            :name="$attrs.name"
+            :class="{ 'is-invalid': $attrs.invalid }"
+            :value="modelValue"
             @input="update"
         ></textarea>
         <span v-if="invalid" class="form-text text-danger">
@@ -36,3 +15,22 @@
         </span>
     </div>
 </template>
+
+<script>
+    export default {
+        props: {
+            modelValue: {
+                type: Number,
+                default: null,
+            },
+        },
+
+        emits: ['update:modelValue'],
+
+        methods: {
+            update(event) {
+                this.$emit('update:modelValue', event.target.value);
+            },
+        },
+    }
+</script>
