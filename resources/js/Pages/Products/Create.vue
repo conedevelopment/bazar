@@ -1,6 +1,6 @@
 <template>
     <data-form class="row" :action="$page.props.action" :data="product" #default="form">
-            <div class="col-12 col-lg-7 col-xl-8 form__body">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')" class="mb-5">
                 <data-form-input
                     type="text"
@@ -189,6 +189,12 @@
 
         mounted() {
             this.$parent.title = this.__('Create Product');
+        },
+
+        data() {
+            return {
+                property: null,
+            };
         },
 
         computed: {
