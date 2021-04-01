@@ -32,7 +32,11 @@
                 return ! Array.isArray(this.modelValue);
             },
             checked() {
-                return this.isSwitch ? this.modelValue : this.modelValue.includes(this.$attrs.value);
+                const json = JSON.stringify(this.$attrs.value);
+
+                return this.isSwitch ? this.modelValue : this.modelValue.some((value) => {
+                    return JSON.stringify(value) === json;
+                });
             },
         },
 
@@ -42,11 +46,18 @@
                     this.$emit('update:modelValue', ! this.modelValue);
                 } else if (! this.checked) {
                     let value = Array.from(this.modelValue);
+
                     value.push(this.$attrs.value);
+
                     this.$emit('update:modelValue', value);
                 } else {
+                    const json = JSON.stringify(this.$attrs.value);
                     let value = Array.from(this.modelValue);
-                    value.splice(this.modelValue.indexOf(this.$attrs.value), 1);
+
+                    value.splice(this.modelValue.findIndex((value) => {
+                        return JSON.stringify(value) === json;
+                    }), 1);
+
                     this.$emit('update:modelValue', value);
                 }
             },

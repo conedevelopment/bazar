@@ -178,6 +178,13 @@
                 <card :title="__('Media')" class="mb-5">
                     <data-form-input type="media" name="media" multiple v-model="form.data.media"></data-form-input>
                 </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
             </div>
         </div>
     </data-form>

@@ -87,17 +87,23 @@
         methods: {
             addMedia(files) {
                 let value = Array.from(this.modelValue);
-                value.push({ name: files[0].name, url: files[0].urls.full });
+
+                value.push({ name: files[0].name, url: files[0].urls.original });
+
                 this.$emit('update:modelValue', value);
             },
             addCustom() {
                 let value = Array.from(this.modelValue);
-                value.push({ name: '', url: '' });
+
+                value.push({ name: null, url: null });
+
                 this.$emit('update:modelValue', value);
             },
             remove(index) {
                 let value = Array.from(this.modelValue);
+
                 value.splice(index, 1);
+
                 this.$emit('update:modelValue', value);
             },
         },

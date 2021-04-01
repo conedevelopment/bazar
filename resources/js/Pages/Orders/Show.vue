@@ -1,6 +1,6 @@
 <template>
     <div>
-        <data-form class="row" :action="$page.props.action" :data="order" #default="form">
+        <data-form class="row" method="PATCH" :action="$page.props.action" :data="order" #default="form">
             <div class="col-12 col-lg-7 col-xl-8 form__body">
                 <card :title="__('General')" class="mb-5">
                     <order-info :order="order"></order-info>
