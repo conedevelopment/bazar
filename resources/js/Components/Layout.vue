@@ -17,6 +17,7 @@
         data() {
             return {
                 key: (new Date).getTime(),
+                title: this.__('Dashboard'),
             };
         },
 

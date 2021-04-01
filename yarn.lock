@@ -848,10 +848,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
-"@inertiajs/inertia-vue3@^0.3.6":
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/@inertiajs/inertia-vue3/-/inertia-vue3-0.3.7.tgz#38995288884b56d5145538a539fb5e9cc0974d30"
-  integrity sha512-UkZFU/8bvaBvpQuCtpqWKKCjtoSJEAJM7FbXyI15KhzUuxqlWHBp29LnTkTEzMmMcSVUfcIta/IknRjX3jDFcw==
+"@inertiajs/inertia-vue3@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@inertiajs/inertia-vue3/-/inertia-vue3-0.3.8.tgz#23d1f49db1b28d2ecd3646e6671ffd30f6e617c1"
+  integrity sha512-/xt8d85XgC8dMC5W69gB/1ZSNfn2ro4EESWRzPJiYORAF2zjDIhnjOC9oxpCcqkwxI6bG9RaOiDfZeNQb9uX0A==
   dependencies:
     lodash.clonedeep "^4.5.0"
 

@@ -1,7 +1,10 @@
 import { h } from 'vue';
+import Tag from './Tag';
 import Input from './Input';
+import Media from './Media';
 import Editor from './Editor';
 import Select from './Select';
+import Checkbox from './Checkbox';
 import Autocomplete from './Autocomplete';
 
 export default {
@@ -65,6 +68,12 @@ export default {
                     return Select;
                 case 'editor':
                     return Editor;
+                case 'tag':
+                    return Tag;
+                case 'checkbox':
+                    return Checkbox;
+                case 'media':
+                    return Media;
                 default:
                     return Input;
             }

@@ -1,7 +1,11 @@
 <template>
-    <div>
+    <div class="form-group">
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
         <div ref="input" class="editor" spellcheck="false"></div>
         <media-manager ref="media" multiple @update:modelValue="insertMedia"></media-manager>
+        <span v-if="$attrs.invalid" class="form-text text-danger">
+            {{ $attrs.error }}
+        </span>
     </div>
 </template>
 

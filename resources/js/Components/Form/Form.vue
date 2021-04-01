@@ -27,10 +27,10 @@
             },
         },
 
-        // remember: {
-        //     data: ['fields'],
-        //     key: window.location.pathname,
-        // },
+        remember: {
+            data: ['fields'],
+            key: window.location.pathname,
+        },
 
         provide() {
             return {

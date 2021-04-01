@@ -1,38 +1,3 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Orders'),
-            };
-        },
-
-        methods: {
-            badgeClass(status) {
-                switch (status) {
-                    case 'completed':
-                        return 'badge-success';
-                    case 'failed':
-                    case 'cancelled':
-                        return 'badge-danger';
-                    case 'on_hold':
-                        return 'badge-light';
-                    default:
-                        return 'badge-warning';
-                }
-            },
-            formatDate(date) {
-                return date.substr(0, 16).replace('T', ' ');
-            }
-        },
-
-        computed: {
-            url() {
-                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
-            }
-        }
-    }
-</script>
-
 <template>
     <section class="card">
         <div class="card__header">
@@ -42,7 +7,7 @@
             </inertia-link>
         </div>
         <div class="card__inner">
-            <data-table :response="$page.props.response" :filters="$page.props.filters">
+            <data-table :response="response" :filters="filters">
                 <data-table-column :label="__('ID')" sort="id" #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         #{{ item.id }}
@@ -66,3 +31,49 @@
         </div>
     </section>
 </template>
+
+<script>
+    export default {
+        props: {
+            response: {
+                type: Object,
+                required: true,
+            },
+            filters: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.title = this.__('Orders');
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            },
+        },
+
+        methods: {
+            badgeClass(status) {
+                switch (status) {
+                    case 'completed':
+                        return 'badge-success';
+                    case 'failed':
+                    case 'cancelled':
+                        return 'badge-danger';
+                    case 'on_hold':
+                        return 'badge-light';
+                    default:
+                        return 'badge-warning';
+                }
+            },
+            formatDate(date) {
+                return date.substr(0, 16).replace('T', ' ');
+            }
+        },
+    }
+</script>

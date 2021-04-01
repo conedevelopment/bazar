@@ -11,9 +11,9 @@ import Password from './../Pages/Password';
 import OrdersIndex from './../Pages/Orders/Index';
 import OrdersShow from './../Pages/Orders/Show';
 import OrdersCreate from './../Pages/Orders/Create';
-// import ProductsIndex from './../Pages/Products/Index';
-// import ProductsShow from './../Pages/Products/Show';
-// import ProductsCreate from './../Pages/Products/Create';
+import ProductsIndex from './../Pages/Products/Index';
+import ProductsShow from './../Pages/Products/Show';
+import ProductsCreate from './../Pages/Products/Create';
 // import UsersIndex from './../Pages/Users/Index';
 // import UsersShow from './../Pages/Users/Show';
 // import UsersCreate from './../Pages/Users/Create';
@@ -37,9 +37,9 @@ export default {
             'Orders/Index': OrdersIndex,
             'Orders/Show': OrdersShow,
             'Orders/Create': OrdersCreate,
-            // 'Products/Index': ProductsIndex,
-            // 'Products/Show': ProductsShow,
-            // 'Products/Create': ProductsCreate,
+            'Products/Index': ProductsIndex,
+            'Products/Show': ProductsShow,
+            'Products/Create': ProductsCreate,
             // 'Users/Index': UsersIndex,
             // 'Users/Show': UsersShow,
             // 'Users/Create': UsersCreate,
