@@ -44,5 +44,5 @@ jobs:
           php artisan key:generate
           php artisan bazar:install --seed
           php artisan bazar:publish --packages --mix
-          yarn install
-          yarn run dev
+          npm install
+          npm run dev
