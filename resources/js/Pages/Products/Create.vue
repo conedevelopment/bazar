@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" :action="$page.props.action" :data="product" #default="form">
+    <data-form class="row" ref="form" :action="$page.props.action" :data="product" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')" class="mb-5">
                 <data-form-input
@@ -23,18 +23,39 @@
             </card>
             <card :title="__('Properties')" class="mb-5">
                 <template #header>
-                    <div class="form-group">
+                    <div class="form-group" style="max-width: 200px;">
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" placeholder="Property">
+                            <input
+                                type="text"
+                                class="form-control"
+                                :placeholder="__('Property')"
+                                v-model="property"
+                                @keydown.enter="addProperty"
+                            >
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-primary">
+                                <button type="button" class="btn btn-outline-primary" :disabled="! property" @click="addProperty">
                                     {{ __('Add') }}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </template>
-                <!-- <form-tag :name="`properties.${key}`" v-model="form.data.properties[key]"></form-tag> -->
+                <div class="form-group" v-for="(properties, key) in form.data.properties" :key="key">
+                    <div class="d-flex">
+                        <label :for="`properties.${key}`">{{ __(key) }}</label>
+                        <button type="button" class="ml-2 icon-btn icon-btn-danger" @click="removeProperty(key)">
+                            <icon name="close"></icon>
+                        </button>
+                    </div>
+                    <data-form-input
+                        type="tag"
+                        :name="`properties.${key}`"
+                        v-model="form.data.properties[key]"
+                    ></data-form-input>
+                </div>
+                <div v-if="form.data.properties.length === 0" class="mb-0 alert alert-info">
+                    {{ __('No properties.') }}
+                </div>
             </card>
             <card :title="__('Pricing')" class="mb-5">
                 <div v-for="(symbol, currency) in currencies" :key="currency" class="row">
@@ -200,6 +221,28 @@
         computed: {
             config() {
                 return window.Bazar.config;
+            },
+        },
+
+        methods: {
+            addProperty() {
+                if (this.property && ! this.$refs.form.fields.properties.hasOwnProperty(this.property)) {
+                    Object.assign(
+                        this.$refs.form.fields,
+                        { properties: Object.assign({}, this.$refs.form.fields.properties, { [this.property]: [] }) }
+                    );
+
+                    this.property = null;
+                }
+            },
+            removeProperty(property) {
+                let properties = Object.assign({}, this.$refs.form.fields.properties);
+
+                properties = Object.keys(properties).reduce((items, key) => {
+                    return key === property ? items : Object.assign(items, { [key]: properties[key] });
+                }, {});
+
+                Object.assign(this.$refs.form.fields, { properties });
             },
         },
     }

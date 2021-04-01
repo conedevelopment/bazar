@@ -1,8 +1,9 @@
 <template>
     <div class="form-group">
-        <div class="tag-control" :class="{ 'is-invalid': invalid }" @click.self="$refs.input.focus()">
-            <span v-for="(tag, index) in tags" :key="index" class="tag is-small">
-                <span class="tag__label">{{ tag }}</span>
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
+        <div class="tag-control" :class="{ 'is-invalid': $attrs.invalid }" @click.self="$refs.input.focus">
+            <span v-for="(item, index) in modelValue" :key="index" class="tag is-small">
+                <span class="tag__label">{{ item }}</span>
                 <button type="button" class="tag__remove" @click="remove(index)">
                     <icon name="close"></icon>
                 </button>
@@ -37,6 +38,8 @@
             },
         },
 
+        emits: ['update:modelValue'],
+
         data() {
             return {
                 tag: null,
@@ -46,22 +49,22 @@
         methods: {
             add() {
                 if (this.tag && ! this.modelValue.includes(this.tag)) {
-                    let values = Array.from(this.modelValue);
-                    values.push(this.tag);
-                    this.$emit('update:modelValue', values);
-                    this.tag = '';
+                    let value = Array.from(this.modelValue);
+                    value.push(this.tag);
+                    this.$emit('update:modelValue', value);
+                    this.tag = null;
                 }
             },
             remove(index) {
-                let values = Array.from(this.modelValue);
-                values.splice(index, 1);
-                this.$emit('update:modelValue', values);
+                let value = Array.from(this.modelValue);
+                value.splice(index, 1);
+                this.$emit('update:modelValue', value);
             },
             removeLast() {
                 if (! this.tag) {
-                    let values = Array.from(this.modelValue);
-                    values.pop();
-                    this.$emit('update:modelValue', values);
+                    let value = Array.from(this.modelValue);
+                    value.pop();
+                    this.$emit('update:modelValue', value);
                 }
             },
         },
