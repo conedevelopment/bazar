@@ -1,9 +1,7 @@
 <script>
-import Icon from '../Icon.vue';
     import Field from './../../Mixins/Field';
 
     export default {
-  components: { Icon },
         mixins: [Field],
 
         inheritAttrs: false,

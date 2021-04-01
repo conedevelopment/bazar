@@ -1,3 +1,15 @@
+<template>
+    <dropdown ref="dropdown" align="right">
+        <inertia-link :href="url" class="dropdown-item">{{ __('Edit') }}</inertia-link>
+        <button type="button" class="dropdown-item" :disabled="! deletable" @click="destroy">
+            {{ __('Delete') }}
+        </button>
+        <button type="button" class="dropdown-item" :disabled="! restorable" @click="restore">
+            {{ __('Restore') }}
+        </button>
+    </dropdown>
+</template>
+
 <script>
     export default {
         computed: {
@@ -10,32 +22,20 @@
             restorable() {
                 return this.$parent.item.hasOwnProperty('deleted_at')
                     && this.$parent.item.deleted_at;
-            }
+            },
         },
 
         methods: {
             destroy() {
                 this.$inertia.delete(this.url, {
-                    only: ['results', 'message']
+                    only: ['results', 'message'],
                 });
             },
             restore() {
                 this.$inertia.patch(`${this.url}/restore`, {
-                    only: ['results', 'message']
+                    only: ['results', 'message'],
                 });
-            }
-        }
+            },
+        },
     }
 </script>
-
-<template>
-    <dropdown ref="dropdown" align="right">
-        <a :href="url" class="dropdown-item">{{ __('Edit') }}</a>
-        <button type="button" class="dropdown-item" :disabled="! deletable" @click.prevent="destroy">
-            {{ __('Delete') }}
-        </button>
-        <button type="button" class="dropdown-item" :disabled="! restorable" @click.prevent="restore">
-            {{ __('Restore') }}
-        </button>
-    </dropdown>
-</template>

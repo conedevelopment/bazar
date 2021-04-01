@@ -76,7 +76,9 @@ export default class Errors
     clear(field = null)
     {
         if (field) {
-            delete this.items[field];
+            this.items = Object.keys(this.items).reduce((items, key) => {
+                return key === field ? items : Object.assign(items, { [key]: this.items[key] });
+            }, {});
         } else {
             this.items = {};
         }

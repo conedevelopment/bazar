@@ -28,7 +28,7 @@
             </inertia-link>
         </template>
         <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-column :label="__('Photo')">
+            <data-table-column :label="__('Photo')">
                 <template #default="item">
                     <img
                         class="table-preview-image"
@@ -36,31 +36,31 @@
                         alt=""
                     >
                 </template>
-            </data-column>
-            <data-column :label="__('Alias')" sort="alias">
+            </data-table-column>
+            <data-table-column :label="__('Alias')" sort="alias">
                 <template #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         {{ item.alias }}
                     </inertia-link>
                 </template>
-            </data-column>
-            <data-column :label="__('Price')">
+            </data-table-column>
+            <data-table-column :label="__('Price')">
                 <template #default="item">
                     {{ item.price ? item.formatted_price : item.product.formatted_price }}
                 </template>
-            </data-column>
-            <data-column :label="__('Variation')">
+            </data-table-column>
+            <data-table-column :label="__('Variation')">
                 <template #default="item">
                     <span v-for="(value, key) in item.variation" :key="key" class="badge badge-primary mr-1">
                         {{ __(key) }}: {{ __(value) }}
                     </span>
                 </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at">
                 <template #default="item">
                     {{ formatDate(item.created_at) }}
                 </template>
-            </data-column>
+            </data-table-column>
         </data-table>
     </card>
 </template>

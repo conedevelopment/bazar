@@ -32,6 +32,16 @@
         //     key: window.location.pathname,
         // },
 
+        provide() {
+            return {
+                form: {
+                    busy: this.busy,
+                    data: this.fields,
+                    errors: this.errors,
+                },
+            };
+        },
+
         data() {
             return {
                 busy: false,

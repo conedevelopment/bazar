@@ -8,9 +8,9 @@ import Password from './../Pages/Password';
 // import CategoriesIndex from './../Pages/Categories/Index';
 // import CategoriesShow from './../Pages/Categories/Show';
 // import CategoriesCreate from './../Pages/Categories/Create';
-// import OrdersIndex from './../Pages/Orders/Index';
-// import OrdersShow from './../Pages/Orders/Show';
-// import OrdersCreate from './../Pages/Orders/Create';
+import OrdersIndex from './../Pages/Orders/Index';
+import OrdersShow from './../Pages/Orders/Show';
+import OrdersCreate from './../Pages/Orders/Create';
 // import ProductsIndex from './../Pages/Products/Index';
 // import ProductsShow from './../Pages/Products/Show';
 // import ProductsCreate from './../Pages/Products/Create';
@@ -34,9 +34,9 @@ export default {
             // 'Categories/Index': CategoriesIndex,
             // 'Categories/Show': CategoriesShow,
             // 'Categories/Create': CategoriesCreate,
-            // 'Orders/Index': OrdersIndex,
-            // 'Orders/Show': OrdersShow,
-            // 'Orders/Create': OrdersCreate,
+            'Orders/Index': OrdersIndex,
+            'Orders/Show': OrdersShow,
+            'Orders/Create': OrdersCreate,
             // 'Products/Index': ProductsIndex,
             // 'Products/Show': ProductsShow,
             // 'Products/Create': ProductsCreate,

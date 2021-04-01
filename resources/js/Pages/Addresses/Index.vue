@@ -28,30 +28,30 @@
             </inertia-link>
         </template>
         <data-table :response="$page.results" searchable>
-            <data-column :label="__('Alias')" sort="alias">
+            <data-table-column :label="__('Alias')" sort="alias">
                 <template #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         {{ item.alias }}
                     </inertia-link>
                 </template>
-            </data-column>
-            <data-column :label="__('Name')">
+            </data-table-column>
+            <data-table-column :label="__('Name')">
                 <template #default="item">
                     {{ item.name }}
                 </template>
-            </data-column>
-            <data-column :label="__('Address')">
+            </data-table-column>
+            <data-table-column :label="__('Address')">
                 <template #default="item">
                     {{ item.country_name }}<br>
                     {{ item.postcode }}, {{ item.city }}<br>
                     {{ item.address }}
                 </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at">
                 <template #default="item">
                     {{ formatDate(item.created_at) }}
                 </template>
-            </data-column>
+            </data-table-column>
         </data-table>
     </card>
 </template>

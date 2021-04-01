@@ -51,7 +51,7 @@ class OrdersController extends Controller
                     ->paginate($request->input('per_page'));
 
         return Inertia::render('Orders/Index', [
-            'results' => $orders,
+            'response' => $orders,
             'filters' => Order::proxy()::filters(),
         ]);
     }

@@ -49,9 +49,18 @@ import Dropdown from './Components/Dropdown';
 app.component('dropdown', Dropdown);
 import Alert from './Components/Alert';
 app.component('alert', Alert);
+import Card from './Components/Card';
+app.component('Card', Card);
 
 import Form from './Components/Form/Form';
 app.component('data-form', Form);
+import Input from './Components/Form/FormInput';
+app.component('data-form-input', Input);
+
+import Table from './Components/Table/Table';
+app.component('data-table', Table);
+import Column from './Components/Table/Column';
+app.component('data-table-column', Column);
 
 // Directives
 import Debounce from './Directives/Debounce';

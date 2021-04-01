@@ -8,18 +8,15 @@ export default {
         },
     },
 
-    watch: {
-        query: {
-            handler(value, oldValue) {
-                this.fetch();
-            },
-            deep: true,
-        },
+    mounted() {
+        this.$watch('query', (newValue, oldValue) => {
+            this.fetch();
+        }, { deep: true });
     },
 
     data() {
         return {
-            processing: false,
+            busy: false,
             errors: new Errors(),
             response: { data: [] },
             query: {
@@ -47,7 +44,7 @@ export default {
 
     methods: {
         fetch() {
-            this.processing = true;
+            this.busy = true;
             this.errors.clear();
 
             this.$http(this.config).then((response) => {
@@ -55,7 +52,7 @@ export default {
             }).catch((error) => {
                 this.errors.fill(error.response.data.errors);
             }).finally(() => {
-                this.processing = false;
+                this.busy = false;
             });
         },
     },

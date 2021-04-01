@@ -28,28 +28,28 @@
             </inertia-link>
         </template>
         <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-column :label="__('Avatar')">
+            <data-table-column :label="__('Avatar')">
                 <template #default="item">
                     <img class="table-preview-image" :src="item.avatar" :alt="item.name">
                 </template>
-            </data-column>
-            <data-column :label="__('Name')" sort="name">
+            </data-table-column>
+            <data-table-column :label="__('Name')" sort="name">
                 <template #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         {{ item.name }}
                     </inertia-link>
                 </template>
-            </data-column>
-            <data-column :label="__('Email')" sort="email">
+            </data-table-column>
+            <data-table-column :label="__('Email')" sort="email">
                 <template #default="item">
                     {{ item.email }}
                 </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at">
                 <template #default="item">
                     {{ formatDate(item.created_at) }}
                 </template>
-            </data-column>
+            </data-table-column>
         </data-table>
     </card>
 </template>

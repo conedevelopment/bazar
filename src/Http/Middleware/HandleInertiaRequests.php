@@ -2,7 +2,6 @@
 
 namespace Bazar\Http\Middleware;
 
-use Bazar\Models\User;
 use Bazar\Support\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;

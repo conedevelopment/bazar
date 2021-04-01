@@ -1,110 +1,14 @@
-<script>
-    import Field from './../../Mixins/Field';
-    import Closable from './../../Mixins/Closable';
-    import Queryable from './../../Mixins/Queryable';
-
-    export default {
-        mixins: [Closable, Field, Queryable],
-
-        props: {
-            value: {
-                type: [Array, Object],
-                default: () => {}
-            },
-            multiple: {
-                type: Boolean,
-                default: false
-            }
-        },
-
-        mounted() {
-            this.$once('open', this.fetch);
-        },
-
-        watch: {
-            value: {
-                handler(n, o) {
-                    this.selection = Array.isArray(this.value) ? this.value : (this.value ? [this.value] : []);
-                },
-                deep: true
-            },
-            selection: {
-                handler(n, o) {
-                    this.$emit('input', this.multiple ? n : (n[0] || null));
-
-                    let exclude = n.map(item => item.id);
-
-                    if (JSON.stringify(exclude) !== JSON.stringify(this.query.exclude)) {
-                        this.query.exclude = exclude;
-                    }
-                },
-                deep: true
-            }
-        },
-
-        data() {
-            return {
-                active: -1,
-                query: {
-                    exclude: Array.isArray(this.value) ? this.value.map(item => item.id) : ([this.value ? this.value.id : null]),
-                },
-                selection: Array.isArray(this.value) ? this.value : (this.value ? [this.value] : []),
-            };
-        },
-
-        methods: {
-            commit() {
-                this.close();
-                this.multiple
-                    ? this.selection.push(this.items[this.active])
-                    : this.selection = [this.items[this.active]];
-            },
-            select(index) {
-                this.highlight(index);
-                this.commit();
-            },
-            highlight(index) {
-                this.open();
-
-                this.active = index;
-
-                if (this.$refs.option) {
-                    this.$nextTick(() => {
-                        this.$refs.option[index].scrollIntoView({ block: 'nearest' });
-                    });
-                }
-            },
-            highlightNext(event) {
-                if (this.isOpen) {
-                    this.highlight(
-                        this.active + 1 >= this.items.length ? 0 : this.active + 1
-                    );
-                }
-            },
-            highlightPrev(event) {
-                if (this.isOpen) {
-                    this.highlight(
-                        this.active === 0 ? this.items.length - 1 : this.active - 1
-                    );
-                }
-            },
-            clear() {
-                this.selection = [];
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="form-group position-relative">
-        <label v-if="label" :for="name">{{ label }}</label>
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
         <input
             class="form-control"
             type="text"
             autocomplete="off"
-            :name="name"
-            :class="{ 'is-invalid': invalid }"
-            v-bind="attrs"
+            :name="$attrs.name"
+            :id="$attrs.name"
+            :class="{ 'is-invalid': $attrs.invalid }"
+            v-bind="$attrs"
             v-model.lazy="query.search"
             v-debounce="300"
             @focus="open"
@@ -112,17 +16,17 @@
             @keydown.down="highlightNext"
             @keydown.enter.prevent="commit"
         >
-        <span v-if="help || invalid" class="form-text" :class="{ 'text-danger': invalid }">
-            {{ error || help }}
+        <span v-if="$attrs.invalid" class="form-text text-danger">
+            {{ $attrs.error }}
         </span>
         <div class="card position-absolute overflow-auto" style="max-height: 200px; width: 100%; z-index: 1000;">
             <div v-show="isOpen" class="card-content">
                 <div class="list-group">
                     <div
-                        ref="option"
                         class="list-group-item list-group-item-action"
                         v-for="(item, index) in items"
                         :key="index"
+                        :ref="`option-${index}`"
                         :class="[index === active ? 'active' : '']"
                         @mousedown="select(index)"
                     >
@@ -139,3 +43,116 @@
         </div>
     </div>
 </template>
+
+<script>
+    import { nextTick } from 'vue';
+    import Closable from './../../Mixins/Closable';
+    import Queryable from './../../Mixins/Queryable';
+
+    export default {
+        mixins: [Closable, Queryable],
+
+        props: {
+            modelValue: {
+                type: Array,
+                default: () => [],
+            },
+            multiple: {
+                type: Boolean,
+                default: false,
+            },
+            type: {
+                type: String,
+            },
+        },
+
+        emits: ['update:modelValue'],
+
+        beforeMount() {
+            Object.assign(this.query, {
+                exclude: this.modelValue.map((item) => item.id),
+            });
+        },
+
+        mounted() {
+            this.$dispatcher.once('open', this.fetch);
+
+            window.addEventListener('keyup', (event) => {
+                if (this.isOpen && event.code === 'Escape') {
+                    this.close();
+                }
+            });
+
+            window.addEventListener('click', (event) => {
+                if (this.isOpen && ! this.$el.contains(event.target)) {
+                    this.close();
+                }
+            });
+        },
+
+        watch: {
+            modelValue: {
+                handler(newValue, oldValue) {
+                    Object.assign(this.query, {
+                        exclude: newValue.map((item) => item.id),
+                    });
+                },
+                deep: true,
+            },
+        },
+
+        data() {
+            return {
+                active: -1,
+            };
+        },
+
+        methods: {
+            commit() {
+                this.close();
+
+                let value = [];
+
+                if (this.multiple) {
+                    value = Array.from(this.modelValue);
+                    value.push(this.items[this.active]);
+                } else {
+                    value = [this.items[this.active]];
+                }
+
+                this.$emit('update:modelValue', value);
+            },
+            select(index) {
+                this.highlight(index);
+                this.commit();
+            },
+            highlight(index) {
+                this.open();
+                this.active = index;
+
+                if (this.$refs[`option-${index}`]) {
+                    nextTick(() => {
+                        this.$refs[`option-${index}`].scrollIntoView({ block: 'nearest' });
+                    });
+                }
+            },
+            highlightNext() {
+                if (this.isOpen) {
+                    this.highlight(
+                        this.active + 1 >= this.items.length ? 0 : this.active + 1
+                    );
+                }
+            },
+            highlightPrev() {
+                if (this.isOpen) {
+                    this.highlight(
+                        this.active === 0 ? this.items.length - 1 : this.active - 1
+                    );
+                }
+            },
+            clear() {
+                this.$emit('update:modelValue', []);
+            },
+        },
+    }
+</script>

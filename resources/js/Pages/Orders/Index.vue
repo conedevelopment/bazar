@@ -2,7 +2,7 @@
     export default {
         data() {
             return {
-                title: this.__('Orders')
+                title: this.__('Orders'),
             };
         },
 
@@ -34,42 +34,35 @@
 </script>
 
 <template>
-    <card :title="title">
-        <template #header>
+    <section class="card">
+        <div class="card__header">
+            <h2 class="card__title">{{ title }}</h2>
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Order') }}
             </inertia-link>
-        </template>
-        <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-column :label="__('ID')" sort="id">
-                <template #default="item">
+        </div>
+        <div class="card__inner">
+            <data-table :response="$page.props.response" :filters="$page.props.filters">
+                <data-table-column :label="__('ID')" sort="id" #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         #{{ item.id }}
                     </inertia-link>
-                </template>
-            </data-column>
-            <data-column :label="__('Total')">
-                <template #default="item">
+                </data-table-column>
+                <data-table-column :label="__('Total')" #default="item">
                     {{ item.formatted_total }}
-                </template>
-            </data-column>
-            <data-column :label="__('Customer')">
-                <template #default="item">
+                </data-table-column>
+                <data-table-column :label="__('Customer')" #default="item">
                     {{ item.address.name }}
-                </template>
-            </data-column>
-            <data-column :label="__('Status')" sort="status">
-                <template #default="item">
+                </data-table-column>
+                <data-table-column :label="__('Status')" sort="status" #default="item">
                     <span class="badge" :class="badgeClass(item.status)">
                         {{ item.status_name }}
                     </span>
-                </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
-                <template #default="item">
+                </data-table-column>
+                <data-table-column :label="__('Created at')" sort="created_at" #default="item">
                     {{ formatDate(item.created_at) }}
-                </template>
-            </data-column>
-        </data-table>
-    </card>
+                </data-table-column>
+            </data-table>
+        </div>
+    </section>
 </template>

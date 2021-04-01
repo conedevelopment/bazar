@@ -28,7 +28,7 @@
             </inertia-link>
         </template>
         <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-column :label="__('Photo')">
+            <data-table-column :label="__('Photo')">
                 <template #default="item">
                     <img
                         class="table-preview-image"
@@ -36,29 +36,29 @@
                         :alt="item.name"
                     >
                 </template>
-            </data-column>
-            <data-column :label="__('Name')" sort="name">
+            </data-table-column>
+            <data-table-column :label="__('Name')" sort="name">
                 <template #default="item">
                     <inertia-link :href="`${url}/${item.id}`">
                         {{ item.name }}
                     </inertia-link>
                 </template>
-            </data-column>
-            <data-column :label="__('SKU')" sort="inventory->sku">
+            </data-table-column>
+            <data-table-column :label="__('SKU')" sort="inventory->sku">
                 <template #default="item">
                     {{ item.inventory.sku }}
                 </template>
-            </data-column>
-            <data-column :label="__('Price')">
+            </data-table-column>
+            <data-table-column :label="__('Price')">
                 <template #default="item">
                     {{ item.formatted_price }}
                 </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at">
                 <template #default="item">
                     {{ formatDate(item.created_at) }}
                 </template>
-            </data-column>
+            </data-table-column>
         </data-table>
     </card>
 </template>

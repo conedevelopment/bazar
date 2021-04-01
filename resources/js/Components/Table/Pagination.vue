@@ -1,11 +1,3 @@
-<script>
-    import Pagable from './../../Mixins/Pagable';
-
-    export default {
-        mixins: [Pagable]
-    }
-</script>
-
 <template>
     <div class="row mt-3">
         <div class="col-12 col-md-6 d-md-flex align-items-center mb-3 mb-md-0">
@@ -29,18 +21,18 @@
             <nav class="d-flex justify-content-center">
                 <ul class="pagination pagination-sm mb-0">
                     <li class="page-item" :class="{ 'disabled': ! hasPrev }">
-                        <button type="button" class="page-link" :disabled="! hasPrev" @click.prevent="prev">
+                        <button type="button" class="page-link" :disabled="! hasPrev" @click="prev">
                             {{ __('Previous') }}
                         </button>
                     </li>
                     <li v-for="page in pages" class="page-item" :key="page" :class="{ 'active': isCurrent(page) }">
-                        <button type="button" class="page-link" :disabled="isCurrent(page)" @click.prevent="to(page)">
+                        <button type="button" class="page-link" :disabled="isCurrent(page)" @click="to(page)">
                             {{ page }}
                             <span v-if="isCurrent(page)" class="sr-only">(current)</span>
                         </button>
                     </li>
                     <li class="page-item" :class="{ 'disabled': ! hasNext }">
-                        <button type="button" class="page-link" :disabled="! hasNext" @click.prevent="next">
+                        <button type="button" class="page-link" :disabled="! hasNext" @click="next">
                             {{ __('Next') }}
                         </button>
                     </li>
@@ -49,3 +41,11 @@
         </div>
     </div>
 </template>
+
+<script>
+    import Pagable from './../../Mixins/Pagable';
+
+    export default {
+        mixins: [Pagable],
+    }
+</script>
