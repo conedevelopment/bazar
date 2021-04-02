@@ -28,7 +28,7 @@ class ProductsTest extends TestCase
             ->get(URL::route('bazar.products.index'))
             ->assertOk()
             ->assertViewHas(
-                'page.props.results', Product::with('media')->paginate()->toArray()
+                'page.props.response', Product::with('media')->paginate()->toArray()
             );
     }
 

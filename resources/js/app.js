@@ -50,9 +50,11 @@ app.component('dropdown', Dropdown);
 import Alert from './Components/Alert';
 app.component('alert', Alert);
 import Card from './Components/Card';
-app.component('Card', Card);
+app.component('card', Card);
 import Modal from './Components/Modal';
-app.component('Modal', Modal);
+app.component('modal', Modal);
+import MediaManager from './Components/Media/Manager';
+app.component('media-manager', MediaManager);
 
 import Form from './Components/Form/Form';
 app.component('data-form', Form);

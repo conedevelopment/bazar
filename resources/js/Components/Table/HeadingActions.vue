@@ -1,3 +1,17 @@
+<template>
+    <dropdown ref="dropdown">
+        <h6 class="dropdown-header">
+            {{ __(':items selected', { items: this.id.length }) }}
+        </h6>
+        <button type="button" class="dropdown-item" :disabled="! deletable" @click="destroy">
+            {{ __('Delete') }}
+        </button>
+        <button type="button" class="dropdown-item" :disabled="! restorable" @click="restore">
+            {{ __('Restore') }}
+        </button>
+    </dropdown>
+</template>
+
 <script>
     export default {
         computed: {
@@ -37,17 +51,3 @@
         },
     }
 </script>
-
-<template>
-    <dropdown ref="dropdown">
-        <h6 class="dropdown-header">
-            {{ __(':items selected', { items: this.id.length }) }}
-        </h6>
-        <button type="button" class="dropdown-item" :disabled="! deletable" @click="destroy">
-            {{ __('Delete') }}
-        </button>
-        <button type="button" class="dropdown-item" :disabled="! restorable" @click="restore">
-            {{ __('Restore') }}
-        </button>
-    </dropdown>
-</template>

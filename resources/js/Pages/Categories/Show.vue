@@ -1,26 +1,59 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.$page.category.name
-            };
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.category">
-        <template #default="form">
+    <data-form class="row" method="PATCH" :action="$page.props.action" :data="category" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
-                <form-input name="name" :label="__('Name')" v-model="form.fields.name"></form-input>
-                <form-input name="slug" :label="__('Slug')" v-model="form.fields.slug"></form-input>
-                <form-editor name="description" :label="__('Description')" v-model="form.fields.description"></form-editor>
+                <data-form-input
+                    type="text"
+                    name="name"
+                    :label="__('Name')"
+                    v-model="form.data.name"
+                ></data-form-input>
+                <data-form-input
+                    type="text"
+                    name="slug"
+                    :label="__('Slug')"
+                    v-model="form.data.slug"
+                ></data-form-input>
+                <data-form-input
+                    type="editor"
+                    name="description"
+                    :label="__('Description')"
+                    v-model="form.data.description"
+                ></data-form-input>
             </card>
-        </template>
-        <template #aside="form">
-            <card :title="__('Media')" class="mb-5">
-                <form-media name="media" v-model="form.fields.media"></form-media>
-            </card>
-        </template>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Media')" class="mb-5">
+                    <data-form-input
+                        type="media"
+                        name="media"
+                        v-model="form.data.media"
+                    ></data-form-input>
+                </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    export default {
+        props: {
+            category: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        mountes() {
+            this.$parent.title = this.category.name;
+        },
+    }
+</script>

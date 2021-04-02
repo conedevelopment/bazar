@@ -1,3 +1,17 @@
+<template>
+    <section class="card">
+        <div class="card__header">
+            <h2 class="card__title">{{ __('Sales') }}</h2>
+        </div>
+        <div class="card__inner">
+            <div v-if="busy" class="alert alert-light mb-0">
+                {{ __('Loading') }}...
+            </div>
+            <data-chart v-else :labels="sales.labels" :data="sales.data"></data-chart>
+        </div>
+    </section>
+</template>
+
 <script>
     import DataChart from './../Chart';
 
@@ -31,17 +45,3 @@
         },
     }
 </script>
-
-<template>
-    <section class="card">
-        <div class="card__header">
-            <h2 class="card__title">{{ __('Sales') }}</h2>
-        </div>
-        <div class="card__inner">
-            <div v-if="busy" class="alert alert-light mb-0">
-                {{ __('Loading') }}...
-            </div>
-            <data-chart v-else :labels="sales.labels" :data="sales.data"></data-chart>
-        </div>
-    </section>
-</template>

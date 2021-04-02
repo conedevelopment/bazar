@@ -45,7 +45,7 @@ class AddressesController extends Controller
 
         return Inertia::render('Addresses/Index', [
             'user' => $user,
-            'results' => $addresses,
+            'response' => $addresses,
         ]);
     }
 

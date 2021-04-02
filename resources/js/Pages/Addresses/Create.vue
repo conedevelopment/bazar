@@ -1,59 +1,145 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Create Address')
-            };
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.address">
-        <template #default="form">
+    <data-form class="row" :action="$page.props.action" :data="address" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <div class="row">
                     <div class="col-12 col-sm-6">
-                        <form-input name="first_name" :label="__('First Name')" v-model="form.fields.first_name"></form-input>
+                        <data-form-input
+                            type="text"
+                            name="first_name"
+                            :label="__('First Name')"
+                            v-model="form.data.first_name"
+                        ></data-form-input>
                     </div>
                     <div class="col-12 col-sm-6">
-                        <form-input name="last_name" :label="__('Last Name')" v-model="form.fields.last_name"></form-input>
+                        <data-form-input
+                            type="text"
+                            name="last_name"
+                            :label="__('Last Name')"
+                            v-model="form.data.last_name"
+                        ></data-form-input>
                     </div>
                 </div>
-                <form-input name="company" :label="__('Company')" v-model="form.fields.company"></form-input>
+                <data-form-input
+                    type="text"
+                    name="company"
+                    :label="__('Company')"
+                    v-model="form.data.company"
+                ></data-form-input>
                 <div class="row">
                     <div class="col-12 col-sm-6">
-                        <form-input name="email" type="email" :label="__('Email')" v-model="form.fields.email"></form-input>
+                        <data-form-input
+                            type="email"
+                            name="email"
+                            :label="__('Email')"
+                            v-model="form.data.email"
+                        ></data-form-input>
                     </div>
                     <div class="col-12 col-sm-6">
-                        <form-input name="phone" type="tel" :label="__('Phone')" v-model="form.fields.phone"></form-input>
+                        <data-form-input
+                            type="tel"
+                            name="phone"
+                            :label="__('Phone')"
+                            v-model="form.data.phone"
+                        ></data-form-input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-6">
-                        <form-select name="country" :label="__('Country')" :options="$page.countries" v-model="form.fields.country"></form-select>
+                        <data-form-input
+                            type="select"
+                            name="country"
+                            :label="__('Country')"
+                            :options="countries"
+                            v-model="form.data.country"
+                        ></data-form-input>
                     </div>
                     <div class="col-12 col-sm-6">
-                        <form-input name="state" :label="__('State')" v-model="form.fields.state"></form-input>
+                        <data-form-input
+                            type="text"
+                            name="state"
+                            :label="__('State')"
+                            v-model="form.data.state"
+                        ></data-form-input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-sm-6">
-                        <form-input name="city" :label="__('City')" v-model="form.fields.city"></form-input>
+                        <data-form-input
+                            type="text"
+                            name="city"
+                            :label="__('City')"
+                            v-model="form.data.city"
+                        ></data-form-input>
                     </div>
                     <div class="col-12 col-sm-6">
-                        <form-input name="postcode" :label="__('Postcode')" v-model="form.fields.postcode"></form-input>
+                        <data-form-input
+                            type="text"
+                            name="postcode"
+                            :label="__('Postcode')"
+                            v-model="form.data.postcode"
+                        ></data-form-input>
                     </div>
                 </div>
-                <form-input name="address" :label="__('Address')" v-model="form.fields.address"></form-input>
-                <form-input name="address_secondary" :label="__('Secondary Address')" v-model="form.fields.address_secondary"></form-input>
+                <data-form-input
+                    type="text"
+                    name="address"
+                    :label="__('Address')"
+                    v-model="form.data.address"
+                ></data-form-input>
+                <data-form-input
+                    type="text"
+                    name="address_secondary"
+                    :label="__('Secondary Address')"
+                    v-model="form.data.address_secondary"
+                ></data-form-input>
             </card>
-        </template>
-        <template #aside="form">
-            <card :title="__('Settings')" class="mb-5">
-                <form-input name="alias" :label="__('Alias')" v-model="form.fields.alias"></form-input>
-                <form-checkbox name="default" :label="__('Default Address')" v-model="form.fields.default"></form-checkbox>
-            </card>
-        </template>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Settings')" class="mb-5">
+                    <data-form-input
+                        type="text"
+                        name="alias"
+                        :label="__('Alias')"
+                        v-model="form.data.alias"
+                    ></data-form-input>
+                    <data-form-input
+                        type="checkbox"
+                        name="default"
+                        :label="__('Default Address')"
+                        v-model="form.data.default"
+                    ></data-form-input>
+                </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    export default {
+        props: {
+            address: {
+                type: Object,
+                required: true,
+            },
+            countries: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.title = this.__('Create Address');
+        },
+    }
+</script>

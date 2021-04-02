@@ -28,7 +28,7 @@ class CategoriesTest extends TestCase
             ->get(URL::route('bazar.categories.index'))
             ->assertOk()
             ->assertViewHas(
-                'page.props.results',
+                'page.props.response',
                 Category::query()->with('media')->paginate()->toArray()
             );
     }

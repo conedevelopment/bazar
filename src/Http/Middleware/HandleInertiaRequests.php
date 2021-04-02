@@ -39,12 +39,6 @@ class HandleInertiaRequests extends Middleware
             'csrf_token' => static function (): string {
                 return csrf_token();
             },
-            'config' => static function (): array {
-                return [
-                    'weight_unit' => Config::get('bazar.weight_unit'),
-                    'dimension_unit' => Config::get('bazar.dimension_unit'),
-                ];
-            },
             'breadcrumbs' => static function () use ($request): Breadcrumbs {
                 return new Breadcrumbs($request);
             },

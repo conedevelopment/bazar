@@ -197,6 +197,10 @@ class BazarServiceProvider extends ServiceProvider
             $view->with('translations', (object) $this->app['translator']->getLoader()->load(
                 $this->app->getLocale(), '*', '*'
             ));
+            $view->with('config', [
+                'weight_unit' => $this->app['config']->get('bazar.weight_unit'),
+                'dimension_unit' => $this->app['config']->get('bazar.dimension_unit'),
+            ]);
         });
     }
 

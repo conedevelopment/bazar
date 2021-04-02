@@ -25,6 +25,7 @@
             pages: {},
             menu: @json($menu),
             user: @json($user),
+            config: @json($config),
             translations: @json($translations),
         };
     </script>

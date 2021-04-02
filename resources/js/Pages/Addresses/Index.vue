@@ -1,57 +1,56 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Addresses')
-            };
-        },
-
-        methods: {
-            formatDate(date) {
-                return date.substr(0, 16).replace('T', ' ');
-            }
-        },
-
-        computed: {
-            url() {
-                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
-            }
-        }
-    }
-</script>
-
 <template>
-    <card :title="title">
+    <card :title="__('Addresses')">
         <template #header>
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Address') }}
             </inertia-link>
         </template>
-        <data-table :response="$page.results" searchable>
-            <data-table-column :label="__('Alias')" sort="alias">
-                <template #default="item">
-                    <inertia-link :href="`${url}/${item.id}`">
-                        {{ item.alias }}
-                    </inertia-link>
-                </template>
+        <data-table :response="response">
+            <data-table-column :label="__('Alias')" sort="alias" #default="item">
+                <inertia-link :href="`${url}/${item.id}`">
+                    {{ item.alias }}
+                </inertia-link>
             </data-table-column>
-            <data-table-column :label="__('Name')">
-                <template #default="item">
-                    {{ item.name }}
-                </template>
+            <data-table-column :label="__('Name')" #default="item">
+                {{ item.name }}
             </data-table-column>
-            <data-table-column :label="__('Address')">
-                <template #default="item">
-                    {{ item.country_name }}<br>
-                    {{ item.postcode }}, {{ item.city }}<br>
-                    {{ item.address }}
-                </template>
+            <data-table-column :label="__('Address')" #default="item">
+                {{ item.country_name }}<br>
+                {{ item.postcode }}, {{ item.city }}<br>
+                {{ item.address }}
             </data-table-column>
-            <data-table-column :label="__('Created at')" sort="created_at">
-                <template #default="item">
-                    {{ formatDate(item.created_at) }}
-                </template>
+            <data-table-column :label="__('Created at')" sort="created_at" #default="item">
+                {{ formatDate(item.created_at) }}
             </data-table-column>
         </data-table>
     </card>
 </template>
+
+<script>
+    export default {
+        props: {
+            response: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.title = this.__('Addresses');
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            },
+        },
+
+        methods: {
+            formatDate(date) {
+                return date.substr(0, 16).replace('T', ' ');
+            },
+        },
+    }
+</script>
