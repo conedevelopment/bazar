@@ -23,7 +23,7 @@ import VariantsCreate from './../Pages/Variants/Create';
 
 export default {
     install(app) {
-        Object.assign(window.Bazar.pages, {
+        window.Bazar.pages = Object.assign({
             'Dashboard': Dashboard,
             'Support': Support,
             'Profile': Profile,
@@ -46,6 +46,6 @@ export default {
             'Variants/Index': VariantsIndex,
             'Variants/Show': VariantsShow,
             'Variants/Create': VariantsCreate,
-        });
+        }, window.Bazar.pages);
     },
 }

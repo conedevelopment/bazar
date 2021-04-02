@@ -132,8 +132,8 @@
             remove(index) {
                 this.products.splice(index, 1);
             },
-            update(event) {
-                this.products = event.map((product) => {
+            update(value) {
+                this.products = value.map((product) => {
                     return Object.assign({
                         item: {
                             tax: 0,

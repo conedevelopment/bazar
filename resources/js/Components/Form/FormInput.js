@@ -2,6 +2,7 @@ import { h } from 'vue';
 import Tag from './Tag';
 import Input from './Input';
 import Media from './Media';
+import Radio from './Radio';
 import Editor from './Editor';
 import Select from './Select';
 import Checkbox from './Checkbox';
@@ -37,8 +38,8 @@ export default {
             error: this.error,
             invalid: this.invalid,
             modelValue: this.modelValue,
-            'onUpdate:modelValue': (event) => {
-                this.update(event);
+            'onUpdate:modelValue': (value) => {
+                this.update(value);
             },
         }), this.$slots.default);
     },
@@ -53,8 +54,8 @@ export default {
     },
 
     methods: {
-        update(event) {
-            this.$emit('update:modelValue', event);
+        update(value) {
+            this.$emit('update:modelValue', value);
 
             if (this.invalid) {
                 this.form.errors.clear(this.name);
@@ -74,6 +75,8 @@ export default {
                     return Checkbox;
                 case 'media':
                     return Media;
+                case 'radio':
+                    return Radio;
                 default:
                     return Input;
             }
