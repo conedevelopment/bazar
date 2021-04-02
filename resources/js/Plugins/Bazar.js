@@ -14,9 +14,9 @@ import OrdersCreate from './../Pages/Orders/Create';
 import ProductsIndex from './../Pages/Products/Index';
 import ProductsShow from './../Pages/Products/Show';
 import ProductsCreate from './../Pages/Products/Create';
-// import UsersIndex from './../Pages/Users/Index';
-// import UsersShow from './../Pages/Users/Show';
-// import UsersCreate from './../Pages/Users/Create';
+import UsersIndex from './../Pages/Users/Index';
+import UsersShow from './../Pages/Users/Show';
+import UsersCreate from './../Pages/Users/Create';
 // import VariantsIndex from './../Pages/Variants/Index';
 // import VariantsShow from './../Pages/Variants/Show';
 // import VariantsCreate from './../Pages/Variants/Create';
@@ -40,9 +40,9 @@ export default {
             'Products/Index': ProductsIndex,
             'Products/Show': ProductsShow,
             'Products/Create': ProductsCreate,
-            // 'Users/Index': UsersIndex,
-            // 'Users/Show': UsersShow,
-            // 'Users/Create': UsersCreate,
+            'Users/Index': UsersIndex,
+            'Users/Show': UsersShow,
+            'Users/Create': UsersCreate,
             // 'Variants/Index': VariantsIndex,
             // 'Variants/Show': VariantsShow,
             // 'Variants/Create': VariantsCreate,

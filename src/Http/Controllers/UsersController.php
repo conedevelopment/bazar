@@ -47,7 +47,7 @@ class UsersController extends Controller
         return $request->expectsJson()
             ? ResponseFactory::json($users)
             : Inertia::render('Users/Index', [
-                'results' => $users,
+                'response' => $users,
                 'filters' => User::proxy()::filters(),
             ]);
     }

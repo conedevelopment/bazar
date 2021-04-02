@@ -1,25 +1,3 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Users')
-            };
-        },
-
-        methods: {
-            formatDate(date) {
-                return date.substr(0, 16).replace('T', ' ');
-            }
-        },
-
-        computed: {
-            url() {
-                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
-            }
-        }
-    }
-</script>
-
 <template>
     <card :title="title">
         <template #header>
@@ -27,29 +5,54 @@
                 {{ __('Create User') }}
             </inertia-link>
         </template>
-        <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-table-column :label="__('Avatar')">
-                <template #default="item">
-                    <img class="table-preview-image" :src="item.avatar" :alt="item.name">
-                </template>
+        <data-table :response="response" :filters="filters">
+            <data-table-column :label="__('Avatar')" #default="item">
+                <img class="table-preview-image" :src="item.avatar" :alt="item.name">
             </data-table-column>
-            <data-table-column :label="__('Name')" sort="name">
-                <template #default="item">
-                    <inertia-link :href="`${url}/${item.id}`">
-                        {{ item.name }}
-                    </inertia-link>
-                </template>
+            <data-table-column :label="__('Name')" sort="name" #default="item">
+                <inertia-link :href="`${url}/${item.id}`">
+                    {{ item.name }}
+                </inertia-link>
             </data-table-column>
-            <data-table-column :label="__('Email')" sort="email">
-                <template #default="item">
-                    {{ item.email }}
-                </template>
+            <data-table-column :label="__('Email')" sort="email" #default="item">
+                {{ item.email }}
             </data-table-column>
-            <data-table-column :label="__('Created at')" sort="created_at">
-                <template #default="item">
-                    {{ formatDate(item.created_at) }}
-                </template>
+            <data-table-column :label="__('Created at')" sort="created_at" #default="item">
+                {{ formatDate(item.created_at) }}
             </data-table-column>
         </data-table>
     </card>
 </template>
+
+<script>
+    export default {
+        props: {
+            response: {
+                type: Object,
+                required: true,
+            },
+            filters: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.title = this.__('Users');
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            },
+        },
+
+        methods: {
+            formatDate(date) {
+                return date.substr(0, 16).replace('T', ' ');
+            },
+        },
+    }
+</script>
