@@ -19,7 +19,7 @@
         <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
             <div class="sticky-helper">
                 <card :title="__('Addresses')" class="mb-5">
-                    <inertia-link :href="`${$page.action}/addresses`" class="btn btn-primary">
+                    <inertia-link :href="`/bazar/users/${user.id}/addresses`" class="btn btn-primary">
                         {{ __('Manage Addresses') }}
                     </inertia-link>
                 </card>

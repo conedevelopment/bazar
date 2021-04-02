@@ -2,9 +2,9 @@ import Dashboard from './../Pages/Dashboard';
 import Support from './../Pages/Support';
 import Profile from './../Pages/Profile';
 import Password from './../Pages/Password';
-// import AddressesIndex from './../Pages/Addresses/Index';
-// import AddressesShow from './../Pages/Addresses/Show';
-// import AddressesCreate from './../Pages/Addresses/Create';
+import AddressesIndex from './../Pages/Addresses/Index';
+import AddressesShow from './../Pages/Addresses/Show';
+import AddressesCreate from './../Pages/Addresses/Create';
 import CategoriesIndex from './../Pages/Categories/Index';
 import CategoriesShow from './../Pages/Categories/Show';
 import CategoriesCreate from './../Pages/Categories/Create';
@@ -28,9 +28,9 @@ export default {
             'Support': Support,
             'Profile': Profile,
             'Password': Password,
-            // 'Addresses/Index': AddressesIndex,
-            // 'Addresses/Show': AddressesShow,
-            // 'Addresses/Create': AddressesCreate,
+            'Addresses/Index': AddressesIndex,
+            'Addresses/Show': AddressesShow,
+            'Addresses/Create': AddressesCreate,
             'Categories/Index': CategoriesIndex,
             'Categories/Show': CategoriesShow,
             'Categories/Create': CategoriesCreate,

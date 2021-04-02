@@ -1,9 +1,3 @@
-<script>
-    export default {
-        inheritAttrs: false,
-    }
-</script>
-
 <template>
     <data-form class="row" method="PATCH" :action="$page.props.action" :data="$parent.user" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
@@ -27,7 +21,7 @@
                 <card :title="__('Actions')">
                     <div class="form-group d-flex justify-content-between mb-0">
                         <button type="submit" class="btn btn-primary" :disabled="form.busy">
-                            {{ __('Update') }}
+                            {{ __('Save') }}
                         </button>
                     </div>
                 </card>
@@ -35,3 +29,13 @@
         </div>
     </data-form>
 </template>
+
+<script>
+    export default {
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.title = this.__('Profile');
+        },
+    }
+</script>
