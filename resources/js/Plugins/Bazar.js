@@ -17,9 +17,9 @@ import ProductsCreate from './../Pages/Products/Create';
 import UsersIndex from './../Pages/Users/Index';
 import UsersShow from './../Pages/Users/Show';
 import UsersCreate from './../Pages/Users/Create';
-// import VariantsIndex from './../Pages/Variants/Index';
-// import VariantsShow from './../Pages/Variants/Show';
-// import VariantsCreate from './../Pages/Variants/Create';
+import VariantsIndex from './../Pages/Variants/Index';
+import VariantsShow from './../Pages/Variants/Show';
+import VariantsCreate from './../Pages/Variants/Create';
 
 export default {
     install(app) {
@@ -43,9 +43,9 @@ export default {
             'Users/Index': UsersIndex,
             'Users/Show': UsersShow,
             'Users/Create': UsersCreate,
-            // 'Variants/Index': VariantsIndex,
-            // 'Variants/Show': VariantsShow,
-            // 'Variants/Create': VariantsCreate,
+            'Variants/Index': VariantsIndex,
+            'Variants/Show': VariantsShow,
+            'Variants/Create': VariantsCreate,
         });
     },
 }

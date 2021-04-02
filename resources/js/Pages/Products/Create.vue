@@ -150,13 +150,9 @@
                         v-model="form.data.inventory.downloadable"
                     ></data-form-input>
                 </div>
-                <files
-                    v-model="form.data.inventory.files"
-                    v-show="form.data.inventory.downloadable"
-                ></files>
+                <files v-model="form.data.inventory.files" v-show="form.data.inventory.downloadable"></files>
             </card>
         </div>
-
         <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
             <div class="sticky-helper">
                 <card :title="__('Categories')" class="mb-5">

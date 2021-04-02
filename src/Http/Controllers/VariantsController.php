@@ -47,14 +47,11 @@ class VariantsController extends Controller
                         ->paginate($request->input('per_page'));
 
         $variants->getCollection()->each(static function (Variant $variant) use ($product): void {
-            $variant->setRelation(
-                'product', $product->withoutRelations()->makeHidden('variants')
-            );
+            $variant->setRelation('product', $product->withoutRelations()->makeHidden('variants'));
         });
 
         return Inertia::render('Variants/Index', [
-            'product' => $product,
-            'results' => $variants,
+            'response' => $variants,
             'filters' => Variant::proxy()::filters(),
         ]);
     }

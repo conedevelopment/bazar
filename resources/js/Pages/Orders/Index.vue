@@ -1,35 +1,32 @@
 <template>
-    <section class="card">
-        <div class="card__header">
-            <h2 class="card__title">{{ title }}</h2>
+    <card :title="__('Orders')">
+        <template #header>
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Order') }}
             </inertia-link>
-        </div>
-        <div class="card__inner">
-            <data-table :response="response" :filters="filters">
-                <data-table-column :label="__('ID')" sort="id" #default="item">
-                    <inertia-link :href="`${url}/${item.id}`">
-                        #{{ item.id }}
-                    </inertia-link>
-                </data-table-column>
-                <data-table-column :label="__('Total')" #default="item">
-                    {{ item.formatted_total }}
-                </data-table-column>
-                <data-table-column :label="__('Customer')" #default="item">
-                    {{ item.address.name }}
-                </data-table-column>
-                <data-table-column :label="__('Status')" sort="status" #default="item">
-                    <span class="badge" :class="badgeClass(item.status)">
-                        {{ item.status_name }}
-                    </span>
-                </data-table-column>
-                <data-table-column :label="__('Created at')" sort="created_at" #default="item">
-                    {{ formatDate(item.created_at) }}
-                </data-table-column>
-            </data-table>
-        </div>
-    </section>
+        </template>
+        <data-table :response="response" :filters="filters">
+            <data-table-column :label="__('ID')" sort="id" #default="item">
+                <inertia-link :href="`${url}/${item.id}`">
+                    #{{ item.id }}
+                </inertia-link>
+            </data-table-column>
+            <data-table-column :label="__('Total')" #default="item">
+                {{ item.formatted_total }}
+            </data-table-column>
+            <data-table-column :label="__('Customer')" #default="item">
+                {{ item.address.name }}
+            </data-table-column>
+            <data-table-column :label="__('Status')" sort="status" #default="item">
+                <span class="badge" :class="badgeClass(item.status)">
+                    {{ item.status_name }}
+                </span>
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at" #default="item">
+                {{ formatDate(item.created_at) }}
+            </data-table-column>
+        </data-table>
+    </card>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <card :title="title">
+    <card :title="__('Users')">
         <template #header>
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create User') }}

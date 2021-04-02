@@ -29,7 +29,7 @@ class VariantsTest extends TestCase
         $this->actingAs($this->admin)
             ->get(URL::route('bazar.products.variants.index', $this->product))
             ->assertOk()
-            ->assertViewHas('page.props.results');
+            ->assertViewHas('page.props.response');
     }
 
     /** @test */

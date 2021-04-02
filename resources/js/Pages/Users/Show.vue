@@ -44,8 +44,10 @@
             },
         },
 
+        inheritAttrs: false,
+
         mounted() {
-            this.$parent.title = this.__('Create User');
+            this.$parent.title = this.user.name;
         },
     }
 </script>

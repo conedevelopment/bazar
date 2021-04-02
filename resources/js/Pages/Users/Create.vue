@@ -39,6 +39,8 @@
             },
         },
 
+        inheritAttrs: false,
+
         mounted() {
             this.$parent.title = this.__('Create User');
         },
