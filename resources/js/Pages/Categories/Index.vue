@@ -1,54 +1,57 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Categories')
-            };
-        },
-
-        methods: {
-            formatDate(date) {
-                return date.substr(0, 16).replace('T', ' ');
-            }
-        },
-
-        computed: {
-            url() {
-                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
-            }
-        }
-    }
-</script>
-
 <template>
-    <card :title="title">
+    <card :title="__('Categories')">
         <template #header>
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Category') }}
             </inertia-link>
         </template>
-        <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-table-column :label="__('Photo')">
-                <template #default="item">
-                    <img
-                        class="table-preview-image"
-                        :src="item.media[0] ? item.media[0].urls.thumb : '/vendor/bazar/img/placeholder.svg'"
-                        :alt="item.name"
-                    >
-                </template>
+        <data-table :response="response" :filters="filters">
+            <data-table-column :label="__('Photo')" #default="item">
+                <img
+                    class="table-preview-image"
+                    :src="item.media[0] ? item.media[0].urls.thumb : '/vendor/bazar/img/placeholder.svg'"
+                    :alt="item.name"
+                >
             </data-table-column>
-            <data-table-column :label="__('Name')" sort="name">
-                <template #default="item">
-                    <inertia-link :href="`${url}/${item.id}`">
-                        {{ item.name }}
-                    </inertia-link>
-                </template>
+            <data-table-column :label="__('Name')" sort="name" #default="item">
+                <inertia-link :href="`${url}/${item.id}`">
+                    {{ item.name }}
+                </inertia-link>
             </data-table-column>
-            <data-table-column :label="__('Created at')" sort="created_at">
-                <template #default="item">
-                    {{ formatDate(item.created_at) }}
-                </template>
+            <data-table-column :label="__('Created at')" sort="created_at" #default="item">
+                {{ formatDate(item.created_at) }}
             </data-table-column>
         </data-table>
     </card>
 </template>
+
+<script>
+    export default {
+        props: {
+            response: {
+                type: Object,
+                require: true,
+            },
+            filters: {
+                type: Object,
+                require: true,
+            },
+        },
+
+        mounted() {
+            this.$parent.title = this.__('Categories');
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            },
+        },
+
+        methods: {
+            formatDate(date) {
+                return date.substr(0, 16).replace('T', ' ');
+            },
+        },
+    }
+</script>

@@ -45,7 +45,7 @@ class CategoriesController extends Controller
                         ->paginate($request->input('per_page'));
 
         return Inertia::render('Categories/Index', [
-            'results' => $categories,
+            'response' => $categories,
             'filters' => Category::proxy()::filters(),
         ]);
     }

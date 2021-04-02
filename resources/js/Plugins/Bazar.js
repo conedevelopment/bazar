@@ -5,9 +5,9 @@ import Password from './../Pages/Password';
 // import AddressesIndex from './../Pages/Addresses/Index';
 // import AddressesShow from './../Pages/Addresses/Show';
 // import AddressesCreate from './../Pages/Addresses/Create';
-// import CategoriesIndex from './../Pages/Categories/Index';
-// import CategoriesShow from './../Pages/Categories/Show';
-// import CategoriesCreate from './../Pages/Categories/Create';
+import CategoriesIndex from './../Pages/Categories/Index';
+import CategoriesShow from './../Pages/Categories/Show';
+import CategoriesCreate from './../Pages/Categories/Create';
 import OrdersIndex from './../Pages/Orders/Index';
 import OrdersShow from './../Pages/Orders/Show';
 import OrdersCreate from './../Pages/Orders/Create';
@@ -31,9 +31,9 @@ export default {
             // 'Addresses/Index': AddressesIndex,
             // 'Addresses/Show': AddressesShow,
             // 'Addresses/Create': AddressesCreate,
-            // 'Categories/Index': CategoriesIndex,
-            // 'Categories/Show': CategoriesShow,
-            // 'Categories/Create': CategoriesCreate,
+            'Categories/Index': CategoriesIndex,
+            'Categories/Show': CategoriesShow,
+            'Categories/Create': CategoriesCreate,
             'Orders/Index': OrdersIndex,
             'Orders/Show': OrdersShow,
             'Orders/Create': OrdersCreate,
