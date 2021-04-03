@@ -9,7 +9,7 @@
                 :id="$attrs.name"
                 :name="$attrs.name"
                 :class="{ 'is-invalid': $attrs.invalid }"
-                @change="udate"
+                @change="update"
             >
             <span v-if="$attrs.label" class="custom-control-label font-weight-bold">{{ $attrs.label }}</span>
         </label>
@@ -23,10 +23,6 @@
                 type: [Object, Array, String, Number, Boolean],
                 default: null,
             },
-            value: {
-                type: [Object, String, Number, Boolean],
-                default: null,
-            },
         },
 
         emits: ['update:modelValue'],
@@ -38,7 +34,7 @@
                 return ! Array.isArray(this.modelValue);
             },
             checked() {
-                const json = JSON.stringify(this.value);
+                const json = JSON.stringify(this.$attrs.value);
 
                 return this.isSwitch ? this.modelValue : this.modelValue.some((value) => {
                     return JSON.stringify(value) === json;
@@ -53,11 +49,11 @@
                 } else if (! this.checked) {
                     let value = Array.from(this.modelValue);
 
-                    value.push(this.value);
+                    value.push(this.$attrs.value);
 
                     this.$emit('update:modelValue', value);
                 } else {
-                    const json = JSON.stringify(this.value);
+                    const json = JSON.stringify(this.$attrs.value);
                     let value = Array.from(this.modelValue);
 
                     value.splice(this.modelValue.findIndex((value) => {
