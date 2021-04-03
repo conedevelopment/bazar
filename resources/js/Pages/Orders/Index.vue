@@ -70,7 +70,7 @@
             },
             formatDate(date) {
                 return date.substr(0, 16).replace('T', ' ');
-            }
+            },
         },
     }
 </script>

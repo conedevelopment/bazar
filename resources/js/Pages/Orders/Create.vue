@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" ref="form" :action="$page.props.action" :data="order" #default="form">
+    <data-form class="row" ref="form" :action="action" :data="order" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('User')" class="mb-5">
                 <data-form-input
@@ -355,6 +355,12 @@
             return {
                 title: this.__('Create Order'),
             };
+        },
+
+        computed: {
+            action() {
+                return '/bazar/categories';
+            },
         },
 
         methods: {

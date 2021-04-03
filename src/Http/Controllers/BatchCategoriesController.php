@@ -42,9 +42,8 @@ class BatchCategoriesController extends Controller
 
         Category::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
 
-        return Redirect::back()->with(
-            'message', __(':count categories have been updated.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count categories have been updated.', ['count' => count($id)]));
     }
 
     /**
@@ -62,9 +61,8 @@ class BatchCategoriesController extends Controller
 
         $request->has('force') ? $categories->forceDelete() : $categories->delete();
 
-        return Redirect::back()->with(
-            'message', __(':count categories have been deleted.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count categories have been deleted.', ['count' => count($id)]));
     }
 
     /**
@@ -81,8 +79,7 @@ class BatchCategoriesController extends Controller
             ->whereIn('id', $id = $request->input('id', []))
             ->restore();
 
-        return Redirect::back()->with(
-            'message', __(':count categories have been restored.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count categories have been restored.', ['count' => count($id)]));
     }
 }

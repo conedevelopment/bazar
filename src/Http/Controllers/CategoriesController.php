@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -61,7 +60,6 @@ class CategoriesController extends Controller
 
         return Inertia::render('Categories/Create', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.store'),
         ]);
     }
 
@@ -79,9 +77,8 @@ class CategoriesController extends Controller
             Arr::pluck($request->input('media', []), 'id')
         );
 
-        return Redirect::route('bazar.categories.show', $category)->with(
-            'message', __('The category has been created.')
-        );
+        return Redirect::route('bazar.categories.show', $category)
+                        ->with('message', __('The category has been created.'));
     }
 
     /**
@@ -96,7 +93,6 @@ class CategoriesController extends Controller
 
         return Inertia::render('Categories/Show', [
             'category' => $category,
-            'action' => URL::route('bazar.categories.update', $category),
         ]);
     }
 
@@ -115,9 +111,8 @@ class CategoriesController extends Controller
             Arr::pluck($request->input('media', []), 'id')
         );
 
-        return Redirect::route('bazar.categories.show', $category)->with(
-            'message', __('The category has been updated.')
-        );
+        return Redirect::route('bazar.categories.show', $category)
+                        ->with('message', __('The category has been updated.'));
     }
 
     /**
@@ -130,9 +125,8 @@ class CategoriesController extends Controller
     {
         $category->trashed() ? $category->forceDelete() : $category->delete();
 
-        return Redirect::route('bazar.categories.index')->with(
-            'message', __('The category has been deleted.')
-        );
+        return Redirect::route('bazar.categories.index')
+                        ->with('message', __('The category has been deleted.'));
     }
 
     /**
@@ -145,8 +139,7 @@ class CategoriesController extends Controller
     {
         $category->restore();
 
-        return Redirect::back()->with(
-            'message', __('The category has been restored.')
-        );
+        return Redirect::back()
+                        ->with('message', __('The category has been restored.'));
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="$parent.user" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="$parent.user" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('Profile')">
                 <data-form-input
@@ -36,6 +36,12 @@
 
         mounted() {
             this.$parent.title = this.__('Profile');
+        },
+
+        computed: {
+            action() {
+                return '/bazar/profile';
+            },
         },
     }
 </script>

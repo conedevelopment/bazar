@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" :action="$page.props.action" :data="user" #default="form">
+    <data-form class="row" :action="action" :data="user" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <data-form-input
@@ -43,6 +43,13 @@
 
         mounted() {
             this.$parent.title = this.__('Create User');
+        },
+
+
+        computed: {
+            action() {
+                return '/bazar/users';
+            },
         },
     }
 </script>

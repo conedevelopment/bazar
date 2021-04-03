@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="variant" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="variant" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('Variation')" class="mb-5">
                 <div v-if="hasProperties">
@@ -183,6 +183,9 @@
             },
             hasProperties() {
                 return Object.keys(this.variant.product.properties).length;
+            },
+            action() {
+                return `/bazar/products/${this.variant.product.id}/variants/${this.variant.id}`;
             },
         },
 

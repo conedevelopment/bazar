@@ -5,7 +5,6 @@ namespace Bazar\Http\Controllers;
 use Bazar\Http\Requests\ProfileUpdateRequest as UpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,9 +17,7 @@ class ProfileController extends Controller
      */
     public function show(): Response
     {
-        return Inertia::render('Profile', [
-            'action' => URL::route('bazar.profile.update'),
-        ]);
+        return Inertia::render('Profile');
     }
 
     /**
@@ -35,8 +32,7 @@ class ProfileController extends Controller
             $request->validated()
         );
 
-        return Redirect::route('bazar.profile.show')->with(
-            'message', __('Your profile has been updated.')
-        );
+        return Redirect::route('bazar.profile.show')
+                        ->with('message', __('Your profile has been updated.'));
     }
 }

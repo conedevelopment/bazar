@@ -10,7 +10,7 @@ const debounce = (callback, delay = 300) => {
         timeoutID = setTimeout(function () {
             callback.apply(that, args);
         }, delay);
-    }
+    };
 };
 
 export default (el, binding) => {

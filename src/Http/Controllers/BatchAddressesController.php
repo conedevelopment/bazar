@@ -43,9 +43,8 @@ class BatchAddressesController extends Controller
 
         $user->addresses()->whereIn('id', $id = $request->input('id', []))->update($data);
 
-        return Redirect::back()->with(
-            'message', __(':count address have been updated.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count address have been updated.', ['count' => count($id)]));
     }
 
     /**
@@ -59,8 +58,7 @@ class BatchAddressesController extends Controller
     {
         $user->addresses()->whereIn('id', $id = $request->input('id', []))->delete();
 
-        return Redirect::back()->with(
-            'message', __(':count addresses have been deleted.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count addresses have been deleted.', ['count' => count($id)]));
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" ref="form" method="PATCH" :action="$page.props.action" :data="product" #default="form">
+    <data-form class="row" ref="form" method="PATCH" :action="action" :data="product" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')" class="mb-5">
                 <data-form-input
@@ -231,6 +231,9 @@
         computed: {
             config() {
                 return window.Bazar.config;
+            },
+            action() {
+                return `/bazar/products/${this.product.id}`;
             },
         },
 

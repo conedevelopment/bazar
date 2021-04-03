@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="address" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="address" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <div class="row">
@@ -130,6 +130,10 @@
                 type: Object,
                 required: true,
             },
+            user: {
+                type: Object,
+                required: true,
+            },
             countries: {
                 type: Object,
                 required: true,
@@ -140,6 +144,12 @@
 
         mounted() {
             this.$parent.title = this.address.alias;
+        },
+
+        computed: {
+            action() {
+                return `/bazar/users/${this.user.id}/addresses/${this.address.id}`;
+            },
         },
     }
 </script>

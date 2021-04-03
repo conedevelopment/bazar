@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="category" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="category" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <data-form-input
@@ -54,6 +54,12 @@
 
         mountes() {
             this.$parent.title = this.category.name;
+        },
+
+        computed: {
+            action() {
+                return `/bazar/categories/${this.category.id}`;
+            },
         },
     }
 </script>

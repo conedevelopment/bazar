@@ -6,7 +6,6 @@ use Bazar\Http\Requests\PasswordUpdateRequest as UpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,9 +18,7 @@ class PasswordController extends Controller
      */
     public function show(): Response
     {
-        return Inertia::render('Password', [
-            'action' => URL::route('bazar.password.update'),
-        ]);
+        return Inertia::render('Password');
     }
 
     /**
@@ -38,8 +35,7 @@ class PasswordController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        return Redirect::route('bazar.password.show')->with(
-            'message', __('Your password has been updated.')
-        );
+        return Redirect::route('bazar.password.show')
+                        ->with('message', __('Your password has been updated.'));
     }
 }

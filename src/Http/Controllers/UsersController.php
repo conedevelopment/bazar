@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response as ResponseFactory;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -64,7 +63,6 @@ class UsersController extends Controller
 
         return Inertia::render('Users/Create', [
             'user' => $user,
-            'action' => URL::route('bazar.users.store'),
         ]);
     }
 
@@ -78,9 +76,8 @@ class UsersController extends Controller
     {
         $user = User::proxy()->newQuery()->create($request->validated());
 
-        return Redirect::route('bazar.users.show', $user)->with(
-            'message', __('The user has been created.')
-        );
+        return Redirect::route('bazar.users.show', $user)
+                        ->with('message', __('The user has been created.'));
     }
 
     /**
@@ -93,7 +90,6 @@ class UsersController extends Controller
     {
         return Inertia::render('Users/Show', [
             'user' => $user,
-            'action' => URL::route('bazar.users.update', $user),
         ]);
     }
 
@@ -108,9 +104,8 @@ class UsersController extends Controller
     {
         $user->update($request->validated());
 
-        return Redirect::route('bazar.users.show', $user)->with(
-            'message', __('The user has been updated.')
-        );
+        return Redirect::route('bazar.users.show', $user)
+                        ->with('message', __('The user has been updated.'));
     }
 
     /**
@@ -123,16 +118,13 @@ class UsersController extends Controller
     public function destroy(Request $request, User $user): RedirectResponse
     {
         if ($user->id === $request->user()->id) {
-            return Redirect::back()->with(
-                'message', __('The authenticated user cannot be deleted.')
-            );
+            return Redirect::back()->with('message', __('The authenticated user cannot be deleted.'));
         }
 
         $user->trashed() ? $user->forceDelete() : $user->delete();
 
-        return Redirect::route('bazar.users.index')->with(
-            'message', __('The user has been deleted.')
-        );
+        return Redirect::route('bazar.users.index')
+                        ->with('message', __('The user has been deleted.'));
     }
 
     /**
@@ -145,8 +137,7 @@ class UsersController extends Controller
     {
         $user->restore();
 
-        return Redirect::back()->with(
-            'message', __('The user has been restored.')
-        );
+        return Redirect::back()
+                        ->with('message', __('The user has been restored.'));
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="passwords" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="passwords" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('Password')">
                 <data-form-input
@@ -52,6 +52,12 @@
                     password_confirmation: null,
                 },
             };
+        },
+
+        computed: {
+            action() {
+                return '/bazar/password';
+            },
         },
     }
 </script>
