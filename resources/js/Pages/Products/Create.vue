@@ -15,7 +15,7 @@
                     v-model="form.data.slug"
                 ></data-form-input>
                 <data-form-input
-                    type="editor"
+                    handler="editor"
                     name="description"
                     :label="__('Description')"
                     v-model="form.data.description"
@@ -48,7 +48,7 @@
                         </button>
                     </div>
                     <data-form-input
-                        type="tag"
+                        handler="tag"
                         :name="`properties.${key}`"
                         v-model="form.data.properties[key]"
                     ></data-form-input>
@@ -84,7 +84,7 @@
             <card :title="__('Inventory')">
                 <template #header>
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="inventory.virtual"
                         :label="__('Virtual')"
                         v-model="form.data.inventory.virtual"
@@ -144,7 +144,7 @@
                 </div>
                 <div class="form-group">
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="inventory.virtual"
                         :label="__('Downloadable')"
                         v-model="form.data.inventory.downloadable"
@@ -159,7 +159,7 @@
                     <div class="form-group is-checkbox-list">
                         <data-form-input
                             v-for="(category, index) in categories"
-                            type="checkbox"
+                            handler="checkbox"
                             name="categories"
                             :key="index"
                             :label="category.name"
@@ -172,7 +172,7 @@
                     </div>
                 </card>
                 <card :title="__('Media')" class="mb-5">
-                    <data-form-input type="media" name="media" multiple v-model="form.data.media"></data-form-input>
+                    <data-form-input handler="media" name="media" multiple v-model="form.data.media"></data-form-input>
                 </card>
                 <card :title="__('Actions')">
                     <div class="form-group d-flex justify-content-between mb-0">

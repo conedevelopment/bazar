@@ -17,7 +17,7 @@
                 <div class="sticky-helper">
                     <card :title="__('Settings')" class="mb-5">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="status"
                             :label="__('Status')"
                             :options="statuses"

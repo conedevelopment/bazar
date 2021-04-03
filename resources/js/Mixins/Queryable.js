@@ -29,25 +29,12 @@ export default {
         };
     },
 
-    computed: {
-        items() {
-            return this.response.data || [];
-        },
-        config() {
-            return {
-                method: 'GET',
-                url: this.endpoint,
-                params: this.query,
-            };
-        },
-    },
-
     methods: {
         fetch() {
             this.busy = true;
             this.errors.clear();
 
-            this.$http(this.config).then((response) => {
+            this.$http.get(this.endpoint, { params: this.query }).then((response) => {
                 this.response = response.data;
             }).catch((error) => {
                 this.errors.fill(error.response.data.errors);

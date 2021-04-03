@@ -2,7 +2,7 @@
     <div class="custom-control" :class="{ 'custom-checkbox': ! isSwitch, 'custom-switch': isSwitch }">
         <label class="mb-0">
             <input
-                type="checkbox"
+                handler="checkbox"
                 class="custom-control-input"
                 v-bind="$attrs"
                 :checked="checked"

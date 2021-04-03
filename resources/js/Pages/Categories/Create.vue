@@ -15,7 +15,7 @@
                     v-model="form.data.slug"
                 ></data-form-input>
                 <data-form-input
-                    type="editor"
+                    handler="editor"
                     name="description"
                     :label="__('Description')"
                     v-model="form.data.description"
@@ -26,7 +26,7 @@
             <div class="sticky-helper">
                 <card :title="__('Media')" class="mb-5">
                     <data-form-input
-                        type="media"
+                        handler="media"
                         name="media"
                         v-model="form.data.media"
                     ></data-form-input>

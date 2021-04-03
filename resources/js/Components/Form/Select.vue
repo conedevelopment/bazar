@@ -31,9 +31,6 @@
                 type: Object,
                 required: true,
             },
-            type: {
-                type: String,
-            },
         },
 
         emits: ['update:modelValue'],

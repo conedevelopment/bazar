@@ -11,7 +11,7 @@ export default {
         },
         total() {
             return this.$parent.response.total || 0;
-        }
+        },
     },
 
     methods: {
@@ -26,6 +26,6 @@ export default {
         },
         isCurrent(page) {
             return this.$parent.response.current_page === page;
-        }
-    }
+        },
+    },
 }

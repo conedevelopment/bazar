@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="country"
                             :label="__('Country')"
                             :options="countries"
@@ -105,7 +105,7 @@
                         v-model="form.data.alias"
                     ></data-form-input>
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="default"
                         :label="__('Default Address')"
                         v-model="form.data.default"

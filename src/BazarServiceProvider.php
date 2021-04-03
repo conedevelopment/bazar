@@ -91,9 +91,10 @@ class BazarServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
 
-            $this->app['router']->get('bazar/download', Http\Controllers\DownloadController::class)
-                                ->name('bazar.download')
-                                ->middleware('signed');
+            $this->app['router']
+                 ->get('bazar/download', Http\Controllers\DownloadController::class)
+                 ->name('bazar.download')
+                 ->middleware('signed');
         }
     }
 
@@ -227,7 +228,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerAuth(): void
     {
-        Gate::define('manage-bazar', static function (Contracts\Models\User $user): bool {
+        Gate::define('manage-bazar', static function (Models\User $user): bool {
             return $user->isAdmin();
         });
     }
@@ -259,9 +260,6 @@ class BazarServiceProvider extends ServiceProvider
         Support\Facades\Menu::resource(URL::to('bazar/products'), __('Products'), ['icon' => 'product']);
         Support\Facades\Menu::resource(URL::to('bazar/categories'), __('Categories'), ['icon' => 'category']);
         Support\Facades\Menu::resource(URL::to('bazar/users'), __('Users'), ['icon' => 'customer']);
-        Support\Facades\Menu::register(URL::to('bazar/support'), __('Support'), [
-            'icon' => 'support',
-            'group' => __('Tools'),
-        ]);
+        Support\Facades\Menu::register(URL::to('bazar/support'), __('Support'), ['icon' => 'support', 'group' => __('Tools')]);
     }
 }

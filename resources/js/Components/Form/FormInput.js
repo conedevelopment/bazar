@@ -19,9 +19,9 @@ export default {
             type: String,
             required: true,
         },
-        type: {
+        handler: {
             type: String,
-            required: true,
+            default: 'input',
         },
     },
 
@@ -32,9 +32,8 @@ export default {
     inject: ['form'],
 
     render() {
-        return h(this.getComponent(this.type), Object.assign({}, this.$attrs, {
+        return h(this.getComponent(this.handler), Object.assign({}, this.$attrs, {
             name: this.name,
-            type: this.type,
             error: this.error,
             invalid: this.invalid,
             modelValue: this.modelValue,
@@ -61,8 +60,8 @@ export default {
                 this.form.errors.clear(this.name);
             }
         },
-        getComponent(type) {
-            switch (type) {
+        getComponent(handler) {
+            switch (handler) {
                 case 'autocomplete':
                     return Autocomplete;
                 case 'select':
