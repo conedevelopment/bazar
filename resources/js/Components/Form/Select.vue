@@ -4,10 +4,9 @@
         <select
             class="form-control custom-select"
             v-bind="$attrs"
-            :modelValue="modelValue"
             :id="$attrs.name"
             :class="{ 'is-invalid': $attrs.invalid }"
-            @change="update"
+            v-model="value"
         >
             <option :value="null" disabled>--- {{ $attrs.label }} ---</option>
             <option v-for="(label, option) in options" :key="label" :value="option">
@@ -35,9 +34,14 @@
 
         emits: ['update:modelValue'],
 
-        methods: {
-            update(event) {
-                this.$emit('update:modelValue', event.target.value);
+        computed: {
+            value: {
+                set(value) {
+                    this.$emit('update:modelValue', value);
+                },
+                get() {
+                    return JSON.parse(JSON.stringify(this.modelValue));
+                },
             },
         },
     }

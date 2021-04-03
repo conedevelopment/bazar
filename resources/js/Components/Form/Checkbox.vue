@@ -2,14 +2,14 @@
     <div class="custom-control" :class="{ 'custom-checkbox': ! isSwitch, 'custom-switch': isSwitch }">
         <label class="mb-0">
             <input
-                handler="checkbox"
+                type="checkbox"
                 class="custom-control-input"
                 v-bind="$attrs"
                 :checked="checked"
                 :id="$attrs.name"
                 :name="$attrs.name"
                 :class="{ 'is-invalid': $attrs.invalid }"
-                @change="update"
+                @change="udate"
             >
             <span v-if="$attrs.label" class="custom-control-label font-weight-bold">{{ $attrs.label }}</span>
         </label>
@@ -20,6 +20,10 @@
     export default {
         props: {
             modelValue: {
+                type: [Object, Array, String, Number, Boolean],
+                default: null,
+            },
+            value: {
                 type: [Object, String, Number, Boolean],
                 default: null,
             },
@@ -27,12 +31,14 @@
 
         emits: ['update:modelValue'],
 
+        inheritAttrs: false,
+
         computed: {
             isSwitch() {
                 return ! Array.isArray(this.modelValue);
             },
             checked() {
-                const json = JSON.stringify(this.$attrs.value);
+                const json = JSON.stringify(this.value);
 
                 return this.isSwitch ? this.modelValue : this.modelValue.some((value) => {
                     return JSON.stringify(value) === json;
@@ -47,11 +53,11 @@
                 } else if (! this.checked) {
                     let value = Array.from(this.modelValue);
 
-                    value.push(this.$attrs.value);
+                    value.push(this.value);
 
                     this.$emit('update:modelValue', value);
                 } else {
-                    const json = JSON.stringify(this.$attrs.value);
+                    const json = JSON.stringify(this.value);
                     let value = Array.from(this.modelValue);
 
                     value.splice(this.modelValue.findIndex((value) => {

@@ -58,8 +58,8 @@ app.component('media-manager', MediaManager);
 
 import Form from './Components/Form/Form';
 app.component('data-form', Form);
-import Input from './Components/Form/FormInput';
-app.component('data-form-input', Input);
+import Handler from './Components/Form/Handler';
+app.component('data-form-input', Handler);
 
 import Table from './Components/Table/Table';
 app.component('data-table', Table);
