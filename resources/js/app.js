@@ -75,5 +75,11 @@ import DispatchesEvents from './Mixins/DispatchesEvents';
 app.mixin(DispatchesEvents);
 
 // Mount
-app.mount(el);
-el.removeAttribute('data-page');
+document.addEventListener('bazar:boot', () => {
+    document.dispatchEvent(new CustomEvent('bazar:booting', { detail: app }));
+
+    app.mount(el);
+    el.removeAttribute('data-page');
+
+    document.dispatchEvent(new CustomEvent('bazar:booted', { detail: app }));
+});

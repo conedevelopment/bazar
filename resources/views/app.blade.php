@@ -33,6 +33,11 @@
     @foreach(Bazar\Support\Facades\Asset::scripts() as $script)
         <script src="{{ $script['url'] }}" defer></script>
     @endforeach
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.dispatchEvent(new Event('bazar:boot'));
+        });
+    </script>
 
     {{-- Title --}}
     <title>Bazar</title>
