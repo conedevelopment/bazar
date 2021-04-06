@@ -4,7 +4,8 @@
             <div class="col-12">
                 <breadcrumbs></breadcrumbs>
                 <h1 class="app-header__title mt-3 mt-md-2">
-                    {{ $parent.title }}
+                    <icon :name="$parent.icon"></icon>
+                    <span>{{ $parent.title }}</span>
                 </h1>
             </div>
         </div>

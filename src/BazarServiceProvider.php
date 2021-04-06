@@ -256,7 +256,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     public function registerMenuItems(): void
     {
-        Support\Facades\Menu::resource(URL::to('bazar/orders'), __('Orders'), ['icon' => 'shop-basket']);
+        Support\Facades\Menu::resource(URL::to('bazar/orders'), __('Orders'), ['icon' => 'order']);
         Support\Facades\Menu::resource(URL::to('bazar/products'), __('Products'), ['icon' => 'product']);
         Support\Facades\Menu::resource(URL::to('bazar/categories'), __('Categories'), ['icon' => 'category']);
         Support\Facades\Menu::resource(URL::to('bazar/users'), __('Users'), ['icon' => 'customer']);

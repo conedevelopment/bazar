@@ -143,6 +143,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'address';
             this.$parent.title = this.address.alias;
         },
 

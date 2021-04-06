@@ -47,6 +47,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'customer';
             this.$parent.title = this.user.name;
         },
 

@@ -52,7 +52,8 @@
             },
         },
 
-        mountes() {
+        mounted() {
+            this.$parent.icon = 'category';
             this.$parent.title = this.category.name;
         },
 

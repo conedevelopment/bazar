@@ -53,6 +53,7 @@
         },
 
         mounted() {
+            this.$parent.icon = 'category';
             this.$parent.title = this.__('Create Category');
         },
 

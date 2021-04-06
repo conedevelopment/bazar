@@ -66,12 +66,13 @@
         },
 
         mounted() {
+            this.$parent.icon = 'order';
             this.$parent.title = this.__('Order #:id', { id: this.order.id });
         },
 
         computed: {
             action() {
-                return `/bazar/orders/${order.id}`;
+                return `/bazar/orders/${this.order.id}`;
             },
         },
     }

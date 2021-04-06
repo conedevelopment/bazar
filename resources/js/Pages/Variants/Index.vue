@@ -47,6 +47,7 @@
         },
 
         mounted() {
+            this.$parent.icon = 'product';
             this.$parent.title = this.__('Variants');
         },
 

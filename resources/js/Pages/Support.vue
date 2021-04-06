@@ -41,5 +41,10 @@
         },
 
         inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'support';
+            this.$parent.title = this.__('Support');
+        },
     }
 </script>

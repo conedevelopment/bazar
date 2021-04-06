@@ -178,6 +178,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'product';
             this.$parent.title = this.__('Create Variant');
         },
 

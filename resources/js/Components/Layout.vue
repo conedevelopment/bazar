@@ -9,13 +9,22 @@
         },
 
         mounted() {
+            document.title = `Bazar | ${this.title}`;
+
             this.$inertia.on('success', (event) => {
                 this.key = (new Date).getTime();
             });
         },
 
+        watch: {
+            title(newValue, oldValue) {
+                document.title = `Bazar | ${newValue}`;
+            },
+        },
+
         data() {
             return {
+                icon: 'dashboard',
                 key: (new Date).getTime(),
                 title: this.__('Dashboard'),
             };
@@ -44,7 +53,7 @@
                     <inertia-link href="/bazar" class="app-mobile-header__logo">
                         <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
                     </inertia-link>
-                    <button type="button" class="app-mobile-header__menu-toggle" @click.prevent="$refs.sidebar.toggle">
+                    <button type="button" class="app-mobile-header__menu-toggle" @click="$refs.sidebar.toggle">
                         <icon name="menu"></icon>
                     </button>
                 </div>

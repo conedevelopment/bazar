@@ -45,6 +45,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'order';
             this.$parent.title = this.__('Orders');
         },
 

@@ -38,11 +38,12 @@
 
 <script>
     export default {
+        inheritAttrs: false,
+
         mounted() {
+            this.$parent.icon = 'customer';
             this.$parent.title = this.__('Password');
         },
-
-        inheritAttrs: false,
 
         data() {
             return {
