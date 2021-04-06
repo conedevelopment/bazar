@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Manager from '../../Components/Media/Manager';
+import Manager from './../../resources/js/Components/Media/Manager';
 
 describe('Manager.vue', () => {
     const wrapper = shallowMount(Manager, {

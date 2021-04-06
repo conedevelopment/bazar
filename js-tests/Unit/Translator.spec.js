@@ -1,4 +1,4 @@
-import Translator from './../../Support/Translator.js';
+import Translator from './../../resources/js/Support/Translator.js';
 
 test('it translates strings', () => {
     const translator = new Translator({
