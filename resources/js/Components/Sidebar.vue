@@ -7,7 +7,7 @@
         mounted() {
             this.setActiveLinks();
 
-            this.$inertia.on('success', event => {
+            this.$inertia.on('success', (event) => {
                 this.setActiveLinks();
             });
         },
@@ -22,7 +22,7 @@
             setActiveLinks() {
                 const path = window.location.pathname.replace(/\/$/, '');
 
-                this.$el.querySelectorAll('a.app-sidebar-menu-link').forEach(el => {
+                this.$el.querySelectorAll('a.app-sidebar-menu-link').forEach((el) => {
                     if (el.pathname !== '/bazar' && path.includes(el.pathname)) {
                         el.closest('.app-sidebar-menu-item').classList.add('is-open');
                     } else {
@@ -30,7 +30,7 @@
                     }
                 });
 
-                this.$el.querySelectorAll('.app-sidebar__inside a').forEach(el => {
+                this.$el.querySelectorAll('.app-sidebar__inside a').forEach((el) => {
                     if (path === el.pathname) {
                         el.classList.add('is-active');
                     } else {
@@ -44,7 +44,7 @@
 
 <template>
     <div class="app__sidebar">
-        <div class="modal app-sidebar-overlay" v-cloak v-show="isOpen" @click.self="close"></div>
+        <div class="modal app-sidebar-overlay" v-show="isOpen" @click.self="close"></div>
         <aside class="app-sidebar" :class="{ 'is-open': isOpen }">
             <div class="app-logo-wrapper">
                 <inertia-link href="/bazar" class="app-logo">
@@ -87,9 +87,9 @@
                         <button class="loggedin-user dropdown-toggle" type="button" style="max-width: 100%;">
                             <span class="loggedin-user__welcome">{{ __('Hi') }},</span>
                             <span class="loggedin-user__name" style="max-width: 100%; overflow: hidden; text-overflow: ellipsis;">
-                                {{ $page.admin.name }}
+                                {{ $parent.user.name }}
                             </span>
-                            <img class="loggedin-user__avatar" :src="$page.admin.avatar" :alt="$page.admin.name">
+                            <img class="loggedin-user__avatar" :src="$parent.user.avatar" :alt="$parent.user.name">
                         </button>
                     </template>
                     <template #default>
@@ -107,7 +107,7 @@
                     </template>
                 </dropdown>
                 <form id="logout-form" action="/logout" method="POST" style="display: none;">
-                    <input type="hidden" name="_token" :value="$page.csrf_token">
+                    <input type="hidden" name="_token" :value="$page.props.csrf_token">
                 </form>
             </div>
         </aside>

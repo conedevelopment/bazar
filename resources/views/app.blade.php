@@ -22,24 +22,22 @@
     {{-- Scripts --}}
     <script>
         window.Bazar = {
-            app: null,
             pages: {},
             menu: @json($menu),
+            user: @json($user),
+            config: @json($config),
             translations: @json($translations),
-            boot: function () {
-                ['booting', '_boot_', 'booted'].forEach(function (event) {
-                    document.dispatchEvent(new CustomEvent('bazar:'+event, {
-                        detail: { Bazar }
-                    }));
-                });
-            }
         };
     </script>
     <script src="{{ URL::asset('vendor/bazar/app.js') }}" defer></script>
     @foreach(Bazar\Support\Facades\Asset::scripts() as $script)
         <script src="{{ $script['url'] }}" defer></script>
     @endforeach
-    <script>document.addEventListener('DOMContentLoaded', Bazar.boot);</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.dispatchEvent(new Event('bazar:boot'));
+        });
+    </script>
 
     {{-- Title --}}
     <title>Bazar</title>

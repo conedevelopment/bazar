@@ -23,20 +23,8 @@ export default class Translator
     {
         string = this.translations[string] || string;
 
-        return this._replace(string, replace);
-    }
-
-    /**
-     * Replace the placeholders.
-     *
-     * @param  {string}  translation
-     * @param  {object}  replace
-     * @return {string}
-     */
-    _replace(translation, replace)
-    {
         for (let placeholder in replace) {
-            translation = translation.toString()
+            string = string.toString()
                 .replace(`:${placeholder}`, replace[placeholder])
                 .replace(`:${placeholder.toUpperCase()}`, replace[placeholder].toString().toUpperCase())
                 .replace(
@@ -45,6 +33,6 @@ export default class Translator
                 );
         }
 
-        return translation.toString().trim();
+        return string.toString().trim();
     }
 }

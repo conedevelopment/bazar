@@ -44,9 +44,8 @@ class BatchVariantsController extends Controller
 
         $product->variants()->whereIn('id', $id = $request->input('id', []))->update($data);
 
-        return Redirect::back()->with(
-            'message', __(':count variants have been updated.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count variants have been updated.', ['count' => count($id)]));
     }
 
     /**
@@ -62,9 +61,8 @@ class BatchVariantsController extends Controller
 
         $request->has('force') ? $variants->forceDelete() : $variants->delete();
 
-        return Redirect::back()->with(
-            'message', __(':count variants have been deleted.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count variants have been deleted.', ['count' => count($id)]));
     }
 
     /**
@@ -78,8 +76,7 @@ class BatchVariantsController extends Controller
     {
         $product->variants()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
-        return Redirect::back()->with(
-            'message', __(':count variants have been restored.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count variants have been restored.', ['count' => count($id)]));
     }
 }

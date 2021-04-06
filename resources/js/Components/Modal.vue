@@ -7,12 +7,12 @@
         props: {
             title: {
                 type: String,
-                default: null
-            }
+                default: null,
+            },
         },
 
         mounted() {
-            window.addEventListener('keyup', event => {
+            window.addEventListener('keyup', (event) => {
                 if (this.isOpen && event.code === 'Escape') {
                     this.close();
                 }
@@ -20,20 +20,14 @@
         },
 
         watch: {
-            isOpen(n, o) {
-                if (n) {
+            isOpen(newValue, oldValue) {
+                if (newValue) {
                     this.$root.$el.classList.add('has-modal-open');
                 } else {
                     this.$root.$el.classList.remove('has-modal-open');
                 }
-            }
+            },
         },
-
-        computed: {
-            modal() {
-                return this;
-            }
-        }
     }
 </script>
 
@@ -48,10 +42,10 @@
                     </button>
                 </div>
                 <div class="modal-body flex-column">
-                    <slot v-bind="modal"></slot>
+                    <slot></slot>
                 </div>
                 <div class="modal-footer">
-                    <slot name="footer" v-bind="modal">
+                    <slot name="footer">
                         <button type="button" class="btn btn-outline-primary" @click.prevent="close">
                             {{ __('Close') }}
                         </button>

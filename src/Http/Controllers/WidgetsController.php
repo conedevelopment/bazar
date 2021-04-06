@@ -23,7 +23,7 @@ class WidgetsController extends Controller
         $orders = Cache::remember('bazar.activities', 3600, static function (): Collection {
             return Order::proxy()->newQuery()->latest()->take(3)->get()->map(static function (Order $order): array {
                 return [
-                    'icon' => 'shop-basket',
+                    'icon' => 'order',
                     'url' => route('bazar.orders.show', $order),
                     'title' => __('Order #:id', ['id' => $order->id]),
                     'description' => __('A new order was placed'),

@@ -1,11 +1,13 @@
-import axios from 'axios';
+import Axios from 'axios';
 
 export default {
-    install(Vue) {
-        Vue.prototype.$http = axios.create({
+    install(app) {
+        app.config.globalProperties.$http = Axios.create({
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
         });
-    }
+    },
 }

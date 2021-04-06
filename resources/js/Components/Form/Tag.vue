@@ -1,54 +1,10 @@
-<script>
-    import Field from './../../Mixins/Field';
-
-    export default {
-        mixins: [Field],
-
-        props: {
-            value: {
-                type: Array,
-                default: () => []
-            }
-        },
-
-        watch: {
-            tags(n, o) {
-                this.$emit('input', n);
-            }
-        },
-
-        data() {
-            return {
-                tag: '',
-                tags: this.value || []
-            }
-        },
-
-        methods: {
-            add() {
-                if (this.tag && ! this.tags.includes(this.tag)) {
-                    this.tags.push(this.tag);
-                    this.tag = '';
-                }
-            },
-            remove(index) {
-                this.tags.splice(index, 1);
-            },
-            removeLast() {
-                if (! this.tag) {
-                    this.tags.pop();
-                }
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="form-group">
-        <div class="tag-control" :class="{ 'is-invalid': invalid }" @click.self="$refs.input.focus()">
-            <span v-for="(tag, index) in tags" :key="index" class="tag is-small">
-                <span class="tag__label">{{ tag }}</span>
-                <button type="button" class="tag__remove" @click.prevent="remove(index)">
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
+        <div class="tag-control" :class="{ 'is-invalid': $attrs.invalid }" @click.self="$refs.input.focus">
+            <span v-for="(item, index) in modelValue" :key="index" class="tag is-small">
+                <span class="tag__label">{{ item }}</span>
+                <button type="button" class="tag__remove" @click="remove(index)">
                     <icon name="close"></icon>
                 </button>
             </span>
@@ -56,19 +12,61 @@
                 ref="input"
                 type="text"
                 v-model="tag"
-                v-bind="attrs"
+                v-bind="$attrs"
                 class="form-control-plaintext"
                 style="width: 150px;"
                 :placeholder="__('Add value')"
-                :name="name"
-                :id="name"
+                :name="$attrs.name"
+                :id="$attrs.name"
                 @blur="add"
                 @keydown.enter="add"
                 @keydown.backspace="removeLast"
             >
         </div>
-        <span v-if="help || invalid" class="form-text" :class="{ 'text-danger': invalid }">
-            {{ error || help }}
+        <span v-if="$attrs.invalid" class="form-text invalid">
+            {{ $attrs.error }}
         </span>
     </div>
 </template>
+
+<script>
+    export default {
+        props: {
+            modelValue: {
+                type: Array,
+                default: () => [],
+            },
+        },
+
+        emits: ['update:modelValue'],
+
+        data() {
+            return {
+                tag: null,
+            };
+        },
+
+        methods: {
+            add() {
+                if (this.tag && ! this.modelValue.includes(this.tag)) {
+                    let value = Array.from(this.modelValue);
+                    value.push(this.tag);
+                    this.$emit('update:modelValue', value);
+                    this.tag = null;
+                }
+            },
+            remove(index) {
+                let value = Array.from(this.modelValue);
+                value.splice(index, 1);
+                this.$emit('update:modelValue', value);
+            },
+            removeLast() {
+                if (! this.tag) {
+                    let value = Array.from(this.modelValue);
+                    value.pop();
+                    this.$emit('update:modelValue', value);
+                }
+            },
+        },
+    }
+</script>

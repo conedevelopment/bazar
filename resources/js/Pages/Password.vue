@@ -1,41 +1,64 @@
+<template>
+    <data-form class="row" method="PATCH" :action="action" :data="passwords" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
+            <card :title="__('Password')">
+                <data-form-input
+                    type="password"
+                    name="current_password"
+                    :label="__('Current Password')"
+                    v-model="form.data.current_password"
+                ></data-form-input>
+                <data-form-input
+                    type="password"
+                    name="password"
+                    :label="__('New Password')"
+                    v-model="form.data.password"
+                ></data-form-input>
+                <data-form-input
+                    type="password"
+                    name="password_confirmation"
+                    :label="__('New Password Confirmation')"
+                    v-model="form.data.password_confirmation"
+                ></data-form-input>
+            </card>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
+    </data-form>
+</template>
+
 <script>
     export default {
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'customer';
+            this.$parent.title = this.__('Password');
+        },
+
         data() {
             return {
-                title: this.__('Password'),
                 passwords: {
                     current_password: null,
                     password: null,
-                    password_confirmation: null
-                }
+                    password_confirmation: null,
+                },
             };
-        }
+        },
+
+        computed: {
+            action() {
+                return '/bazar/password';
+            },
+        },
     }
 </script>
-
-<template>
-    <data-form :action="$page.action" :model="passwords" custom method="PATCH">
-        <template #default="form">
-            <div class="row">
-                <div class="col-12 col-lg-7 col-xl-8 form__body">
-                    <card :title="__('Password')">
-                        <form-input name="current_password" type="password" :label="__('Current Password')" v-model="form.fields.current_password"></form-input>
-                        <form-input name="password" type="password" :label="__('New Password')" v-model="form.fields.password"></form-input>
-                        <form-input name="password_confirmation" type="password" :label="__('New Password Confirmation')" v-model="form.fields.password_confirmation"></form-input>
-                    </card>
-                </div>
-                <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
-                    <div class="sticky-helper">
-                        <card :title="__('Actions')">
-                            <div class="form-group d-flex justify-content-between mb-0">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Update') }}
-                                </button>
-                            </div>
-                        </card>
-                    </div>
-                </div>
-            </div>
-        </template>
-    </data-form>
-</template>

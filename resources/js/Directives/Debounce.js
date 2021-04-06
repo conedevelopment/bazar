@@ -10,12 +10,12 @@ const debounce = (callback, delay = 300) => {
         timeoutID = setTimeout(function () {
             callback.apply(that, args);
         }, delay);
-    }
+    };
 };
 
 export default (el, binding) => {
     if (binding.value !== binding.oldValue) {
-        el.oninput = debounce(event => {
+        el.oninput = debounce((event) => {
             el.dispatchEvent(new Event('change'));
         }, parseInt(binding.value) || 300);
     }

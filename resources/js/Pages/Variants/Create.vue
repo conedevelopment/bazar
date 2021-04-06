@@ -1,40 +1,17 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Create Variant')
-            };
-        },
-
-        computed: {
-            hasProperties() {
-                return Object.keys(this.$page.variant.product.properties).length;
-            }
-        },
-
-        methods: {
-            selection(properties) {
-                return properties.reduce((stack, property) => {
-                    return Object.assign(stack, { [property]: this.__(property) });
-                }, { '*': this.__('Any') });
-            }
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.variant">
-        <template #default="form">
+    <data-form class="row" :action="action" :data="variant" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('Variation')" class="mb-5">
                 <div v-if="hasProperties">
                     <div class="row">
-                        <div v-for="(values, name) in $page.variant.product.properties" :key="name" class="col">
-                            <form-select
+                        <div v-for="(values, name) in variant.product.properties" :key="name" class="col">
+                            <data-form-input
+                                handler="select"
                                 :name="`variation.${name}`"
                                 :label="__(name)"
                                 :options="selection(values)"
-                                v-model="form.fields.variation[name]"
-                            ></form-select>
+                                v-model="form.data.variation[name]"
+                            ></data-form-input>
                         </div>
                     </div>
                     <div v-if="form.errors.has('variation')" class="row">
@@ -50,93 +27,179 @@
                 </div>
             </card>
             <card :title="__('Pricing')" class="mb-5">
-                <div v-for="(symbol, currency) in $page.currencies" :key="currency" class="row">
+                <div v-for="(symbol, currency) in currencies" :key="currency" class="row">
                     <div class="col">
-                        <form-input
-                            v-model="form.fields.prices[currency].default"
+                        <data-form-input
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.default`"
+                            :name="`form.data.prices.${currency}.default`"
                             :label="__('Price (:CURRENCY)', { currency })"
-                        ></form-input>
+                            v-model="form.data.prices[currency].default"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
-                            v-model="form.fields.prices[currency].sale"
+                        <data-form-input
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.sale`"
+                            :name="`form.data.prices.${currency}.sale`"
                             :label="__('Sale Price (:CURRENCY)', { currency })"
-                        ></form-input>
+                            v-model="form.data.prices[currency].sale"
+                        ></data-form-input>
                     </div>
                 </div>
             </card>
             <card :title="__('Inventory')">
                 <template #header>
-                    <form-checkbox name="inventory.virtual" :label="__('Virtual')" v-model="form.fields.inventory.virtual"></form-checkbox>
+                    <data-form-input
+                        handler="checkbox"
+                        name="inventory.virtual"
+                        :label="__('Virtual')"
+                        v-model="form.data.inventory.virtual"
+                    ></data-form-input>
                 </template>
-                <form-input name="inventory.sku" :label="__('SKU')" v-model="form.fields.inventory.sku"></form-input>
-                <form-input
+                <data-form-input
+                    type="text"
+                    name="inventory.sku"
+                    :label="__('SKU')"
+                    v-model="form.data.inventory.sku"
+                ></data-form-input>
+                <data-form-input
+                    type="number"
                     name="inventory.quantity"
                     min="0"
-                    type="number"
                     :label="__('Quantity')"
                     :help="__('Leave it empty for disabling quantity tracking.')"
-                    v-model="form.fields.inventory.quantity"
-                    v-show="! form.fields.inventory.virtual"
-                ></form-input>
-                <form-input
+                    v-model="form.data.inventory.quantity"
+                    v-show="! form.data.inventory.virtual"
+                ></data-form-input>
+                <data-form-input
                     name="inventory.weight"
                     min="0"
                     type="number"
-                    :label="__('Weight (:unit)', { unit: $page.config.weight_unit })"
-                    v-model="form.fields.inventory.weight"
-                    v-show="! form.fields.inventory.virtual"
-                ></form-input>
-                <div class="row align-items-end" v-show="! form.fields.inventory.virtual">
+                    :label="__('Weight (:unit)', { unit: config.weight_unit })"
+                    v-model="form.data.inventory.weight"
+                    v-show="! form.data.inventory.virtual"
+                ></data-form-input>
+                <div class="row align-items-end" v-show="! form.data.inventory.virtual">
                     <div class="col">
-                        <form-input
+                        <data-form-input
+                            type="number"
                             name="inventory.length"
                             min="0"
-                            type="number"
-                            :label="__('Length (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.length"
-                        ></form-input>
+                            :label="__('Length (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.length"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
+                        <data-form-input
+                            type="number"
                             name="inventory.width"
                             min="0"
-                            type="number"
-                            :label="__('Width (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.width"
-                        ></form-input>
+                            :label="__('Width (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.width"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
+                        <data-form-input
                             name="inventory.height"
                             min="0"
                             type="number"
-                            :label="__('Height (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.height"
-                        ></form-input>
+                            :label="__('Height (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.height"
+                        ></data-form-input>
                     </div>
                 </div>
                 <div class="form-group">
-                    <form-checkbox name="inventory.virtual" :label="__('Downloadable')" v-model="form.fields.inventory.downloadable"></form-checkbox>
+                    <data-form-input
+                        handler="checkbox"
+                        name="inventory.virtual"
+                        :label="__('Downloadable')"
+                        v-model="form.data.inventory.downloadable"
+                    ></data-form-input>
                 </div>
-                <form-downloads name="inventory.files" v-model="form.fields.inventory.files" v-show="form.fields.inventory.downloadable"></form-downloads>
+                <files v-model="form.data.inventory.files" v-show="form.data.inventory.downloadable"></files>
             </card>
-        </template>
-        <template #aside="form">
-            <card :title="__('General')" class="mb-5">
-                <form-input name="alias" :label="__('Alias')" v-model="form.fields.alias"></form-input>
-            </card>
-            <card :title="__('Media')" class="mb-5">
-                <form-media name="media" multiple v-model="form.fields.media"></form-media>
-            </card>
-        </template>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('General')" class="mb-5">
+                    <data-form-input
+                        type="text"
+                        name="alias"
+                        :label="__('Alias')"
+                        v-model="form.data.alias"
+                    ></data-form-input>
+                </card>
+                <card :title="__('Media')" class="mb-5">
+                    <data-form-input
+                        handler="media"
+                        name="media"
+                        multiple
+                        v-model="form.data.media"
+                    ></data-form-input>
+                </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    import Files from './../../Components/Product/Files';
+
+    export default {
+        components: {
+            Files,
+        },
+
+        props: {
+            variant: {
+                type: Object,
+                required: true,
+            },
+            product: {
+                type: Object,
+                required: true,
+            },
+            currencies: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'product';
+            this.$parent.title = this.__('Create Variant');
+        },
+
+        computed: {
+            config() {
+                return window.Bazar.config;
+            },
+            hasProperties() {
+                return Object.keys(this.variant.product.properties).length;
+            },
+            action() {
+                return `/bazar/products/${this.product.id}/variants`;
+            },
+        },
+
+        methods: {
+            selection(properties) {
+                return properties.reduce((stack, property) => {
+                    return Object.assign(stack, { [property]: this.__(property) });
+                }, { '*': this.__('Any') });
+            },
+        },
+    }
+</script>

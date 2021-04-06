@@ -45,9 +45,8 @@ class BatchProductsController extends Controller
             ->whereIn('id', $id = $request->input('id', []))
             ->update($data);
 
-        return Redirect::back()->with(
-            'message', __(':count products have been updated.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count products have been updated.', ['count' => count($id)]));
     }
 
     /**
@@ -65,9 +64,8 @@ class BatchProductsController extends Controller
 
         $request->has('force') ? $products->forceDelete() : $products->delete();
 
-        return Redirect::back()->with(
-            'message', __(':count products have been deleted.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count products have been deleted.', ['count' => count($id)]));
     }
 
     /**
@@ -84,8 +82,7 @@ class BatchProductsController extends Controller
             ->whereIn('id', $id = $request->input('id', []))
             ->restore();
 
-        return Redirect::back()->with(
-            'message', __(':count products have been restored.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count products have been restored.', ['count' => count($id)]));
     }
 }

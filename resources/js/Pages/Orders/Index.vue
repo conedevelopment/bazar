@@ -1,9 +1,58 @@
+<template>
+    <card :title="__('Orders')">
+        <template #header>
+            <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
+                {{ __('Create Order') }}
+            </inertia-link>
+        </template>
+        <data-table :response="response" :filters="filters">
+            <data-table-column :label="__('ID')" sort="id" #default="item">
+                <inertia-link :href="`${url}/${item.id}`">
+                    #{{ item.id }}
+                </inertia-link>
+            </data-table-column>
+            <data-table-column :label="__('Total')" #default="item">
+                {{ item.formatted_total }}
+            </data-table-column>
+            <data-table-column :label="__('Customer')" #default="item">
+                {{ item.address.name }}
+            </data-table-column>
+            <data-table-column :label="__('Status')" sort="status" #default="item">
+                <span class="badge" :class="badgeClass(item.status)">
+                    {{ item.status_name }}
+                </span>
+            </data-table-column>
+            <data-table-column :label="__('Created at')" sort="created_at" #default="item">
+                {{ formatDate(item.created_at) }}
+            </data-table-column>
+        </data-table>
+    </card>
+</template>
+
 <script>
     export default {
-        data() {
-            return {
-                title: this.__('Orders')
-            };
+        props: {
+            response: {
+                type: Object,
+                required: true,
+            },
+            filters: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'order';
+            this.$parent.title = this.__('Orders');
+        },
+
+        computed: {
+            url() {
+                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
+            },
         },
 
         methods: {
@@ -22,54 +71,7 @@
             },
             formatDate(date) {
                 return date.substr(0, 16).replace('T', ' ');
-            }
+            },
         },
-
-        computed: {
-            url() {
-                return window.location.href.replace(window.location.search, '').replace(/\/$/, '');
-            }
-        }
     }
 </script>
-
-<template>
-    <card :title="title">
-        <template #header>
-            <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
-                {{ __('Create Order') }}
-            </inertia-link>
-        </template>
-        <data-table :response="$page.results" :filters="$page.filters" searchable>
-            <data-column :label="__('ID')" sort="id">
-                <template #default="item">
-                    <inertia-link :href="`${url}/${item.id}`">
-                        #{{ item.id }}
-                    </inertia-link>
-                </template>
-            </data-column>
-            <data-column :label="__('Total')">
-                <template #default="item">
-                    {{ item.formatted_total }}
-                </template>
-            </data-column>
-            <data-column :label="__('Customer')">
-                <template #default="item">
-                    {{ item.address.name }}
-                </template>
-            </data-column>
-            <data-column :label="__('Status')" sort="status">
-                <template #default="item">
-                    <span class="badge" :class="badgeClass(item.status)">
-                        {{ item.status_name }}
-                    </span>
-                </template>
-            </data-column>
-            <data-column :label="__('Created at')" sort="created_at">
-                <template #default="item">
-                    {{ formatDate(item.created_at) }}
-                </template>
-            </data-column>
-        </data-table>
-    </card>
-</template>

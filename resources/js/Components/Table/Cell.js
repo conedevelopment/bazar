@@ -1,12 +1,16 @@
+import { h } from 'vue';
+
 export default {
     props: {
         column: {
             type: Object,
-            required: true
-        }
+            required: true,
+        },
     },
 
-    render(createElement) {
-        return createElement('div', {}, this.column.$scopedSlots.default(this.$parent.item));
-    }
+    functional: true,
+
+    render() {
+        return h('div', {}, this.column.$slots.default(this.$parent.item));
+    },
 }

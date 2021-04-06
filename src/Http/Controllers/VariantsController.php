@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,14 +46,11 @@ class VariantsController extends Controller
                         ->paginate($request->input('per_page'));
 
         $variants->getCollection()->each(static function (Variant $variant) use ($product): void {
-            $variant->setRelation(
-                'product', $product->withoutRelations()->makeHidden('variants')
-            );
+            $variant->setRelation('product', $product->withoutRelations()->makeHidden('variants'));
         });
 
         return Inertia::render('Variants/Index', [
-            'product' => $product,
-            'results' => $variants,
+            'response' => $variants,
             'filters' => Variant::proxy()::filters(),
         ]);
     }
@@ -76,7 +72,6 @@ class VariantsController extends Controller
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variants.store', $product),
         ]);
     }
 
@@ -95,9 +90,8 @@ class VariantsController extends Controller
             Arr::pluck($request->input('media', []), 'id')
         );
 
-        return Redirect::route('bazar.products.variants.show', [$product, $variant])->with(
-            'message', __('The variant has been created.')
-        );
+        return Redirect::route('bazar.products.variants.show', [$product, $variant])
+                        ->with('message', __('The variant has been created.'));
     }
 
     /**
@@ -117,7 +111,6 @@ class VariantsController extends Controller
             'product' => $product,
             'variant' => $variant,
             'currencies' => Bazar::currencies(),
-            'action' => URL::route('bazar.products.variants.update', [$product, $variant]),
         ]);
     }
 
@@ -137,9 +130,8 @@ class VariantsController extends Controller
             Arr::pluck($request->input('media', []), 'id')
         );
 
-        return Redirect::route('bazar.products.variants.show', [$product, $variant])->with(
-            'message', __('The variant has been updated.')
-        );
+        return Redirect::route('bazar.products.variants.show', [$product, $variant])
+                        ->with('message', __('The variant has been updated.'));
     }
 
     /**
@@ -153,9 +145,8 @@ class VariantsController extends Controller
     {
         $variant->trashed() ? $variant->forceDelete() : $variant->delete();
 
-        return Redirect::route('bazar.products.variants.index', $product)->with(
-            'message', __('The variant has been deleted.')
-        );
+        return Redirect::route('bazar.products.variants.index', $product)
+                        ->with('message', __('The variant has been deleted.'));
     }
 
     /**
@@ -169,8 +160,7 @@ class VariantsController extends Controller
     {
         $variant->restore();
 
-        return Redirect::back()->with(
-            'message', __('The variant has been restored.')
-        );
+        return Redirect::back()
+                        ->with('message', __('The variant has been restored.'));
     }
 }

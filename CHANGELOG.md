@@ -1,5 +1,7 @@
 # Changelog
 
+## v0.7.0 (Unreleased)
+
 ## v0.6.0 (2021-03-29)
 ### Added
 - Added retries to the uploader component, to make sure, the image is loaded after the job is finished

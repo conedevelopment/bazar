@@ -35,7 +35,7 @@ class OrdersTest extends TestCase
             ->get(URL::route('bazar.orders.index'))
             ->assertOk()
             ->assertViewHas(
-                'page.props.results',
+                'page.props.response',
                 Order::query()->with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
             );
     }

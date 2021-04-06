@@ -61,7 +61,7 @@ class CommandsTest extends TestCase
         $bazarPackages = json_decode(file_get_contents(__DIR__.'/../../package.json'), true);
         $packages = json_decode(file_get_contents(App::basePath('package.json')), true);
 
-        $this->assertEmpty(array_diff_key($bazarPackages['devDependencies'], $packages['devDependencies']));
+        $this->assertEmpty(array_diff_key($bazarPackages['dependencies'], $packages['dependencies']));
 
         $this->artisan('bazar:publish', ['--mix' => true])
             ->assertExitCode(Command::SUCCESS);

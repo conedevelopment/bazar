@@ -17,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -51,7 +50,7 @@ class OrdersController extends Controller
                     ->paginate($request->input('per_page'));
 
         return Inertia::render('Orders/Index', [
-            'results' => $orders,
+            'response' => $orders,
             'filters' => Order::proxy()::filters(),
         ]);
     }
@@ -75,7 +74,6 @@ class OrdersController extends Controller
             'countries' => Countries::all(),
             'currencies' => Bazar::currencies(),
             'statuses' => Order::proxy()::statuses(),
-            'action' => URL::route('bazar.orders.store', $order),
             'drivers' => Collection::make(Shipping::enabled())->map->name(),
         ]);
     }
@@ -100,9 +98,8 @@ class OrdersController extends Controller
 
         $order->products()->attach(array_column($data['products'], 'item', 'id'));
 
-        return Redirect::route('bazar.orders.show', $order)->with(
-            'message', __('The order has been created.')
-        );
+        return Redirect::route('bazar.orders.show', $order)
+                        ->with('message', __('The order has been created.'));
     }
 
     /**
@@ -118,7 +115,6 @@ class OrdersController extends Controller
         return Inertia::render('Orders/Show', [
             'order' => $order,
             'statuses' => Order::proxy()::statuses(),
-            'action' => URL::route('bazar.orders.update', $order),
         ]);
     }
 
@@ -133,9 +129,8 @@ class OrdersController extends Controller
     {
         $order->update($request->validated());
 
-        return Redirect::route('bazar.orders.show', $order)->with(
-            'message', __('The order has been updated.')
-        );
+        return Redirect::route('bazar.orders.show', $order)
+                        ->with('message', __('The order has been updated.'));
     }
 
     /**
@@ -148,9 +143,8 @@ class OrdersController extends Controller
     {
         $order->trashed() ? $order->forceDelete() : $order->delete();
 
-        return Redirect::route('bazar.orders.index')->with(
-            'message', __('The order has been deleted.')
-        );
+        return Redirect::route('bazar.orders.index')
+                        ->with('message', __('The order has been deleted.'));
     }
 
     /**
@@ -163,8 +157,7 @@ class OrdersController extends Controller
     {
         $order->restore();
 
-        return Redirect::back()->with(
-            'message', __('The order has been restored.')
-        );
+        return Redirect::back()
+                        ->with('message', __('The order has been restored.'));
     }
 }

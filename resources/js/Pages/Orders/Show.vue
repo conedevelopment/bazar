@@ -1,3 +1,66 @@
+<template>
+    <div>
+        <data-form class="row" method="PATCH" :action="action" :data="order" #default="form">
+            <div class="col-12 col-lg-7 col-xl-8 form__body">
+                <card :title="__('General')" class="mb-5">
+                    <order-info :order="order"></order-info>
+                </card>
+                <card :title="__('Products')">
+                    <div v-if="! order.products.length" class="alert alert-info  mb-0">
+                        {{ __('There are no products yet.') }}
+                    </div>
+                    <products-table v-else :order="order"></products-table>
+                </card>
+            </div>
+
+            <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+                <div class="sticky-helper">
+                    <card :title="__('Settings')" class="mb-5">
+                        <data-form-input
+                            handler="select"
+                            name="status"
+                            :label="__('Status')"
+                            :options="statuses"
+                            v-model="form.data.status"
+                        ></data-form-input>
+                    </card>
+                    <card :title="__('Actions')">
+                        <div class="form-group d-flex justify-content-between mb-0">
+                            <inertia-link
+                                as="button"
+                                method="DELETE"
+                                class="btn btn-outline-danger"
+                                :href="action"
+                                :disabled="form.busy"
+                            >
+                                {{ order.deleted_at ? __('Delete') : __('Trash') }}
+                            </inertia-link>
+                            <inertia-link
+                                v-if="order.deleted_at"
+                                as="button"
+                                method="PATCH"
+                                class="btn btn-warning"
+                                :href="`${action}/restore`"
+                                :disabled="form.busy"
+                            >
+                                {{ __('Restore') }}
+                            </inertia-link>
+                            <button v-else type="submit" class="btn btn-primary" :disabled="form.busy">
+                                {{ __('Save') }}
+                            </button>
+                        </div>
+                    </card>
+                </div>
+            </div>
+        </data-form>
+        <div class="row">
+            <div class="col-12 col-lg-7 col-xl-8 mt-5">
+                <transactions :order="order"></transactions>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script>
     import OrderInfo from './../../Components/Order/OrderInfo';
     import Transactions from './../../Components/Order/Transactions';
@@ -7,41 +70,29 @@
         components: {
             OrderInfo,
             Transactions,
-            ProductsTable
+            ProductsTable,
         },
 
-        data() {
-            return {
-                title: this.__('Order #:id', { id: this.$page.order.id })
-            };
-        }
+        props: {
+            order: {
+                type: Object,
+                required: true,
+            },
+            statuses: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        mounted() {
+            this.$parent.icon = 'order';
+            this.$parent.title = this.__('Order #:id', { id: this.order.id });
+        },
+
+        computed: {
+            action() {
+                return `/bazar/orders/${this.order.id}`;
+            },
+        },
     }
 </script>
-
-<template>
-    <div>
-        <data-form :action="$page.action" :model="$page.order">
-            <template #default>
-                <card :title="__('General')" class="mb-5">
-                    <order-info :order="$page.order"></order-info>
-                </card>
-                <card :title="__('Products')">
-                    <div v-if="! $page.order.products.length" class="alert alert-info  mb-0">
-                        {{ __('There are no products yet.') }}
-                    </div>
-                    <products-table v-else :order="$page.order"></products-table>
-                </card>
-            </template>
-            <template #aside="form">
-                <card :title="__('Settings')" class="mb-5">
-                    <form-select name="status" :label="__('Status')" :options="$page.statuses" v-model="form.fields.status"></form-select>
-                </card>
-            </template>
-        </data-form>
-        <div class="row">
-            <div class="col-12 col-lg-7 col-xl-8 mt-5">
-                <transactions :order="$page.order"></transactions>
-            </div>
-        </div>
-    </div>
-</template>

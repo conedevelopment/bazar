@@ -19,7 +19,7 @@ class UsersTest extends TestCase
             ->get(URL::route('bazar.users.index'))
             ->assertOk()
             ->assertViewHas(
-                'page.props.results', User::with('addresses')->paginate()->toArray()
+                'page.props.response', User::with('addresses')->paginate()->toArray()
             );
     }
 

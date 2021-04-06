@@ -64,11 +64,11 @@ class Publish extends Command
         if (file_exists(App::basePath('package.json'))) {
             $packages = json_decode(file_get_contents(App::basePath('package.json')), true);
 
-            $packages['devDependencies'] = array_replace(
-                ($packages['devDependencies'] ?? []), $bazarPackages['devDependencies']
+            $packages['dependencies'] = array_replace(
+                $packages['dependencies'] ?? [], $bazarPackages['dependencies']
             );
 
-            ksort($packages['devDependencies']);
+            ksort($packages['dependencies']);
         }
 
         file_put_contents(

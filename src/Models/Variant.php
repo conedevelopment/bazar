@@ -157,6 +157,20 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the formatted price by the given type and currency.
+     *
+     * @param  string  $type
+     * @param  string|null  $currency
+     * @return string|null
+     */
+    public function formattedPrice(string $type = 'default', string $currency = null): ?string
+    {
+        $currency = $currency ?: Bazar::currency();
+
+        return $this->prices->format("{$currency}.{$type}") ?: $this->product->prices->format("{$currency}.{$type}");
+    }
+
+    /**
      * Scope the query only to the given search term.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

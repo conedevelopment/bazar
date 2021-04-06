@@ -1,61 +1,48 @@
+<template>
+    <div class="form-group">
+        <label v-if="$attrs.label" :for="$attrs.name">{{ $attrs.label }}</label>
+        <select
+            class="form-control custom-select"
+            v-bind="$attrs"
+            :id="$attrs.name"
+            :class="{ 'is-invalid': $attrs.invalid }"
+            v-model="value"
+        >
+            <option :value="null" disabled>--- {{ $attrs.label }} ---</option>
+            <option v-for="(label, option) in options" :key="label" :value="option">
+                {{ label }}
+            </option>
+        </select>
+        <span v-if="$attrs.invalid" class="form-text text-danger">
+            {{ $attrs.error }}
+        </span>
+    </div>
+</template>
+
 <script>
-    import Field from './../../Mixins/Field';
-
     export default {
-        mixins: [Field],
-
         props: {
-            value: {
+            modelValue: {
                 type: [Object, String, Number],
                 default: null
             },
             options: {
                 type: Object,
-                required: true
-            }
+                required: true,
+            },
         },
 
-        watch: {
-            value(n, o) {
-                if (n !== this.selected) {
-                    this.selected = n;
-                }
-            }
-        },
+        emits: ['update:modelValue'],
 
-        data() {
-            return {
-                selected: this.value
-            };
+        computed: {
+            value: {
+                set(value) {
+                    this.$emit('update:modelValue', value);
+                },
+                get() {
+                    return JSON.parse(JSON.stringify(this.modelValue));
+                },
+            },
         },
-
-        methods: {
-            update(event) {
-                this.$emit('input', event.target.value);
-            }
-        }
     }
 </script>
-
-<template>
-    <div class="form-group">
-        <label v-if="label" :for="name">{{ label }}</label>
-        <select
-            class="custom-select form-control"
-            v-model="selected"
-            v-bind="attrs"
-            :id="name"
-            :name="name"
-            :class="{ 'is-invalid': invalid }"
-            @change="update"
-        >
-            <option :value="null" disabled>--- {{ label }} ---</option>
-            <option v-for="(label, option) in options" :value="option" :key="option">
-                {{ label }}
-            </option>
-        </select>
-        <span v-if="invalid" class="form-text text-danger">
-            {{ error }}
-        </span>
-    </div>
-</template>

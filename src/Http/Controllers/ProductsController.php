@@ -49,7 +49,7 @@ class ProductsController extends Controller
         return $request->expectsJson()
             ? ResponseFactory::json($products)
             : Inertia::render('Products/Index', [
-                'results' => $products,
+                'response' => $products,
                 'filters' => Product::proxy()::filters(),
             ]);
     }

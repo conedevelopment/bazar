@@ -1,133 +1,282 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.$page.product.name
-            };
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.product">
-        <template #default="form">
+    <data-form class="row" ref="form" method="PATCH" :action="action" :data="product" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')" class="mb-5">
-                <form-input name="name" :label="__('Name')" v-model="form.fields.name"></form-input>
-                <form-input name="slug" :label="__('Slug')" v-model="form.fields.slug"></form-input>
-                <form-editor name="description" :label="__('Description')" v-model="form.fields.description"></form-editor>
+                <data-form-input
+                    type="text"
+                    name="name"
+                    :label="__('Name')"
+                    v-model="form.data.name"
+                ></data-form-input>
+                <data-form-input
+                    type="text"
+                    name="slug"
+                    :label="__('Slug')"
+                    v-model="form.data.slug"
+                ></data-form-input>
+                <data-form-input
+                    handler="editor"
+                    name="description"
+                    :label="__('Description')"
+                    v-model="form.data.description"
+                ></data-form-input>
             </card>
             <card :title="__('Properties')" class="mb-5">
                 <template #header>
-                    <inertia-link :href="`${$page.action}/variants`" class="btn btn-sm btn-primary">
+                    <div class="form-group" style="max-width: 200px;">
+                        <div class="input-group input-group-sm">
+                            <input
+                                type="text"
+                                class="form-control"
+                                :placeholder="__('Property')"
+                                v-model="property"
+                                @keydown.enter="addProperty"
+                            >
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-outline-primary" :disabled="! property" @click="addProperty">
+                                    {{ __('Add') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <inertia-link :href="`/bazar/products/${product.id}/variants`" class="btn btn-primary btn-sm">
                         {{ __('Variants') }}
                     </inertia-link>
                 </template>
-                <form-options name="properties" v-model="form.fields.properties" :schema="[]">
-                    <template #default="{ key }">
-                        <form-tag :name="`properties.${key}`" v-model="form.fields.properties[key]"></form-tag>
-                    </template>
-                </form-options>
+                <div class="form-group" v-for="(properties, key) in form.data.properties" :key="key">
+                    <div class="d-flex">
+                        <label :for="`properties.${key}`">{{ __(key) }}</label>
+                        <button type="button" class="ml-2 icon-btn icon-btn-danger" @click="removeProperty(key)">
+                            <icon name="close"></icon>
+                        </button>
+                    </div>
+                    <data-form-input
+                        handler="tag"
+                        :name="`properties.${key}`"
+                        v-model="form.data.properties[key]"
+                    ></data-form-input>
+                </div>
+                <div v-if="form.data.properties.length === 0" class="mb-0 alert alert-info">
+                    {{ __('No properties.') }}
+                </div>
             </card>
             <card :title="__('Pricing')" class="mb-5">
-                <div v-for="(symbol, currency) in $page.currencies" :key="currency" class="row">
+                <div v-for="(symbol, currency) in currencies" :key="currency" class="row">
                     <div class="col">
-                        <form-input
-                            v-model="form.fields.prices[currency].default"
+                        <data-form-input
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.default`"
+                            :name="`form.data.prices.${currency}.default`"
                             :label="__('Price (:CURRENCY)', { currency })"
-                        ></form-input>
+                            v-model="form.data.prices[currency].default"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
-                            v-model="form.fields.prices[currency].sale"
+                        <data-form-input
                             type="number"
                             min="0"
                             step="0.1"
-                            :name="`form.fields.prices.${currency}.sale`"
+                            :name="`form.data.prices.${currency}.sale`"
                             :label="__('Sale Price (:CURRENCY)', { currency })"
-                        ></form-input>
+                            v-model="form.data.prices[currency].sale"
+                        ></data-form-input>
                     </div>
                 </div>
             </card>
             <card :title="__('Inventory')">
                 <template #header>
-                    <form-checkbox name="inventory.virtual" :label="__('Virtual')" v-model="form.fields.inventory.virtual"></form-checkbox>
+                    <data-form-input
+                        handler="checkbox"
+                        name="inventory.virtual"
+                        :label="__('Virtual')"
+                        v-model="form.data.inventory.virtual"
+                    ></data-form-input>
                 </template>
-                <form-input name="inventory.sku" :label="__('SKU')" v-model="form.fields.inventory.sku"></form-input>
-                <form-input
+                <data-form-input
+                    type="text"
+                    name="inventory.sku"
+                    :label="__('SKU')"
+                    v-model="form.data.inventory.sku"
+                ></data-form-input>
+                <data-form-input
                     name="inventory.quantity"
                     min="0"
                     type="number"
                     :label="__('Quantity')"
                     :help="__('Leave it empty for disabling quantity tracking.')"
-                    v-model="form.fields.inventory.quantity"
-                    v-show="! form.fields.inventory.virtual"
-                ></form-input>
-                <form-input
+                    v-model="form.data.inventory.quantity"
+                    v-show="! form.data.inventory.virtual"
+                ></data-form-input>
+                <data-form-input
                     name="inventory.weight"
                     min="0"
                     type="number"
-                    :label="__('Weight (:unit)', { unit: $page.config.weight_unit })"
-                    v-model="form.fields.inventory.weight"
-                    v-show="! form.fields.inventory.virtual"
-                ></form-input>
-                <div class="row align-items-end" v-show="! form.fields.inventory.virtual">
+                    :label="__('Weight (:unit)', { unit: config.weight_unit })"
+                    v-model="form.data.inventory.weight"
+                    v-show="! form.data.inventory.virtual"
+                ></data-form-input>
+                <div class="row align-items-end" v-show="! form.data.inventory.virtual">
                     <div class="col">
-                        <form-input
+                        <data-form-input
                             name="inventory.length"
                             min="0"
                             type="number"
-                            :label="__('Length (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.length"
-                        ></form-input>
+                            :label="__('Length (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.length"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
+                        <data-form-input
                             name="inventory.width"
                             min="0"
                             type="number"
-                            :label="__('Width (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.width"
-                        ></form-input>
+                            :label="__('Width (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.width"
+                        ></data-form-input>
                     </div>
                     <div class="col">
-                        <form-input
+                        <data-form-input
                             name="inventory.height"
                             min="0"
                             type="number"
-                            :label="__('Height (:unit)', { unit: $page.config.dimension_unit })"
-                            v-model="form.fields.inventory.height"
-                        ></form-input>
+                            :label="__('Height (:unit)', { unit: config.dimension_unit })"
+                            v-model="form.data.inventory.height"
+                        ></data-form-input>
                     </div>
                 </div>
                 <div class="form-group">
-                    <form-checkbox name="inventory.virtual" :label="__('Downloadable')" v-model="form.fields.inventory.downloadable"></form-checkbox>
+                    <data-form-input
+                        handler="checkbox"
+                        name="inventory.virtual"
+                        :label="__('Downloadable')"
+                        v-model="form.data.inventory.downloadable"
+                    ></data-form-input>
                 </div>
-                <form-downloads name="inventory.files" v-model="form.fields.inventory.files" v-show="form.fields.inventory.downloadable"></form-downloads>
+                <files
+                    v-model="form.data.inventory.files"
+                    v-show="form.data.inventory.downloadable"
+                ></files>
             </card>
-        </template>
-        <template #aside="form">
-            <card :title="__('Categories')" class="mb-5">
-                <div class="form-group is-checkbox-list">
-                    <form-checkbox
-                        v-for="(category, index) in $page.categories"
-                        name="categories"
-                        :key="index"
-                        :label="category.name"
-                        :value="category"
-                        v-model="form.fields.categories"
-                    ></form-checkbox>
-                    <span v-if="form.errors.has('categories')" class="form-text text-danger">
-                        {{ form.errors.get('categories') }}
-                    </span>
-                </div>
-            </card>
-            <card :title="__('Media')" class="mb-5">
-                <form-media name="media" multiple v-model="form.fields.media"></form-media>
-            </card>
-        </template>
+        </div>
+
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Categories')" class="mb-5">
+                    <div class="form-group is-checkbox-list">
+                        <data-form-input
+                            v-for="(category, index) in categories"
+                            handler="checkbox"
+                            name="categories"
+                            :key="index"
+                            :label="category.name"
+                            :value="category"
+                            v-model="form.data.categories"
+                        ></data-form-input>
+                        <span v-if="form.errors.has('categories')" class="form-text text-danger">
+                            {{ form.errors.get('categories') }}
+                        </span>
+                    </div>
+                </card>
+                <card :title="__('Media')" class="mb-5">
+                    <data-form-input handler="media" name="media" multiple v-model="form.data.media"></data-form-input>
+                </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <inertia-link
+                            as="button"
+                            method="DELETE"
+                            class="btn btn-outline-danger"
+                            :href="action"
+                            :disabled="form.busy"
+                        >
+                            {{ product.deleted_at ? __('Delete') : __('Trash') }}
+                        </inertia-link>
+                        <inertia-link
+                            v-if="product.deleted_at"
+                            as="button"
+                            method="PATCH"
+                            class="btn btn-warning"
+                            :href="`${action}/restore`"
+                            :disabled="form.busy"
+                        >
+                            {{ __('Restore') }}
+                        </inertia-link>
+                        <button v-else type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    import Files from './../../Components/Product/Files';
+
+    export default {
+        components: {
+            Files,
+        },
+
+        props: {
+            product: {
+                type: Object,
+                required: true,
+            },
+            currencies: {
+                type: Object,
+                required: true,
+            },
+            categories: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'product';
+            this.$parent.title = this.product.name;
+        },
+
+        data() {
+            return {
+                property: null,
+            };
+        },
+
+        computed: {
+            config() {
+                return window.Bazar.config;
+            },
+            action() {
+                return `/bazar/products/${this.product.id}`;
+            },
+        },
+
+        methods: {
+            addProperty() {
+                if (this.property && ! this.$refs.form.fields.properties.hasOwnProperty(this.property)) {
+                    Object.assign(
+                        this.$refs.form.fields,
+                        { properties: Object.assign({}, this.$refs.form.fields.properties, { [this.property]: [] }) }
+                    );
+
+                    this.property = null;
+                }
+            },
+            removeProperty(property) {
+                let properties = Object.assign({}, this.$refs.form.fields.properties);
+
+                properties = Object.keys(properties).reduce((items, key) => {
+                    return key === property ? items : Object.assign(items, { [key]: properties[key] });
+                }, {});
+
+                Object.assign(this.$refs.form.fields, { properties });
+            },
+        },
+    }
+</script>

@@ -1,20 +1,55 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.__('Create User')
-            };
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.user">
-        <template #default="form">
+    <data-form class="row" :action="action" :data="user" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
-                <form-input name="name" :label="__('Name')" v-model="form.fields.name"></form-input>
-                <form-input name="email" type="email" :label="__('Email')" v-model="form.fields.email"></form-input>
+                <data-form-input
+                    type="text"
+                    name="name"
+                    :label="__('Name')"
+                    v-model="form.data.name"
+                ></data-form-input>
+                <data-form-input
+                    name="email"
+                    type="email"
+                    :label="__('Email')"
+                    v-model="form.data.email"
+                ></data-form-input>
             </card>
-        </template>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    export default {
+        props: {
+            user: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'customer';
+            this.$parent.title = this.__('Create User');
+        },
+
+        computed: {
+            action() {
+                return '/bazar/users';
+            },
+        },
+    }
+</script>

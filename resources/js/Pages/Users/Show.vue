@@ -1,27 +1,79 @@
-<script>
-    export default {
-        data() {
-            return {
-                title: this.$page.user.name
-            };
-        }
-    }
-</script>
-
 <template>
-    <data-form :action="$page.action" :model="$page.user">
-        <template #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="user" #default="form">
+        <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
-                <form-input name="name" :label="__('Name')" v-model="form.fields.name"></form-input>
-                <form-input name="email" type="email" :label="__('Email')" v-model="form.fields.email"></form-input>
+                <data-form-input
+                    type="text"
+                    name="name"
+                    :label="__('Name')"
+                    v-model="form.data.name"
+                ></data-form-input>
+                <data-form-input
+                    name="email"
+                    type="email"
+                    :label="__('Email')"
+                    v-model="form.data.email"
+                ></data-form-input>
             </card>
-        </template>
-        <template #aside>
-            <card :title="__('Addresses')" class="mb-5">
-                <inertia-link :href="`${$page.action}/addresses`" class="btn btn-primary">
-                    {{ __('Manage Addresses') }}
-                </inertia-link>
-            </card>
-        </template>
+        </div>
+        <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
+            <div class="sticky-helper">
+                <card :title="__('Addresses')" class="mb-5">
+                    <inertia-link :href="`/bazar/users/${user.id}/addresses`" class="btn btn-primary">
+                        {{ __('Manage Addresses') }}
+                    </inertia-link>
+                </card>
+                <card :title="__('Actions')">
+                    <div class="form-group d-flex justify-content-between mb-0">
+                        <inertia-link
+                            as="button"
+                            method="DELETE"
+                            class="btn btn-outline-danger"
+                            :href="action"
+                            :disabled="form.busy || $parent.user.id === user.id"
+                        >
+                            {{ user.deleted_at ? __('Delete') : __('Trash') }}
+                        </inertia-link>
+                        <inertia-link
+                            v-if="user.deleted_at"
+                            as="button"
+                            method="PATCH"
+                            class="btn btn-warning"
+                            :href="`${action}/restore`"
+                            :disabled="form.busy"
+                        >
+                            {{ __('Restore') }}
+                        </inertia-link>
+                        <button v-else type="submit" class="btn btn-primary" :disabled="form.busy">
+                            {{ __('Save') }}
+                        </button>
+                    </div>
+                </card>
+            </div>
+        </div>
     </data-form>
 </template>
+
+<script>
+    export default {
+        props: {
+            user: {
+                type: Object,
+                required: true,
+            },
+        },
+
+        inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'customer';
+            this.$parent.title = this.user.name;
+        },
+
+        computed: {
+            action() {
+                return `/bazar/users/${this.user.id}`;
+            },
+        },
+    }
+</script>

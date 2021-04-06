@@ -1,3 +1,41 @@
+<template>
+    <section class="card">
+        <div class="card__header">
+            <h2 class="card__title">{{ __('Recent Activity') }}</h2>
+        </div>
+        <div class="card__inner">
+            <div v-if="activities.length" class="activities-scroll-helper" data-simplebar>
+                <div class="activities">
+                    <div v-for="(activity, index) in activities" :key="index" class="activity">
+                        <div class="activity__icon-helper">
+                            <div class="activity__icon">
+                                <icon :name="activity.icon"></icon>
+                            </div>
+                        </div>
+                        <div class="activity__content">
+                            <h3 class="activity__title">
+                                <inertia-link :href="activity.url">
+                                    {{ activity.title }}
+                                </inertia-link>
+                            </h3>
+                            <p class="activity__description">{{ activity.description }}</p>
+                            <div class="activity__meta">
+                                <time :datetime="activity.created_at">{{ activity.formatted_created_at }}</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="busy && ! activities.length" class="alert alert-light mb-0">
+                {{ __('Loading') }}...
+            </div>
+            <div v-else class="alert alert-info mb-0">
+                {{ __('No recent activities.') }}
+            </div>
+        </div>
+    </section>
+</template>
+
 <script>
     export default {
         mounted() {
@@ -7,54 +45,21 @@
         data() {
             return {
                 busy: false,
-                activities: []
+                activities: [],
             };
         },
 
         methods: {
             fetch() {
                 this.busy = true;
-                this.$http.get('/bazar/widgets/activities').then(response => {
+                this.$http.get('/bazar/widgets/activities').then((response) => {
                     this.activities = response.data;
-                }).catch(error => {
+                }).catch((error) => {
                     //
                 }).finally(() => {
                     this.busy = false;
                 });
-            }
-        }
+            },
+        },
     }
 </script>
-
-<template>
-    <card :title="__('Recent Activity')">
-        <div v-if="activities.length" class="activities-scroll-helper" data-simplebar>
-            <div class="activities">
-                <div v-for="(activity, index) in activities" :key="index" class="activity">
-                    <div class="activity__icon-helper">
-                        <div class="activity__icon">
-                            <icon :name="activity.icon"></icon>
-                        </div>
-                    </div>
-                    <div class="activity__content">
-                        <h3 class="activity__title">
-                            <inertia-link :href="activity.url">
-                                {{ activity.title }}
-                            </inertia-link>
-                        </h3>
-                        <p class="activity__description">{{ activity.description }}</p>
-                        <div class="activity__meta">
-                            <time :datetime="activity.created_at">{{ activity.formatted_created_at }}</time>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div v-else-if="busy && ! activities.length" class="alert alert-light mb-0">
-            {{ __('Loading...') }}
-        </div>
-        <div v-else class="alert alert-info mb-0">
-            {{ __('No recent activities.') }}
-        </div>
-    </card>
-</template>

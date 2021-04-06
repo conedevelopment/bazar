@@ -16,8 +16,7 @@ class PasswordTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($this->admin)
-            ->get(URL::route('bazar.password.show'))
-            ->assertViewHas('page.props.action', URL::route('bazar.password.update'));
+            ->get(URL::route('bazar.password.show'));
     }
 
     /** @test */

@@ -30,7 +30,7 @@ class AddressesTest extends TestCase
             ->get(URL::route('bazar.users.addresses.index', $this->user))
             ->assertOk()
             ->assertViewHas(
-                'page.props.results', $this->user->addresses()->paginate()->toArray()
+                'page.props.response', $this->user->addresses()->paginate()->toArray()
             );
     }
 

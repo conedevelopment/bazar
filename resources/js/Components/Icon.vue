@@ -1,16 +1,16 @@
+<template>
+    <svg class="icon" aria-hidden="true" role="img" fill="currentColor" viewBox="0 0 24 24" width="24" height="24">
+        <use :xlink:href="`#icon-${name}`"></use>
+    </svg>
+</template>
+
 <script>
     export default {
         props: {
             name: {
                 type: String,
-                required: true
-            }
-        }
+                required: true,
+            },
+        },
     }
 </script>
-
-<template>
-    <svg class="icon" :class="`icon-${name}`" aria-hidden="true" role="img" fill="currentColor">
-        <use :href="`#icon-${name}`" :xlink:href="`#icon-${name}`"></use>
-    </svg>
-</template>

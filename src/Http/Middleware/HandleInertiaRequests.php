@@ -2,7 +2,6 @@
 
 namespace Bazar\Http\Middleware;
 
-use Bazar\Models\User;
 use Bazar\Support\Breadcrumbs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -39,15 +38,6 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'csrf_token' => static function (): string {
                 return csrf_token();
-            },
-            'config' => static function (): array {
-                return [
-                    'weight_unit' => Config::get('bazar.weight_unit'),
-                    'dimension_unit' => Config::get('bazar.dimension_unit'),
-                ];
-            },
-            'admin' => static function () use ($request): ?User {
-                return $request->user();
             },
             'breadcrumbs' => static function () use ($request): Breadcrumbs {
                 return new Breadcrumbs($request);

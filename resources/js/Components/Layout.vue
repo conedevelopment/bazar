@@ -5,41 +5,42 @@
     export default {
         components: {
             AppHeader,
-            AppSidebar
+            AppSidebar,
         },
 
         mounted() {
-            this.setTitle();
+            document.title = `Bazar | ${this.title}`;
 
-            this.$inertia.on('success', event => {
-                this.setTitle();
+            this.$inertia.on('success', (event) => {
+                this.key = (new Date).getTime();
             });
+        },
+
+        watch: {
+            title(newValue, oldValue) {
+                document.title = `Bazar | ${newValue}`;
+            },
         },
 
         data() {
             return {
-                title: null
+                icon: 'dashboard',
+                key: (new Date).getTime(),
+                title: this.__('Dashboard'),
             };
         },
 
         computed: {
-            message() {
-                return this.$page.message || null;
+            user() {
+                return window.Bazar.user;
             },
-            error() {
-                return Object.keys(this.$page.errors).length > 0 ? this.__('Something went wrong!') : null;
-            }
+            message() {
+                return this.$page.props.message;
+            },
+            hasErrors() {
+                return Object.keys(this.$page.props.errors).length > 0;
+            },
         },
-
-        methods: {
-            setTitle() {
-                const title = this.$slots.default[0].componentInstance.title;
-
-                this.title = title;
-
-                document.title = 'Bazar' + (title ? ` | ${title}` : '');
-            }
-        }
     }
 </script>
 
@@ -52,14 +53,16 @@
                     <inertia-link href="/bazar" class="app-mobile-header__logo">
                         <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
                     </inertia-link>
-                    <button type="button" class="app-mobile-header__menu-toggle" @click.prevent="$refs.sidebar.toggle">
+                    <button type="button" class="app-mobile-header__menu-toggle" @click="$refs.sidebar.toggle">
                         <icon name="menu"></icon>
                     </button>
                 </div>
                 <app-header></app-header>
                 <div class="app__messages">
                     <alert v-if="message" :key="`message-${$parent.key}`" closable>{{ message }}</alert>
-                    <alert v-if="error" type="danger" :key="`error-${$parent.key}`" closable>{{ error }}</alert>
+                    <alert v-if="hasErrors" type="danger" :key="`error-${$parent.key}`" closable>
+                        {{ __('There is an error!') }}
+                    </alert>
                 </div>
                 <slot></slot>
             </div>

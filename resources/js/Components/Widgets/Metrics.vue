@@ -1,31 +1,3 @@
-<script>
-    export default {
-        mounted() {
-            this.fetch();
-        },
-
-        data() {
-            return {
-                busy: false,
-                metrics: {}
-            };
-        },
-
-        methods: {
-            fetch() {
-                this.busy = true;
-                this.$http.get('/bazar/widgets/metrics').then(response => {
-                    this.metrics = response.data;
-                }).catch(error => {
-                    //
-                }).finally(() => {
-                    this.busy = false;
-                });
-            }
-        }
-    }
-</script>
-
 <template>
     <div>
         <div class="col-12 col-sm-6 col-xl-4 mb-5">
@@ -66,3 +38,31 @@
         </div>
     </div>
 </template>
+
+<script>
+    export default {
+        mounted() {
+            this.fetch();
+        },
+
+        data() {
+            return {
+                busy: false,
+                metrics: {},
+            };
+        },
+
+        methods: {
+            fetch() {
+                this.busy = true;
+                this.$http.get('/bazar/widgets/metrics').then((response) => {
+                    this.metrics = response.data;
+                }).catch((error) => {
+                    //
+                }).finally(() => {
+                    this.busy = false;
+                });
+            },
+        },
+    }
+</script>

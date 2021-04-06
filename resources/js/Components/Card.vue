@@ -1,23 +1,3 @@
-<script>
-    export default {
-        props: {
-            title: {
-                type: String,
-                default: null
-            }
-        },
-
-        computed: {
-            hasHeader() {
-                return (!! this.title) || this.$scopedSlots.hasOwnProperty('header');
-            },
-            hasFooter() {
-                return this.$scopedSlots.hasOwnProperty('footer');
-            }
-        }
-    }
-</script>
-
 <template>
     <section class="card">
         <div v-if="hasHeader" class="card__header">
@@ -28,7 +8,27 @@
             <slot></slot>
         </div>
         <div v-if="hasFooter" class="card__footer">
-            <slot name="header"></slot>
+            <slot name="footer"></slot>
         </div>
     </section>
 </template>
+
+<script>
+    export default {
+        props: {
+            title: {
+                type: String,
+                default: null,
+            },
+        },
+
+        computed: {
+            hasHeader() {
+                return (!! this.title) || this.$slots.hasOwnProperty('header');
+            },
+            hasFooter() {
+                return this.$slots.hasOwnProperty('footer');
+            },
+        },
+    }
+</script>

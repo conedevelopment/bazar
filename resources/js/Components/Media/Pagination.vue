@@ -1,11 +1,3 @@
-<script>
-    import Pagable from './../../Mixins/Pagable';
-
-    export default {
-        mixins: [Pagable]
-    }
-</script>
-
 <template>
     <div class="d-flex justify-content-end align-items-center">
         <div class="form-group mr-3">
@@ -23,7 +15,7 @@
                 </select>
                 <label for="media-pagination" class="input-group-append mb-0">
                     <span class="input-group-text">
-                        <span>{{ __('of :count items', { count: total }) }}</span>
+                        <span>{{ __(':count items', { count: total }) }}</span>
                     </span>
                 </label>
             </div>
@@ -31,7 +23,7 @@
         <nav :aria-label="__('Pagination')">
             <ul class="pagination pagination-sm">
                 <li class="page-item" :class="{ 'disabled': ! hasPrev || $parent.busy }">
-                    <button type="button" class="page-link" :disabled="! hasPrev || $parent.busy" @click.prevent="prev">
+                    <button type="button" class="page-link" :disabled="! hasPrev || $parent.busy" @click="prev">
                         {{ __('Previous') }}
                     </button>
                 </li>
@@ -42,13 +34,13 @@
                     :key="page"
                     :class="{ 'active': isCurrent(page) }"
                 >
-                    <button type="button" class="page-link" :disabled="isCurrent(page) || $parent.busy" @click.prevent="to(page)">
+                    <button type="button" class="page-link" :disabled="isCurrent(page) || $parent.busy" @click="to(page)">
                         {{ page }}
                         <span v-if="isCurrent(page)" class="sr-only">(current)</span>
                     </button>
                 </li>
                 <li class="page-item" :class="{ 'disabled': ! hasNext || $parent.busy }">
-                    <button type="button" class="page-link" :disabled="! hasNext || $parent.busy" @click.prevent="next">
+                    <button type="button" class="page-link" :disabled="! hasNext || $parent.busy" @click="next">
                         {{ __('Next') }}
                     </button>
                 </li>
@@ -56,3 +48,11 @@
         </nav>
     </div>
 </template>
+
+<script>
+    import Pagable from './../../Mixins/Pagable';
+
+    export default {
+        mixins: [Pagable],
+    }
+</script>

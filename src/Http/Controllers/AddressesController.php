@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,7 +44,7 @@ class AddressesController extends Controller
 
         return Inertia::render('Addresses/Index', [
             'user' => $user,
-            'results' => $addresses,
+            'response' => $addresses,
         ]);
     }
 
@@ -61,7 +60,6 @@ class AddressesController extends Controller
             'user' => $user,
             'countries' => Countries::all(),
             'address' => Address::proxy()->newInstance(),
-            'action' => URL::route('bazar.users.addresses.store', $user),
         ]);
     }
 
@@ -76,9 +74,8 @@ class AddressesController extends Controller
     {
         $address = $user->addresses()->create($request->validated());
 
-        return Redirect::route('bazar.users.addresses.show', [$user, $address])->with(
-            'message', __('The address has been created.')
-        );
+        return Redirect::route('bazar.users.addresses.show', [$user, $address])
+                        ->with('message', __('The address has been created.'));
     }
 
     /**
@@ -94,7 +91,6 @@ class AddressesController extends Controller
             'user' => $user,
             'address' => $address,
             'countries' => Countries::all(),
-            'action' => URL::route('bazar.users.addresses.update', [$user, $address]),
         ]);
     }
 
@@ -110,8 +106,8 @@ class AddressesController extends Controller
     {
         $address->update($request->validated());
 
-        return Redirect::route('bazar.users.addresses.show', [$user, $address])->with(
-            'message', __('The address has been updated.')
+        return Redirect::route('bazar.users.addresses.show', [$user, $address])
+                        ->with('message', __('The address has been updated.')
         );
     }
 
@@ -126,8 +122,7 @@ class AddressesController extends Controller
     {
         $address->delete();
 
-        return Redirect::route('bazar.users.addresses.index', $user)->with(
-            'message', __('The address has been deleted.')
-        );
+        return Redirect::route('bazar.users.addresses.index', $user)
+                        ->with('message', __('The address has been deleted.'));
     }
 }

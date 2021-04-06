@@ -1,6 +1,5 @@
 module.exports = {
     plugins: [
-        // npm packages: eslint eslint-plugin-vue
         "vue"
     ],
     extends: [
