@@ -16,7 +16,7 @@ jobs:
         php: ["7.4", "8.0"]
         stability: ["prefer-stable"]
 
-    name: "${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
+    name: "Unit - ${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
 
     runs-on: "${{ matrix.os }}"
 
