@@ -1,0 +1,68 @@
+name: Front-end
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: null
+
+jobs:
+  lint:
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ["ubuntu-18.04", "windows-latest"]
+        nodejs: ["12", "14"]
+
+    name: "Lint - ${{ matrix.os }} - Node.js ${{ matrix.nodejs }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "${{ matrix.nodejs }}"
+
+      - name: Configure yarn
+        run: yarn config set engine-strict true
+
+      - name: Install dependencies
+        run: yarn install --non-interactive
+
+      - name: Run linter
+        run: yarn run lint
+
+  unit_tests:
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ["ubuntu-18.04", "windows-latest"]
+        nodejs: ["12", "14"]
+
+    name: "Unit - ${{ matrix.os }} - Node.js ${{ matrix.nodejs }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "${{ matrix.nodejs }}"
+
+      - name: Configure yarn
+        run: yarn config set engine-strict true
+
+      - name: Install dependencies
+        run: yarn install --non-interactive
+
+      - name: Run tests
+        run: yarn run test --color
