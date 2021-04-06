@@ -9,7 +9,7 @@
         "prod": "yarn run production",
         "production": "mix --production",
         "test": "jest",
-        "lint": "eslint resources/js/"
+        "lint": "eslint resources/js/ js-tests/"
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.8.6",
