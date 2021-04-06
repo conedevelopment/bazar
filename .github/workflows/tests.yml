@@ -49,6 +49,36 @@ jobs:
           wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
           php ./php-coveralls.phar -v
 
+  vue_lint:
+
+    strategy:
+      fail-fast: true
+      matrix:
+        os: ["ubuntu-18.04", "windows-latest"]
+        nodejs: ["12", "14"]
+
+    name: "${{ matrix.os }} - Node.js ${{ matrix.nodejs }}"
+
+    runs-on: "${{ matrix.os }}"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "${{ matrix.nodejs }}"
+
+      - name: Configure yarn
+        run: yarn config set engine-strict true
+
+      - name: Install dependencies
+        run: yarn install --non-interactive --pure-lockfile
+
+      - name: Execute tests
+        run: yarn run lint
+
   vue_tests:
 
     strategy:
@@ -70,8 +100,11 @@ jobs:
         with:
           node-version: "${{ matrix.nodejs }}"
 
-      - name: Install dependencies
-        run: yarn install --pure-lockfile
+      - name: Configure yarn
+        run: yarn config set engine-strict true
 
-      - name: Execute tests
-        run: yarn run eslint resources/
+      - name: Install dependencies
+        run: yarn install --non-interactive --pure-lockfile
+
+      - name: Run tests
+        run: yarn run test --color
