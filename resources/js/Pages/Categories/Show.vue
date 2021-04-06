@@ -33,7 +33,26 @@
                 </card>
                 <card :title="__('Actions')">
                     <div class="form-group d-flex justify-content-between mb-0">
-                        <button type="submit" class="btn btn-primary" :disabled="form.busy">
+                        <inertia-link
+                            as="button"
+                            method="DELETE"
+                            class="btn btn-outline-danger"
+                            :href="action"
+                            :disabled="form.busy"
+                        >
+                            {{ category.deleted_at ? __('Delete') : __('Trash') }}
+                        </inertia-link>
+                        <inertia-link
+                            v-if="category.deleted_at"
+                            as="button"
+                            method="PATCH"
+                            class="btn btn-warning"
+                            :href="`${action}/restore`"
+                            :disabled="form.busy"
+                        >
+                            {{ __('Restore') }}
+                        </inertia-link>
+                        <button v-else type="submit" class="btn btn-primary" :disabled="form.busy">
                             {{ __('Save') }}
                         </button>
                     </div>

@@ -113,6 +113,15 @@
                 </card>
                 <card :title="__('Actions')">
                     <div class="form-group d-flex justify-content-between mb-0">
+                        <inertia-link
+                            as="button"
+                            method="DELETE"
+                            class="btn btn-outline-danger"
+                            :href="action"
+                            :disabled="form.busy"
+                        >
+                            {{ __('Delete') }}
+                        </inertia-link>
                         <button type="submit" class="btn btn-primary" :disabled="form.busy">
                             {{ __('Save') }}
                         </button>
