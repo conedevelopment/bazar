@@ -38,11 +38,16 @@ jobs:
           cd laravel/
           sed -i -e 's#"type": "project",#&\n"repositories": [ { "type": "path", "url": "../" } ],#' composer.json
           composer require --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress conedevelopment/bazar
+          # APP_ENV is local
           cp .env.example .env
           sed -i -e 's#^DB_CONNECTION=.*$#DB_CONNECTION=sqlite#' .env
           sed -i -e 's#^DB_DATABASE=.*$#DB_DATABASE=:memory:#' .env
           php artisan key:generate
           php artisan bazar:install --seed
           php artisan bazar:publish --packages --mix
-          npm install
-          npm run dev
+
+      - name: "Install front-end dependencies"
+        run: "npm install --production"
+
+      - name: "Build front-end"
+        run: "npm run production"
