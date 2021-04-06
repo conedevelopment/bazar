@@ -57,7 +57,7 @@ jobs:
         os: ["ubuntu-18.04", "windows-latest"]
         nodejs: ["12", "14"]
 
-    name: "${{ matrix.os }} - Node.js ${{ matrix.nodejs }}"
+    name: "Lint - ${{ matrix.os }} - Node.js ${{ matrix.nodejs }}"
 
     runs-on: "${{ matrix.os }}"
 
@@ -76,7 +76,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --non-interactive --pure-lockfile
 
-      - name: Execute tests
+      - name: Run linter
         run: yarn run lint
 
   vue_tests:
