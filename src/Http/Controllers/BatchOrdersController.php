@@ -42,9 +42,8 @@ class BatchOrdersController extends Controller
 
         Order::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
 
-        return Redirect::back()->with(
-            'message', __(':count orders have been updated.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count orders have been updated.', ['count' => count($id)]));
     }
 
     /**
@@ -59,9 +58,8 @@ class BatchOrdersController extends Controller
 
         $request->has('force') ? $orders->forceDelete() : $orders->delete();
 
-        return Redirect::back()->with(
-            'message', __(':count orders have been deleted.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count orders have been deleted.', ['count' => count($id)]));
     }
 
     /**

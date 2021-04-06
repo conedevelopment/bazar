@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="user" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="user" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <data-form-input
@@ -47,7 +47,14 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'customer';
             this.$parent.title = this.user.name;
+        },
+
+        computed: {
+            action() {
+                return `/bazar/users/${this.user.id}`;
+            },
         },
     }
 </script>

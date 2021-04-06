@@ -1,9 +1,9 @@
 <template>
-    <data-form class="row" ref="form" :action="$page.props.action" :data="order" #default="form">
+    <data-form class="row" ref="form" :action="action" :data="order" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('User')" class="mb-5">
                 <data-form-input
-                    type="autocomplete"
+                    handler="autocomplete"
                     name="user"
                     endpoint="/bazar/users"
                     placeholder="Jane Doe"
@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="address.country"
                             :label="__('Country')"
                             :options="countries"
@@ -154,7 +154,7 @@
                 <div class="row">
                     <div class="col">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="shipping.driver"
                             :label="__('Driver')"
                             :options="drivers"
@@ -229,7 +229,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="shipping.address.country"
                             :label="__('Country')"
                             :options="countries"
@@ -294,14 +294,14 @@
                         v-model="form.data.discount"
                     ></data-form-input>
                     <data-form-input
-                        type="select"
+                        handler="select"
                         name="currency"
                         :label="__('Currency')"
                         :options="currencies"
                         v-model="form.data.currency"
                     ></data-form-input>
                     <data-form-input
-                        type="select"
+                        handler="select"
                         name="status"
                         :label="__('Status')"
                         :options="statuses"
@@ -351,10 +351,15 @@
             },
         },
 
-        data() {
-            return {
-                title: this.__('Create Order'),
-            };
+        mounted() {
+            this.$parent.icon = 'order';
+            this.$parent.title = this.__('Create Order');
+        },
+
+        computed: {
+            action() {
+                return '/bazar/categories';
+            },
         },
 
         methods: {

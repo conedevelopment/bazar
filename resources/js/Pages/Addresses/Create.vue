@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" :action="$page.props.action" :data="address" #default="form">
+    <data-form class="row" :action="action" :data="address" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <div class="row">
@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-12 col-sm-6">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="country"
                             :label="__('Country')"
                             :options="countries"
@@ -105,7 +105,7 @@
                         v-model="form.data.alias"
                     ></data-form-input>
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="default"
                         :label="__('Default Address')"
                         v-model="form.data.default"
@@ -130,6 +130,10 @@
                 type: Object,
                 required: true,
             },
+            user: {
+                type: Object,
+                required: true,
+            },
             countries: {
                 type: Object,
                 required: true,
@@ -139,7 +143,14 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'address';
             this.$parent.title = this.__('Create Address');
+        },
+
+        computed: {
+            action() {
+                return `/bazar/users/${this.user.id}/addresses`;
+            },
         },
     }
 </script>

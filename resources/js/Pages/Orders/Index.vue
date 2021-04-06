@@ -45,6 +45,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'order';
             this.$parent.title = this.__('Orders');
         },
 
@@ -70,7 +71,7 @@
             },
             formatDate(date) {
                 return date.substr(0, 16).replace('T', ' ');
-            }
+            },
         },
     }
 </script>

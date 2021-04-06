@@ -24,7 +24,7 @@
                 <div class="list-group">
                     <div
                         class="list-group-item list-group-item-action"
-                        v-for="(item, index) in items"
+                        v-for="(item, index) in response.data"
                         :key="index"
                         :ref="`option-${index}`"
                         :class="[index === active ? 'active' : '']"
@@ -32,7 +32,7 @@
                     >
                         <slot v-bind="item"></slot>
                     </div>
-                    <div v-if="items.length === 0" class="list-group-item disabled" aria-disabled="true">
+                    <div v-if="response.data.length === 0" class="list-group-item disabled" aria-disabled="true">
                         {{ __('No items found for the given keyword.') }}
                     </div>
                     <div v-else-if="errors.any()" class="list-group-item list-group-item-danger">
@@ -60,9 +60,6 @@
             multiple: {
                 type: Boolean,
                 default: false,
-            },
-            type: {
-                type: String,
             },
         },
 
@@ -115,9 +112,9 @@
 
                 if (this.multiple) {
                     value = Array.from(this.modelValue);
-                    value.push(this.items[this.active]);
+                    value.push(this.response.data[this.active]);
                 } else {
-                    value = [this.items[this.active]];
+                    value = [this.response.data[this.active]];
                 }
 
                 this.$emit('update:modelValue', value);
@@ -139,14 +136,14 @@
             highlightNext() {
                 if (this.isOpen) {
                     this.highlight(
-                        this.active + 1 >= this.items.length ? 0 : this.active + 1
+                        this.active + 1 >= this.response.data.length ? 0 : this.active + 1
                     );
                 }
             },
             highlightPrev() {
                 if (this.isOpen) {
                     this.highlight(
-                        this.active === 0 ? this.items.length - 1 : this.active - 1
+                        this.active === 0 ? this.response.data.length - 1 : this.active - 1
                     );
                 }
             },

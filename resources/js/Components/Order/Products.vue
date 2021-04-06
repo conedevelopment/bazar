@@ -1,7 +1,7 @@
 <template>
     <div>
         <data-form-input
-            type="autocomplete"
+            handler="autocomplete"
             name="products"
             endpoint="/bazar/products"
             placeholder="Hoodie"

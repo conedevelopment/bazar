@@ -25,5 +25,10 @@
         },
 
         inheritAttrs: false,
+
+        mounted() {
+            this.$parent.icon = 'dashboard';
+            this.$parent.title = this.__('Dashboard');
+        },
     }
 </script>

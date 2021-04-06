@@ -20,12 +20,14 @@
     export default {
         props: {
             modelValue: {
-                type: [Object, String, Number, Boolean],
+                type: [Object, Array, String, Number, Boolean],
                 default: null,
             },
         },
 
         emits: ['update:modelValue'],
+
+        inheritAttrs: false,
 
         computed: {
             isSwitch() {

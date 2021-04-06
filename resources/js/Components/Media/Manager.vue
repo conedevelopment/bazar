@@ -27,11 +27,11 @@
                                 <pagination></pagination>
                             </div>
                         </div>
-                        <div v-if="queue.length || items.length" class="form-row">
+                        <div v-if="queue.length || response.data.length" class="form-row">
                             <div :class="{ 'col-9': selection.length, 'col-12': ! selection.length }">
                                 <div class="form-row">
                                     <uploader v-for="(file, index) in queue" :key="`uploader-${index}`" :file="file"></uploader>
-                                    <item v-for="(item, index) in items" :key="`${item.file_name}-${index}`" :item="item"></item>
+                                    <item v-for="(item, index) in response.data" :key="`${item.file_name}-${index}`" :item="item"></item>
                                 </div>
                             </div>
                             <div v-show="selection.length" class="col-3">

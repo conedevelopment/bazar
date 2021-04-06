@@ -76,8 +76,7 @@ class BatchUsersController extends Controller
     {
         User::proxy()->newQuery()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
-        return Redirect::back()->with(
-            'message', __(':count users have been restored.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count users have been restored.', ['count' => count($id)]));
     }
 }

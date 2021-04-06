@@ -39,6 +39,7 @@
         },
 
         mounted() {
+            this.$parent.icon = 'category';
             this.$parent.title = this.__('Categories');
         },
 

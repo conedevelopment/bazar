@@ -1,5 +1,5 @@
 <template>
-    <data-form class="row" method="PATCH" :action="$page.props.action" :data="category" #default="form">
+    <data-form class="row" method="PATCH" :action="action" :data="category" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('General')">
                 <data-form-input
@@ -15,7 +15,7 @@
                     v-model="form.data.slug"
                 ></data-form-input>
                 <data-form-input
-                    type="editor"
+                    handler="editor"
                     name="description"
                     :label="__('Description')"
                     v-model="form.data.description"
@@ -26,7 +26,7 @@
             <div class="sticky-helper">
                 <card :title="__('Media')" class="mb-5">
                     <data-form-input
-                        type="media"
+                        handler="media"
                         name="media"
                         v-model="form.data.media"
                     ></data-form-input>
@@ -52,8 +52,15 @@
             },
         },
 
-        mountes() {
+        mounted() {
+            this.$parent.icon = 'category';
             this.$parent.title = this.category.name;
+        },
+
+        computed: {
+            action() {
+                return `/bazar/categories/${this.category.id}`;
+            },
         },
     }
 </script>

@@ -5,7 +5,7 @@
                 <label class="custom-control custom-checkbox mb-0">
                     <input
                         ref="input"
-                        type="checkbox"
+                        handler="checkbox"
                         class="custom-control-input"
                         :checked="selected"
                         :disabled="$parent.busy"

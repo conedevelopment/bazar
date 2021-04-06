@@ -1,6 +1,6 @@
 <template>
     <div>
-        <data-form class="row" method="PATCH" :action="$page.props.action" :data="order" #default="form">
+        <data-form class="row" method="PATCH" :action="action" :data="order" #default="form">
             <div class="col-12 col-lg-7 col-xl-8 form__body">
                 <card :title="__('General')" class="mb-5">
                     <order-info :order="order"></order-info>
@@ -17,7 +17,7 @@
                 <div class="sticky-helper">
                     <card :title="__('Settings')" class="mb-5">
                         <data-form-input
-                            type="select"
+                            handler="select"
                             name="status"
                             :label="__('Status')"
                             :options="statuses"
@@ -65,10 +65,15 @@
             },
         },
 
-        data() {
-            return {
-                title: this.__('Order #:id', { id: this.order.id }),
-            };
+        mounted() {
+            this.$parent.icon = 'order';
+            this.$parent.title = this.__('Order #:id', { id: this.order.id });
+        },
+
+        computed: {
+            action() {
+                return `/bazar/orders/${this.order.id}`;
+            },
         },
     }
 </script>

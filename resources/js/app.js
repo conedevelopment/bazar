@@ -58,8 +58,8 @@ app.component('media-manager', MediaManager);
 
 import Form from './Components/Form/Form';
 app.component('data-form', Form);
-import Input from './Components/Form/FormInput';
-app.component('data-form-input', Input);
+import Handler from './Components/Form/Handler';
+app.component('data-form-input', Handler);
 
 import Table from './Components/Table/Table';
 app.component('data-table', Table);
@@ -75,5 +75,11 @@ import DispatchesEvents from './Mixins/DispatchesEvents';
 app.mixin(DispatchesEvents);
 
 // Mount
-app.mount(el);
-el.removeAttribute('data-page');
+document.addEventListener('bazar:boot', () => {
+    document.dispatchEvent(new CustomEvent('bazar:booting', { detail: app }));
+
+    app.mount(el);
+    el.removeAttribute('data-page');
+
+    document.dispatchEvent(new CustomEvent('bazar:booted', { detail: app }));
+});

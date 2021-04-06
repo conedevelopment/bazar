@@ -1,12 +1,12 @@
 <template>
-    <data-form class="row" :action="$page.props.action" :data="variant" #default="form">
+    <data-form class="row" :action="action" :data="variant" #default="form">
         <div class="col-12 col-lg-7 col-xl-8 form__body">
             <card :title="__('Variation')" class="mb-5">
                 <div v-if="hasProperties">
                     <div class="row">
                         <div v-for="(values, name) in variant.product.properties" :key="name" class="col">
                             <data-form-input
-                                type="select"
+                                handler="select"
                                 :name="`variation.${name}`"
                                 :label="__(name)"
                                 :options="selection(values)"
@@ -53,7 +53,7 @@
             <card :title="__('Inventory')">
                 <template #header>
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="inventory.virtual"
                         :label="__('Virtual')"
                         v-model="form.data.inventory.virtual"
@@ -113,7 +113,7 @@
                 </div>
                 <div class="form-group">
                     <data-form-input
-                        type="checkbox"
+                        handler="checkbox"
                         name="inventory.virtual"
                         :label="__('Downloadable')"
                         v-model="form.data.inventory.downloadable"
@@ -134,7 +134,7 @@
                 </card>
                 <card :title="__('Media')" class="mb-5">
                     <data-form-input
-                        type="media"
+                        handler="media"
                         name="media"
                         multiple
                         v-model="form.data.media"
@@ -165,6 +165,10 @@
                 type: Object,
                 required: true,
             },
+            product: {
+                type: Object,
+                required: true,
+            },
             currencies: {
                 type: Object,
                 required: true,
@@ -174,6 +178,7 @@
         inheritAttrs: false,
 
         mounted() {
+            this.$parent.icon = 'product';
             this.$parent.title = this.__('Create Variant');
         },
 
@@ -183,6 +188,9 @@
             },
             hasProperties() {
                 return Object.keys(this.variant.product.properties).length;
+            },
+            action() {
+                return `/bazar/products/${this.product.id}/variants`;
             },
         },
 
