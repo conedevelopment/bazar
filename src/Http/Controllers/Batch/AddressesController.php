@@ -1,7 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Bazar\Http\Controllers\Batch;
 
+use Bazar\Http\Controllers\Controller;
 use Bazar\Models\Address;
 use Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -11,7 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
-class BatchAddressesController extends Controller
+class AddressesController extends Controller
 {
     /**
      * Create a new controller instance.

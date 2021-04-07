@@ -1,7 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Bazar\Http\Controllers\Batch;
 
+use Bazar\Http\Controllers\Controller;
 use Bazar\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
-class BatchProductsController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Create a new controller instance.

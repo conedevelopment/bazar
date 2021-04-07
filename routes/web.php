@@ -1,13 +1,13 @@
 <?php
 
 use Bazar\Http\Controllers\AddressesController;
-use Bazar\Http\Controllers\BatchAddressesController;
-use Bazar\Http\Controllers\BatchCategoriesController;
-use Bazar\Http\Controllers\BatchMediaController;
-use Bazar\Http\Controllers\BatchOrdersController;
-use Bazar\Http\Controllers\BatchProductsController;
-use Bazar\Http\Controllers\BatchUsersController;
-use Bazar\Http\Controllers\BatchVariantsController;
+use Bazar\Http\Controllers\Batch\AddressesController as BatchAddressesController;
+use Bazar\Http\Controllers\Batch\CategoriesController as BatchCategoriesController;
+use Bazar\Http\Controllers\Batch\MediaController as BatchMediaController;
+use Bazar\Http\Controllers\Batch\OrdersController as BatchOrdersController;
+use Bazar\Http\Controllers\Batch\ProductsController as BatchProductsController;
+use Bazar\Http\Controllers\Batch\UsersController as BatchUsersController;
+use Bazar\Http\Controllers\Batch\VariantsController as BatchVariantsController;
 use Bazar\Http\Controllers\CategoriesController;
 use Bazar\Http\Controllers\MediaController;
 use Bazar\Http\Controllers\OrdersController;

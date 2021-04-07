@@ -1,8 +1,10 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Bazar\Http\Controllers\Batch;
 
-use Bazar\Models\Order;
+use Bazar\Http\Controllers\Controller;
+use Bazar\Models\Product;
+use Bazar\Models\Variant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -10,7 +12,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
-class BatchOrdersController extends Controller
+class VariantsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -19,7 +21,7 @@ class BatchOrdersController extends Controller
      */
     public function __construct()
     {
-        if (Gate::getPolicyFor($class = Order::getProxiedClass())) {
+        if (Gate::getPolicyFor($class = Variant::getProxiedClass())) {
             $this->middleware("can:batchUpdate,{$class}")->only('update');
             $this->middleware("can:batchDelete,{$class}")->only('destroy');
             $this->middleware("can:batchRestore,{$class}")->only('restore');
@@ -30,9 +32,10 @@ class BatchOrdersController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, Product $product): RedirectResponse
     {
         $data = Arr::dot($request->except('id'));
 
@@ -40,40 +43,41 @@ class BatchOrdersController extends Controller
             return [str_replace('.', '->', $key) => $item];
         })->all();
 
-        Order::proxy()->newQuery()->whereIn('id', $id = $request->input('id', []))->update($data);
+        $product->variants()->whereIn('id', $id = $request->input('id', []))->update($data);
 
         return Redirect::back()
-                        ->with('message', __(':count orders have been updated.', ['count' => count($id)]));
+                        ->with('message', __(':count variants have been updated.', ['count' => count($id)]));
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request, Product $product): RedirectResponse
     {
-        $orders = Order::proxy()->newQuery()->withTrashed()->whereIn('id', $id = $request->input('id', []));
+        $variants = $product->variants()->withTrashed()->whereIn('id', $id = $request->input('id', []));
 
-        $request->has('force') ? $orders->forceDelete() : $orders->delete();
+        $request->has('force') ? $variants->forceDelete() : $variants->delete();
 
         return Redirect::back()
-                        ->with('message', __(':count orders have been deleted.', ['count' => count($id)]));
+                        ->with('message', __(':count variants have been deleted.', ['count' => count($id)]));
     }
 
     /**
      * Restore the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  \Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function restore(Request $request): RedirectResponse
+    public function restore(Request $request, Product $product): RedirectResponse
     {
-        Order::proxy()->newQuery()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
+        $product->variants()->onlyTrashed()->whereIn('id', $id = $request->input('id', []))->restore();
 
-        return Redirect::back()->with(
-            'message', __(':count orders have been restored.', ['count' => count($id)])
-        );
+        return Redirect::back()
+                        ->with('message', __(':count variants have been restored.', ['count' => count($id)]));
     }
 }
