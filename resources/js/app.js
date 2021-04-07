@@ -9,7 +9,7 @@ import Translator from './Plugins/Translator';
 
 InertiaProgress.init({
     delay: 250,
-    color: '#91c83e',
+    color: '#1382f9',
     includeCSS: true,
 });
 
@@ -20,17 +20,21 @@ const app = createApp({
         return h(App, {
             initialPage: JSON.parse(el.dataset.page),
             resolveComponent: (name) => {
-                const page = window.Bazar.pages[name];
+                let page = window.Bazar.pages[name];
 
                 if (! page) {
                     throw 'Page is not registered.';
                 } else if (page instanceof Promise) {
-                    return page.then((component) => {
-                        return Object.assign({ layout: Layout }, component.default);
+                    page = page.then((component) => {
+                        component.layout = Layout;
+
+                        return component;
                     });
+                } else {
+                    page.layout = Layout;
                 }
 
-                return Object.assign({ layout: Layout }, page);
+                return page;
             },
         });
     },
