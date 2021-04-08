@@ -4,7 +4,6 @@ namespace Bazar\Http\Middleware;
 
 use Bazar\Support\Breadcrumbs;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware

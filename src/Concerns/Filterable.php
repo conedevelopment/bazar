@@ -86,9 +86,18 @@ trait Filterable
      */
     public function scopeSort(Builder $query, array $value = []): Builder
     {
-        return $query->orderBy(
-            $query->qualifyColumn(str_replace('.', '->', $value['by'] ?? 'created_at')),
-            $value['order'] ?? 'desc'
-        );
+        [$order, $by] = [
+            $value['order'] ?? 'desc',
+            str_replace('.', '->', $value['by'] ?? 'created_at')
+        ];
+
+        $by = $query->getModel()
+                    ->getConnection()
+                    ->getSchemaBuilder()
+                    ->hasColumn($query->getModel()->getTable(), explode('->', $by, 2)[0])
+                    ? $query->qualifyColumn($by)
+                    : $by;
+
+        return $query->orderBy($by, $order);
     }
 }
