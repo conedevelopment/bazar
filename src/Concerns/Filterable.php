@@ -88,7 +88,7 @@ trait Filterable
     {
         [$order, $by] = [
             $value['order'] ?? 'desc',
-            str_replace('.', '->', $value['by'] ?? 'created_at')
+            str_replace('.', '->', $value['by'] ?? 'created_at'),
         ];
 
         $by = $query->getModel()
