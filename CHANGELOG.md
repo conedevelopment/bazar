@@ -1,6 +1,16 @@
 # Changelog
 
 ## v0.7.0 (Unreleased)
+### Added
+- Added front-end (Jest) tests (WIP)
+
+### Changed
+- Migrated from Vue 2 to Vue 3
+- Migrated from NPM to Yarn
+- Changed front-end bootstrapping events
+
+### Fixed
+- Fixed persistent layout bug
 
 ## v0.6.0 (2021-03-29)
 ### Added
