@@ -2,9 +2,9 @@
 
 namespace Bazar\Gateway;
 
+use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
-use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Support\Facades\Gateway;
 use InvalidArgumentException;
 

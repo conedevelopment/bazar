@@ -4,11 +4,11 @@ namespace Bazar\Cart;
 
 use Bazar\Bazar;
 use Bazar\Cart\Checkout;
+use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
+use Bazar\Models\Item;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
-use Bazar\Events\CartTouched;
-use Bazar\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

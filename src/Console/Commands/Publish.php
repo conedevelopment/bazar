@@ -4,7 +4,6 @@ namespace Bazar\Console\Commands;
 
 use Bazar\BazarServiceProvider;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class Publish extends Command
@@ -61,8 +60,8 @@ class Publish extends Command
     {
         $bazarPackages = json_decode(file_get_contents(__DIR__.'/../../../package.json'), true);
 
-        if (file_exists(App::basePath('package.json'))) {
-            $packages = json_decode(file_get_contents(App::basePath('package.json')), true);
+        if (file_exists($this->laravel->basePath('package.json'))) {
+            $packages = json_decode(file_get_contents($this->laravel->basePath('package.json')), true);
 
             $packages['dependencies'] = array_replace(
                 $packages['dependencies'] ?? [], $bazarPackages['dependencies']
@@ -72,7 +71,7 @@ class Publish extends Command
         }
 
         file_put_contents(
-            App::basePath('package.json'),
+            $this->laravel->basePath('package.json'),
             json_encode($packages ?? $bazarPackages, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT).PHP_EOL
         );
     }
@@ -84,15 +83,15 @@ class Publish extends Command
      */
     protected function mix(): void
     {
-        if (! file_exists(App::basePath('webpack.mix.js'))) {
+        if (! file_exists($this->laravel->basePath('webpack.mix.js'))) {
             return;
         }
 
         $script = file_get_contents(__DIR__.'/../../../resources/stubs/webpack.mix.js');
 
-        if (! Str::contains(file_get_contents(App::basePath('webpack.mix.js')), $script)) {
+        if (! Str::contains(file_get_contents($this->laravel->basePath('webpack.mix.js')), $script)) {
             file_put_contents(
-                App::basePath('webpack.mix.js'),
+                $this->laravel->basePath('webpack.mix.js'),
                 PHP_EOL.$script,
                 FILE_APPEND
             );
