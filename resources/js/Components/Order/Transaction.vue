@@ -1,3 +1,48 @@
+<template>
+    <tr>
+        <td>
+            <span :class="className">
+                {{ `${sign} ${amount}` }}
+            </span>
+        </td>
+        <td>
+            <span>{{ transaction.driver_name }}</span>
+            <small v-if="transaction.url">
+                (<a :href="transaction.url" target="_blank">{{ transaction.key }}</a>)
+            </small>
+        </td>
+        <td>
+            <span v-if="transaction.completed_at">
+                {{ completedAt }}
+            </span>
+            <span v-else class="badge badge-warning">{{ __('Pending') }}</span>
+        </td>
+        <td>
+            <div class="d-flex">
+                <button
+                    type="button"
+                    class="icon-btn"
+                    :class="{ 'icon-btn-success': ! completed, 'icon-btn-warning': completed }"
+                    :disabled="busy"
+                    :aria-label="completed ? __('Mark pending') : __('Mark completed')"
+                    @click="update"
+                >
+                    <icon :name="icon"></icon>
+                </button>
+                <button
+                    type="button"
+                    class="icon-btn icon-btn-danger ml-1"
+                    :disabled="busy"
+                    :aria-label="__('Delete')"
+                    @click="destroy"
+                >
+                    <icon name="close"></icon>
+                </button>
+            </div>
+        </td>
+    </tr>
+</template>
+
 <script>
     export default {
         props: {
@@ -63,48 +108,3 @@
         },
     }
 </script>
-
-<template>
-    <tr>
-        <td>
-            <span :class="className">
-                {{ `${sign} ${amount}` }}
-            </span>
-        </td>
-        <td>
-            <span>{{ transaction.driver_name }}</span>
-            <small v-if="transaction.url">
-                (<a :href="transaction.url" target="_blank">{{ transaction.key }}</a>)
-            </small>
-        </td>
-        <td>
-            <span v-if="transaction.completed_at">
-                {{ completedAt }}
-            </span>
-            <span v-else class="badge badge-warning">{{ __('Pending') }}</span>
-        </td>
-        <td>
-            <div class="d-flex">
-                <button
-                    type="button"
-                    class="icon-btn"
-                    :class="{ 'icon-btn-success': ! completed, 'icon-btn-warning': completed }"
-                    :disabled="busy"
-                    :aria-label="completed ? __('Mark pending') : __('Mark completed')"
-                    @click="update"
-                >
-                    <icon :name="icon"></icon>
-                </button>
-                <button
-                    type="button"
-                    class="icon-btn icon-btn-danger ml-1"
-                    :disabled="busy"
-                    :aria-label="__('Delete')"
-                    @click="destroy"
-                >
-                    <icon name="close"></icon>
-                </button>
-            </div>
-        </td>
-    </tr>
-</template>

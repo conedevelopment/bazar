@@ -1,3 +1,7 @@
+<template>
+    <canvas width="600" height="300"></canvas>
+</template>
+
 <script>
     import Chart from 'chart.js';
 
@@ -5,12 +9,12 @@
         props: {
             labels: {
                 type: Array,
-                default: () => []
+                default: () => [],
             },
             data: {
                 type: Array,
-                default: () => []
-            }
+                default: () => [],
+            },
         },
 
         mounted() {
@@ -31,7 +35,7 @@
                         backgroundColor: '#fff',
                         displayColors: false,
                         titleFontColor: '#000',
-                        bodyFontColor: '#000'
+                        bodyFontColor: '#000',
                     },
                     legend: {
                         display: false
@@ -39,15 +43,15 @@
                     scales: {
                         xAxes: [{
                             gridLines: {
-                                display:false
-                            }
+                                display:false,
+                            },
                         }],
                         yAxes: [{
                             ticks: {
-                                stepSize: 1
-                            }
-                        }]
-                    }
+                                stepSize: 1,
+                            },
+                        }],
+                    },
                 };
             },
             datasets() {
@@ -65,11 +69,7 @@
                     pointBorderWidth: 3,
                     pointHitRadius: 16,
                 }];
-            }
-        }
+            },
+        },
     }
 </script>
-
-<template>
-    <canvas width="600" height="300"></canvas>
-</template>

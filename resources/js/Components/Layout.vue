@@ -1,3 +1,29 @@
+<template>
+    <div class="app">
+        <app-sidebar ref="sidebar"></app-sidebar>
+        <div class="app__main">
+            <div class="app__body">
+                <div class="app-mobile-header">
+                    <inertia-link href="/bazar" class="app-mobile-header__logo">
+                        <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
+                    </inertia-link>
+                    <button type="button" class="app-mobile-header__menu-toggle" @click="$refs.sidebar.toggle">
+                        <icon name="menu"></icon>
+                    </button>
+                </div>
+                <app-header></app-header>
+                <div class="app__messages">
+                    <alert v-if="message" :key="`message-${$parent.key}`" closable>{{ message }}</alert>
+                    <alert v-if="hasErrors" type="danger" :key="`error-${$parent.key}`" closable>
+                        {{ __('There is an error!') }}
+                    </alert>
+                </div>
+                <slot></slot>
+            </div>
+        </div>
+    </div>
+</template>
+
 <script>
     import AppHeader from './Header';
     import AppSidebar from './Sidebar';
@@ -43,29 +69,3 @@
         },
     }
 </script>
-
-<template>
-    <div class="app">
-        <app-sidebar ref="sidebar"></app-sidebar>
-        <div class="app__main">
-            <div class="app__body">
-                <div class="app-mobile-header">
-                    <inertia-link href="/bazar" class="app-mobile-header__logo">
-                        <img src="/vendor/bazar/img/bazar-logo.svg" alt="">
-                    </inertia-link>
-                    <button type="button" class="app-mobile-header__menu-toggle" @click="$refs.sidebar.toggle">
-                        <icon name="menu"></icon>
-                    </button>
-                </div>
-                <app-header></app-header>
-                <div class="app__messages">
-                    <alert v-if="message" :key="`message-${$parent.key}`" closable>{{ message }}</alert>
-                    <alert v-if="hasErrors" type="danger" :key="`error-${$parent.key}`" closable>
-                        {{ __('There is an error!') }}
-                    </alert>
-                </div>
-                <slot></slot>
-            </div>
-        </div>
-    </div>
-</template>

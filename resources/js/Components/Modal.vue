@@ -1,36 +1,3 @@
-<script>
-    import Closable from './../Mixins/Closable';
-
-    export default {
-        mixins: [Closable],
-
-        props: {
-            title: {
-                type: String,
-                default: null,
-            },
-        },
-
-        mounted() {
-            window.addEventListener('keyup', (event) => {
-                if (this.isOpen && event.code === 'Escape') {
-                    this.close();
-                }
-            });
-        },
-
-        watch: {
-            isOpen(newValue, oldValue) {
-                if (newValue) {
-                    this.$root.$el.classList.add('has-modal-open');
-                } else {
-                    this.$root.$el.classList.remove('has-modal-open');
-                }
-            },
-        },
-    }
-</script>
-
 <template>
     <div v-show="isOpen" class="modal" tabindex="-1" role="dialog" aria-hidden="true" @click.self="close">
         <div role="document" class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
@@ -55,3 +22,38 @@
         </div>
     </div>
 </template>
+
+<script>
+    import Closable from './../Mixins/Closable';
+
+    export default {
+        mixins: [Closable],
+
+        props: {
+            title: {
+                type: String,
+                default: null,
+            },
+        },
+
+        mounted() {
+            window.addEventListener('keyup', (event) => {
+                if (this.isOpen && event.code === 'Escape') {
+                    this.close();
+                }
+            });
+        },
+
+        watch: {
+            isOpen(newValue, oldValue) {
+                const className = this.$el.closest('.form__sidebar') ? 'sidebar' : 'body';
+
+                if (newValue) {
+                    this.$root.$el.classList.add(`has-modal-open--${className}`);
+                } else {
+                    this.$root.$el.classList.remove(`has-modal-open--${className}`);
+                }
+            },
+        },
+    }
+</script>

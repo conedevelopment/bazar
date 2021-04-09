@@ -1,47 +1,3 @@
-<script>
-    import Closable from './../Mixins/Closable';
-
-    export default {
-        mixins: [Closable],
-
-        mounted() {
-            this.setActiveLinks();
-
-            this.$inertia.on('success', (event) => {
-                this.setActiveLinks();
-            });
-        },
-
-        computed: {
-            groups() {
-                return window.Bazar.menu;
-            },
-        },
-
-        methods: {
-            setActiveLinks() {
-                const path = window.location.pathname.replace(/\/$/, '');
-
-                this.$el.querySelectorAll('a.app-sidebar-menu-link').forEach((el) => {
-                    if (el.pathname !== '/bazar' && path.includes(el.pathname)) {
-                        el.closest('.app-sidebar-menu-item').classList.add('is-open');
-                    } else {
-                        el.closest('.app-sidebar-menu-item').classList.remove('is-open');
-                    }
-                });
-
-                this.$el.querySelectorAll('.app-sidebar__inside a').forEach((el) => {
-                    if (path === el.pathname) {
-                        el.classList.add('is-active');
-                    } else {
-                        el.classList.remove('is-active');
-                    }
-                });
-            }
-        }
-    }
-</script>
-
 <template>
     <div class="app__sidebar">
         <div class="modal app-sidebar-overlay" v-show="isOpen" @click.self="close"></div>
@@ -113,3 +69,47 @@
         </aside>
     </div>
 </template>
+
+<script>
+    import Closable from './../Mixins/Closable';
+
+    export default {
+        mixins: [Closable],
+
+        mounted() {
+            this.setActiveLinks();
+
+            this.$inertia.on('success', (event) => {
+                this.setActiveLinks();
+            });
+        },
+
+        computed: {
+            groups() {
+                return window.Bazar.menu;
+            },
+        },
+
+        methods: {
+            setActiveLinks() {
+                const path = window.location.pathname.replace(/\/$/, '');
+
+                this.$el.querySelectorAll('a.app-sidebar-menu-link').forEach((el) => {
+                    if (el.pathname !== '/bazar' && path.includes(el.pathname)) {
+                        el.closest('.app-sidebar-menu-item').classList.add('is-open', 'is-active');
+                    } else {
+                        el.closest('.app-sidebar-menu-item').classList.remove('is-open', 'is-active');
+                    }
+                });
+
+                this.$el.querySelectorAll('.app-sidebar__inside a').forEach((el) => {
+                    if (path === el.pathname) {
+                        el.classList.add('is-active');
+                    } else {
+                        el.classList.remove('is-active');
+                    }
+                });
+            }
+        }
+    }
+</script>
