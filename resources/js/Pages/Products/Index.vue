@@ -1,10 +1,11 @@
 <template>
-    <card :title="__('Products')">
-        <template #header>
+    <div>
+        <teleport v-if="mounted" to=".app-header__actions">
             <inertia-link :href="`${url}/create`" class="btn btn-primary btn-sm">
                 {{ __('Create Product') }}
             </inertia-link>
-        </template>
+        </teleport>
+
         <data-table :response="response" :filters="filters">
             <data-table-column :label="__('Photo')" #default="item">
                 <img
@@ -28,11 +29,15 @@
                 {{ formatDate(item.created_at) }}
             </data-table-column>
         </data-table>
-    </card>
+    </div>
 </template>
 
 <script>
+    import InteractsWithTeleport from './../../Mixins/InteractsWithTeleport';
+
     export default {
+        mixins: [InteractsWithTeleport],
+
         props: {
             response: {
                 type: Object,

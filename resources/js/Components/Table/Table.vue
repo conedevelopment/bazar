@@ -1,27 +1,29 @@
 <template>
-    <div>
-        <filters></filters>
-        <div class="table-responsive">
-            <table v-if="response.data.length > 0" class="table table-hover">
-                <thead>
-                    <heading></heading>
-                </thead>
-                <tbody>
-                    <row v-for="(item, index) in response.data" :key="index" :item="item"></row>
-                </tbody>
-                <tfoot>
-                    <heading></heading>
-                </tfoot>
-            </table>
-            <div v-else class="alert alert-info mb-0">
-                {{ __('No results found.') }}
+    <section class="card">
+        <div class="card__inner">
+            <filters></filters>
+            <div class="table-responsive">
+                <table v-if="response.data.length > 0" class="table table-hover">
+                    <thead>
+                        <heading></heading>
+                    </thead>
+                    <tbody>
+                        <row v-for="(item, index) in response.data" :key="index" :item="item"></row>
+                    </tbody>
+                    <tfoot>
+                        <heading></heading>
+                    </tfoot>
+                </table>
+                <div v-else class="alert alert-info mb-0">
+                    {{ __('No results found.') }}
+                </div>
+            </div>
+            <pagination v-if="response.data.length > 0"></pagination>
+            <div style="display: none;">
+                <slot></slot>
             </div>
         </div>
-        <pagination v-if="response.data.length > 0"></pagination>
-        <div style="display: none;">
-            <slot></slot>
-        </div>
-    </div>
+    </section>
 </template>
 
 <script>

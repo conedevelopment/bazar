@@ -21,10 +21,10 @@
             new Chart(this.$el.getContext('2d'), {
                 data: {
                     labels: this.labels,
-                    datasets: this.datasets
+                    datasets: this.datasets,
                 },
                 type: 'line',
-                options: this.options
+                options: this.options,
             });
         },
 
@@ -38,7 +38,7 @@
                         bodyFontColor: '#000',
                     },
                     legend: {
-                        display: false
+                        display: false,
                     },
                     scales: {
                         xAxes: [{
