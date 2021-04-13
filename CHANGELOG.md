@@ -1,8 +1,8 @@
 # Changelog
 
-## v0.7.0 (Unreleased)
+## v0.7.0 (2021-04-13)
 ### Added
-- Added front-end (Jest) tests (WIP)
+- Added – at least getting started – front-end (Jest) test
 
 ### Changed
 - Migrated from Vue 2 to Vue 3
