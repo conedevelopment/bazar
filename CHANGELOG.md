@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.1 (2021-04-16)
+### Fixed
+- Fixed `Shipping` foreign ID compatibility [#140](https://github.com/conedevelopment/bazar/issues/140)
+
 ## v0.7.0 (2021-04-13)
 ### Added
 - Added – at least getting started – front-end (Jest) test
