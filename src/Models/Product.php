@@ -25,7 +25,9 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes;
+    use BazarRoutable, HasFactory, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes, Filterable {
+        filters as defaultFilters;
+    }
 
     /**
      * The accessors to append to the model's array form.
@@ -107,14 +109,9 @@ class Product extends Model implements Contract
      */
     public static function filters(): array
     {
-        return [
-            'state' => [
-                'all' => __('All'),
-                'available' => __('Available'),
-                'trashed' => __('Trashed')
-            ],
-            'category' => array_map('__', Category::proxy()->newQuery()->pluck('name', 'id')->toArray()),
-        ];
+        return array_merge(static::defaultFilters(), [
+            'category' => array_map('__', Category::proxy()->newQuery()->pluck('id', 'name')->toArray()),
+        ]);
     }
 
     /**

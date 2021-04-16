@@ -15,13 +15,13 @@ trait Filterable
      */
     public static function filters(): array
     {
-        return in_array(SoftDeletes::class, class_uses(static::class)) ? [
-            'state' => [
-                'all' => __('All'),
-                'available' => __('Available'),
-                'trashed' => __('Trashed')
-            ],
-        ] : [];
+        return in_array(SoftDeletes::class, class_uses(get_called_class()))
+            ? ['state' => [
+                __('All') => 'all',
+                __('Available') => 'available',
+                __('Trashed') => 'trashed',
+            ]]
+            : [];
     }
 
     /**

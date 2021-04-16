@@ -9,7 +9,7 @@
             v-model="value"
         >
             <option :value="null" disabled>--- {{ $attrs.label }} ---</option>
-            <option v-for="(label, option) in options" :key="label" :value="option">
+            <option v-for="(value, label) in options" :key="label" :value="value">
                 {{ label }}
             </option>
         </select>

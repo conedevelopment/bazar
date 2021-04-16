@@ -109,22 +109,6 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     }
 
     /**
-     * Get the filter options for the model.
-     *
-     * @return array
-     */
-    public static function filters(): array
-    {
-        return [
-            'state' => [
-                'all' => __('All'),
-                'available' => __('Available'),
-                'trashed' => __('Trashed')
-            ],
-        ];
-    }
-
-    /**
      * Get the cart for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

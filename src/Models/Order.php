@@ -21,7 +21,9 @@ use Illuminate\Support\Collection;
 
 class Order extends Model implements Contract
 {
-    use Addressable, BazarRoutable, Filterable, HasFactory, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes;
+    use Addressable, BazarRoutable, HasFactory, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes, Filterable {
+        filters as defaultFilters;
+    }
 
     /**
      * The accessors to append to the model's array form.
@@ -132,13 +134,13 @@ class Order extends Model implements Contract
     public static function statuses(): array
     {
         return [
-            'pending' => __('Pending'),
-            'on_hold' => __('On Hold'),
-            'in_progress' => __('In Progress'),
-            'completed' => __('Completed'),
-            'cancelled' => __('Cancelled'),
-            'failed' => __('Failed'),
-            'refunded' => __('Refunded'),
+            __('Pending') => 'pending',
+            __('On Hold') => 'on_hold',
+            __('In Progress') => 'in_progress',
+            __('Completed') => 'completed',
+            __('Cancelled') => 'cancelled',
+            __('Failed') => 'failed',
+            __('Refunded') => 'refunded',
         ];
     }
 
@@ -149,15 +151,10 @@ class Order extends Model implements Contract
      */
     public static function filters(): array
     {
-        return [
-            'state' => [
-                'all' => __('All'),
-                'available' => __('Available'),
-                'trashed' => __('Trashed')
-            ],
+        return array_merge(static::defaultFilters(), [
             'status' => static::statuses(),
-            'user' => User::proxy()->newQuery()->pluck('name', 'id')->toArray(),
-        ];
+            'user' => User::proxy()->newQuery()->pluck('id', 'name')->toArray(),
+        ]);
     }
 
     /**
