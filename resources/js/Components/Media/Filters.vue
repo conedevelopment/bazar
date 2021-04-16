@@ -16,9 +16,7 @@
             <div class="form-group mr-3">
                 <div class="input-group input-group-sm">
                     <label for="media-type" class="input-group-prepend mb-0">
-                        <span class="input-group-text">
-                            <span>{{ __('Type') }}</span>
-                        </span>
+                        <span class="input-group-text">{{ __('Type') }}</span>
                     </label>
                     <select
                         id="media-type"
@@ -35,9 +33,7 @@
             <div class="form-group">
                 <div class="input-group input-group-sm">
                     <label for="media-date" class="input-group-prepend mb-0">
-                        <span class="input-group-text">
-                            <span>{{ __('Sort') }}</span>
-                        </span>
+                        <span class="input-group-text">{{ __('Sort') }}</span>
                     </label>
                     <select
                         id="media-date"

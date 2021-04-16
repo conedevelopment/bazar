@@ -13,7 +13,7 @@
                         :disabled="$parent.busy"
                     >
                         <option :value="undefined">{{ __('Any') }}</option>
-                        <option v-for="(label, value) in filters" :key="value" :value="value">
+                        <option v-for="(value, label) in filters" :key="label" :value="value">
                             {{ label }}
                         </option>
                     </select>

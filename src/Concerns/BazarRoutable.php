@@ -17,10 +17,11 @@ trait BazarRoutable
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        if (in_array(SoftDeletes::class, class_uses($this)) && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->where(
-                $field ?: $this->getRouteKeyName(), $value
-            )->withTrashed()->firstOrFail();
+        if (in_array(SoftDeletes::class, class_uses(get_called_class()))
+            && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
+            return $this->where($field ?: $this->getRouteKeyName(), $value)
+                        ->withTrashed()
+                        ->firstOrFail();
         }
 
         return parent::resolveRouteBinding($value, $field);

@@ -17,7 +17,7 @@ class OrderUpdateRequest extends FormRequest
         return [
             'status' => [
                 'required',
-                Rule::in(array_keys(Order::proxy()::statuses())),
+                Rule::in(Order::proxy()::statuses()),
             ],
         ];
     }

@@ -30,11 +30,11 @@ class OrderStoreRequest extends FormRequest
             'discount' => ['nullable', 'numeric', 'min:0'],
             'currency' => [
                 'required',
-                Rule::in(array_keys(Bazar::currencies())),
+                Rule::in(Bazar::currencies()),
             ],
             'status' => [
                 'required',
-                Rule::in(array_keys(Order::proxy()::statuses())),
+                Rule::in(Order::proxy()::statuses()),
             ],
             'address' => ['required', 'array'],
             'address.first_name' => ['required', 'string'],

@@ -20,7 +20,8 @@ class BazarTest extends TestCase
     public function it_has_currencies()
     {
         $this->assertSame(
-            $this->app['config']->get('bazar.currencies.available'), Bazar::currencies()
+            $this->app['config']->get('bazar.currencies.available'),
+            array_flip(Bazar::currencies())
         );
     }
 
