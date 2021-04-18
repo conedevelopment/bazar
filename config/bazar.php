@@ -49,11 +49,12 @@ return [
     */
 
     'cart' => [
-        'default' => 'cookie',
+        'default' => strtolower(env('BAZAR_CART_DRIVER', 'cookie')),
         'drivers' => [
             'cookie' => [
                 'expiration' => 4320,
             ],
+            'session' => [],
         ],
     ],
 

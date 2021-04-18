@@ -28,4 +28,16 @@ class Manager extends BaseManager implements Contract
             $this->config->get('bazar.cart.drivers.cookie', [])
         );
     }
+
+    /**
+     * Create the session driver.
+     *
+     * @return \Bazar\Cart\SessionDriver
+     */
+    public function createSessionDriver(): SessionDriver
+    {
+        return new SessionDriver(
+            $this->config->get('bazar.cart.drivers.session', [])
+        );
+    }
 }
