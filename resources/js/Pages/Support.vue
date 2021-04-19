@@ -20,8 +20,8 @@
                     <tr>
                         <th>Docs:</th>
                         <td>
-                            <a href="https://bazar.condevelopment.com">
-                                https://bazar.condevelopment.com
+                            <a href="https://bazar.conedevelopment.com">
+                                https://bazar.conedevelopment.com
                             </a>
                         </td>
                     </tr>
