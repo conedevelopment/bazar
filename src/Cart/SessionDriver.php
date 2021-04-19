@@ -4,7 +4,6 @@ namespace Bazar\Cart;
 
 use Bazar\Models\Cart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cookie;
 
 class SessionDriver extends Driver
 {
