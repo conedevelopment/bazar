@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.3 (2021-04-19)
+### Fixed
+- Fixed proxy based route-model binding
+
 ## v0.7.2 (2021-04-19)
 ### Added
 - Added Session Cart Driver ([#143](https://github.com/conedevelopment/bazar/pull/143))

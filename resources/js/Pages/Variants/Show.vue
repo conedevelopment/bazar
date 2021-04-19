@@ -212,8 +212,8 @@
         methods: {
             selection(properties) {
                 return properties.reduce((stack, property) => {
-                    return Object.assign(stack, { [property]: this.__(property) });
-                }, { '*': this.__('Any') });
+                    return Object.assign(stack, { [this.__(property)]: property });
+                }, { [this.__('Any')]: '*' });
             },
         },
     }

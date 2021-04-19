@@ -103,9 +103,8 @@ class VariantsController extends Controller
      */
     public function show(Product $product, Variant $variant): Response
     {
-        $variant->setRelation(
-            'product', $product->withoutRelations()->makeHidden('variant')
-        )->loadMissing('media');
+        $variant->setRelation('product', $product->withoutRelations()->makeHidden('variant'))
+                ->loadMissing('media');
 
         return Inertia::render('Variants/Show', [
             'product' => $product,

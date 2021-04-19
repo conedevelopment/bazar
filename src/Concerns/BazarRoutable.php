@@ -19,9 +19,11 @@ trait BazarRoutable
     {
         if (in_array(SoftDeletes::class, class_uses(get_called_class()))
             && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->where($field ?: $this->getRouteKeyName(), $value)
-                        ->withTrashed()
-                        ->firstOrFail();
+                return static::proxy()
+                            ->newQuery()
+                            ->where($field ?: static::proxy()->getRouteKeyName(), $value)
+                            ->withTrashed()
+                            ->first();
         }
 
         return parent::resolveRouteBinding($value, $field);

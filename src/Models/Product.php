@@ -223,7 +223,7 @@ class Product extends Model implements Contract
             return $this->variants()
                         ->where($field ?: $this->variants()->getRelated()->getRouteKeyName(), $value)
                         ->withTrashed()
-                        ->firstOrFail();
+                        ->first();
         }
 
         return parent::resolveChildRouteBinding($childType, $value, $field);
