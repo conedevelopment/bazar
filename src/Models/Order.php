@@ -194,9 +194,7 @@ class Order extends Model implements Contract
      */
     public function getStatusNameAttribute(): string
     {
-        $statuses = static::statuses();
-
-        return $statuses[$this->status] ?? $this->status;
+        return array_search($this->status, static::statuses()) ?: $this->status;
     }
 
     /**

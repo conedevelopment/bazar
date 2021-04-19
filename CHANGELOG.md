@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.7.2 (2021-04-19)
+### Added
+- Added Session Cart Driver ([#143](https://github.com/conedevelopment/bazar/pull/143))
+
+### Fixed
+- Fixed `itemable` column type to `uuidMorphs` ([#142](https://github.com/conedevelopment/bazar/pull/142))
+
+### Changed
+- Changed default fitler handling and swapped key-values for filters
+
 ## v0.7.1 (2021-04-16)
 ### Fixed
 - Fixed `Shipping` foreign ID compatibility [#140](https://github.com/conedevelopment/bazar/issues/140)

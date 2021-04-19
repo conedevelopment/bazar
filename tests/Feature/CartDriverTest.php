@@ -5,6 +5,7 @@ namespace Bazar\Tests\Feature;
 use Bazar\Cart\Checkout;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
+use Bazar\Cart\SessionDriver;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
 use Bazar\Models\Product;
@@ -13,6 +14,8 @@ use Bazar\Models\Variant;
 use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 
 class CartDriverTest extends TestCase
 {
@@ -46,10 +49,21 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_has_cart_driver()
+    public function it_has_cookie_driver()
     {
         $this->assertInstanceOf(CookieDriver::class, $this->manager->driver('cookie'));
         $this->assertInstanceOf(Cart::class, $this->manager->driver('cookie')->model());
+    }
+
+    /** @test */
+    public function it_has_session_driver()
+    {
+        $this->session([]);
+
+        $this->app['request']->setLaravelSession($this->app['session']);
+
+        $this->assertInstanceOf(SessionDriver::class, $this->manager->driver('session'));
+        $this->assertInstanceOf(Cart::class, $this->manager->driver('session')->model());
     }
 
     /** @test */
