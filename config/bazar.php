@@ -32,8 +32,8 @@ return [
     'currencies' => [
         'default' => strtolower(env('BAZAR_CURRENCY', 'usd')),
         'available' => [
-            'usd' => 'USD',
-            'eur' => 'EUR',
+            'usd' => 'usd',
+            'eur' => 'eur',
         ],
     ],
 
