@@ -20,7 +20,7 @@ class Option implements Rule
      *
      * @var \Bazar\Models\Variant|null
      */
-    protected ?Variant $variant;
+    protected ?Variant $variant = null;
 
     /**
      * Create a new rule instance.
