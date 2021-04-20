@@ -9,9 +9,9 @@ trait InteractsWithProxy
     /**
      * The resolve proxy instance.
      *
-     * @var object|null
+     * @var object
      */
-    protected static ?object $proxy = null;
+    protected static object $proxy;
 
     /**
      * Get the proxied contract.
@@ -27,7 +27,7 @@ trait InteractsWithProxy
      */
     public static function proxy(): object
     {
-        if (is_null(static::$proxy)) {
+        if (! isset(static::$proxy)) {
             static::$proxy = Container::getInstance()->make(
                 static::getProxiedContract()
             );
