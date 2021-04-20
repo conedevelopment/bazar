@@ -15,14 +15,14 @@ abstract class Driver
      *
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Indicates if the driver is enabled.
      *
      * @var bool
      */
-    protected $enabled = true;
+    protected bool $enabled = true;
 
     /**
      * Create a new driver instance.
@@ -123,7 +123,7 @@ abstract class Driver
      * @throws \InvalidArgumentException
      * @throws \Bazar\Exceptions\TransactionFailedException
      */
-    public function transaction(Order $order, string $type = 'payment', float $amount = null): Transaction
+    public function transaction(Order $order, string $type = 'payment', ?float $amount = null): Transaction
     {
         if (! in_array($type, ['payment', 'refund'])) {
             throw new InvalidArgumentException('The transaction type must be "payment" or "refund".');
@@ -157,7 +157,7 @@ abstract class Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    abstract public function pay(Order $order, float $amount = null): Transaction;
+    abstract public function pay(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Process the refund.
@@ -166,5 +166,5 @@ abstract class Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    abstract public function refund(Order $order, float $amount = null): Transaction;
+    abstract public function refund(Order $order, ?float $amount = null): Transaction;
 }

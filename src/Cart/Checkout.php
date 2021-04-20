@@ -2,14 +2,14 @@
 
 namespace Bazar\Cart;
 
-use Bazar\Models\Cart;
-use Bazar\Models\Shipping;
 use Bazar\Events\CartTouched;
 use Bazar\Events\CheckoutFailed;
 use Bazar\Events\CheckoutFailing;
 use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
+use Bazar\Models\Cart;
 use Bazar\Models\Order;
+use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Gateway;
 use Throwable;
 
@@ -20,7 +20,7 @@ class Checkout
      *
      * @var \Bazar\Models\Cart
      */
-    protected $cart;
+    protected Cart $cart;
 
     /**
      * The success callback.
@@ -41,7 +41,7 @@ class Checkout
      *
      * @var string
      */
-    protected $gateway;
+    protected string $gateway;
 
     /**
      * Create a new checkout instance.

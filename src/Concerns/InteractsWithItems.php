@@ -75,7 +75,7 @@ trait InteractsWithItems
      * @param  string|null  $value
      * @return string
      */
-    public function getCurrencyAttribute(string $value = null): string
+    public function getCurrencyAttribute(?string $value = null): string
     {
         return $value ?: Bazar::currency();
     }

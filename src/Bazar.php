@@ -20,9 +20,9 @@ abstract class Bazar
     /**
      * The default currency.
      *
-     * @var string
+     * @var string|null
      */
-    protected static $currency;
+    protected static ?string $currency = null;
 
     /**
      * Get the version.
@@ -52,7 +52,7 @@ abstract class Bazar
      *
      * @throws \Bazar\Exceptions\InvalidCurrencyException
      */
-    public static function currency(string $currency = null): string
+    public static function currency(?string $currency = null): string
     {
         if (is_null($currency)) {
             $currency = static::$currency ?: Config::get('bazar.currencies.default', 'usd');

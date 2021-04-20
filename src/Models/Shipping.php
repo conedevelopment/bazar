@@ -105,7 +105,7 @@ class Shipping extends Model implements Contract
      * @param  string|null  $value
      * @return string
      */
-    public function getDriverAttribute(string $value = null): string
+    public function getDriverAttribute(?string $value = null): string
     {
         return $value ?: Manager::getDefaultDriver();
     }

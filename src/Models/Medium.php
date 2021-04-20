@@ -167,7 +167,7 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function path(string $conversion = null): string
+    public function path(?string $conversion = null): string
     {
         $path = "{$this->id}/{$this->file_name}";
 
@@ -184,7 +184,7 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function fullPath(string $conversion = null): string
+    public function fullPath(?string $conversion = null): string
     {
         if (! in_array($this->disk, ['local', 'public'])) {
             return $this->url($conversion);
@@ -199,7 +199,7 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function url(string $conversion = null): string
+    public function url(?string $conversion = null): string
     {
         return URL::to(Storage::disk($this->disk)->url($this->path($conversion)));
     }

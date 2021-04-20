@@ -13,7 +13,7 @@ class Manager extends BaseManager implements Contract
      *
      * @var array
      */
-    protected $conversions = [];
+    protected array $conversions = [];
 
     /**
      * Get the default driver name.

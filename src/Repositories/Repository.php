@@ -11,7 +11,7 @@ abstract class Repository
      *
      * @var \Illuminate\Support\Collection
      */
-    protected $items;
+    protected Collection $items;
 
     /**
      * Create a new repository instance.

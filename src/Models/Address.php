@@ -125,7 +125,7 @@ class Address extends Model implements Contract
      * @param  string|null  $value
      * @return string|null
      */
-    public function getAliasAttribute(string $value = null): ?string
+    public function getAliasAttribute(?string $value = null): ?string
     {
         return $this->exists ? ($value ?: "#{$this->id}") : $value;
     }

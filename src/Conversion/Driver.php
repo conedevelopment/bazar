@@ -11,7 +11,7 @@ abstract class Driver
      *
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Create a new driver instance.

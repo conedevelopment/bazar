@@ -140,7 +140,7 @@ class Transaction extends Model implements Contract
      * @param \DateTimeInterface|null  $date
      * @return $this
      */
-    public function markAsCompleted(DateTimeInterface $date = null): self
+    public function markAsCompleted(?DateTimeInterface $date = null): self
     {
         $date = $date ?: Carbon::now();
 

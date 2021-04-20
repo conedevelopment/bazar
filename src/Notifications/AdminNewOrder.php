@@ -18,7 +18,7 @@ class AdminNewOrder extends Notification implements ShouldQueue
      *
      * @var \Bazar\Models\Order
      */
-    protected $order;
+    protected Order $order;
 
     /**
      * Create a new notification instance.

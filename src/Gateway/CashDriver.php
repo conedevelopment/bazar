@@ -14,7 +14,7 @@ class CashDriver extends Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, ?float $amount = null): Transaction
     {
         return $this->transaction($order, 'payment', $amount)->markAsCompleted();
     }
@@ -26,7 +26,7 @@ class CashDriver extends Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, ?float $amount = null): Transaction
     {
         return $this->transaction($order, 'refund', $amount)->markAsCompleted();
     }

@@ -15,7 +15,7 @@ class CheckoutFailing
      *
      * @var \Bazar\Models\Order
      */
-    public $order;
+    public Order $order;
 
     /**
      * Create a new event instance.

@@ -15,7 +15,7 @@ class CartTouched
      *
      * @var \Bazar\Models\Cart
      */
-    public $cart;
+    public Cart $cart;
 
     /**
      * Create a new event instance.

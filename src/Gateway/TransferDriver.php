@@ -14,7 +14,7 @@ class TransferDriver extends Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, ?float $amount = null): Transaction
     {
         return tap($this->transaction($order, 'payment', $amount), static function (Transaction $transaction): void {
             $transaction->save();
@@ -28,7 +28,7 @@ class TransferDriver extends Driver
      * @param  float|null  $amount
      * @return \Bazar\Models\Transaction
      */
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, ?float $amount = null): Transaction
     {
         return tap($this->transaction($order, 'refund', $amount), static function (Transaction $transaction): void {
             $transaction->save();

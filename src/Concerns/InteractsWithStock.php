@@ -33,7 +33,7 @@ trait InteractsWithStock
      * @param  string|null  $currency
      * @return float|null
      */
-    public function price(string $type = 'default', string $currency = null): ?float
+    public function price(string $type = 'default', ?string $currency = null): ?float
     {
         $currency = $currency ?: Bazar::currency();
 
@@ -47,7 +47,7 @@ trait InteractsWithStock
      * @param  string|null  $currency
      * @return string|null
      */
-    public function formattedPrice(string $type = 'default', string $currency = null): ?string
+    public function formattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
         $currency = $currency ?: Bazar::currency();
 

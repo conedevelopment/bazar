@@ -25,7 +25,7 @@ interface Priceable
      * @param  string|null  $currency
      * @return float|null
      */
-    public function price(string $type = 'default', string $currency = null): ?float;
+    public function price(string $type = 'default', ?string $currency = null): ?float;
 
     /**
      * Get the formatted price by the given type and currency.
@@ -34,7 +34,7 @@ interface Priceable
      * @param  string|null  $currency
      * @return string|null
      */
-    public function formattedPrice(string $type = 'default', string $currency = null): ?string;
+    public function formattedPrice(string $type = 'default', ?string $currency = null): ?string;
 
     /**
      * Determine if the stockable model is free.

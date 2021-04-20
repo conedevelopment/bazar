@@ -12,14 +12,14 @@ class TransactionAmount implements Rule
      *
      * @var float
      */
-    protected $amount;
+    protected float $amount;
 
     /**
      * The transaction type.
      *
      * @var string
      */
-    protected $type = 'payment';
+    protected string $type = 'payment';
 
     /**
      * Create a new rule instance.
@@ -28,7 +28,7 @@ class TransactionAmount implements Rule
      * @param  string|null  $type
      * @return void
      */
-    public function __construct(Order $order, string $type = null)
+    public function __construct(Order $order, ?string $type = null)
     {
         $this->type = $type ?: $this->type;
 

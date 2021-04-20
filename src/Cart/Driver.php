@@ -21,14 +21,14 @@ abstract class Driver
      *
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * The cart instance.
      *
      * @var \Bazar\Models\Cart|null
      */
-    protected $cart;
+    protected ?Cart $cart = null;
 
     /**
      * Create a new driver instance.

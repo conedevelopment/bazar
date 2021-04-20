@@ -12,14 +12,14 @@ abstract class Driver
      *
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Indicates if the driver is enabled.
      *
      * @var bool
      */
-    protected $enabled = true;
+    protected bool $enabled = true;
 
     /**
      * Create a new driver instance.

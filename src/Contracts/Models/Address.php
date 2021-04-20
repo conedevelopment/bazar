@@ -20,7 +20,7 @@ interface Address extends Breadcrumbable
      * @param  string|null  $value
      * @return string|null
      */
-    public function getAliasAttribute(string $value = null): ?string;
+    public function getAliasAttribute(?string $value = null): ?string;
 
     /**
      * Get the name attribute.

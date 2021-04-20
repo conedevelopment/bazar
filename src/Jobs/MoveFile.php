@@ -21,21 +21,21 @@ class MoveFile implements ShouldQueue
      *
      * @var \Bazar\Models\Medium
      */
-    public $medium;
+    public Medium $medium;
 
     /**
      * The path to the file.
      *
      * @var string
      */
-    public $path;
+    public string $path;
 
     /**
      * Preserve the original file.
      *
      * @var bool
      */
-    public $preserve = false;
+    public bool $preserve = false;
 
     /**
      * Delete the job if its models no longer exist.

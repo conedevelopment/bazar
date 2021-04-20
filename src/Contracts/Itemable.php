@@ -2,9 +2,9 @@
 
 namespace Bazar\Contracts;
 
-use Bazar\Models\Shipping;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
+use Bazar\Models\Shipping;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -39,7 +39,7 @@ interface Itemable extends Shippable
      * @param  string|null  $value
      * @return string
      */
-    public function getCurrencyAttribute(string $value = null): string;
+    public function getCurrencyAttribute(?string $value = null): string;
 
     /**
      * Get the shipping attribute.

@@ -30,7 +30,7 @@ class Prices extends AttributeBag
      * @param  string|null  $key
      * @return string|null
      */
-    public function format(string $key = null): ?string
+    public function format(?string $key = null): ?string
     {
         $currency = $key ? explode('.', $key, 2)[0] : Bazar::currency();
 

@@ -20,7 +20,7 @@ interface Shipping extends Taxable
      * @param  string|null  $value
      * @return string
      */
-    public function getDriverAttribute(string $value = null): string;
+    public function getDriverAttribute(?string $value = null): string;
 
     /**
      * Get the total attribute.

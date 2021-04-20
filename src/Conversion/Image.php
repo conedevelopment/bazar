@@ -14,7 +14,7 @@ class Image
      *
      * @var \Bazar\Models\Medium
      */
-    protected $medium;
+    protected Medium $medium;
 
     /**
      * The path of the image.
@@ -28,7 +28,7 @@ class Image
      *
      * @var int
      */
-    protected $type;
+    protected int $type;
 
     /**
      * The resource.
@@ -42,7 +42,7 @@ class Image
      *
      * @var array
      */
-    protected $attributes = [
+    protected array $attributes = [
         'width' => 0,
         'height' => 0,
         'quality' => 70,
@@ -121,7 +121,7 @@ class Image
      * @param  int|null  $height
      * @return $this
      */
-    public function crop(int $width = null, int $height = null): Image
+    public function crop(?int $width = null, ?int $height = null): Image
     {
         $this->resize($width, $height, true);
 
@@ -136,7 +136,7 @@ class Image
      * @param  bool  $crop
      * @return $this
      */
-    public function resize(int $width = null, int $height = null, bool $crop = false): Image
+    public function resize(?int $width = null, ?int $height = null, bool $crop = false): Image
     {
         $x = $y = 0;
         [$originalWidth, $originalHeight] = getimagesize($this->medium->fullPath());

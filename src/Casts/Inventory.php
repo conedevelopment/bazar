@@ -11,7 +11,7 @@ class Inventory extends AttributeBag
      *
      * @var array
      */
-    protected $defaults = [
+    protected array $defaults = [
         'files' => [],
         'sku' => null,
         'width' => null,

@@ -11,7 +11,7 @@ trait InteractsWithProxy
      *
      * @var object|null
      */
-    protected static $proxy;
+    protected static ?object $proxy = null;
 
     /**
      * Get the proxied contract.
@@ -27,7 +27,7 @@ trait InteractsWithProxy
      */
     public static function proxy(): object
     {
-        if (! isset(static::$proxy)) {
+        if (is_null(static::$proxy)) {
             static::$proxy = Container::getInstance()->make(
                 static::getProxiedContract()
             );

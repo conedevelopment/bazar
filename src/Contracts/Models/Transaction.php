@@ -48,7 +48,7 @@ interface Transaction
      * @param \DateTimeInterface|null  $date
      * @return $this
      */
-    public function markAsCompleted(DateTimeInterface $date = null): self;
+    public function markAsCompleted(?DateTimeInterface $date = null): self;
 
     /**
      * Mark the transaction as pending.

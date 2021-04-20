@@ -19,7 +19,7 @@ class PerformConversions implements ShouldQueue
      *
      * @var \Bazar\Models\Medium
      */
-    public $medium;
+    public Medium $medium;
 
     /**
      * Delete the job if its models no longer exist.

@@ -14,14 +14,14 @@ class Breadcrumbs implements Arrayable
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * The label replacers.
      *
      * @var array
      */
-    protected $replacers = [
+    protected array $replacers = [
         'bazar' => 'dashboard',
     ];
 

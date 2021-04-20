@@ -18,7 +18,7 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
      *
      * @var array
      */
-    protected $defaults = [];
+    protected array $defaults = [];
 
     /**
      * Create a new attribute bag instance.

@@ -13,14 +13,14 @@ class Option implements Rule
      *
      * @var \Bazar\Models\Product
      */
-    protected $product;
+    protected Product $product;
 
     /**
      * The variant instance.
      *
      * @var \Bazar\Models\Variant|null
      */
-    protected $variant;
+    protected ?Variant $variant;
 
     /**
      * Create a new rule instance.
@@ -29,7 +29,7 @@ class Option implements Rule
      * @param  \Bazar\Models\Variant|null  $variant
      * @return void
      */
-    public function __construct(Product $product, Variant $variant = null)
+    public function __construct(Product $product, ?Variant $variant = null)
     {
         $this->product = $product;
         $this->variant = $variant;
