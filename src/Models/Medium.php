@@ -17,7 +17,9 @@ use Illuminate\Support\Str;
 
 class Medium extends Model implements Contract
 {
-    use Filterable, HasFactory, InteractsWithProxy;
+    use Filterable;
+    use HasFactory;
+    use InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.

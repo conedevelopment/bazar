@@ -17,7 +17,12 @@ use Illuminate\Support\Carbon;
 
 class Cart extends Model implements Contract
 {
-    use Addressable, HasFactory, HasUuid, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy;
+    use Addressable;
+    use HasFactory;
+    use HasUuid;
+    use InteractsWithDiscounts;
+    use InteractsWithItems;
+    use InteractsWithProxy;
 
     /**
      * The attributes that should have default values.

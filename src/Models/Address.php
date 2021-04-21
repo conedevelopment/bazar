@@ -16,7 +16,10 @@ use Illuminate\Http\Request;
 
 class Address extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy;
+    use BazarRoutable;
+    use Filterable;
+    use HasFactory;
+    use InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.

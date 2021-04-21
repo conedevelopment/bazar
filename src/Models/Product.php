@@ -25,8 +25,15 @@ use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Contract
 {
-    use BazarRoutable, HasFactory, InteractsWithProxy, InteractsWithStock, HasMedia, Sluggable, SoftDeletes, Filterable {
-        filters as defaultFilters;
+    use BazarRoutable;
+    use HasFactory;
+    use InteractsWithProxy;
+    use InteractsWithStock;
+    use HasMedia;
+    use Sluggable;
+    use SoftDeletes;
+    use Filterable {
+        Filterable::filters as defaultFilters;
     }
 
     /**

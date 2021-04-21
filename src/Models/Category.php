@@ -18,7 +18,13 @@ use Illuminate\Http\Request;
 
 class Category extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasFactory, HasMedia, InteractsWithProxy, Sluggable, SoftDeletes;
+    use BazarRoutable;
+    use Filterable;
+    use HasFactory;
+    use HasMedia;
+    use InteractsWithProxy;
+    use Sluggable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

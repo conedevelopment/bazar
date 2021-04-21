@@ -16,7 +16,10 @@ use Throwable;
 
 class Shipping extends Model implements Contract
 {
-    use Addressable, HasFactory, InteractsWithProxy, InteractsWithTaxes;
+    use Addressable;
+    use HasFactory;
+    use InteractsWithProxy;
+    use InteractsWithTaxes;
 
     /**
      * The accessors to append to the model's array form.

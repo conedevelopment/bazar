@@ -21,8 +21,15 @@ use Illuminate\Support\Collection;
 
 class Order extends Model implements Contract
 {
-    use Addressable, BazarRoutable, HasFactory, InteractsWithDiscounts, InteractsWithItems, InteractsWithProxy, SoftDeletes, Filterable {
-        filters as defaultFilters;
+    use Addressable;
+    use BazarRoutable;
+    use HasFactory;
+    use InteractsWithDiscounts;
+    use InteractsWithItems;
+    use InteractsWithProxy;
+    use SoftDeletes;
+    use Filterable {
+        Filterable::filters as defaultFilters;
     }
 
     /**

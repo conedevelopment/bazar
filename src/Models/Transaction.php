@@ -16,7 +16,8 @@ use Throwable;
 
 class Transaction extends Model implements Contract
 {
-    use HasFactory, InteractsWithProxy;
+    use HasFactory;
+    use InteractsWithProxy;
 
     /**
      * The accessors to append to the model's array form.

@@ -21,7 +21,13 @@ use Illuminate\Http\Request;
 
 class Variant extends Model implements Contract
 {
-    use BazarRoutable, Filterable, HasFactory, HasMedia, InteractsWithProxy, InteractsWithStock, SoftDeletes;
+    use BazarRoutable;
+    use Filterable;
+    use HasFactory;
+    use HasMedia;
+    use InteractsWithProxy;
+    use InteractsWithStock;
+    use SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.

@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class CheckoutProcessing
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The order instace.

@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class CartTouched
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The cart instace.

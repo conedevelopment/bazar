@@ -6,15 +6,11 @@ use Bazar\Events\OrderPlaced;
 use Bazar\Models\User;
 use Bazar\Notifications\AdminNewOrder;
 use Bazar\Notifications\CustomerNewOrder;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 
-class SendNewOrderNotifications implements ShouldQueue
+class SendNewOrderNotifications
 {
-    use InteractsWithQueue;
-
     /**
      * Handle the event.
      *

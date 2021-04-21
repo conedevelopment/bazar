@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderPlaced
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
+    use SerializesModels;
 
     /**
      * The order instace.

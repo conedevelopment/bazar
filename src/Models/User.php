@@ -24,7 +24,11 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable implements Contract, MustVerifyEmail
 {
-    use BazarRoutable, Filterable, HasFactory, InteractsWithProxy, Notifiable, SoftDeletes;
+    use BazarRoutable;
+    use Filterable, HasFactory;
+    use InteractsWithProxy;
+    use Notifiable;
+    use SoftDeletes;
 
     /**
      * The accessors to append to the model's array form.

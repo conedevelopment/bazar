@@ -14,7 +14,9 @@ use Illuminate\Support\Traits\Tappable;
 
 class Item extends MorphPivot implements Taxable
 {
-    use InteractsWithTaxes, HasUuid, Tappable;
+    use InteractsWithTaxes;
+    use HasUuid;
+    use Tappable;
 
     /**
      * The accessors to append to the model's array form.
