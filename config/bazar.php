@@ -24,7 +24,7 @@ return [
     |
     | All the available currencies can be set here, as well as the default one.
     | The available currencies will be shown on the products admin page as
-    | a configurable price. The key of the currency is the ISO code,
+    | a configurable price. The key of the currency is the ISO 4217 code,
     | while the value is the currency symbol.
     |
     */
