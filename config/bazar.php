@@ -70,7 +70,7 @@ return [
     */
 
     'gateway' => [
-        'default' => 'transfer',
+        'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
             'cash' => [],
             'manual' => [],
@@ -90,7 +90,7 @@ return [
     */
 
     'shipping' => [
-        'default' => 'local-pickup',
+        'default' => env('BAZAR_SHIPPING_DRIVER', 'local-pickup'),
         'drivers' => [
             'local-pickup' => [],
         ],

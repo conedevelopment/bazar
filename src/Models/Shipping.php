@@ -39,7 +39,6 @@ class Shipping extends Model implements Contract
     protected $attributes = [
         'tax' => 0,
         'cost' => 0,
-        'driver' => 'local-pickup',
     ];
 
     /**
@@ -69,6 +68,18 @@ class Shipping extends Model implements Contract
      * @var string
      */
     protected $table = 'bazar_shippings';
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted(): void
+    {
+        static::creating(static function (self $shipping): void {
+            $shipping->driver = $shipping->driver ?: Manager::getDefaultDriver();
+        });
+    }
 
     /**
      * Get the proxied contract.

@@ -74,7 +74,7 @@ class OrdersController extends Controller
             'countries' => Countries::all(),
             'currencies' => Bazar::currencies(),
             'statuses' => Order::proxy()::statuses(),
-            'drivers' => Collection::make(Shipping::enabled())->map->name(),
+            'drivers' => Collection::make(Shipping::enabled())->map->name()->flip(),
         ]);
     }
 

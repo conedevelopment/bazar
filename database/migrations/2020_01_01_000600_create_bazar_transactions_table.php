@@ -17,7 +17,7 @@ class CreateBazarTransactionsTable extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained('bazar_orders')->cascadeOnDelete();
             $table->string('key')->nullable()->unique();
-            $table->string('driver')->nullable();
+            $table->string('driver');
             $table->string('type');
             $table->unsignedDecimal('amount');
             $table->timestamp('completed_at')->nullable();

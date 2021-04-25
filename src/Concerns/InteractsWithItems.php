@@ -8,6 +8,7 @@ use Bazar\Models\Item;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Models\User;
+use Bazar\Support\Facades\Shipping as ShippingManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -66,7 +67,9 @@ trait InteractsWithItems
      */
     public function shipping(): MorphOne
     {
-        return $this->morphOne(Shipping::getProxiedClass(), 'shippable')->withDefault();
+        return $this->morphOne(Shipping::getProxiedClass(), 'shippable')->withDefault([
+            'driver' => ShippingManager::getDefaultDriver(),
+        ]);
     }
 
     /**
