@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.7.4 (2021-04-25)
+### Added
+- Added `env` functions for default drivers in the `bazar.php` config file
+
+### Fixed
+- Fixed shipping driver issue ([#148](https://github.com/conedevelopment/bazar/issues/148))
+- Fixed `addressable` column type to `uuidMorphs` ([#157](https://github.com/conedevelopment/bazar/pull/147))
+- Fixed `shippable` column type to `uuidMorphs` ([a4b150a](https://github.com/conedevelopment/bazar/commit/a4b150abde9a7bf2e55519807c49e8e6997afb4f))
+
 ## v0.7.3 (2021-04-19)
 ### Fixed
 - Fixed proxy based route-model binding
