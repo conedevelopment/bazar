@@ -17,7 +17,7 @@ trait BazarRoutable
      */
     public function resolveRouteBinding($value, $field = null): ?Model
     {
-        if (in_array(SoftDeletes::class, class_uses(get_called_class()))
+        if (in_array(SoftDeletes::class, class_uses_recursive(get_called_class()))
             && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
                 return static::proxy()
                             ->newQuery()

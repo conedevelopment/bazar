@@ -15,7 +15,7 @@ trait Filterable
      */
     public static function filters(): array
     {
-        return in_array(SoftDeletes::class, class_uses(get_called_class()))
+        return in_array(SoftDeletes::class, class_uses_recursive(get_called_class()))
             ? ['state' => [
                 __('All') => 'all',
                 __('Available') => 'available',

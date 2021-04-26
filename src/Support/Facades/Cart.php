@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Bazar\Models\Cart model()
  * @method static \Bazar\Models\Item|null item(\Bazar\Models\Product $product, array $properties)
  * @method static \Bazar\Models\Item add(\Bazar\Models\Product $product, float $quantity, array $properties)
- * @method static void remove(\Bazar\Models\Item|int|array $item)
+ * @method static void remove(\Bazar\Models\Item|int|array $items)
  * @method static void update(array $items)
  * @method static void empty()
  * @method static \Illuminate\Support\Collection products()

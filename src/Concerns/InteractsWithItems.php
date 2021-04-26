@@ -29,7 +29,7 @@ trait InteractsWithItems
     public static function bootInteractsWithItems(): void
     {
         static::deleting(static function (self $model): void {
-            if (! in_array(SoftDeletes::class, class_uses($model)) || $model->forceDeleting) {
+            if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
                 $model->products()->detach();
                 $model->shipping()->delete();
             }

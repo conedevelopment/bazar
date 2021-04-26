@@ -44,6 +44,6 @@ abstract class Repository
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->items->{$method}(...$arguments);
+        return call_user_func_array([$this->items, $method], $arguments);
     }
 }

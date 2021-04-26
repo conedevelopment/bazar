@@ -4,12 +4,11 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The Bazar Administrators
+    | Bazar Administrators
     |--------------------------------------------------------------------------
     |
-    | Bazar does not handle roles or different permissions. The users whom are
-    | defined here will have access to the complete admin section. By
-    | default their email address is used for authorization.
+    | Here your can define administrators by their email address. By default
+    | the given values are used by the 'manage-bazar' Gate defnition.
     |
     */
 
@@ -19,13 +18,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The Currencies
+    | Currencies
     |--------------------------------------------------------------------------
     |
     | All the available currencies can be set here, as well as the default one.
-    | The available currencies will be shown on the products admin page as
-    | a configurable price. The key of the currency is the ISO 4217 code,
-    | while the value is the currency symbol.
+    | The key of the currency is the ISO 4217 code, while the value is the
+    | currency symbol.
     |
     */
 
@@ -39,10 +37,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The Cart Drivers
+    | Cart Drivers
     |--------------------------------------------------------------------------
-    | In this section, you can specify the cart driver that you want to use
-    | to resolve the cart instance, that is used by the cart facade.
+    | In this section, you can specify all the available cart drivers and
+    | their configuration.
     |
     | Supported drivers: "cookie"
     |
@@ -60,10 +58,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The Gateway Drivers
+    | Gateway Drivers
     |--------------------------------------------------------------------------
-    | In this section, you can specify the gateway driver that you want to use
-    | to resolve the gateway instance, that is used by the gateway facade.
+    | In this section, you can specify all the available gateway drivers and
+    | their configuration.
     |
     | Supported drivers: "cash", "manual", "transfer"
     |
@@ -80,10 +78,10 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | The Shipping Drivers
+    | Shipping Drivers
     |--------------------------------------------------------------------------
-    | In this section, you can specify the shipping driver that you want to use
-    | to resolve the shipping instance, that is used by the shipping facade.
+    | In this section, you can specify all the available shipping drivers and
+    | their configuration.
     |
     | Supported drivers: "local-pickup"
     |
@@ -98,25 +96,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Weight Unit
+    | Units
     |--------------------------------------------------------------------------
     |
-    | You can specify the weight unit here. When a product's weight will be
-    | specified it will apply this unit.
+    | You can specify the weight and dimension units. A product or a variant
+    | will apply the given unit on their values.
     |
     */
 
     'weight_unit' => env('BAZAR_WEIGHT_UNIT', 'g'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Dimension Unit
-    |--------------------------------------------------------------------------
-    |
-    | You can specify the dimension unit here. When a product's dimension will be
-    | specified it will apply this unit.
-    |
-    */
 
     'dimension_unit' => env('BAZAR_DIMENSION_UNIT', 'mm'),
 

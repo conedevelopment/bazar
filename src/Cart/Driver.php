@@ -109,14 +109,14 @@ abstract class Driver
     /**
      * Remove the given items from the cart.
      *
-     * @param  \Bazar\Models\Item|int|array  $item
+     * @param  \Bazar\Models\Item|int|array  $items
      * @return void
      */
-    public function remove($item): void
+    public function remove($items): void
     {
         $id = array_map(static function ($item): string {
             return $item instanceof Item ? $item->id : $item;
-        }, Arr::wrap($item));
+        }, Arr::wrap($items));
 
         $this->model()->products()->wherePivotIn('id', $id)->detach();
 
@@ -240,6 +240,6 @@ abstract class Driver
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->model()->{$method}(...$arguments);
+        return call_user_func_array([$this->model(), $method], $arguments);
     }
 }
