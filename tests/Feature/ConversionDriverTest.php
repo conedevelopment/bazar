@@ -31,21 +31,21 @@ class ConversionDriverTest extends TestCase
     /** @test */
     public function it_can_register_conversions()
     {
-        Conversion::registerConversion('4k', function (Medium $medium) {
+        Conversion::register('4k', function (Medium $medium) {
             //
         });
 
-        $this->assertTrue(array_key_exists('4k', Conversion::getConversions()));
+        $this->assertTrue(array_key_exists('4k', Conversion::all()));
     }
 
     /** @test */
     public function it_can_remove_conversions()
     {
-        $this->assertTrue(array_key_exists('thumb', Conversion::getConversions()));
+        $this->assertTrue(array_key_exists('thumb', Conversion::all()));
 
-        Conversion::removeConversion('thumb');
+        Conversion::remove('thumb');
 
-        $this->assertFalse(array_key_exists('thumb', Conversion::getConversions()));
+        $this->assertFalse(array_key_exists('thumb', Conversion::all()));
     }
 
     /** @test */

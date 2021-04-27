@@ -39,6 +39,14 @@ class ShippingTest extends TestCase
     }
 
     /** @test */
+    public function a_shipping_belongs_to_a_cart_by_default()
+    {
+        $shipping = new Shipping();
+
+        $this->assertInstanceOf(Cart::class, $shipping->shippable);
+    }
+
+    /** @test */
     public function a_shipping_belongs_to_an_order()
     {
         $order = $this->admin->orders()->save(Order::factory()->make());
