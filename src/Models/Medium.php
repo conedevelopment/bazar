@@ -114,15 +114,15 @@ class Medium extends Model implements Contract
     {
         $name = preg_replace('/[\w]{5}__/iu', '', basename($path, '.chunk'));
 
-        if (Str::is('image/*', $type = mime_content_type($path))) {
+        if (($type = mime_content_type($path)) !== 'image/svg+xml' && Str::is('image/*', $type)) {
             [$width, $height] = getimagesize($path);
         }
 
         return static::create([
             'file_name' => $name,
             'mime_type' => $type,
-            'width' => $width ?? null,
-            'height' => $height ?? null,
+            'width' => isset($width) ? $width : null,
+            'height' => isset($height) ? $height : null,
             'disk' => Config::get('bazar.media.disk', 'public'),
             'size' => round(filesize($path) / 1024),
             'name' => pathinfo($name, PATHINFO_FILENAME),
@@ -149,8 +149,20 @@ class Medium extends Model implements Contract
         $conversions = array_keys(Conversion::all());
 
         return array_reduce($conversions, function (array $urls, string $name): array {
-            return $this->isImage ? array_merge($urls, [$name => $this->url($name)]) : $urls;
+            return $this->convertable()
+                ? array_merge($urls, [$name => $this->url($name)])
+                : $urls;
         }, ['original' => $this->url()]);
+    }
+
+    /**
+     * Determine if the medium should is convertable.
+     *
+     * @return bool
+     */
+    public function convertable(): bool
+    {
+        return $this->isImage && $this->mime_type !== 'image/svg+xml';
     }
 
     /**

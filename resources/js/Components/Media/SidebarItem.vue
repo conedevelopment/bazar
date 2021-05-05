@@ -18,7 +18,7 @@
             <ul class="media-sidebar__list mt-3 mb-3">
                 <li>{{ createdAt }}</li>
                 <li>{{ size }}</li>
-                <li v-if="item.is_image" v-html="dimensions"></li>
+                <li v-if="dimensions" v-html="dimensions"></li>
             </ul>
             <button type="button" class="btn btn-sm btn-outline-danger" :disabled="busy" @click="destroy">
                 {{ __('Delete') }}
@@ -42,7 +42,7 @@
                 isOpen: false,
                 loading: false,
                 busy: false,
-                url: this.item.urls.thumb,
+                url: this.item.urls.thumb || this.item.urls.original,
             };
         },
 
@@ -57,7 +57,11 @@
                 return (this.item.size / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
             },
             dimensions() {
-                return `${this.item.width}&times;${this.item.height} px`;
+                if (this.item.width && this.item.height) {
+                    return `${this.item.width}&times;${this.item.height} px`;
+                }
+
+                return null;
             },
             createdAt() {
                 return this.item.created_at.substr(0, 16).replace('T', ' ');

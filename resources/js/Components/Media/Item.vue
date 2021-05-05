@@ -28,7 +28,7 @@
             return {
                 tries: 0,
                 loading: false,
-                url: this.item.urls.thumb,
+                url: this.item.urls.thumb || this.item.urls.original,
             };
         },
 

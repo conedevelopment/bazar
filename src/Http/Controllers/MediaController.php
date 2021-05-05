@@ -65,9 +65,8 @@ class MediaController extends Controller
 
         $medium = Medium::proxy()::createFrom($path);
 
-        MoveFile::withChain(
-            $medium->isImage ? [new PerformConversions($medium)] : []
-        )->dispatch($medium, $path);
+        MoveFile::withChain($medium->convertable() ? [new PerformConversions($medium)] : [])
+                ->dispatch($medium, $path);
 
         return Response::json($medium, JsonResponse::HTTP_CREATED);
     }
