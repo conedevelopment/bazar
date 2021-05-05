@@ -16,13 +16,13 @@ export default {
 
     methods: {
         next() {
-            this.$parent.query.page++;
+            this.to(this.$parent.query.page + 1);
         },
         prev() {
-            this.$parent.query.page--;
+            this.to(this.$parent.query.page - 1);
         },
         to(page) {
-            this.$parent.query.page = page;
+            Object.assign(this.$parent.query, { page });
         },
         isCurrent(page) {
             return this.$parent.response.current_page === page;

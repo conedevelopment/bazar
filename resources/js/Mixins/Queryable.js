@@ -19,13 +19,7 @@ export default {
             busy: false,
             errors: new Errors(),
             response: { data: [] },
-            query: {
-                'sort[by]': 'created_at',
-                'sort[order]': 'desc',
-                page: 1,
-                per_page: null,
-                search: null,
-            },
+            query: {},
         };
     },
 

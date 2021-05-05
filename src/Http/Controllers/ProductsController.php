@@ -43,7 +43,8 @@ class ProductsController extends Controller
         $products = Product::proxy()
                         ->newQuery()
                         ->with('media')
-                        ->filter($request)->latest()
+                        ->filter($request)
+                        ->latest()
                         ->paginate($request->input('per_page'));
 
         return $request->expectsJson()

@@ -1,11 +1,6 @@
 <template>
     <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3">
-        <div
-            class="media-item"
-            style="cursor: pointer;"
-            :class="{ 'is-image': item.is_image, 'is-document': ! item.is_image, 'is-selected': selected, 'is-loading': loading }"
-            @click.prevent="toggle"
-        >
+        <div class="media-item" style="cursor: pointer;" :class="classNames" @click.prevent="toggle">
             <img v-if="item.is_image" :src="url" :alt="item.name" @error="reload" @load="loading = false">
             <span v-else class="media-item__caption">
                 <icon name="file"></icon>
@@ -33,6 +28,15 @@
         },
 
         computed: {
+            classNames() {
+                return {
+                    'is-image': this.item.is_image,
+                    'is-svg': this.item.mime_type === 'image/svg+xml',
+                    'is-document': ! this.item.is_image,
+                    'is-selected': this.selected,
+                    'is-loading': this.loading,
+                };
+            },
             selected() {
                 return this.$parent.selection.some((item) => item.id === this.item.id);
             },

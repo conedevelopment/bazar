@@ -38,9 +38,11 @@ class MediaController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $media = Medium::proxy()->newQuery()->filter($request)->latest()->paginate(
-            $request->input('per_page')
-        );
+        $media = Medium::proxy()
+                    ->newQuery()
+                    ->filter($request)
+                    ->latest()
+                    ->paginate($request->input('per_page'));
 
         return Response::json($media);
     }

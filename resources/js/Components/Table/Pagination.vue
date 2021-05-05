@@ -3,8 +3,13 @@
         <div class="col-12 col-md-6 d-md-flex align-items-center mb-3 mb-md-0">
             <div class="form-group mb-0">
                 <div class="input-group input-group-sm">
-                    <select id="per-page" class="custom-select form-control" v-model="$parent.query.per_page">
-                        <option :value="null">15</option>
+                    <select
+                        id="per-page"
+                        class="custom-select form-control"
+                        v-model="$parent.query.per_page"
+                        :disabled="$parent.processing"
+                    >
+                        <option :value="undefined">15</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>

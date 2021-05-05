@@ -24,7 +24,7 @@
                         v-model="$parent.query.type"
                         :disabled="$parent.busy"
                     >
-                        <option :value="null">{{ __('Any') }}</option>
+                        <option :value="undefined">{{ __('Any') }}</option>
                         <option value="file">{{ __('File') }}</option>
                         <option value="image">{{ __('Image') }}</option>
                     </select>
@@ -35,13 +35,7 @@
                     <label for="media-date" class="input-group-prepend mb-0">
                         <span class="input-group-text">{{ __('Sort') }}</span>
                     </label>
-                    <select
-                        id="media-date"
-                        class="custom-select form-control"
-                        :disabled="$parent.busy"
-                        :modelValue="$parent.query['sort[by]']"
-                        @update:modelValue="$parent.query['sort[by]'] = $event"
-                    >
+                    <select id="media-date" class="custom-select form-control" :disabled="$parent.busy" v-model="order">
                         <option value="name">{{ __('Name') }}</option>
                         <option value="created_at">{{ __('Created at') }}</option>
                         <option value="updated_at">{{ __('Updated at') }}</option>
@@ -60,6 +54,14 @@
 <script>
     export default {
         computed: {
+            order: {
+                set(value) {
+                    this.$parent.query['sort[by]'] = value;
+                },
+                get() {
+                    return (this.$parent.query['sort[by]'] || 'created_at') || 'created_at';
+                },
+            },
             isDesc() {
                 return this.$parent.query['sort[order]'] === 'desc';
             },

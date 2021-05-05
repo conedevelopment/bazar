@@ -89,13 +89,7 @@
                 columns: [],
                 selection: [],
                 busy: false,
-                query: {
-                    page: 1,
-                    search: null,
-                    per_page: null,
-                    'sort[order]': 'desc',
-                    'sort[by]': 'created_at',
-                },
+                query: {},
             };
         },
     }

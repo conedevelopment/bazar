@@ -56,7 +56,7 @@
                     && this.$parent.selection.length < this.$parent.response.data.length;
             },
             isDesc() {
-                return this.$parent.query['sort[order]'] === 'desc';
+                return (this.$parent.query['sort[order]'] || 'desc') === 'desc';
             },
             icon() {
                 return this.isDesc ? 'keyboard-arrow-down' : 'keyboard-arrow-up';

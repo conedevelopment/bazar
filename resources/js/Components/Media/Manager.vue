@@ -104,12 +104,6 @@
             },
         },
 
-        beforeMount() {
-            Object.assign(this.query, {
-                type: null,
-            });
-        },
-
         mounted() {
             this.$dispatcher.once('open', this.fetch);
 

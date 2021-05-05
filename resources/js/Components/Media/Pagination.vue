@@ -8,7 +8,7 @@
                     v-model="$parent.query.per_page"
                     :disabled="$parent.busy"
                 >
-                    <option :value="null">15</option>
+                    <option :value="undefined">15</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
                     <option value="100">100</option>
