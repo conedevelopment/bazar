@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Throwable;
 
 class Transaction extends Model implements Contract
@@ -143,7 +143,7 @@ class Transaction extends Model implements Contract
      */
     public function markAsCompleted(?DateTimeInterface $date = null): self
     {
-        $date = $date ?: Carbon::now();
+        $date = $date ?: Date::now();
 
         if (is_null($this->completed_at) || $this->completed_at->notEqualTo($date)) {
             $this->forceFill(['completed_at' => $date])->save();

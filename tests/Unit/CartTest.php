@@ -7,7 +7,7 @@ use Bazar\Models\Cart;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 class CartTest extends TestCase
 {
@@ -122,7 +122,7 @@ class CartTest extends TestCase
         $this->assertSame(
             $this->cart->newQuery()
                 ->whereNull('bazar_carts.user_id')
-                ->where('bazar_carts.updated_at', '<', Carbon::now()->subDays(3))
+                ->where('bazar_carts.updated_at', '<', Date::now()->subDays(3))
                 ->toSql(),
             $this->cart->newQuery()->expired()->toSql()
         );

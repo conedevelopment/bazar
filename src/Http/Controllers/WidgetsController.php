@@ -6,9 +6,9 @@ use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Response;
 
 class WidgetsController extends Controller
@@ -63,13 +63,13 @@ class WidgetsController extends Controller
     {
         $sales = Cache::remember('bazar.sales', 3600, static function (): array {
             $days = array_reverse(array_reduce(array_fill(0, 7, null), static function (array $days): array {
-                return array_merge($days, [Carbon::now()->subDays(count($days))->format('m-d')]);
+                return array_merge($days, [Date::now()->subDays(count($days))->format('m-d')]);
             }, []));
 
             $orders = Order::proxy()->newQuery()->whereNotIn(
                 'status', ['cancelled', 'failed']
             )->where(
-                'created_at', '>=', Carbon::now()->subDays(7)->startOfDay()
+                'created_at', '>=', Date::now()->subDays(7)->startOfDay()
             )->get()->groupBy(static function (Order $order): string {
                 return $order->created_at->format('m-d');
             })->map(static function (Collection $group): int {

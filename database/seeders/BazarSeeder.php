@@ -14,7 +14,7 @@ use Bazar\Models\Medium;
 use Bazar\Models\Product;
 use Bazar\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 
 class BazarSeeder extends Seeder
@@ -43,14 +43,14 @@ class BazarSeeder extends Seeder
         User::create([
             'name' => 'Bazar Admin',
             'email' => 'admin@bazar.test',
-            'email_verified_at' => Carbon::now(),
+            'email_verified_at' => Date::now(),
             'password' => Hash::make('secret'),
         ]);
 
         User::create([
             'name' => 'Bazar User',
             'email' => 'user@bazar.test',
-            'email_verified_at' => Carbon::now(),
+            'email_verified_at' => Date::now(),
             'password' => Hash::make('secret'),
         ]);
     }
@@ -92,7 +92,7 @@ class BazarSeeder extends Seeder
         $orders = OrderFactory::new()->count(15)->make();
 
         $orders->each(function ($order, $key) {
-            $order->created_at = Carbon::now()->subDays(15 - $key);
+            $order->created_at = Date::now()->subDays(15 - $key);
 
             $order->save();
 

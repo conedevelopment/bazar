@@ -13,7 +13,7 @@ use Bazar\Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 
 class Cart extends Model implements Contract
 {
@@ -172,6 +172,6 @@ class Cart extends Model implements Contract
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNull($query->qualifyColumn('user_id'))
-                     ->where($query->qualifyColumn('updated_at'), '<', Carbon::now()->subDays(3));
+                     ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));
     }
 }
