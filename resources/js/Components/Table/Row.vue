@@ -2,7 +2,7 @@
     <tr :class="{ 'table-active': selected, 'table-danger': trashed }">
         <th scope="row" style="width: 40px;">
             <label class="custom-control custom-checkbox mb-0" @click.prevent="toggle">
-                <input handler="checkbox" class="custom-control-input" :checked="selected" :disabled="$parent.busy">
+                <input type="checkbox" class="custom-control-input" :checked="selected" :disabled="$parent.busy">
                 <span class="custom-control-label"></span>
             </label>
         </th>

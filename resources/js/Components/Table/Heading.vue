@@ -2,14 +2,13 @@
     <tr>
         <th scope="col" style="width: 80px;">
             <div class="d-flex">
-                <label class="custom-control custom-checkbox mb-0">
+                <label class="custom-control custom-checkbox mb-0" @click.prevent="toggle">
                     <input
                         ref="input"
-                        handler="checkbox"
+                        type="checkbox"
                         class="custom-control-input"
                         :checked="selected"
                         :disabled="$parent.busy"
-                        @input.prevent="toggle"
                     >
                     <span class="custom-control-label"></span>
                 </label>
@@ -65,7 +64,7 @@
 
         methods: {
             select() {
-                this.$parent.selection = this.$parent.response.data.map((item) => item.id);
+                this.$parent.selection = Array.from(this.$parent.response.data);
             },
             deselect() {
                 this.$parent.selection = [];

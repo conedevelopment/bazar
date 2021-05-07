@@ -106,13 +106,13 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
      * Get the caster class to use when casting from / to this cast target.
      *
      * @param  array  $arguments
-     * @return object
+     * @return \Illuminate\Contracts\Database\Eloquent\CastsAttributes
      */
-    public static function castUsing(array $arguments): object
+    public static function castUsing(array $arguments): CastsAttributes
     {
         return new class(static::class) implements CastsAttributes
         {
-            protected $class;
+            protected string $class;
 
             public function __construct(string $class)
             {
@@ -123,9 +123,9 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
             {
                 $class = $this->class;
 
-                $value = $value ? json_decode($value, true) : [];
-
-                return new $class($value);
+                return new $class(
+                    $value ? json_decode($value, true) : []
+                );
             }
 
             public function set($model, string $key, $value, array $attributes): string
