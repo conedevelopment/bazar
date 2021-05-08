@@ -45,7 +45,7 @@ class CategoriesController extends Controller
 
         return Inertia::render('Categories/Index', [
             'response' => $categories,
-            'filters' => Category::proxy()::filters(),
+            'filters' => Category::proxy()::filters($request),
         ]);
     }
 

@@ -47,7 +47,7 @@ class UsersController extends Controller
             ? ResponseFactory::json($users)
             : Inertia::render('Users/Index', [
                 'response' => $users,
-                'filters' => User::proxy()::filters(),
+                'filters' => User::proxy()::filters($request),
             ]);
     }
 

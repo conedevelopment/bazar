@@ -51,7 +51,7 @@ class OrdersController extends Controller
 
         return Inertia::render('Orders/Index', [
             'response' => $orders,
-            'filters' => Order::proxy()::filters(),
+            'filters' => Order::proxy()::filters($request),
         ]);
     }
 

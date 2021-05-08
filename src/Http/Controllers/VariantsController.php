@@ -51,7 +51,7 @@ class VariantsController extends Controller
 
         return Inertia::render('Variants/Index', [
             'response' => $variants,
-            'filters' => Variant::proxy()::filters(),
+            'filters' => Variant::proxy()::filters($request),
         ]);
     }
 

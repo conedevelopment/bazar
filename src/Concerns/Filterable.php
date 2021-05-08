@@ -11,9 +11,10 @@ trait Filterable
     /**
      * Get the filter options for the model.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public static function filters(): array
+    public static function filters(Request $request): array
     {
         return in_array(SoftDeletes::class, class_uses_recursive(get_called_class()))
             ? ['state' => [

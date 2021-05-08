@@ -51,7 +51,7 @@ class ProductsController extends Controller
             ? ResponseFactory::json($products)
             : Inertia::render('Products/Index', [
                 'response' => $products,
-                'filters' => Product::proxy()::filters(),
+                'filters' => Product::proxy()::filters($request),
             ]);
     }
 

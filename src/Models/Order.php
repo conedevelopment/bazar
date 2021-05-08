@@ -154,11 +154,12 @@ class Order extends Model implements Contract
     /**
      * Get the filter options for the model.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public static function filters(): array
+    public static function filters(Request $request): array
     {
-        return array_merge(static::defaultFilters(), [
+        return array_merge(static::defaultFilters($request), [
             'status' => static::statuses(),
             'user' => User::proxy()->newQuery()->pluck('id', 'name')->toArray(),
         ]);
