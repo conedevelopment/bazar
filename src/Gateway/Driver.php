@@ -34,6 +34,24 @@ abstract class Driver
     }
 
     /**
+     * Process the payment.
+     *
+     * @param  \Bazar\Models\Order  $order
+     * @param  float|null  $amount
+     * @return \Bazar\Models\Transaction
+     */
+    abstract public function pay(Order $order, ?float $amount = null): Transaction;
+
+    /**
+     * Process the refund.
+     *
+     * @param  \Bazar\Models\Order  $order
+     * @param  float|null  $amount
+     * @return \Bazar\Models\Transaction
+     */
+    abstract public function refund(Order $order, ?float $amount = null): Transaction;
+
+    /**
      * Get the ID of the driver.
      *
      * @return string
@@ -80,7 +98,7 @@ abstract class Driver
      *
      * @return $this
      */
-    public function enable(): Driver
+    public function enable(): self
     {
         $this->enabled = true;
 
@@ -92,7 +110,7 @@ abstract class Driver
      *
      * @return $this
      */
-    public function disable(): Driver
+    public function disable(): self
     {
         $this->enabled = false;
 
@@ -109,22 +127,4 @@ abstract class Driver
     {
         return null;
     }
-
-    /**
-     * Process the payment.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     */
-    abstract public function pay(Order $order, ?float $amount = null): Transaction;
-
-    /**
-     * Process the refund.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     */
-    abstract public function refund(Order $order, ?float $amount = null): Transaction;
 }

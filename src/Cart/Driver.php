@@ -42,6 +42,14 @@ abstract class Driver
     }
 
     /**
+     * Resolve the cart instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Bazar\Models\Cart
+     */
+    abstract protected function resolve(Request $request): Cart;
+
+    /**
      * Get the cart model.
      *
      * @return \Bazar\Models\Cart
@@ -222,14 +230,6 @@ abstract class Driver
     {
         return new Checkout($this->model());
     }
-
-    /**
-     * Resolve the cart instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Models\Cart
-     */
-    abstract protected function resolve(Request $request): Cart;
 
     /**
      * Handle dynamic method calls into the driver.

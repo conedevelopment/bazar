@@ -33,6 +33,14 @@ abstract class Driver
     }
 
     /**
+     * Calculate the shipping cost.
+     *
+     * @param  \Bazar\Contracts\Shippable  $model
+     * @return float
+     */
+    abstract public function calculate(Shippable $model): float;
+
+    /**
      * Get the ID of the driver.
      *
      * @return string
@@ -79,7 +87,7 @@ abstract class Driver
      *
      * @return $this
      */
-    public function enable(): Driver
+    public function enable(): self
     {
         $this->enabled = true;
 
@@ -91,18 +99,10 @@ abstract class Driver
      *
      * @return $this
      */
-    public function disable(): Driver
+    public function disable(): self
     {
         $this->enabled = false;
 
         return $this;
     }
-
-    /**
-     * Calculate the shipping cost.
-     *
-     * @param  \Bazar\Contracts\Shippable  $model
-     * @return float
-     */
-    abstract public function calculate(Shippable $model): float;
 }
