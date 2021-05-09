@@ -11,6 +11,8 @@ use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Order as Contract;
 use Bazar\Database\Factories\OrderFactory;
+use Bazar\Exceptions\TransactionFailedException;
+use Bazar\Support\Facades\Gateway;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -206,6 +208,50 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Create a payment transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @return \Bazar\Models\Transaction
+     *
+     * @throws \Bazar\Exceptions\TransactionFailedException
+     */
+    public function pay(?float $amount = null, ?string $driver = null): Transaction
+    {
+        if ($this->paid()) {
+            throw new TransactionFailedException("The order #{$this->id} is fully paid.");
+        }
+
+        return $this->transactions()->create([
+            'type' => 'payment',
+            'driver' => $driver ?: Gateway::getDefaultDriver(),
+            'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
+        ]);
+    }
+
+    /**
+     * Create a refund transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @return \Bazar\Models\Transaction
+     *
+     * @throws \Bazar\Exceptions\TransactionFailedException
+     */
+    public function refund(?float $amount = null, ?string $driver = null): Transaction
+    {
+        if ($this->refunded()) {
+            throw new TransactionFailedException("The order #{$this->id} is fully refunded.");
+        }
+
+        return $this->transactions()->create([
+            'type' => 'refund',
+            'driver' => $driver ?: Gateway::getDefaultDriver(),
+            'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
+        ]);
+    }
+
+    /**
      * Get the total paid amount.
      *
      * @return float
@@ -273,7 +319,7 @@ class Order extends Model implements Contract
      */
     public function status(string $status): self
     {
-        $this->update(['status' => $status]);
+        $this->setAttribute('status', $status)->save();
 
         return $this;
     }

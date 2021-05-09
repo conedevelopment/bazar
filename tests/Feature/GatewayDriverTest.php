@@ -55,32 +55,6 @@ class GatewayDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_exceptions()
-    {
-        $driver = $this->manager->driver('cash');
-
-        try {
-            $driver->transaction($this->order, 'fake');
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(InvalidArgumentException::class, $e);
-        }
-
-        $driver->pay($this->order);
-        try {
-            $driver->pay($this->order);
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(TransactionFailedException::class, $e);
-        }
-
-        $driver->refund($this->order);
-        try {
-            $driver->refund($this->order);
-        } catch (Throwable $e) {
-            $this->assertInstanceOf(TransactionFailedException::class, $e);
-        }
-    }
-
-    /** @test */
     public function it_has_cash_driver()
     {
         $driver = $this->manager->driver('cash');
@@ -91,13 +65,13 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertTrue($this->order->fresh()->paid());
+        $this->assertTrue($this->order->refresh()->paid());
         $this->assertNull($driver->transactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertTrue($this->order->fresh()->refunded());
+        $this->assertTrue($this->order->refresh()->refunded());
         $this->assertNull($driver->transactionUrl($payment));
     }
 
@@ -112,13 +86,13 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertTrue($this->order->fresh()->paid());
+        $this->assertTrue($this->order->refresh()->paid());
         $this->assertNull($driver->transactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertTrue($this->order->fresh()->refunded());
+        $this->assertTrue($this->order->refresh()->refunded());
         $this->assertNull($driver->transactionUrl($payment));
     }
 
@@ -131,13 +105,13 @@ class GatewayDriverTest extends TestCase
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
-        $this->assertTrue($this->order->fresh()->paid());
+        $this->assertTrue($this->order->refresh()->paid());
         $this->assertSame('fake-url', $driver->transactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
-        $this->assertTrue($this->order->fresh()->refunded());
+        $this->assertTrue($this->order->refresh()->refunded());
         $this->assertSame('fake-url', $driver->transactionUrl($payment));
     }
 }
@@ -151,19 +125,11 @@ class CustomGatewayDriver Extends Driver
 
     public function pay(Order $order, float $amount = null): Transaction
     {
-        $transaction = $this->transaction($order, 'payment', $amount);
-
-        $transaction->save();
-
-        return $transaction;
+        return $order->pay($amount, $this->id());
     }
 
     public function refund(Order $order, float $amount = null): Transaction
     {
-        $transaction = $this->transaction($order, 'refund', $amount);
-
-        $transaction->save();
-
-        return $transaction;
+        return $order->refund($amount, $this->id());
     }
 }

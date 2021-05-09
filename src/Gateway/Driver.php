@@ -2,11 +2,9 @@
 
 namespace Bazar\Gateway;
 
-use Bazar\Exceptions\TransactionFailedException;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
-use InvalidArgumentException;
 
 abstract class Driver
 {
@@ -110,44 +108,6 @@ abstract class Driver
     public function transactionUrl(Transaction $transaction): ?string
     {
         return null;
-    }
-
-    /**
-     * Make a transaction for the given order.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  string  $type
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Bazar\Exceptions\TransactionFailedException
-     */
-    public function transaction(Order $order, string $type = 'payment', ?float $amount = null): Transaction
-    {
-        if (! in_array($type, ['payment', 'refund'])) {
-            throw new InvalidArgumentException('The transaction type must be "payment" or "refund".');
-        }
-
-        if ($type === 'payment' && $order->paid()) {
-            throw new TransactionFailedException("The order #{$order->id} is fully paid.");
-        }
-
-        if ($type === 'refund' && $order->refunded()) {
-            throw new TransactionFailedException("The order #{$order->id} is fully refunded.");
-        }
-
-        $total = $type === 'payment' ? $order->totalPayable() : $order->totalRefundable();
-
-        $transaction = $order->transactions()->make([
-            'type' => $type,
-            'driver' => $this->id(),
-            'amount' => is_null($amount) ? $total : min($amount, $total),
-        ]);
-
-        $order->transactions->push($transaction);
-
-        return $transaction;
     }
 
     /**

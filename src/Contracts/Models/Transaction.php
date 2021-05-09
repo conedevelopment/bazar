@@ -46,16 +46,16 @@ interface Transaction
      * Mark the transaction as completed.
      *
      * @param \DateTimeInterface|null  $date
-     * @return $this
+     * @return void
      */
-    public function markAsCompleted(?DateTimeInterface $date = null): self;
+    public function markAsCompleted(?DateTimeInterface $date = null): void;
 
     /**
      * Mark the transaction as pending.
      *
-     * @return $this
+     * @return void
      */
-    public function markAsPending(): self;
+    public function markAsPending(): void;
 
     /**
      * Set the driver.
