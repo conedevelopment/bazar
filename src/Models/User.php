@@ -25,7 +25,8 @@ use Illuminate\Support\Str;
 class User extends Authenticatable implements Contract, MustVerifyEmail
 {
     use BazarRoutable;
-    use Filterable, HasFactory;
+    use Filterable;
+    use HasFactory;
     use InteractsWithProxy;
     use Notifiable;
     use SoftDeletes;
@@ -105,11 +106,11 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\UserFactory
+     * @return \Bazar\Database\Factories\UserFactory|null
      */
-    protected static function newFactory(): UserFactory
+    protected static function newFactory(): ?UserFactory
     {
-        return UserFactory::new();
+        return get_called_class() === User::class ? UserFactory::new() : null;
     }
 
     /**

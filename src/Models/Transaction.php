@@ -145,8 +145,8 @@ class Transaction extends Model implements Contract
     {
         $date = $date ?: Date::now();
 
-        if (is_null($this->completed_at) || $this->completed_at->notEqualTo($date)) {
-            $this->forceFill(['completed_at' => $date])->save();
+        if ($this->pending() || $this->completed_at->notEqualTo($date)) {
+            $this->setAttribute('completed_at', $date)->save();
         }
 
         return $this;
@@ -159,8 +159,8 @@ class Transaction extends Model implements Contract
      */
     public function markAsPending(): self
     {
-        if (! is_null($this->completed_at)) {
-            $this->forceFill(['completed_at' => null])->save();
+        if ($this->completed()) {
+            $this->setAttribute('completed_at', null)->save();
         }
 
         return $this;
