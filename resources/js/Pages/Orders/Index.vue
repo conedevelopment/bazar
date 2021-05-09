@@ -24,7 +24,7 @@
                 </span>
             </data-table-column>
             <data-table-column :label="__('Created at')" sort="created_at" #default="item">
-                {{ formatDate(item.created_at) }}
+                {{ $date(item.created_at).format('YYYY-MM-DD HH:mm') }}
             </data-table-column>
         </data-table>
     </div>
@@ -73,9 +73,6 @@
                     default:
                         return 'badge-warning';
                 }
-            },
-            formatDate(date) {
-                return date.substr(0, 16).replace('T', ' ');
             },
         },
     }

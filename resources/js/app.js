@@ -3,9 +3,6 @@ import { App, plugin } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress';
 import Layout from './Components/Layout';
 import 'simplebar';
-import Bazar from './Plugins/Bazar';
-import Http from './Plugins/Http';
-import Translator from './Plugins/Translator';
 
 InertiaProgress.init({
     delay: 250,
@@ -42,8 +39,13 @@ const app = createApp({
 
 // Plugins
 app.use(plugin);
+import Bazar from './Plugins/Bazar';
 app.use(Bazar);
+import DateTime from './Plugins/DateTime';
+app.use(DateTime);
+import Http from './Plugins/Http';
 app.use(Http);
+import Translator from './Plugins/Translator';
 app.use(Translator, { translations: Bazar.translations });
 
 // Components

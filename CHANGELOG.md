@@ -1,5 +1,16 @@
 # Changelog
 
+## v0.7.5 (2021-05-09)
+### Added
+- Added SVG support for the media library
+
+### Changed
+- Use the `Date` facade, instead of the `Carbon` class
+- Passes the `Request` object for the filtering methods as a parameter
+
+### Fixed
+- Fixed data table selection issues
+
 ## v0.7.4 (2021-04-25)
 ### Added
 - Added `env` functions for default drivers in the `bazar.php` config file

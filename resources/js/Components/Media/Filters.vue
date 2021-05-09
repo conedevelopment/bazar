@@ -59,11 +59,11 @@
                     this.$parent.query['sort[by]'] = value;
                 },
                 get() {
-                    return (this.$parent.query['sort[by]'] || 'created_at') || 'created_at';
+                    return this.$parent.query['sort[by]'] || 'created_at';
                 },
             },
             isDesc() {
-                return this.$parent.query['sort[order]'] === 'desc';
+                return (this.$parent.query['sort[order]'] || 'desc') === 'desc';
             },
             icon() {
                 return this.isDesc ? 'keyboard-arrow-down' : 'keyboard-arrow-up';

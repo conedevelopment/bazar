@@ -80,7 +80,7 @@
                 return `/bazar/orders/${this.transaction.order_id}/transactions/${this.transaction.id}`;
             },
             completedAt() {
-                return this.transaction.completed_at.substr(0, 16).replace('T', ' ');
+                return this.$date(this.transaction.completed_at).format('YYYY-MM-DD HH:mm');
             },
         },
 

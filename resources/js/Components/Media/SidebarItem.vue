@@ -64,7 +64,7 @@
                 return null;
             },
             createdAt() {
-                return this.item.created_at.substr(0, 16).replace('T', ' ');
+                return this.$date(this.item.created_at).format('YYYY-MM-DD HH:mm');
             },
         },
 

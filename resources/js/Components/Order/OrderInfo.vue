@@ -79,7 +79,7 @@
 
         computed: {
             createdAt() {
-                return this.order.created_at.substr(0, 16).replace('T', ' ');
+                return this.$date(this.order.created_at).format('YYYY-MM-DD HH:mm');
             },
         },
     }
