@@ -48,6 +48,7 @@ class Transaction extends Model implements Contract
         'type',
         'amount',
         'driver',
+        'completed_at',
     ];
 
     /**

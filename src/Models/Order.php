@@ -212,21 +212,22 @@ class Order extends Model implements Contract
      *
      * @param  float|null  $amount
      * @param  string|null  $driver
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      *
      * @throws \Bazar\Exceptions\TransactionFailedException
      */
-    public function pay(?float $amount = null, ?string $driver = null): Transaction
+    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
         if ($this->paid()) {
-            throw new TransactionFailedException("The order #{$this->id} is fully paid.");
+            throw new TransactionFailedException("Order #{$this->id} is fully paid.");
         }
 
-        return $this->transactions()->create([
+        return $this->transactions()->create(array_replace($attributes, [
             'type' => 'payment',
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
-        ]);
+        ]));
     }
 
     /**
@@ -234,21 +235,22 @@ class Order extends Model implements Contract
      *
      * @param  float|null  $amount
      * @param  string|null  $driver
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      *
      * @throws \Bazar\Exceptions\TransactionFailedException
      */
-    public function refund(?float $amount = null, ?string $driver = null): Transaction
+    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
         if ($this->refunded()) {
-            throw new TransactionFailedException("The order #{$this->id} is fully refunded.");
+            throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
         }
 
-        return $this->transactions()->create([
+        return $this->transactions()->create(array_replace($attributes, [
             'type' => 'refund',
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
-        ]);
+        ]));
     }
 
     /**

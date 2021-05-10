@@ -16,9 +16,9 @@ class CashDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null): Transaction
     {
-        return tap($order->pay($amount, $this->id()), static function (Transaction $transaction): void {
-            $transaction->markAsCompleted();
-        });
+        return $order->pay($amount, $this->id(), [
+            'completed_at' => time(),
+        ]);
     }
 
     /**
@@ -30,8 +30,8 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null): Transaction
     {
-        return tap($order->refund($amount, $this->id()), static function (Transaction $transaction): void {
-            $transaction->markAsCompleted();
-        });
+        return $order->refund($amount, $this->id(), [
+            'completed_at' => time(),
+        ]);
     }
 }

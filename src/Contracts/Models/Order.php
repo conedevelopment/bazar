@@ -43,18 +43,20 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      *
      * @param  float|null  $amount
      * @param  string|null  $driver
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function pay(?float $amount = null, ?string $driver = null): Transaction;
+    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
     /**
      * Create a refund transaction for the order.
      *
      * @param  float|null  $amount
      * @param  string|null  $driver
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function refund(?float $amount = null, ?string $driver = null): Transaction;
+    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
     /**
      * Get the total paid amount.
