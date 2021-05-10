@@ -219,7 +219,7 @@ class Order extends Model implements Contract
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->paid()) {
+        if ($this->totalPayable() === 0 || $this->paid()) {
             throw new TransactionFailedException("Order #{$this->id} is fully paid.");
         }
 
@@ -242,7 +242,7 @@ class Order extends Model implements Contract
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->refunded()) {
+        if ($this->totalRefundable() === 0 || $this->refunded()) {
             throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
         }
 

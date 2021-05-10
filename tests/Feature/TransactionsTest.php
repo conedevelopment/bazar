@@ -70,7 +70,7 @@ class TransactionsTest extends TestCase
             URL::route('bazar.orders.transactions.store', $this->order),
             $payment = Transaction::factory()->make([
                 'type' => 'payment',
-                'driver' => 'manual',
+                'driver' => 'cash',
                 'amount' => $this->order->fresh()->totalPayable(),
             ])->toArray()
         )->assertCreated()
@@ -80,7 +80,7 @@ class TransactionsTest extends TestCase
             URL::route('bazar.orders.transactions.store', $this->order),
             $refund = Transaction::factory()->make([
                 'type' => 'refund',
-                'driver' => 'manual',
+                'driver' => 'cash',
                 'amount' => $this->order->totalRefundable(),
             ])->toArray()
         )->assertCreated()
