@@ -38,7 +38,7 @@ class TransactionsController extends Controller
      */
     public function store(StoreRequest $request, Order $order): JsonResponse
     {
-        $method = $request->input('type') === 'refund' ? 'refund' : 'pay';
+        $method = $request->input('type') === Transaction::REFUND ? 'refund' : 'pay';
 
         try {
             $transaction = call_user_func_array(

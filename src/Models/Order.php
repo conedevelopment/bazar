@@ -184,7 +184,7 @@ class Order extends Model implements Contract
      */
     public function getPaymentsAttribute(): Collection
     {
-        return $this->transactions->where('type', 'payment');
+        return $this->transactions->where('type', Transaction::PAYMENT);
     }
 
     /**
@@ -194,7 +194,7 @@ class Order extends Model implements Contract
      */
     public function getRefundsAttribute(): Collection
     {
-        return $this->transactions->where('type', 'refund');
+        return $this->transactions->where('type', Transaction::REFUND);
     }
 
     /**
@@ -224,7 +224,7 @@ class Order extends Model implements Contract
         }
 
         return $this->transactions()->create(array_replace($attributes, [
-            'type' => 'payment',
+            'type' => Transaction::PAYMENT,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
         ]));
@@ -247,7 +247,7 @@ class Order extends Model implements Contract
         }
 
         return $this->transactions()->create(array_replace($attributes, [
-            'type' => 'refund',
+            'type' => Transaction::REFUND,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
         ]));

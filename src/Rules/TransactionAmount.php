@@ -3,6 +3,7 @@
 namespace Bazar\Rules;
 
 use Bazar\Models\Order;
+use Bazar\Models\Transaction;
 use Illuminate\Contracts\Validation\Rule;
 
 class TransactionAmount implements Rule
@@ -19,7 +20,7 @@ class TransactionAmount implements Rule
      *
      * @var string
      */
-    protected string $type = 'payment';
+    protected string $type = Transaction::PAYMENT;
 
     /**
      * Create a new rule instance.
@@ -32,7 +33,7 @@ class TransactionAmount implements Rule
     {
         $this->type = $type ?: $this->type;
 
-        $this->amount = $this->type === 'payment'
+        $this->amount = $this->type === Transaction::PAYMENT
             ? $order->totalPayable()
             : $order->totalRefundable();
     }
@@ -57,7 +58,7 @@ class TransactionAmount implements Rule
     public function message(): string
     {
         return $this->amount <= 0
-            ? ($this->type === 'payment' ? __('The order is fully paid.') : __('The order is fully refunded.'))
+            ? ($this->type === Transaction::PAYMENT ? __('The order is fully paid.') : __('The order is fully refunded.'))
             : __('The :attribute must be less than :value.', ['value' => $this->amount]);
     }
 }

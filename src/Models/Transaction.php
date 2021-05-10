@@ -20,6 +20,20 @@ class Transaction extends Model implements Contract
     use InteractsWithProxy;
 
     /**
+     * The payment type.
+     *
+     * @var string
+     */
+    public const PAYMENT = 'payment';
+
+    /**
+     * The refund type.
+     *
+     * @var string
+     */
+    public const REFUND = 'refund';
+
+    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -184,7 +198,7 @@ class Transaction extends Model implements Contract
      */
     public function scopePayment(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), 'payment');
+        return $query->where($query->qualifyColumn('type'), static::PAYMENT);
     }
 
     /**
@@ -195,7 +209,7 @@ class Transaction extends Model implements Contract
      */
     public function scopeRefund(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), 'refund');
+        return $query->where($query->qualifyColumn('type'), static::REFUND);
     }
 
     /**
