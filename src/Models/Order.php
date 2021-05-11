@@ -109,33 +109,6 @@ class Order extends Model implements Contract
     }
 
     /**
-     * Create a new order from the given cart.
-     *
-     * @param  \Bazar\Models\Cart  $cart
-     * @return static
-     */
-    public static function createFrom(Cart $cart): Order
-    {
-        $order = static::make($cart->toArray());
-
-        $order->user()->associate($cart->user)->save();
-
-        $order->products()->attach(
-            $cart->items->mapWithKeys(static function (Item $item): array {
-                return [$item->product_id => $item->only([
-                    'price', 'tax', 'quantity', 'properties',
-                ])];
-            })->toArray()
-        );
-
-        $order->address()->save($cart->address);
-        $order->shipping()->save($cart->shipping);
-        $order->shipping->address()->save($cart->shipping->address);
-
-        return $order;
-    }
-
-    /**
      * Get the available order statuses.
      *
      * @return array

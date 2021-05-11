@@ -9,7 +9,6 @@ use Bazar\Events\CheckoutProcessed;
 use Bazar\Events\CheckoutProcessing;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
-use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Gateway;
 use Throwable;
 
@@ -93,13 +92,8 @@ class Checkout
      */
     public function shipping(string $driver, array $details = []): Checkout
     {
-        tap($this->cart->shipping->driver($driver), static function (Shipping $shipping): void {
-            if (! $shipping->exists) {
-                $shipping->save();
-            }
-        })->address->fill(
-            array_replace_recursive($this->cart->address->toArray(), $details)
-        )->save();
+        $this->cart->shipping->driver($driver)->save();
+        $this->cart->shipping->address->fill(array_replace_recursive($this->cart->address->toArray(), $details))->save();
 
         return $this;
     }
@@ -167,6 +161,6 @@ class Checkout
     {
         CartTouched::dispatch($this->cart);
 
-        return Order::proxy()::createFrom($this->cart);
+        return $this->cart->toOrder();
     }
 }
