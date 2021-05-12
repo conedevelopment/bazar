@@ -60,7 +60,7 @@ abstract class Driver
                 $cart = $this->resolve($request);
 
                 if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::currency()) {
-                    $cart->fill(['currency' => Bazar::currency()])->save();
+                    $cart->setAttribute('currency', Bazar::currency())->save();
                 }
 
                 return $cart;

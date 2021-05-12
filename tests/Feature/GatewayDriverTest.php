@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Events\CheckoutProcessing;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
@@ -12,7 +11,6 @@ use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
-use Illuminate\Support\Facades\Event;
 
 class GatewayDriverTest extends TestCase
 {
