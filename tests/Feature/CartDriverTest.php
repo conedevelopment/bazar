@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Cart\Checkout;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
 use Bazar\Cart\SessionDriver;
@@ -14,8 +13,6 @@ use Bazar\Models\Variant;
 use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Str;
 
 class CartDriverTest extends TestCase
 {
@@ -145,14 +142,6 @@ class CartDriverTest extends TestCase
     {
         $this->assertEquals(
             $this->manager->model()->discount, $this->manager->discount()
-        );
-    }
-
-    /** @test */
-    public function it_can_checkout()
-    {
-        $this->assertInstanceOf(
-            Checkout::class, $this->manager->checkout()
         );
     }
 }

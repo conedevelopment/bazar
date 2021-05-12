@@ -3,7 +3,6 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
-use Bazar\Cart\Checkout;
 use Bazar\Events\CartTouched;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
@@ -219,16 +218,6 @@ abstract class Driver
     public function isNotEmpty(): bool
     {
         return ! $this->isEmpty();
-    }
-
-    /**
-     * Initialize a checkout instance.
-     *
-     * @return \Bazar\Cart\Checkout
-     */
-    public function checkout(): Checkout
-    {
-        return new Checkout($this->model());
     }
 
     /**

@@ -196,11 +196,15 @@ class Order extends Model implements Contract
             throw new TransactionFailedException("Order #{$this->id} is fully paid.");
         }
 
-        return $this->transactions()->create(array_replace($attributes, [
+        $transaction = $this->transactions()->create(array_replace($attributes, [
             'type' => Transaction::PAYMENT,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
         ]));
+
+        $this->transactions->push($transaction);
+
+        return $transaction;
     }
 
     /**
@@ -219,11 +223,15 @@ class Order extends Model implements Contract
             throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
         }
 
-        return $this->transactions()->create(array_replace($attributes, [
+        $transaction = $this->transactions()->create(array_replace($attributes, [
             'type' => Transaction::REFUND,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
         ]));
+
+        $this->transactions->push($transaction);
+
+        return $transaction;
     }
 
     /**

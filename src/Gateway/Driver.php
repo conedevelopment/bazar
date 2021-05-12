@@ -2,9 +2,14 @@
 
 namespace Bazar\Gateway;
 
+use Bazar\Events\CheckoutFailed;
+use Bazar\Events\CheckoutProcessing;
+use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
+use Illuminate\Http\Request;
+use Throwable;
 
 abstract class Driver
 {
@@ -126,5 +131,27 @@ abstract class Driver
     public function transactionUrl(Transaction $transaction): ?string
     {
         return null;
+    }
+
+    /**
+     * Handle the checkout request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Bazar\Models\Cart  $cart
+     * @return \Bazar\Models\Order
+     */
+    public function checkout(Request $request, Cart $cart): Order
+    {
+        $order = $cart->toOrder();
+
+        try {
+            CheckoutProcessing::dispatch($order);
+
+            $this->pay($order);
+        } catch (Throwable $exception) {
+            CheckoutFailed::dispatch($order);
+        }
+
+        return $order;
     }
 }

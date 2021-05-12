@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static float count()
  * @method static bool isEmpty()
  * @method static bool isNotEmpty()
- * @method static \Bazar\Cart\Checkout checkout()
  * @method static \Bazar\Models\Order toOrder()
  *
  * @see \Bazar\Cart\Driver
