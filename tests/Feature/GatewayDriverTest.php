@@ -2,17 +2,17 @@
 
 namespace Bazar\Tests\Feature;
 
-use Bazar\Exceptions\TransactionFailedException;
+use Bazar\Events\CheckoutProcessing;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
 use Bazar\Gateway\TransferDriver;
+use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
 use Bazar\Tests\TestCase;
-use InvalidArgumentException;
-use Throwable;
+use Illuminate\Support\Facades\Event;
 
 class GatewayDriverTest extends TestCase
 {
@@ -113,6 +113,18 @@ class GatewayDriverTest extends TestCase
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
         $this->assertSame('fake-url', $driver->transactionUrl($payment));
+    }
+
+    /** @test */
+    public function it_can_checkout_using_a_driver()
+    {
+        $driver = $this->manager->driver('cash');
+
+        $cart = Cart::factory()->create();
+
+        $order = $driver->checkout($this->app['request'], $cart);
+
+        $this->assertInstanceOf(Order::class, $order);
     }
 }
 
