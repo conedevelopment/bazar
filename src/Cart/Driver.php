@@ -4,6 +4,7 @@ namespace Bazar\Cart;
 
 use Bazar\Bazar;
 use Bazar\Events\CartTouched;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
@@ -178,6 +179,16 @@ abstract class Driver
     public function items(): Collection
     {
         return $this->model()->items;
+    }
+
+    /**
+     * Get the billing address that belongs to the cart.
+     *
+     * @return \Bazar\Models\Address
+     */
+    public function billing(): Address
+    {
+        return $this->model()->address;
     }
 
     /**

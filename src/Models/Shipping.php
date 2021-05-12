@@ -239,16 +239,14 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Set the driver.
+     * Set the driver attribute.
      *
      * @param  string  $driver
      * @return $this
      */
     public function driver(string $driver): self
     {
-        $this->driver = $driver;
-
-        return $this;
+        return $this->setAttribute('driver', $driver);
     }
 
     /**

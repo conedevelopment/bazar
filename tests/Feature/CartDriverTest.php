@@ -6,6 +6,7 @@ use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
 use Bazar\Cart\SessionDriver;
 use Bazar\Events\CartTouched;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
@@ -119,6 +120,12 @@ class CartDriverTest extends TestCase
     public function it_has_shipping()
     {
         $this->assertInstanceOf(Shipping::class, $this->manager->shipping());
+    }
+
+    /** @test */
+    public function it_has_billing()
+    {
+        $this->assertInstanceOf(Address::class, $this->manager->billing());
     }
 
     /** @test */
