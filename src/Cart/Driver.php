@@ -72,18 +72,6 @@ abstract class Driver
     }
 
     /**
-     * Get the item by the product and its properties.
-     *
-     * @param  \Bazar\Models\Product  $product
-     * @param  array  $properties
-     * @return \Bazar\Models\Item|null
-     */
-    public function item(Product $product, array $properties = []): ?Item
-    {
-        return $this->model()->item($product, $properties);
-    }
-
-    /**
      * Add the product with the given properties to the cart.
      *
      * @param  \Bazar\Models\Product  $product
@@ -93,7 +81,7 @@ abstract class Driver
      */
     public function add(Product $product, float $quantity = 1, array $properties = []): Item
     {
-        if ($item = $this->item($product, $properties)) {
+        if ($item = $this->model()->item($product, $properties)) {
             $item->update([
                 'properties' => $properties,
                 'quantity' => $item->quantity + $quantity,
@@ -139,11 +127,11 @@ abstract class Driver
      */
     public function update(array $items = []): void
     {
-        $this->model()->items->whereIn(
-            'id', array_keys($items)
-        )->each(static function (Item $item) use ($items): void {
-            $item->update($items[$item->id]);
-        });
+        $this->items()
+            ->whereIn('id', array_keys($items))
+            ->each(static function (Item $item) use ($items): void {
+                $item->update($items[$item->id]);
+            });
 
         CartTouched::dispatch($this->model());
     }
@@ -208,7 +196,7 @@ abstract class Driver
      */
     public function count(): float
     {
-        return $this->model()->items->sum('quantity');
+        return $this->items()->sum('quantity');
     }
 
     /**
@@ -218,7 +206,7 @@ abstract class Driver
      */
     public function isEmpty(): bool
     {
-        return $this->model()->items->isEmpty();
+        return $this->items()->isEmpty();
     }
 
     /**
@@ -235,11 +223,11 @@ abstract class Driver
      * Handle dynamic method calls into the driver.
      *
      * @param  string  $method
-     * @param  array  $arguments
+     * @param  array  $parameters
      * @return mixed
      */
-    public function __call(string $method, array $arguments)
+    public function __call(string $method, array $parameters)
     {
-        return call_user_func_array([$this->model(), $method], $arguments);
+        return call_user_func_array([$this->model(), $method], $parameters);
     }
 }
