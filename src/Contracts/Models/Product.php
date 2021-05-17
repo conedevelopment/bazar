@@ -53,5 +53,5 @@ interface Product extends Breadcrumbable, Stockable
      * @param  array  $option
      * @return \Bazar\Models\Variant|null
      */
-    public function variant(array $option): ?Variant;
+    public function toVariant(array $option): ?Variant;
 }

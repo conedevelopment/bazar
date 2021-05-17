@@ -184,40 +184,6 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the variant of the given option.
-     *
-     * @param  array  $variation
-     * @return \Bazar\Models\Variant|null
-     */
-    public function variant(array $variation): ?Variant
-    {
-        return $this->variants->sortBy(static function (Variant $variant): int {
-            return array_count_values($variant->variation)['*'] ?? 0;
-        })->first(function (Variant $variant) use ($variation): bool {
-            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
-
-            foreach ($variant->variation as $key => $value) {
-                if ($value === '*') {
-                    $variation[$key] = $value;
-                }
-            }
-
-            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
-        });
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->name;
-    }
-
-    /**
      * Retrieve the child model for a bound value.
      *
      * @param  string  $childType
@@ -286,5 +252,39 @@ class Product extends Model implements Contract
     public function scopeInStock(Builder $query): Builder
     {
         return $query->where($query->qualifyColumn('inventory->quantity'), '>', 0);
+    }
+
+    /**
+     * Get the variant of the given option.
+     *
+     * @param  array  $variation
+     * @return \Bazar\Models\Variant|null
+     */
+    public function toVariant(array $variation): ?Variant
+    {
+        return $this->variants->sortBy(static function (Variant $variant): int {
+            return array_count_values($variant->variation)['*'] ?? 0;
+        })->first(function (Variant $variant) use ($variation): bool {
+            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
+
+            foreach ($variant->variation as $key => $value) {
+                if ($value === '*') {
+                    $variation[$key] = $value;
+                }
+            }
+
+            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
+        });
+    }
+
+    /**
+     * Get the breadcrumb representation of the object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function toBreadcrumb(Request $request): string
+    {
+        return $this->name;
     }
 }

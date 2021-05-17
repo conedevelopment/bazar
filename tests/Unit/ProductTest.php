@@ -86,8 +86,8 @@ class ProductTest extends TestCase
         );
 
         $this->assertTrue($this->product->variants->pluck('id')->contains($variant->id));
-        $this->assertSame($variant->id, $this->product->variant(['Height' => 100, 'Width' => 100])->id);
-        $this->assertNull($this->product->variant(['Height' => 100, 'Width' => 200]));
+        $this->assertSame($variant->id, $this->product->toVariant(['Height' => 100, 'Width' => 100])->id);
+        $this->assertNull($this->product->toVariant(['Height' => 100, 'Width' => 200]));
     }
 
     /** @test */

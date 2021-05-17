@@ -152,7 +152,7 @@ class Item extends MorphPivot implements Taxable
             return null;
         }
 
-        return $product->variant((array) $this->properties) ?: $product;
+        return $product->toVariant((array) $this->properties) ?: $product;
     }
 
     /**

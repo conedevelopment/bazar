@@ -292,9 +292,8 @@ trait InteractsWithItems
     public function item(Product $product, array $properties = []): ?Item
     {
         return $this->items->first(static function (Item $item) use ($product, $properties): bool {
-            return (int) $item->product_id === (int) $product->id && empty(array_diff(
-                Arr::dot($properties), Arr::dot($item->properties)
-            ));
+            return (int) $item->product_id === (int) $product->id
+                && empty(array_diff(Arr::dot($properties), Arr::dot($item->properties)));
         });
     }
 }
