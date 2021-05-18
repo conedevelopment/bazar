@@ -10,7 +10,7 @@
                 {{ __('Delete') }}
             </button>
             <span v-show="id.length" class="modal-help-text ml-3">
-                {{ __(':files items selected', { files: id.length }) }}
+                {{ __(':count items selected', { count: id.length }) }}
             </span>
         </div>
         <div>
@@ -39,7 +39,7 @@
             },
             destroy() {
                 this.$parent.busy = true;
-                this.$http.delete('/admin/media/batch-destroy', {
+                this.$http.delete('/bazar/media/batch-destroy', {
                     data: { id: this.id },
                 }).then((response) => {
                     this.refresh();
