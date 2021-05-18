@@ -283,17 +283,15 @@ trait InteractsWithItems
     }
 
     /**
-     * Get an item by its parent product and properties.
+     * Find an item by its attributes or make a new instance.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  array  $properties
-     * @return \Bazar\Models\Item|null
+     * @param  array  $attributes
+     * @return \Bazar\Models\Item
      */
-    public function item(Product $product, array $properties = []): ?Item
+    public function findItemOrNew(array $attributes): Item
     {
-        return $this->items->first(static function (Item $item) use ($product, $properties): bool {
-            return (int) $item->product_id === (int) $product->id
-                && empty(array_diff(Arr::dot($properties), Arr::dot($item->properties)));
-        });
+        return $this->items->first(static function (Item $item) use ($attributes): bool {
+            return empty(array_diff(Arr::dot($attributes), Arr::dot($item->toArray())));
+        }, (new Item)->forceFill($attributes));
     }
 }

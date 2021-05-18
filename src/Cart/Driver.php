@@ -88,21 +88,16 @@ abstract class Driver
      */
     public function addItem(Product $product, float $quantity = 1, array $properties = []): Item
     {
-        if ($item = $this->getModel()->item($product, $properties)) {
-            $item->update([
-                'properties' => $properties,
-                'quantity' => $item->quantity + $quantity,
-            ]);
-        } else {
-            $item = Item::make(['quantity' => $quantity, 'properties' => $properties])
-                        ->tap(function (Item $item) use ($product): void {
-                            $item->product()
-                                ->associate($product)
-                                ->itemable()
-                                ->associate($this->getModel())
-                                ->save();
-                        });
-        }
+        $item = $this->getModel()->findItemOrNew([
+            'properties' => $properties,
+            'product_id' => $product->id,
+            'itemable_id' => $this->getModel()->id,
+            'itemable_type' => get_class($this->getModel()),
+        ]);
+
+        $item->quantity += $quantity;
+
+        $item->save();
 
         $this->refresh();
 

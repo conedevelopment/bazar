@@ -3,7 +3,6 @@
 namespace Bazar\Contracts;
 
 use Bazar\Models\Item;
-use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -155,11 +154,10 @@ interface Itemable extends Shippable
     public function downloads(): Collection;
 
     /**
-     * Get an item by its parent product and properties.
+     * Find an item by its attributes or make a new instance.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  array  $properties
-     * @return \Bazar\Models\Item|null
+     * @param  array  $attributes
+     * @return \Bazar\Models\Item
      */
-    public function item(Product $product, array $properties = []): ?Item;
+    public function findItemOrNew(array $attributes): Item;
 }
