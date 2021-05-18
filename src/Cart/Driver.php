@@ -156,6 +156,19 @@ abstract class Driver
     }
 
     /**
+     * Update the billing address.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function updateBilling(array $attributes): void
+    {
+        $this->getBilling()->fill($attributes)->save();
+
+        $this->refresh();
+    }
+
+    /**
      * Get the shipping that belongs to the cart.
      *
      * @return \Bazar\Models\Shipping
@@ -163,6 +176,24 @@ abstract class Driver
     public function getShipping(): Shipping
     {
         return $this->getModel()->shipping;
+    }
+
+    /**
+     * Update the shipping address and driver.
+     *
+     * @param  array  $attributes
+     * @param  string|null  $driver
+     * @return void
+     */
+    public function updateShipping(array $attributes, ?string $driver = null): void
+    {
+        $this->getShipping()->address->fill($attributes)->save();
+
+        if (! is_null($driver)) {
+            $this->getShipping()->setAttribute('driver', $driver);
+        }
+
+        $this->refresh();
     }
 
     /**

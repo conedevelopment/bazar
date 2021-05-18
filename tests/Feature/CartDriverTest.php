@@ -99,7 +99,7 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_updated()
+    public function it_can_update_items()
     {
         $item = $this->manager->getModel()->findItemOrNew([
             'product_id' => $this->product->id,
@@ -126,9 +126,25 @@ class CartDriverTest extends TestCase
     }
 
     /** @test */
+    public function it_updates_shipping()
+    {
+        $this->manager->updateShipping(['first_name' => 'Test'], 'local-pickup');
+
+        $this->assertSame('Test', $this->manager->getShipping()->address->first_name);
+    }
+
+    /** @test */
     public function it_has_billing()
     {
         $this->assertInstanceOf(Address::class, $this->manager->getBilling());
+    }
+
+    /** @test */
+    public function it_updates_billing()
+    {
+        $this->manager->updateBilling(['first_name' => 'Test']);
+
+        $this->assertSame('Test', $this->manager->getBilling()->first_name);
     }
 
     /** @test */

@@ -100,14 +100,6 @@ interface Shipping extends Taxable
     public function formattedNetTotal(): string;
 
     /**
-     * Set the driver.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self;
-
-    /**
      * Calculate the cost.
      *
      * @param  bool  $update

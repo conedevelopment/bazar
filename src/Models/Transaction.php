@@ -178,17 +178,6 @@ class Transaction extends Model implements Contract
     }
 
     /**
-     * Set the driver attribute.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self
-    {
-        return $this->setAttribute('driver', $driver);
-    }
-
-    /**
      * Scope the query to only include payments.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

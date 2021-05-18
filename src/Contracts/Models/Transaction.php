@@ -56,12 +56,4 @@ interface Transaction
      * @return void
      */
     public function markAsPending(): void;
-
-    /**
-     * Set the driver.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self;
 }

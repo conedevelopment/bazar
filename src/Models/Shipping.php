@@ -113,6 +113,8 @@ class Shipping extends Model implements Contract
         });
     }
 
+    //
+
     /**
      * Get the driver attribute.
      *
@@ -236,17 +238,6 @@ class Shipping extends Model implements Contract
     public function formattedNetTotal(): string
     {
         return Str::currency($this->netTotal(), $this->shippable->currency);
-    }
-
-    /**
-     * Set the driver attribute.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self
-    {
-        return $this->setAttribute('driver', $driver);
     }
 
     /**

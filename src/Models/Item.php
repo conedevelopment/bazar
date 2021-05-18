@@ -10,13 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
-use Illuminate\Support\Traits\Tappable;
 
 class Item extends MorphPivot implements Taxable
 {
     use InteractsWithTaxes;
     use HasUuid;
-    use Tappable;
 
     /**
      * The accessors to append to the model's array form.
