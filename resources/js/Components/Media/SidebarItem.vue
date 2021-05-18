@@ -48,7 +48,7 @@
 
         computed: {
             action() {
-                return `/admin/media/${this.item.id}`;
+                return `/bazar/media/${this.item.id}`;
             },
             size() {
                 const sizes = ['KB', 'MB', 'GB', 'TB'];

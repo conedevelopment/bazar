@@ -23,8 +23,17 @@
     position: relative;
     height: 100%;
 
+    &.is-document,
+    &.is-svg {
+        &::after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+    }
+
     &.is-document {
-        background-color: map-get($colors, 'light-gray');
+        background-color: lighten(map-get($colors, 'light-gray'), 3%);
         display: flex;
         align-items: center;
         justify-self: center;
@@ -40,6 +49,19 @@
             bottom: 0;
             left: 0;
             box-shadow: 0 0 0 5px map-get($colors, 'primary') inset;
+        }
+    }
+
+    &.is-svg {
+        background-color: lighten(map-get($colors, 'light-gray'), 3%);
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        justify-content: center;
+
+        img {
+            height: auto;
+            width: 70%;
         }
     }
 

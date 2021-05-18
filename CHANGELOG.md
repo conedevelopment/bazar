@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7.6 (2021-05-18)
+### Fixed
+- Fixed non-existing media URLs
+
 ## v0.7.5 (2021-05-09)
 ### Added
 - Added SVG support for the media library
