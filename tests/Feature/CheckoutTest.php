@@ -71,13 +71,9 @@ class CheckoutTest extends TestCase
             return new FailingDriver();
         });
 
-        Event::fake(CheckoutFailed::class);
-
         $order = Gateway::driver('failing')->checkout($this->app['request'], $this->cart);
 
-        Event::assertDispatched(CheckoutFailed::class, function ($event) use ($order) {
-            return $event->order->id === $order->id;
-        });
+        $this->assertSame('failed', $order->refresh()->status);
     }
 }
 

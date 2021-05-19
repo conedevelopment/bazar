@@ -10,7 +10,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
-use Throwable;
 
 class SendNewOrderNotifications
 {
@@ -58,16 +57,5 @@ class SendNewOrderNotifications
         if ($email = $this->order->address->email) {
             Notification::route('mail', $email)->notify(new CustomerNewOrder($this->order));
         }
-    }
-
-    /**
-     * Handle a job failure.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     */
-    public function failed(Throwable $exception): void
-    {
-        //
     }
 }
