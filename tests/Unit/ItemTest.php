@@ -29,7 +29,7 @@ class ItemTest extends TestCase
 
         $product = Product::factory()->create();
 
-        $this->item = Cart::add($product, 3, ['text' => 'test-text']);
+        $this->item = Cart::addItem($product, 3, ['text' => 'test-text']);
     }
 
     /** @test */

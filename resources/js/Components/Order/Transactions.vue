@@ -1,7 +1,7 @@
 <template>
     <card :title="__('Transactions')">
         <template #header>
-            <create-transaction :order="order"></create-transaction>
+            <create-transaction :order="order" :drivers="drivers"></create-transaction>
         </template>
         <div v-if="order.transactions.length" class="table-responsive">
             <table class="table table-hover has-filled-header mb-0">
@@ -44,6 +44,10 @@
 
         props: {
             order: {
+                type: Object,
+                required: true,
+            },
+            drivers: {
                 type: Object,
                 required: true,
             },

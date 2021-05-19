@@ -25,7 +25,7 @@ class TransactionFactory extends Factory
         return [
             'driver' => 'cash',
             'amount' => mt_rand(10, 1000) / 10,
-            'type' => Arr::random(['refund', 'payment']),
+            'type' => Arr::random([Transaction::PAYMENT, Transaction::REFUND]),
         ];
     }
 }

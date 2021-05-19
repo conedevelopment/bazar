@@ -38,7 +38,7 @@
                         @change="errors.clear('driver')"
                     >
                         <option :value="null" disabled>--- {{ __('Driver') }} ---</option>
-                        <option v-for="(label, driver) in drivers" :key="driver" :value="driver">
+                        <option v-for="(driver, label) in drivers" :key="driver" :value="driver">
                             {{ label }}
                         </option>
                     </select>
@@ -89,13 +89,9 @@
                 type: Object,
                 reqired: true,
             },
-        },
-
-        watch: {
-            'transaction.type'(newValue, oldValue) {
-                if (newValue === 'payment') {
-                    this.transaction.driver = 'manual';
-                }
+            drivers: {
+                type: Object,
+                reqired: true,
             },
         },
 
@@ -106,7 +102,7 @@
                 transaction: {
                     amount: null,
                     type: 'refund',
-                    driver: 'manual',
+                    driver: 'cash',
                 },
             };
         },
@@ -117,15 +113,6 @@
                     payment: this.__('Payment'),
                     refund: this.__('Refund'),
                 };
-            },
-            drivers() {
-                const manual = { manual: this.__('Manual') };
-
-                return this.transaction.type === 'refund' ? this.order.transactions.reduce((options, transaction) => {
-                    return Object.assign(options, {
-                        [transaction.driver]: transaction.driver_name,
-                    });
-                }, manual) : manual;
             },
         },
 
@@ -146,7 +133,7 @@
                 this.transaction = {
                     amount: null,
                     type: 'refund',
-                    driver: 'manual',
+                    driver: 'cash',
                 };
             },
         },

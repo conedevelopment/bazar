@@ -29,8 +29,10 @@ class TransactionTest extends TestCase
     /** @test */
     public function it_has_driver_name()
     {
-        $this->assertSame(Gateway::driver($this->transaction->driver)->name(), $this->transaction->driverName);
-        $this->assertSame('fake', $this->transaction->driver('fake')->driverName);
+        $this->assertSame(
+            Gateway::driver($this->transaction->driver)->name(),
+            $this->transaction->driverName
+        );
     }
 
     /** @test */
@@ -41,7 +43,8 @@ class TransactionTest extends TestCase
             $this->transaction->url
         );
 
-        $this->assertNull($this->transaction->driver('fake')->url);
+        $this->transaction->setAttribute('driver', 'fake');
+        $this->assertNull($this->transaction->url);
     }
 
     /** @test */

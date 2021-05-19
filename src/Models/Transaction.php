@@ -20,6 +20,20 @@ class Transaction extends Model implements Contract
     use InteractsWithProxy;
 
     /**
+     * The payment type.
+     *
+     * @var string
+     */
+    public const PAYMENT = 'payment';
+
+    /**
+     * The refund type.
+     *
+     * @var string
+     */
+    public const REFUND = 'refund';
+
+    /**
      * The accessors to append to the model's array form.
      *
      * @var array
@@ -48,6 +62,7 @@ class Transaction extends Model implements Contract
         'type',
         'amount',
         'driver',
+        'completed_at',
     ];
 
     /**
@@ -139,44 +154,27 @@ class Transaction extends Model implements Contract
      * Mark the transaction as completed.
      *
      * @param \DateTimeInterface|null  $date
-     * @return $this
+     * @return void
      */
-    public function markAsCompleted(?DateTimeInterface $date = null): self
+    public function markAsCompleted(?DateTimeInterface $date = null): void
     {
         $date = $date ?: Date::now();
 
         if ($this->pending() || $this->completed_at->notEqualTo($date)) {
             $this->setAttribute('completed_at', $date)->save();
         }
-
-        return $this;
     }
 
     /**
      * Mark the transaction as pending.
      *
-     * @return $this
+     * @return void
      */
-    public function markAsPending(): self
+    public function markAsPending(): void
     {
         if ($this->completed()) {
             $this->setAttribute('completed_at', null)->save();
         }
-
-        return $this;
-    }
-
-    /**
-     * Set the driver.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self
-    {
-        $this->driver = $driver;
-
-        return $this;
     }
 
     /**
@@ -187,7 +185,7 @@ class Transaction extends Model implements Contract
      */
     public function scopePayment(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), 'payment');
+        return $query->where($query->qualifyColumn('type'), static::PAYMENT);
     }
 
     /**
@@ -198,7 +196,7 @@ class Transaction extends Model implements Contract
      */
     public function scopeRefund(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), 'refund');
+        return $query->where($query->qualifyColumn('type'), static::REFUND);
     }
 
     /**

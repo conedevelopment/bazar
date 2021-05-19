@@ -55,7 +55,7 @@
         </data-form>
         <div class="row">
             <div class="col-12 col-lg-7 col-xl-8 mt-5">
-                <transactions :order="order"></transactions>
+                <transactions :order="order" :drivers="drivers"></transactions>
             </div>
         </div>
     </div>
@@ -79,6 +79,10 @@
                 required: true,
             },
             statuses: {
+                type: Object,
+                required: true,
+            },
+            drivers: {
                 type: Object,
                 required: true,
             },

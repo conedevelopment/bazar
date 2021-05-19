@@ -2,8 +2,9 @@
 
 namespace Bazar\Http\Requests;
 
+use Bazar\Models\Transaction;
 use Bazar\Rules\TransactionAmount;
-use Illuminate\Support\Collection;
+use Bazar\Support\Facades\Gateway;
 use Illuminate\Validation\Rule;
 
 class TransactionStoreRequest extends FormRequest
@@ -16,7 +17,7 @@ class TransactionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required', 'in:payment,refund'],
+            'type' => ['required', Rule::in(Transaction::REFUND, Transaction::PAYMENT)],
             'amount' => [
                 'nullable',
                 'numeric',
@@ -25,15 +26,7 @@ class TransactionStoreRequest extends FormRequest
             ],
             'driver' => [
                 'required',
-                Rule::in(
-                    $this->route('order')->transactions->pluck('driver')->push('manual')->unique()->when(
-                        $this->input('type') === 'payment', static function (Collection $collection): Collection {
-                            return $collection->filter(static function (string $driver): bool {
-                                return $driver === 'manual';
-                            });
-                        }
-                    )->values()
-                ),
+                Rule::in(array_keys(Gateway::enabled())),
             ],
         ];
     }

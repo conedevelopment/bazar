@@ -16,9 +16,7 @@ class TransferDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null): Transaction
     {
-        return tap($this->transaction($order, 'payment', $amount), static function (Transaction $transaction): void {
-            $transaction->save();
-        });
+        return $order->pay($amount, $this->id());
     }
 
     /**
@@ -30,8 +28,6 @@ class TransferDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null): Transaction
     {
-        return tap($this->transaction($order, 'refund', $amount), static function (Transaction $transaction): void {
-            $transaction->save();
-        });
+        return $order->refund($amount, $this->id());
     }
 }

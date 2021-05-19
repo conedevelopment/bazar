@@ -10,6 +10,7 @@ use Bazar\Models\Order;
 use Bazar\Models\User;
 use Bazar\Support\Countries;
 use Bazar\Support\Facades\Discount;
+use Bazar\Support\Facades\Gateway;
 use Bazar\Support\Facades\Shipping;
 use Bazar\Support\Facades\Tax;
 use Illuminate\Http\RedirectResponse;
@@ -115,6 +116,7 @@ class OrdersController extends Controller
         return Inertia::render('Orders/Show', [
             'order' => $order,
             'statuses' => Order::proxy()::statuses(),
+            'drivers' => Collection::make(Gateway::enabled())->map->name()->flip(),
         ]);
     }
 

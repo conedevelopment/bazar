@@ -39,6 +39,26 @@ interface Order extends Breadcrumbable, Discountable, Itemable
     public function getStatusNameAttribute(): string;
 
     /**
+     * Create a payment transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @param  array  $attributes
+     * @return \Bazar\Models\Transaction
+     */
+    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
+
+    /**
+     * Create a refund transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @param  array  $attributes
+     * @return \Bazar\Models\Transaction
+     */
+    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
+
+    /**
      * Get the total paid amount.
      *
      * @return float
@@ -84,7 +104,7 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      * Set the status by the given value.
      *
      * @param  string  $status
-     * @return $this
+     * @return void
      */
-    public function status(string $status): self;
+    public function markAs(string $status): void;
 }

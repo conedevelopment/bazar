@@ -5,6 +5,7 @@ import Media from './Media';
 import Radio from './Radio';
 import Editor from './Editor';
 import Select from './Select';
+import DateTime from './DateTime';
 import Checkbox from './Checkbox';
 import Autocomplete from './Autocomplete';
 
@@ -76,6 +77,8 @@ export default {
                     return Media;
                 case 'radio':
                     return Radio;
+                case 'datetime':
+                    return DateTime;
                 default:
                     return Input;
             }

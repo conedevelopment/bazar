@@ -239,19 +239,6 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Set the driver.
-     *
-     * @param  string  $driver
-     * @return $this
-     */
-    public function driver(string $driver): self
-    {
-        $this->driver = $driver;
-
-        return $this;
-    }
-
-    /**
      * Calculate the cost.
      *
      * @param  bool  $update

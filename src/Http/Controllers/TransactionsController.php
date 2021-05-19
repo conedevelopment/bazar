@@ -38,12 +38,12 @@ class TransactionsController extends Controller
      */
     public function store(StoreRequest $request, Order $order): JsonResponse
     {
-        $method = $request->input('type') === 'refund' ? 'refund' : 'pay';
+        $method = $request->input('type') === Transaction::REFUND ? 'refund' : 'pay';
 
         try {
             $transaction = call_user_func_array(
                 [Gateway::driver($request->input('driver')), $method],
-                [$order, $request->amount ? (float) $request->amount : null]
+                [$order, $request->input('amount')]
             );
         } catch (Throwable $exception) {
             throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $exception->getMessage());

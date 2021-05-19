@@ -63,7 +63,7 @@ return [
     | In this section, you can specify all the available gateway drivers and
     | their configuration.
     |
-    | Supported drivers: "cash", "manual", "transfer"
+    | Supported drivers: "cash", "transfer"
     |
     */
 
@@ -71,7 +71,6 @@ return [
         'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
             'cash' => [],
-            'manual' => [],
             'transfer' => [],
         ],
     ],

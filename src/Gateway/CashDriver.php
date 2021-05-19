@@ -2,6 +2,7 @@
 
 namespace Bazar\Gateway;
 
+use Bazar\Events\CheckoutProcessed;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 
@@ -16,7 +17,13 @@ class CashDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null): Transaction
     {
-        return $this->transaction($order, 'payment', $amount)->markAsCompleted();
+        $transaction = $order->pay($amount, $this->id(), [
+            'completed_at' => time(),
+        ]);
+
+        CheckoutProcessed::dispatch($order);
+
+        return $transaction;
     }
 
     /**
@@ -28,6 +35,12 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null): Transaction
     {
-        return $this->transaction($order, 'refund', $amount)->markAsCompleted();
+        $transaction = $order->refund($amount, $this->id(), [
+            'completed_at' => time(),
+        ]);
+
+        $order->markAs('refunded');
+
+        return $transaction;
     }
 }

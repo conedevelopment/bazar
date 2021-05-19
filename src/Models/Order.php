@@ -11,6 +11,8 @@ use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Contracts\Models\Order as Contract;
 use Bazar\Database\Factories\OrderFactory;
+use Bazar\Exceptions\TransactionFailedException;
+use Bazar\Support\Facades\Gateway;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -107,33 +109,6 @@ class Order extends Model implements Contract
     }
 
     /**
-     * Create a new order from the given cart.
-     *
-     * @param  \Bazar\Models\Cart  $cart
-     * @return static
-     */
-    public static function createFrom(Cart $cart): Order
-    {
-        $order = static::make($cart->toArray());
-
-        $order->user()->associate($cart->user)->save();
-
-        $order->products()->attach(
-            $cart->items->mapWithKeys(static function (Item $item): array {
-                return [$item->product_id => $item->only([
-                    'price', 'tax', 'quantity', 'properties',
-                ])];
-            })->toArray()
-        );
-
-        $order->address()->save($cart->address);
-        $order->shipping()->save($cart->shipping);
-        $order->shipping->address()->save($cart->shipping->address);
-
-        return $order;
-    }
-
-    /**
      * Get the available order statuses.
      *
      * @return array
@@ -182,7 +157,7 @@ class Order extends Model implements Contract
      */
     public function getPaymentsAttribute(): Collection
     {
-        return $this->transactions->where('type', 'payment');
+        return $this->transactions->where('type', Transaction::PAYMENT);
     }
 
     /**
@@ -192,7 +167,7 @@ class Order extends Model implements Contract
      */
     public function getRefundsAttribute(): Collection
     {
-        return $this->transactions->where('type', 'refund');
+        return $this->transactions->where('type', Transaction::REFUND);
     }
 
     /**
@@ -203,6 +178,60 @@ class Order extends Model implements Contract
     public function getStatusNameAttribute(): string
     {
         return array_search($this->status, static::statuses()) ?: $this->status;
+    }
+
+    /**
+     * Create a payment transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @param  array  $attributes
+     * @return \Bazar\Models\Transaction
+     *
+     * @throws \Bazar\Exceptions\TransactionFailedException
+     */
+    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
+    {
+        if ($this->totalPayable() === 0 || $this->paid()) {
+            throw new TransactionFailedException("Order #{$this->id} is fully paid.");
+        }
+
+        $transaction = $this->transactions()->create(array_replace($attributes, [
+            'type' => Transaction::PAYMENT,
+            'driver' => $driver ?: Gateway::getDefaultDriver(),
+            'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
+        ]));
+
+        $this->transactions->push($transaction);
+
+        return $transaction;
+    }
+
+    /**
+     * Create a refund transaction for the order.
+     *
+     * @param  float|null  $amount
+     * @param  string|null  $driver
+     * @param  array  $attributes
+     * @return \Bazar\Models\Transaction
+     *
+     * @throws \Bazar\Exceptions\TransactionFailedException
+     */
+    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
+    {
+        if ($this->totalRefundable() === 0 || $this->refunded()) {
+            throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
+        }
+
+        $transaction = $this->transactions()->create(array_replace($attributes, [
+            'type' => Transaction::REFUND,
+            'driver' => $driver ?: Gateway::getDefaultDriver(),
+            'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
+        ]));
+
+        $this->transactions->push($transaction);
+
+        return $transaction;
     }
 
     /**
@@ -269,24 +298,13 @@ class Order extends Model implements Contract
      * Set the status by the given value.
      *
      * @param  string  $status
-     * @return $this
+     * @return void
      */
-    public function status(string $status): self
+    public function markAs(string $status): void
     {
-        $this->update(['status' => $status]);
-
-        return $this;
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return sprintf('#%d', $this->id);
+        if ($this->status !== $status) {
+            $this->setAttribute('status', $status)->save();
+        }
     }
 
     /**
@@ -328,5 +346,16 @@ class Order extends Model implements Contract
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
+    }
+
+    /**
+     * Get the breadcrumb representation of the object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function toBreadcrumb(Request $request): string
+    {
+        return sprintf('#%d', $this->id);
     }
 }

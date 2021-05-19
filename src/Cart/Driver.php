@@ -3,14 +3,14 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
-use Bazar\Cart\Checkout;
-use Bazar\Events\CartTouched;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
+use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
+use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
@@ -42,21 +42,27 @@ abstract class Driver
     }
 
     /**
+     * Resolve the cart instance.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Bazar\Models\Cart
+     */
+    abstract protected function resolve(Request $request): Cart;
+
+    /**
      * Get the cart model.
      *
      * @return \Bazar\Models\Cart
      */
-    public function model(): Cart
+    public function getModel(): Cart
     {
         if (is_null($this->cart)) {
             $this->cart = App::call(function (Request $request): Cart {
-                $cart = $this->resolve($request);
-
-                if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::currency()) {
-                    $cart->fill(['currency' => Bazar::currency()])->save();
-                }
-
-                return $cart;
+                return tap($this->resolve($request), static function (Cart $cart): void {
+                    if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::currency()) {
+                        $cart->setAttribute('currency', Bazar::currency())->save();
+                    }
+                });
             });
         }
 
@@ -64,15 +70,14 @@ abstract class Driver
     }
 
     /**
-     * Get the item by the product and its properties.
+     * Get the item with the given id.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  array  $properties
+     * @param  string  $id
      * @return \Bazar\Models\Item|null
      */
-    public function item(Product $product, array $properties = []): ?Item
+    public function getItem(string $id): ?Item
     {
-        return $this->model()->item($product, $properties);
+        return $this->getItems()->firstWhere('id', $id);
     }
 
     /**
@@ -83,61 +88,131 @@ abstract class Driver
      * @param  array  $properties
      * @return \Bazar\Models\Item
      */
-    public function add(Product $product, float $quantity = 1, array $properties = []): Item
+    public function addItem(Product $product, float $quantity = 1, array $properties = []): Item
     {
-        if ($item = $this->item($product, $properties)) {
-            $item->update([
-                'properties' => $properties,
-                'quantity' => $item->quantity + $quantity,
-            ]);
-        } else {
-            $item = Item::make(['quantity' => $quantity, 'properties' => $properties])
-                        ->tap(function (Item $item) use ($product): void {
-                            $item->product()
-                                ->associate($product)
-                                ->itemable()
-                                ->associate($this->model())
-                                ->save();
-                        });
-        }
+        $item = $this->getModel()->findItemOrNew([
+            'properties' => $properties,
+            'product_id' => $product->id,
+            'itemable_id' => $this->getModel()->id,
+            'itemable_type' => get_class($this->getModel()),
+        ]);
 
-        CartTouched::dispatch($this->model());
+        $item->quantity += $quantity;
+
+        $item->save();
+
+        $this->refresh();
 
         return $item;
     }
 
     /**
-     * Remove the given items from the cart.
+     * Remove the given item from the cart.
      *
-     * @param  \Bazar\Models\Item|int|array  $items
+     * @param  string  $id
      * @return void
      */
-    public function remove($items): void
+    public function removeItem(string $id): void
     {
-        $id = array_map(static function ($item): string {
-            return $item instanceof Item ? $item->id : $item;
-        }, Arr::wrap($items));
+        if ($item = $this->getItem($id)) {
+            $item->delete();
 
-        $this->model()->products()->wherePivotIn('id', $id)->detach();
-
-        CartTouched::dispatch($this->model());
+            $this->refresh();
+        }
     }
 
     /**
      * Update the cart items.
      *
-     * @param  array  $items
+     * @param  string  $id
+     * @param  array  $properties
      * @return void
      */
-    public function update(array $items = []): void
+    public function updateItem(string $id, array $properties = []): void
     {
-        $this->model()->items->whereIn(
-            'id', array_keys($items)
-        )->each(static function (Item $item) use ($items): void {
-            $item->update($items[$item->id]);
-        });
+        if ($item = $this->getItem($id)) {
+            $item->fill($properties)->save();
 
-        CartTouched::dispatch($this->model());
+            $this->refresh();
+        }
+    }
+
+    /**
+     * Get the cart items.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getItems(): Collection
+    {
+        return $this->getModel()->items;
+    }
+
+    /**
+     * Get the billing address that belongs to the cart.
+     *
+     * @return \Bazar\Models\Address
+     */
+    public function getBilling(): Address
+    {
+        return $this->getModel()->address;
+    }
+
+    /**
+     * Update the billing address.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function updateBilling(array $attributes): void
+    {
+        $this->getBilling()->fill($attributes)->save();
+
+        $this->refresh();
+    }
+
+    /**
+     * Get the shipping that belongs to the cart.
+     *
+     * @return \Bazar\Models\Shipping
+     */
+    public function getShipping(): Shipping
+    {
+        return $this->getModel()->shipping;
+    }
+
+    /**
+     * Update the shipping address and driver.
+     *
+     * @param  array  $attributes
+     * @param  string|null  $driver
+     * @return void
+     */
+    public function updateShipping(array $attributes, ?string $driver = null): void
+    {
+        $this->getShipping()->address->fill($attributes)->save();
+
+        if (! is_null($driver)) {
+            $this->getShipping()->setAttribute('driver', $driver);
+        }
+
+        $this->refresh();
+    }
+
+    /**
+     * Refresh and recalculate the cart contents.
+     *
+     * @return void
+     */
+    public function refresh(): void
+    {
+        $this->getShipping()->cost(false);
+        $this->getShipping()->tax(false);
+        $this->getShipping()->save();
+
+        $this->getModel()->discount(false);
+        $this->getModel()->save();
+
+        $this->getModel()->refresh();
     }
 
     /**
@@ -147,40 +222,10 @@ abstract class Driver
      */
     public function empty(): void
     {
-        $this->model()->products()->detach();
-        $this->model()->shipping->update(['tax' => 0, 'cost' => 0]);
+        $this->getModel()->products()->detach();
+        $this->getModel()->shipping->update(['tax' => 0, 'cost' => 0]);
 
-        CartTouched::dispatch($this->model());
-    }
-
-    /**
-     * Get the products that belong to the cart.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function products(): Collection
-    {
-        return $this->model()->products;
-    }
-
-    /**
-     * Get the cart items.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function items(): Collection
-    {
-        return $this->model()->items;
-    }
-
-    /**
-     * Get the shipping that belongs to the cart.
-     *
-     * @return \Bazar\Models\Shipping
-     */
-    public function shipping(): Shipping
-    {
-        return $this->model()->shipping;
+        $this->refresh();
     }
 
     /**
@@ -190,7 +235,7 @@ abstract class Driver
      */
     public function count(): float
     {
-        return $this->model()->items->sum('quantity');
+        return $this->getItems()->sum('quantity');
     }
 
     /**
@@ -200,7 +245,20 @@ abstract class Driver
      */
     public function isEmpty(): bool
     {
-        return $this->model()->items->isEmpty();
+        return $this->getItems()->isEmpty();
+    }
+
+    /**
+     * Perform the checkout using the given driver.
+     *
+     * @param  string  $driver
+     * @return \Bazar\Models\Order
+     */
+    public function checkout(string $driver): Order
+    {
+        return App::call(function (Request $request) use ($driver): Order {
+            return Gateway::driver($driver)->checkout($request, $this->getModel());
+        });
     }
 
     /**
@@ -214,32 +272,14 @@ abstract class Driver
     }
 
     /**
-     * Initialize a checkout instance.
-     *
-     * @return \Bazar\Cart\Checkout
-     */
-    public function checkout(): Checkout
-    {
-        return new Checkout($this->model());
-    }
-
-    /**
-     * Resolve the cart instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Models\Cart
-     */
-    abstract protected function resolve(Request $request): Cart;
-
-    /**
      * Handle dynamic method calls into the driver.
      *
      * @param  string  $method
-     * @param  array  $arguments
+     * @param  array  $parameters
      * @return mixed
      */
-    public function __call(string $method, array $arguments)
+    public function __call(string $method, array $parameters)
     {
-        return call_user_func_array([$this->model(), $method], $arguments);
+        return call_user_func_array([$this->getModel(), $method], $parameters);
     }
 }

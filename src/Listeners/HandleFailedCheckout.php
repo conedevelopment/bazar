@@ -2,9 +2,9 @@
 
 namespace Bazar\Listeners;
 
-use Bazar\Events\CheckoutFailing;
+use Bazar\Events\CheckoutFailed;
 
-class HandleFailingCheckout
+class HandleFailedCheckout
 {
     /**
      * Handle the event.
@@ -12,8 +12,8 @@ class HandleFailingCheckout
      * @param  \Bazar\Events\CheckoutFailing  $event
      * @return void
      */
-    public function handle(CheckoutFailing $event): void
+    public function handle(CheckoutFailed $event): void
     {
-        $event->order->status('failed');
+        $event->order->markAs('failed');
     }
 }

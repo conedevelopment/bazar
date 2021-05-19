@@ -2,11 +2,14 @@
 
 namespace Bazar\Gateway;
 
-use Bazar\Exceptions\TransactionFailedException;
+use Bazar\Events\CheckoutFailed;
+use Bazar\Events\CheckoutProcessing;
+use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
-use InvalidArgumentException;
+use Illuminate\Http\Request;
+use Throwable;
 
 abstract class Driver
 {
@@ -34,6 +37,24 @@ abstract class Driver
     {
         $this->config = $config;
     }
+
+    /**
+     * Process the payment.
+     *
+     * @param  \Bazar\Models\Order  $order
+     * @param  float|null  $amount
+     * @return \Bazar\Models\Transaction
+     */
+    abstract public function pay(Order $order, ?float $amount = null): Transaction;
+
+    /**
+     * Process the refund.
+     *
+     * @param  \Bazar\Models\Order  $order
+     * @param  float|null  $amount
+     * @return \Bazar\Models\Transaction
+     */
+    abstract public function refund(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Get the ID of the driver.
@@ -82,7 +103,7 @@ abstract class Driver
      *
      * @return $this
      */
-    public function enable(): Driver
+    public function enable(): self
     {
         $this->enabled = true;
 
@@ -94,7 +115,7 @@ abstract class Driver
      *
      * @return $this
      */
-    public function disable(): Driver
+    public function disable(): self
     {
         $this->enabled = false;
 
@@ -113,58 +134,24 @@ abstract class Driver
     }
 
     /**
-     * Make a transaction for the given order.
+     * Handle the checkout request.
      *
-     * @param  \Bazar\Models\Order  $order
-     * @param  string  $type
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Bazar\Exceptions\TransactionFailedException
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Bazar\Models\Cart  $cart
+     * @return \Bazar\Models\Order
      */
-    public function transaction(Order $order, string $type = 'payment', ?float $amount = null): Transaction
+    public function checkout(Request $request, Cart $cart): Order
     {
-        if (! in_array($type, ['payment', 'refund'])) {
-            throw new InvalidArgumentException('The transaction type must be "payment" or "refund".');
+        $order = $cart->toOrder();
+
+        try {
+            CheckoutProcessing::dispatch($order);
+
+            $this->pay($order);
+        } catch (Throwable $exception) {
+            CheckoutFailed::dispatch($order);
         }
 
-        if ($type === 'payment' && $order->paid()) {
-            throw new TransactionFailedException("The order #{$order->id} is fully paid.");
-        }
-
-        if ($type === 'refund' && $order->refunded()) {
-            throw new TransactionFailedException("The order #{$order->id} is fully refunded.");
-        }
-
-        $total = $type === 'payment' ? $order->totalPayable() : $order->totalRefundable();
-
-        $transaction = $order->transactions()->make([
-            'type' => $type,
-            'driver' => $this->id(),
-            'amount' => is_null($amount) ? $total : min($amount, $total),
-        ]);
-
-        $order->transactions->push($transaction);
-
-        return $transaction;
+        return $order;
     }
-
-    /**
-     * Process the payment.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     */
-    abstract public function pay(Order $order, ?float $amount = null): Transaction;
-
-    /**
-     * Process the refund.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
-     */
-    abstract public function refund(Order $order, ?float $amount = null): Transaction;
 }

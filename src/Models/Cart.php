@@ -125,7 +125,7 @@ class Cart extends Model implements Contract
     public function lock(): void
     {
         if (! $this->locked) {
-            $this->fill(['locked' => true])->save();
+            $this->setAttribute('locked', true)->save();
         }
     }
 
@@ -137,7 +137,7 @@ class Cart extends Model implements Contract
     public function unlock(): void
     {
         if ($this->locked) {
-            $this->fill(['locked' => false])->save();
+            $this->setAttribute('locked', false)->save();
         }
     }
 
@@ -173,5 +173,31 @@ class Cart extends Model implements Contract
     {
         return $query->whereNull($query->qualifyColumn('user_id'))
                      ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));
+    }
+
+    /**
+     * Convert the cart to a new order.
+     *
+     * @return \Bazar\Models\Order
+     */
+    public function toOrder(): Order
+    {
+        $order = new Order($this->toArray());
+
+        $order->user()->associate($this->user)->save();
+
+        $order->products()->attach(
+            $this->items->mapWithKeys(static function (Item $item): array {
+                return [$item->product_id => $item->only([
+                    'price', 'tax', 'quantity', 'properties',
+                ])];
+            })->toArray()
+        );
+
+        $order->address()->save($this->address);
+        $order->shipping()->save($this->shipping);
+        $order->shipping->address()->save($this->shipping->address);
+
+        return $order;
     }
 }

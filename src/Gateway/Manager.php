@@ -104,14 +104,4 @@ class Manager extends BaseManager implements Contract
             $this->config->get('bazar.gateway.drivers.cash', [])
         );
     }
-
-    /**
-     * Create the manual driver.
-     *
-     * @return \Bazar\Gateway\ManualDriver
-     */
-    public function createManualDriver(): ManualDriver
-    {
-        return new ManualDriver();
-    }
 }

@@ -78,9 +78,6 @@ class ShippingTest extends TestCase
     {
         $cost = $this->shipping->cost();
         $this->assertSame($cost, $this->shipping->cost);
-
-        $cost = $this->shipping->driver('fake')->cost();
-        $this->assertSame($cost, $this->shipping->cost);
     }
 
     /** @test */
@@ -128,6 +125,8 @@ class ShippingTest extends TestCase
     public function it_has_driver_name()
     {
         $this->assertSame(ShippingManager::driver($this->shipping->driver)->name(), $this->shipping->driverName);
-        $this->assertSame('fake', $this->shipping->driver('fake')->driverName);
+
+        $this->shipping->setAttribute('driver', 'fake');
+        $this->assertSame('fake', $this->shipping->driverName);
     }
 }

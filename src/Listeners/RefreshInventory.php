@@ -3,7 +3,7 @@
 namespace Bazar\Listeners;
 
 use Bazar\Contracts\Stockable;
-use Bazar\Events\OrderPlaced;
+use Bazar\Events\CheckoutProcessed;
 use Bazar\Models\Item;
 
 class RefreshInventory
@@ -11,10 +11,10 @@ class RefreshInventory
     /**
      * Handle the event.
      *
-     * @param  \Bazar\Events\OrderPlaced  $event
+     * @param  \Bazar\Events\CheckoutProcessed  $event
      * @return void
      */
-    public function handle(OrderPlaced $event): void
+    public function handle(CheckoutProcessed $event): void
     {
         $event->order->loadMissing(['products', 'products.variants']);
 
