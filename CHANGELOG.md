@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.8.0 (Unreleased)
+### Changed
+- Changed the `Cart` Driver API
+- Changed the `SendNewOrderNotifications` event listener to a job
+
+### Fixed
+- Fixed key-values in form components
+- Fixed SVG item display in media manager
+
+### Removed
+- Removed the `Checkout` class, now it's integrated into the `Gateway` Drivers
+- Removed the `Manual` Driver
+
 ## v0.7.6 (2021-05-18)
 ### Fixed
 - Fixed non-existing media URLs
