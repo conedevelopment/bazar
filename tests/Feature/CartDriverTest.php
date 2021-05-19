@@ -5,6 +5,8 @@ namespace Bazar\Tests\Feature;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
 use Bazar\Cart\SessionDriver;
+use Bazar\Events\CheckoutProcessed;
+use Bazar\Events\CheckoutProcessing;
 use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Product;
@@ -12,6 +14,7 @@ use Bazar\Models\Shipping;
 use Bazar\Models\Variant;
 use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
+use Illuminate\Support\Facades\Event;
 
 class CartDriverTest extends TestCase
 {
@@ -169,5 +172,16 @@ class CartDriverTest extends TestCase
         $this->assertEquals(
             $this->manager->getModel()->discount, $this->manager->discount()
         );
+    }
+
+    /** @test */
+    public function it_can_checkout()
+    {
+        Event::fake([CheckoutProcessing::class, CheckoutProcessed::class]);
+
+        $this->manager->checkout('cash');
+
+        Event::assertDispatched(CheckoutProcessing::class);
+        Event::assertDispatched(CheckoutProcessed::class);
     }
 }

@@ -2,33 +2,51 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Events\CheckoutProcessing;
 use Bazar\Gateway\CashDriver;
 use Bazar\Gateway\Driver;
 use Bazar\Gateway\Manager;
 use Bazar\Gateway\TransferDriver;
+use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
+use Bazar\Notifications\AdminNewOrder;
+use Bazar\Notifications\CustomerNewOrder;
 use Bazar\Tests\TestCase;
+use Exception;
+use Illuminate\Notifications\AnonymousNotifiable;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Notification;
 
 class GatewayDriverTest extends TestCase
 {
-    protected $manager, $order;
+    protected $manager, $cart, $order;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->order = Order::factory()->create();
         $products = Product::factory()->count(3)->create()->mapWithKeys(function ($product) {
             return [$product->id => ['quantity' => mt_rand(1, 5), 'tax' => 0, 'price' => $product->price]];
         });
+
+        $this->cart = Cart::factory()->create();
+        $this->cart->address()->save(Address::factory()->make());
+        $this->cart->shipping->save();
+        $this->cart->shipping->address()->save(Address::factory()->make());
+        $this->cart->products()->attach($products->all());
+
+        $this->order = Order::factory()->create();
         $this->order->products()->attach($products->all());
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {
             return new CustomGatewayDriver();
+        });
+        $this->manager->extend('failing', function () {
+            return new FailingDriver();
         });
     }
 
@@ -36,11 +54,11 @@ class GatewayDriverTest extends TestCase
     public function it_can_list_enabled_drivers()
     {
         $this->manager->driver('cash')->disable();
-        $this->assertEquals(['transfer', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['transfer', 'custom-driver', 'failing'], array_keys($this->manager->enabled()));
         $this->assertEquals(['cash'], array_keys($this->manager->disabled()));
 
         $this->manager->driver('cash')->enable();
-        $this->assertEquals(['cash', 'transfer', 'custom-driver'], array_keys($this->manager->enabled()));
+        $this->assertEquals(['cash', 'transfer', 'custom-driver', 'failing'], array_keys($this->manager->enabled()));
         $this->assertEmpty(array_keys($this->manager->disabled()));
     }
 
@@ -114,15 +132,34 @@ class GatewayDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_can_checkout_using_a_driver()
+    public function it_can_process_checkout()
     {
-        $driver = $this->manager->driver('cash');
+        Event::fake(CheckoutProcessing::class);
+        Notification::fake();
 
-        $cart = Cart::factory()->create();
-
-        $order = $driver->checkout($this->app['request'], $cart);
+        $order = $this->manager->driver('cash')->checkout($this->app['request'], $this->cart);
 
         $this->assertInstanceOf(Order::class, $order);
+
+        Event::assertDispatched(CheckoutProcessing::class);
+
+        Notification::assertSentTo($this->admin, AdminNewOrder::class);
+
+        Notification::assertSentTo(
+            new AnonymousNotifiable,
+            CustomerNewOrder::class,
+            function ($notification, $channels, $notifiable) {
+                return $notifiable->routes['mail'] === $this->cart->address->email;
+            }
+        );
+    }
+
+    /** @test */
+    public function it_handles_failed_checkout()
+    {
+        $order = $this->manager->driver('failing')->checkout($this->app['request'], $this->cart);
+
+        $this->assertSame('failed', $order->refresh()->status);
     }
 }
 
@@ -141,5 +178,18 @@ class CustomGatewayDriver Extends Driver
     public function refund(Order $order, float $amount = null): Transaction
     {
         return $order->refund($amount, $this->id());
+    }
+}
+
+class FailingDriver Extends Driver
+{
+    public function pay(Order $order, float $amount = null): Transaction
+    {
+        throw new Exception;
+    }
+
+    public function refund(Order $order, float $amount = null): Transaction
+    {
+        throw new Exception;
     }
 }
