@@ -3,25 +3,10 @@
 namespace Bazar\Gateway;
 
 use Bazar\Contracts\Gateway\Manager as Contract;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract
 {
-    /**
-     * Create a new manager instance.
-     *
-     * @param  \Illuminate\Contracts\Container\Container  $container
-     * @return void
-     */
-    public function __construct(Container $container)
-    {
-        parent::__construct($container);
-
-        $this->drivers['cash'] = $this->createDriver('cash');
-        $this->drivers['transfer'] = $this->createDriver('transfer');
-    }
-
     /**
      * Get the default driver name.
      *
@@ -33,52 +18,27 @@ class Manager extends BaseManager implements Contract
     }
 
     /**
-     * Get all drivers.
+     * Get all of the created "drivers".
      *
      * @return array
      */
-    public function all(): array
+    public function getDrivers(): array
     {
-        foreach (array_keys(array_diff_key($this->customCreators, $this->drivers)) as $key) {
-            $this->drivers[$key] = $this->callCustomCreator($key);
+        if (! isset($this->drivers['cash'])) {
+            $this->drivers['cash'] = $this->createDriver('cash');
         }
 
-        return $this->getDrivers();
-    }
+        if (! isset($this->drivers['transfer'])) {
+            $this->drivers['transfer'] = $this->createDriver('transfer');
+        }
 
-    /**
-     * Get the enabled drivers.
-     *
-     * @return array
-     */
-    public function enabled(): array
-    {
-        return array_filter($this->all(), static function (Driver $driver): bool {
-            return $driver->enabled();
-        });
-    }
+        foreach (array_keys(array_diff_key($this->customCreators, $this->drivers)) as $key) {
+            if (! isset($this->drivers[$key])) {
+                $this->drivers[$key] = $this->createDriver($key);
+            }
+        }
 
-    /**
-     * Get the disabled drivers.
-     *
-     * @return array
-     */
-    public function disabled(): array
-    {
-        return array_filter($this->all(), static function (Driver $driver): bool {
-            return $driver->disabled();
-        });
-    }
-
-    /**
-     * Determine if the given driver exists.
-     *
-     * @param  string  $driver
-     * @return bool
-     */
-    public function has(string $driver): bool
-    {
-        return isset($this->drivers[$driver]) || isset($this->customCreators[$driver]);
+        return parent::getDrivers();
     }
 
     /**

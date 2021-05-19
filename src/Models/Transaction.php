@@ -110,7 +110,7 @@ class Transaction extends Model implements Contract
     public function getDriverNameAttribute(): string
     {
         try {
-            return Gateway::driver($this->driver)->name();
+            return Gateway::driver($this->driver)->getName();
         } catch (Throwable $exception) {
             return $this->driver;
         }
@@ -124,7 +124,7 @@ class Transaction extends Model implements Contract
     public function getUrlAttribute(): ?string
     {
         try {
-            return Gateway::driver($this->driver)->transactionUrl($this);
+            return Gateway::driver($this->driver)->getTransactionUrl($this);
         } catch (Throwable $exception) {
             return null;
         }

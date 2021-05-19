@@ -18,7 +18,7 @@ class CashDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->pay($amount, $this->id(), array_merge($attributes, [
+        $transaction = $order->pay($amount, 'cash', array_merge($attributes, [
             'completed_at' => time(),
         ]));
 
@@ -37,7 +37,7 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->refund($amount, $this->id(), array_merge($attributes, [
+        $transaction = $order->refund($amount, 'cash', array_merge($attributes, [
             'completed_at' => time(),
         ]));
 

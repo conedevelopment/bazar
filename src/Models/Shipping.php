@@ -192,7 +192,7 @@ class Shipping extends Model implements Contract
     public function getDriverNameAttribute(): string
     {
         try {
-            return Manager::driver($this->driver)->name();
+            return Manager::driver($this->driver)->getName();
         } catch (Throwable $exception) {
             return $this->driver;
         }

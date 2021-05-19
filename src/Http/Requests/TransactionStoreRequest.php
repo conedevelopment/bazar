@@ -26,7 +26,7 @@ class TransactionStoreRequest extends FormRequest
             ],
             'driver' => [
                 'required',
-                Rule::in(array_keys(Gateway::enabled())),
+                Rule::in(array_keys(Gateway::getDrivers())),
             ],
             'key' => ['nullable', 'unique:bazar_transactions'],
         ];

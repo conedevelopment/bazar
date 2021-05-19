@@ -124,7 +124,7 @@ class ShippingTest extends TestCase
     /** @test */
     public function it_has_driver_name()
     {
-        $this->assertSame(ShippingManager::driver($this->shipping->driver)->name(), $this->shipping->driverName);
+        $this->assertSame(ShippingManager::driver($this->shipping->driver)->getName(), $this->shipping->driverName);
 
         $this->shipping->setAttribute('driver', 'fake');
         $this->assertSame('fake', $this->shipping->driverName);

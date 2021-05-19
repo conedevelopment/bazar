@@ -17,7 +17,7 @@ class TransferDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return $order->pay($amount, $this->id(), $attributes);
+        return $order->pay($amount, 'transfer', $attributes);
     }
 
     /**
@@ -30,6 +30,6 @@ class TransferDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return $order->refund($amount, $this->id(), $attributes);
+        return $order->refund($amount, 'transfer', $attributes);
     }
 }

@@ -7,7 +7,6 @@ use Bazar\Events\CheckoutProcessing;
 use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Transaction;
-use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -19,13 +18,6 @@ abstract class Driver
      * @var array
      */
     protected array $config = [];
-
-    /**
-     * Indicates if the driver is enabled.
-     *
-     * @var bool
-     */
-    protected bool $enabled = true;
 
     /**
      * Create a new driver instance.
@@ -59,69 +51,15 @@ abstract class Driver
     abstract public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction;
 
     /**
-     * Get the ID of the driver.
-     *
-     * @return string
-     */
-    public function id(): string
-    {
-        return array_search($this, Gateway::all());
-    }
-
-    /**
      * Get the name of the driver.
      *
      * @return string
      */
-    public function name(): string
+    public function getName(): string
     {
         return preg_replace(
-            '/([a-z0-9])([A-Z])/', '$1 $2', str_replace('Driver', '', class_basename($this))
+            '/([a-z0-9])([A-Z])/', '$1 $2', str_replace('Driver', '', class_basename(static::class))
         );
-    }
-
-    /**
-     * Determine if the driver is enabled.
-     *
-     * @return bool
-     */
-    public function enabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    /**
-     * Determine if the driver is disabled.
-     *
-     * @return bool
-     */
-    public function disabled(): bool
-    {
-        return ! $this->enabled;
-    }
-
-    /**
-     * Enable the gateway.
-     *
-     * @return $this
-     */
-    public function enable(): self
-    {
-        $this->enabled = true;
-
-        return $this;
-    }
-
-    /**
-     * Disable the gateway.
-     *
-     * @return $this
-     */
-    public function disable(): self
-    {
-        $this->enabled = false;
-
-        return $this;
     }
 
     /**
@@ -130,7 +68,7 @@ abstract class Driver
      * @param  \Bazar\Models\Transaction  $transaction
      * @return string|null
      */
-    public function transactionUrl(Transaction $transaction): ?string
+    public function getTransactionUrl(Transaction $transaction): ?string
     {
         return null;
     }

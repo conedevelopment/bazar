@@ -6,10 +6,7 @@ use Bazar\Contracts\Gateway\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array all()
- * @method static array enabled()
- * @method static array disabled()
- * @method static bool has(string $driver)
+ * @method static array getDrivers()
  *
  * @see \Bazar\Contracts\Gateway\Manager
  */

@@ -75,7 +75,7 @@ class OrdersController extends Controller
             'countries' => Countries::all(),
             'currencies' => Bazar::currencies(),
             'statuses' => Order::proxy()::statuses(),
-            'drivers' => Collection::make(Shipping::enabled())->map->name()->flip(),
+            'drivers' => Collection::make(Shipping::getDrivers())->map->getName()->flip(),
         ]);
     }
 
@@ -116,7 +116,7 @@ class OrdersController extends Controller
         return Inertia::render('Orders/Show', [
             'order' => $order,
             'statuses' => Order::proxy()::statuses(),
-            'drivers' => Collection::make(Gateway::enabled())->map->name()->flip(),
+            'drivers' => Collection::make(Gateway::getDrivers())->map->getName()->flip(),
         ]);
     }
 

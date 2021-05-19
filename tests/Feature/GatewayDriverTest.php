@@ -45,29 +45,9 @@ class GatewayDriverTest extends TestCase
         $this->manager->extend('custom-driver', function () {
             return new CustomGatewayDriver();
         });
-        $this->manager->extend('failing', function () {
+        $this->manager->extend('failing-driver', function () {
             return new FailingDriver();
         });
-    }
-
-    /** @test */
-    public function it_can_list_enabled_drivers()
-    {
-        $this->manager->driver('cash')->disable();
-        $this->assertEquals(['transfer', 'custom-driver', 'failing'], array_keys($this->manager->enabled()));
-        $this->assertEquals(['cash'], array_keys($this->manager->disabled()));
-
-        $this->manager->driver('cash')->enable();
-        $this->assertEquals(['cash', 'transfer', 'custom-driver', 'failing'], array_keys($this->manager->enabled()));
-        $this->assertEmpty(array_keys($this->manager->disabled()));
-    }
-
-    /** @test */
-    public function it_can_check_if_the_given_driver_is_registered()
-    {
-        $this->assertTrue($this->manager->has('cash'));
-        $this->assertTrue($this->manager->has('custom-driver'));
-        $this->assertFalse($this->manager->has('fake-driver'));
     }
 
     /** @test */
@@ -75,20 +55,19 @@ class GatewayDriverTest extends TestCase
     {
         $driver = $this->manager->driver('cash');
         $this->assertInstanceOf(CashDriver::class, $driver);
-        $this->assertSame('Cash', $driver->name());
-        $this->assertSame('cash', $driver->id());
+        $this->assertSame('Cash', $driver->getName());
 
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
         $this->assertTrue($this->order->refresh()->paid());
-        $this->assertNull($driver->transactionUrl($payment));
+        $this->assertNull($driver->getTransactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
-        $this->assertNull($driver->transactionUrl($payment));
+        $this->assertNull($driver->getTransactionUrl($payment));
     }
 
     /** @test */
@@ -96,20 +75,19 @@ class GatewayDriverTest extends TestCase
     {
         $driver = $this->manager->driver('transfer');
         $this->assertInstanceOf(TransferDriver::class, $driver);
-        $this->assertSame('Transfer', $driver->name());
-        $this->assertSame('transfer', $driver->id());
+        $this->assertSame('Transfer', $driver->getName());
 
         $payment = $driver->pay($this->order, 1);
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
         $this->assertTrue($this->order->refresh()->paid());
-        $this->assertNull($driver->transactionUrl($payment));
+        $this->assertNull($driver->getTransactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
-        $this->assertNull($driver->transactionUrl($payment));
+        $this->assertNull($driver->getTransactionUrl($payment));
     }
 
     /** @test */
@@ -122,13 +100,13 @@ class GatewayDriverTest extends TestCase
         $this->assertEquals(1, $payment->amount);
         $payment = $driver->pay($this->order);
         $this->assertTrue($this->order->refresh()->paid());
-        $this->assertSame('fake-url', $driver->transactionUrl($payment));
+        $this->assertSame('fake-url', $driver->getTransactionUrl($payment));
 
         $refund = $driver->refund($this->order, 1);
         $this->assertEquals(1, $refund->amount);
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
-        $this->assertSame('fake-url', $driver->transactionUrl($payment));
+        $this->assertSame('fake-url', $driver->getTransactionUrl($payment));
     }
 
     /** @test */
@@ -157,7 +135,7 @@ class GatewayDriverTest extends TestCase
     /** @test */
     public function it_handles_failed_checkout()
     {
-        $order = $this->manager->driver('failing')->checkout($this->app['request'], $this->cart);
+        $order = $this->manager->driver('failing-driver')->checkout($this->app['request'], $this->cart);
 
         $this->assertSame('failed', $order->refresh()->status);
     }
@@ -165,19 +143,19 @@ class GatewayDriverTest extends TestCase
 
 class CustomGatewayDriver Extends Driver
 {
-    public function transactionUrl(Transaction $transaction): ?string
+    public function getTransactionUrl(Transaction $transaction): ?string
     {
         return 'fake-url';
     }
 
     public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        return $order->pay($amount, $this->id());
+        return $order->pay($amount, 'custom-driver');
     }
 
     public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        return $order->refund($amount, $this->id());
+        return $order->refund($amount, 'custom-driver');
     }
 }
 

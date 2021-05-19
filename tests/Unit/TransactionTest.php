@@ -30,7 +30,7 @@ class TransactionTest extends TestCase
     public function it_has_driver_name()
     {
         $this->assertSame(
-            Gateway::driver($this->transaction->driver)->name(),
+            Gateway::driver($this->transaction->driver)->getName(),
             $this->transaction->driverName
         );
     }
@@ -39,7 +39,7 @@ class TransactionTest extends TestCase
     public function it_has_url()
     {
         $this->assertSame(
-            Gateway::driver($this->transaction->driver)->transactionUrl($this->transaction),
+            Gateway::driver($this->transaction->driver)->getTransactionUrl($this->transaction),
             $this->transaction->url
         );
 

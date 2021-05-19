@@ -26,32 +26,11 @@ class ShippingDriverTest extends TestCase
     }
 
     /** @test */
-    public function it_can_list_enabled_drivers()
-    {
-        $this->manager->driver('local-pickup')->disable();
-        $this->assertEquals(['custom-driver'], array_keys($this->manager->enabled()));
-        $this->assertEquals(['local-pickup'], array_keys($this->manager->disabled()));
-
-        $this->manager->driver('local-pickup')->enable();
-        $this->assertEquals(['local-pickup', 'custom-driver'], array_keys($this->manager->enabled()));
-        $this->assertEmpty(array_keys($this->manager->disabled()));
-    }
-
-    /** @test */
-    public function it_can_check_if_the_given_driver_is_registered()
-    {
-        $this->assertTrue($this->manager->has('local-pickup'));
-        $this->assertTrue($this->manager->has('custom-driver'));
-        $this->assertFalse($this->manager->has('fake-driver'));
-    }
-
-    /** @test */
     public function it_has_local_pickup_driver()
     {
         $driver = $this->manager->driver('local-pickup');
         $this->assertInstanceOf(LocalPickupDriver::class, $driver);
-        $this->assertSame('Local Pickup', $driver->name());
-        $this->assertSame('local-pickup', $driver->id());
+        $this->assertSame('Local Pickup', $driver->getName());
 
         $this->assertEquals(0, $driver->calculate($this->order));
     }
