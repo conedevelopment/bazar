@@ -170,12 +170,12 @@ class CustomGatewayDriver Extends Driver
         return 'fake-url';
     }
 
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         return $order->pay($amount, $this->id());
     }
 
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         return $order->refund($amount, $this->id());
     }
@@ -183,12 +183,12 @@ class CustomGatewayDriver Extends Driver
 
 class FailingDriver Extends Driver
 {
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception;
     }
 
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception;
     }

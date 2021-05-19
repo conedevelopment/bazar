@@ -28,6 +28,7 @@ class TransactionStoreRequest extends FormRequest
                 'required',
                 Rule::in(array_keys(Gateway::enabled())),
             ],
+            'key' => ['nullable', 'unique:bazar_transactions'],
         ];
     }
 }

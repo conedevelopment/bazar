@@ -132,14 +132,14 @@ class TransactionsTest extends TestCase
 
 class FakeGateway extends Driver
 {
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new TransactionFailedException('Payment failed');
 
         return new Transaction();
     }
 
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new TransactionFailedException('Refund failed');
 

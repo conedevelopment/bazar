@@ -66,6 +66,21 @@
                         {{ __('Leave it empty to apply the remaining amount automatically.') }}
                     </span>
                 </div>
+                <div class="form-group">
+                    <label for="amount">{{ __('Reference') }}</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="key"
+                        name="key"
+                        v-model="transaction.key"
+                        :class="{ 'is-invalid': errors.has('key') }"
+                        @input="errors.clear('key')"
+                    >
+                    <span v-if="errors.has('key')" class="form-text text-danger">
+                        {{ errors.get('key') }}
+                    </span>
+                </div>
             </template>
 
             <template #footer>
@@ -100,6 +115,7 @@
                 busy: false,
                 errors: new Errors(),
                 transaction: {
+                    key: null,
                     amount: null,
                     type: 'refund',
                     driver: 'cash',
@@ -131,6 +147,7 @@
                 this.order.transactions.push(transaction);
                 this.$refs.refund.close();
                 this.transaction = {
+                    key: null,
                     amount: null,
                     type: 'refund',
                     driver: 'cash',

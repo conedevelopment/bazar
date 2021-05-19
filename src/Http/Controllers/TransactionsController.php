@@ -43,7 +43,7 @@ class TransactionsController extends Controller
         try {
             $transaction = call_user_func_array(
                 [Gateway::driver($request->input('driver')), $method],
-                [$order, $request->input('amount')]
+                [$order, $request->input('amount'), $request->only('key')]
             );
         } catch (Throwable $exception) {
             throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $exception->getMessage());

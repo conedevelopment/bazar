@@ -13,13 +13,14 @@ class CashDriver extends Driver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function pay(Order $order, ?float $amount = null): Transaction
+    public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->pay($amount, $this->id(), [
+        $transaction = $order->pay($amount, $this->id(), array_merge($attributes, [
             'completed_at' => time(),
-        ]);
+        ]));
 
         CheckoutProcessed::dispatch($order);
 
@@ -31,13 +32,14 @@ class CashDriver extends Driver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function refund(Order $order, ?float $amount = null): Transaction
+    public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->refund($amount, $this->id(), [
+        $transaction = $order->refund($amount, $this->id(), array_merge($attributes, [
             'completed_at' => time(),
-        ]);
+        ]));
 
         $order->markAs('refunded');
 

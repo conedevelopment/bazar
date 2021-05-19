@@ -43,18 +43,20 @@ abstract class Driver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    abstract public function pay(Order $order, ?float $amount = null): Transaction;
+    abstract public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction;
 
     /**
      * Process the refund.
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
+     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    abstract public function refund(Order $order, ?float $amount = null): Transaction;
+    abstract public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction;
 
     /**
      * Get the ID of the driver.
