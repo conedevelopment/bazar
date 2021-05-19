@@ -256,7 +256,9 @@ abstract class Driver
      */
     public function checkout(string $driver): Order
     {
-        return Gateway::driver($driver)->checkout($this->getModel());
+        return App::call(function (Request $request) use ($driver): Order {
+            return Gateway::driver($driver)->checkout($request, $this->getModel());
+        });
     }
 
     /**
