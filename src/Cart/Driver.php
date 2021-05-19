@@ -6,8 +6,10 @@ use Bazar\Bazar;
 use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
+use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
+use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -244,6 +246,17 @@ abstract class Driver
     public function isEmpty(): bool
     {
         return $this->getItems()->isEmpty();
+    }
+
+    /**
+     * Perform the checkout using the given driver.
+     *
+     * @param  string  $driver
+     * @return \Bazar\Models\Order
+     */
+    public function checkout(string $driver): Order
+    {
+        return Gateway::driver($driver)->checkout($this->getModel());
     }
 
     /**
