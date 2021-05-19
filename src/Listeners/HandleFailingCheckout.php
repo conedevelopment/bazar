@@ -14,6 +14,6 @@ class HandleFailedCheckout
      */
     public function handle(CheckoutFailed $event): void
     {
-        $event->order->status('failed');
+        $event->order->markAs('failed');
     }
 }

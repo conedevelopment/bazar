@@ -3,7 +3,7 @@
 namespace Bazar\Listeners;
 
 use Bazar\Events\CheckoutProcessed;
-use Bazar\Events\OrderPlaced;
+use Bazar\Jobs\SendNewOrderNotifications;
 use Bazar\Support\Facades\Cart;
 
 class PlaceOrder
@@ -16,7 +16,9 @@ class PlaceOrder
      */
     public function handle(CheckoutProcessed $event): void
     {
-        OrderPlaced::dispatch($event->order);
+        $event->order->markAs('in_progress');
+
+        SendNewOrderNotifications::dispatch($event->order);
 
         Cart::empty();
     }

@@ -104,7 +104,7 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      * Set the status by the given value.
      *
      * @param  string  $status
-     * @return $this
+     * @return void
      */
-    public function status(string $status): self;
+    public function markAs(string $status): void;
 }

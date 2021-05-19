@@ -14,6 +14,6 @@ class HandleProcessingCheckout
      */
     public function handle(CheckoutProcessing $event): void
     {
-        $event->order->status('pending');
+        $event->order->markAs('pending');
     }
 }

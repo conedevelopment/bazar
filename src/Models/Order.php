@@ -298,24 +298,13 @@ class Order extends Model implements Contract
      * Set the status by the given value.
      *
      * @param  string  $status
-     * @return $this
+     * @return void
      */
-    public function status(string $status): self
+    public function markAs(string $status): void
     {
-        $this->setAttribute('status', $status)->save();
-
-        return $this;
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return sprintf('#%d', $this->id);
+        if ($this->status !== $status) {
+            $this->setAttribute('status', $status)->save();
+        }
     }
 
     /**
@@ -357,5 +346,16 @@ class Order extends Model implements Contract
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
+    }
+
+    /**
+     * Get the breadcrumb representation of the object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function toBreadcrumb(Request $request): string
+    {
+        return sprintf('#%d', $this->id);
     }
 }
