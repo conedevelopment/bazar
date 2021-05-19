@@ -42,6 +42,9 @@ class TransactionTest extends TestCase
             Gateway::driver($this->transaction->driver)->transactionUrl($this->transaction),
             $this->transaction->url
         );
+
+        $this->transaction->setAttribute('driver', 'fake');
+        $this->assertNull($this->transaction->url);
     }
 
     /** @test */

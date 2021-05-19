@@ -113,8 +113,6 @@ class Shipping extends Model implements Contract
         });
     }
 
-    //
-
     /**
      * Get the driver attribute.
      *
