@@ -52,7 +52,7 @@ class OrderStoreRequest extends FormRequest
             'shipping.driver' => [
                 'required',
                 'string',
-                Rule::in(array_keys(Shipping::getDrivers())),
+                Rule::in(array_keys(Shipping::getAvailableDrivers())),
             ],
             'shipping.cost' => ['nullable', 'numeric', 'min:0'],
             'shipping.tax' => ['nullable', 'numeric', 'min:0'],

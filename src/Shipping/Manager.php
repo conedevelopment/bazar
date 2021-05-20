@@ -35,10 +35,10 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable  $model
+     * @param  \Bazar\Contracts\Itemable|null  $model
      * @return void
      */
-    public function getAvailableDriversFor(Itemable $model): array
+    public function getAvailableDrivers(?Itemable $model = null): array
     {
         foreach (array_keys(array_diff_key($this->customCreators, parent::getDrivers())) as $key) {
             if (! isset($this->drivers[$key])) {
@@ -47,7 +47,7 @@ class Manager extends BaseManager implements Contract
         }
 
         return array_filter(parent::getDrivers(), static function (Driver $driver) use ($model): bool {
-            return $driver->availableFor($model);
+            return is_null($model) ? $driver->enabled() : $driver->available($model);
         });
     }
 

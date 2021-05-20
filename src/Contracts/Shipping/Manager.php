@@ -9,8 +9,8 @@ interface Manager
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable  $model
+     * @param  \Bazar\Contracts\Itemable|null  $model
      * @return void
      */
-    public function getAvailableDriversFor(Itemable $model): array;
+    public function getAvailableDrivers(?Itemable $model = null): array;
 }

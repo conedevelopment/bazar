@@ -55,7 +55,7 @@ class GatewayManagerTest extends TestCase
     {
         $this->assertEquals(
             ['cash', 'transfer', 'custom-driver', 'failing-driver'],
-            array_keys($this->manager->getAvailableDriversFor($this->cart))
+            array_keys($this->manager->getAvailableDrivers($this->cart))
         );
     }
 
@@ -80,10 +80,10 @@ class GatewayManagerTest extends TestCase
 
         $driver->disable();
         $this->assertTrue($driver->disabled());
-        $this->assertFalse($driver->availableFor($this->order));
+        $this->assertFalse($driver->available($this->order));
         $driver->enable();
         $this->assertTrue($driver->enabled());
-        $this->assertTrue($driver->availableFor($this->order));
+        $this->assertTrue($driver->available($this->order));
     }
 
     /** @test */
@@ -107,10 +107,10 @@ class GatewayManagerTest extends TestCase
 
         $driver->disable();
         $this->assertTrue($driver->disabled());
-        $this->assertFalse($driver->availableFor($this->order));
+        $this->assertFalse($driver->available($this->order));
         $driver->enable();
         $this->assertTrue($driver->enabled());
-        $this->assertTrue($driver->availableFor($this->order));
+        $this->assertTrue($driver->available($this->order));
     }
 
     /** @test */

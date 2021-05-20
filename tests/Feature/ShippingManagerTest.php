@@ -30,7 +30,7 @@ class ShippingManagerTest extends TestCase
     {
         $this->assertEquals(
             ['local-pickup', 'custom-driver'],
-            array_keys($this->manager->getAvailableDriversFor($this->order))
+            array_keys($this->manager->getAvailableDrivers($this->order))
         );
     }
 
@@ -45,10 +45,10 @@ class ShippingManagerTest extends TestCase
 
         $driver->disable();
         $this->assertTrue($driver->disabled());
-        $this->assertFalse($driver->availableFor($this->order));
+        $this->assertFalse($driver->available($this->order));
         $driver->enable();
         $this->assertTrue($driver->enabled());
-        $this->assertTrue($driver->availableFor($this->order));
+        $this->assertTrue($driver->available($this->order));
     }
 
     /** @test */

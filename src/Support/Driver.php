@@ -37,7 +37,7 @@ abstract class Driver
      * @param  \Bazar\Contracts\Itemable  $model
      * @return bool
      */
-    public function availableFor(Itemable $model): bool
+    public function available(Itemable $model): bool
     {
         return $this->enabled();
     }
