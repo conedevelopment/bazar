@@ -4,6 +4,7 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Models\Address;
+use Bazar\Models\Cart;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Transaction;
@@ -27,7 +28,7 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function it_can_belong_to_a_customer()
+    public function it_can_belong_to_customer()
     {
         $this->assertNull($this->order->user);
 
@@ -48,6 +49,16 @@ class OrderTest extends TestCase
         $this->assertSame(
             $this->order->transactions->pluck('id')->all(), $transactions->pluck('id')->all()
         );
+    }
+
+    /** @test */
+    public function it_can_have_cart()
+    {
+        $cart = $this->order->cart()->save(
+            Cart::factory()->make()
+        );
+
+        $this->assertSame($cart->id, $this->order->cart->id);
     }
 
     /** @test */

@@ -4,6 +4,7 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Models\Address;
 use Bazar\Models\Cart;
+use Bazar\Models\Order;
 use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Tests\TestCase;
@@ -29,7 +30,21 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_belong_to_a_customer()
+    public function it_can_belong_to_order()
+    {
+        $order = Order::factory()->create();
+
+        $this->assertFalse($this->cart->order->exists);
+
+        $this->cart->order()->associate($order);
+
+        $this->cart->save();
+
+        $this->assertSame($order->id, $this->cart->order->id);
+    }
+
+    /** @test */
+    public function it_can_belong_to_customer()
     {
         $this->assertNull($this->cart->user);
 
@@ -41,7 +56,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_a_shipping()
+    public function it_has_shipping()
     {
         $shipping = $this->cart->shipping()->save(Shipping::factory()->make());
 

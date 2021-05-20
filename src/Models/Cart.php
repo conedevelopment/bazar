@@ -125,7 +125,9 @@ class Cart extends Model implements Contract
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::getProxiedClass());
+        return $this->belongsTo(Order::getProxiedClass())->withDefault(function (): Order {
+            return Order::proxy()->newInstance($this->toArray());
+        });
     }
 
     /**
@@ -193,12 +195,8 @@ class Cart extends Model implements Contract
      */
     public function toOrder(): Order
     {
-        $order = new Order($this->toArray());
-        $order->user()->associate($this->user)->save();
-
-        $this->order()->associate($order)->save();
-
-        $order->products()->attach(
+        $this->order->user()->associate($this->user)->save();
+        $this->order->products()->attach(
             $this->items->mapWithKeys(static function (Item $item): array {
                 return [$item->product_id => $item->only([
                     'price', 'tax', 'quantity', 'properties',
@@ -206,10 +204,10 @@ class Cart extends Model implements Contract
             })->toArray()
         );
 
-        $order->address()->save($this->address);
-        $order->shipping()->save($this->shipping);
-        $order->shipping->address()->save($this->shipping->address);
+        $this->order->address()->save($this->address);
+        $this->order->shipping()->save($this->shipping);
+        $this->order->shipping->address()->save($this->shipping->address);
 
-        return $order;
+        return $this->order;
     }
 }
