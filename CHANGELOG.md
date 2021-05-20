@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0 (Unreleased)
+## v0.8.0 (2021-05-20)
 ### Changed
 - Changed the `Cart` Driver API
 - Changed the `Shipping` Manager and Driver API
