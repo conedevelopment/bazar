@@ -15,7 +15,7 @@ class CreateBazarShippingsTable extends Migration
     {
         Schema::create('bazar_shippings', static function (Blueprint $table): void {
             $table->id();
-            $table->uuidMorphs('shippable');
+            $table->morphs('shippable');
             $table->string('driver');
             $table->unsignedDecimal('cost')->default(0);
             $table->unsignedDecimal('tax')->default(0);

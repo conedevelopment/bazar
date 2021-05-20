@@ -15,7 +15,7 @@ class CreateBazarAddressesTable extends Migration
     {
         Schema::create('bazar_addresses', static function (Blueprint $table): void {
             $table->id();
-            $table->uuidMorphs('addressable');
+            $table->morphs('addressable');
             $table->string('first_name', 60)->nullable();
             $table->string('last_name', 60)->nullable();
             $table->string('country', 2)->nullable();

@@ -4,7 +4,6 @@ namespace Bazar\Models;
 
 use Bazar\Bazar;
 use Bazar\Concerns\Addressable;
-use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithDiscounts;
 use Bazar\Concerns\InteractsWithItems;
 use Bazar\Concerns\InteractsWithProxy;
@@ -20,7 +19,6 @@ class Cart extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
-    use HasUuid;
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
@@ -52,25 +50,10 @@ class Cart extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'id',
         'locked',
         'discount',
         'currency',
     ];
-
-    /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
 
     /**
      * The table associated with the model.
