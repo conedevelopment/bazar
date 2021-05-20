@@ -20,7 +20,7 @@ use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 
-class GatewayDriverTest extends TestCase
+class GatewayManagerTest extends TestCase
 {
     protected $manager, $cart, $order;
 
@@ -51,6 +51,15 @@ class GatewayDriverTest extends TestCase
     }
 
     /** @test */
+    public function it_can_list_available_drivers_for_itemable_model()
+    {
+        $this->assertEquals(
+            ['cash', 'transfer', 'custom-driver', 'failing-driver'],
+            array_keys($this->manager->getAvailableDriversFor($this->cart))
+        );
+    }
+
+    /** @test */
     public function it_has_cash_driver()
     {
         $driver = $this->manager->driver('cash');
@@ -68,6 +77,13 @@ class GatewayDriverTest extends TestCase
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
         $this->assertNull($driver->getTransactionUrl($payment));
+
+        $driver->disable();
+        $this->assertTrue($driver->disabled());
+        $this->assertFalse($driver->availableFor($this->order));
+        $driver->enable();
+        $this->assertTrue($driver->enabled());
+        $this->assertTrue($driver->availableFor($this->order));
     }
 
     /** @test */
@@ -88,6 +104,13 @@ class GatewayDriverTest extends TestCase
         $refund = $driver->refund($this->order);
         $this->assertTrue($this->order->refresh()->refunded());
         $this->assertNull($driver->getTransactionUrl($payment));
+
+        $driver->disable();
+        $this->assertTrue($driver->disabled());
+        $this->assertFalse($driver->availableFor($this->order));
+        $driver->enable();
+        $this->assertTrue($driver->enabled());
+        $this->assertTrue($driver->availableFor($this->order));
     }
 
     /** @test */

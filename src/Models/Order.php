@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -138,6 +139,16 @@ class Order extends Model implements Contract
             'status' => static::statuses(),
             'user' => User::proxy()->newQuery()->pluck('id', 'name')->toArray(),
         ]);
+    }
+
+    /**
+     * Get the cart for the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::getProxiedClass());
     }
 
     /**

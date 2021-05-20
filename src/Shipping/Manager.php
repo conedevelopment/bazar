@@ -2,11 +2,26 @@
 
 namespace Bazar\Shipping;
 
+use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Shipping\Manager as Contract;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract
 {
+    /**
+     * Create a new manager instance.
+     *
+     * @param  \Illuminate\Contracts\Container\Container  $container
+     * @return void
+     */
+    public function __construct(Container $container)
+    {
+        parent::__construct($container);
+
+        $this->drivers['local-pickup'] = $this->createDriver('local-pickup');
+    }
+
     /**
      * Get the default driver name.
      *
@@ -18,23 +33,22 @@ class Manager extends BaseManager implements Contract
     }
 
     /**
-     * Get all of the created "drivers".
+     * Get the available drivers for the given model.
      *
-     * @return array
+     * @param  \Bazar\Contracts\Itemable  $model
+     * @return void
      */
-    public function getDrivers(): array
+    public function getAvailableDriversFor(Itemable $model): array
     {
-        if (! isset($this->drivers['local-pickup'])) {
-            $this->drivers['local-pickup'] = $this->createDriver('local-pickup');
-        }
-
-        foreach (array_keys(array_diff_key($this->customCreators, $this->drivers)) as $key) {
+        foreach (array_keys(array_diff_key($this->customCreators, parent::getDrivers())) as $key) {
             if (! isset($this->drivers[$key])) {
                 $this->drivers[$key] = $this->createDriver($key);
             }
         }
 
-        return parent::getDrivers();
+        return array_filter(parent::getDrivers(), static function (Driver $driver) use ($model): bool {
+            return $driver->availableFor($model);
+        });
     }
 
     /**

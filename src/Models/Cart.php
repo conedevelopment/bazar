@@ -13,6 +13,7 @@ use Bazar\Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Date;
 
 class Cart extends Model implements Contract
@@ -118,6 +119,16 @@ class Cart extends Model implements Contract
     }
 
     /**
+     * Get the order for the cart.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::getProxiedClass());
+    }
+
+    /**
      * Lock the cart.
      *
      * @return void
@@ -183,8 +194,9 @@ class Cart extends Model implements Contract
     public function toOrder(): Order
     {
         $order = new Order($this->toArray());
-
         $order->user()->associate($this->user)->save();
+
+        $this->order()->associate($order)->save();
 
         $order->products()->attach(
             $this->items->mapWithKeys(static function (Item $item): array {

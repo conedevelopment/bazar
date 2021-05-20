@@ -3,6 +3,8 @@
 ## v0.8.0 (Unreleased)
 ### Changed
 - Changed the `Cart` Driver API
+- Changed the `Shipping` Manager and Driver API
+- Changed the `Gateway` Manager and Driver API
 - Changed the `SendNewOrderNotifications` event listener to a job
 
 ### Fixed

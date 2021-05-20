@@ -36,7 +36,7 @@
                             :disabled="! form.data.user.addresses.length"
                             @input.prevent="(event) => copy(event.target.value, 'billing')"
                         >
-                            <option :value="null" selected>--- {{ __('Address') }} ---</option>
+                            <option :value="null" selected>{{ __('Address') }}</option>
                             <option v-for="address in form.data.user.addresses" :key="address.id" :value="JSON.stringify(address)">
                                 {{ address.alias }}
                             </option>
@@ -144,7 +144,7 @@
                             :disabled="! form.data.user.addresses.length"
                             @input.prevent="(event) => copy(event.target.value, 'shipping')"
                         >
-                            <option :value="null" selected>--- {{ __('Address') }} ---</option>
+                            <option :value="null" selected>{{ __('Address') }}</option>
                             <option v-for="address in form.data.user.addresses" :key="address.id" :value="JSON.stringify(address)">
                                 {{ address.alias }}
                             </option>

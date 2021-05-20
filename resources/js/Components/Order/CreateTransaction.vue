@@ -18,7 +18,7 @@
                         v-model="transaction.type"
                         @change="errors.clear('type')"
                     >
-                        <option :value="null" disabled>--- {{ __('Type') }} ---</option>
+                        <option :value="null" disabled>{{ __('Type') }}</option>
                         <option v-for="(label, type) in types" :key="type" :value="type">
                             {{ label }}
                         </option>
@@ -37,7 +37,7 @@
                         v-model="transaction.driver"
                         @change="errors.clear('driver')"
                     >
-                        <option :value="null" disabled>--- {{ __('Driver') }} ---</option>
+                        <option :value="null" disabled>{{ __('Driver') }}</option>
                         <option v-for="(driver, label) in drivers" :key="driver" :value="driver">
                             {{ label }}
                         </option>
@@ -118,7 +118,7 @@
                     key: null,
                     amount: null,
                     type: 'refund',
-                    driver: 'cash',
+                    driver: null,
                 },
             };
         },
@@ -150,7 +150,7 @@
                     key: null,
                     amount: null,
                     type: 'refund',
-                    driver: 'cash',
+                    driver: null,
                 };
             },
         },

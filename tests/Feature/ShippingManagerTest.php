@@ -9,7 +9,7 @@ use Bazar\Shipping\Driver;
 use Bazar\Shipping\LocalPickupDriver;
 use Bazar\Tests\TestCase;
 
-class ShippingDriverTest extends TestCase
+class ShippingManagerTest extends TestCase
 {
     protected $manager, $order;
 
@@ -26,6 +26,15 @@ class ShippingDriverTest extends TestCase
     }
 
     /** @test */
+    public function it_can_list_available_drivers_for_itemable_model()
+    {
+        $this->assertEquals(
+            ['local-pickup', 'custom-driver'],
+            array_keys($this->manager->getAvailableDriversFor($this->order))
+        );
+    }
+
+    /** @test */
     public function it_has_local_pickup_driver()
     {
         $driver = $this->manager->driver('local-pickup');
@@ -33,6 +42,13 @@ class ShippingDriverTest extends TestCase
         $this->assertSame('Local Pickup', $driver->getName());
 
         $this->assertEquals(0, $driver->calculate($this->order));
+
+        $driver->disable();
+        $this->assertTrue($driver->disabled());
+        $this->assertFalse($driver->availableFor($this->order));
+        $driver->enable();
+        $this->assertTrue($driver->enabled());
+        $this->assertTrue($driver->availableFor($this->order));
     }
 
     /** @test */

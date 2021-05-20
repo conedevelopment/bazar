@@ -20,6 +20,8 @@ class PlaceOrder
 
         SendNewOrderNotifications::dispatch($event->order);
 
-        Cart::empty();
+        if ($event->order->cart) {
+            $event->order->cart->delete();
+        }
     }
 }

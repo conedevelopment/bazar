@@ -6,7 +6,7 @@ use Bazar\Contracts\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getDrivers()
+ * @method static array getAvailableDriversFor(\Bazar\Contracts\Itemable $model)
  *
  * @see \Bazar\Contracts\Shipping\Manager
  */

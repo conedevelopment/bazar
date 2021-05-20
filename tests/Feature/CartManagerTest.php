@@ -16,7 +16,7 @@ use Bazar\Support\Facades\Cart as CartFacade;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 
-class CartDriverTest extends TestCase
+class CartManagerTest extends TestCase
 {
     protected $manager, $product, $variant;
 

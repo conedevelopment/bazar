@@ -6,10 +6,18 @@ use Bazar\Contracts\Breadcrumbable;
 use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 
 interface Order extends Breadcrumbable, Discountable, Itemable
 {
+    /**
+     * Get the cart for the order.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function cart(): HasOne;
+
     /**
      * Get the transactions for the order.
      *

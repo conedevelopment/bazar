@@ -116,7 +116,7 @@ class OrdersController extends Controller
         return Inertia::render('Orders/Show', [
             'order' => $order,
             'statuses' => Order::proxy()::statuses(),
-            'drivers' => Collection::make(Gateway::getDrivers())->map->getName()->flip(),
+            'drivers' => Collection::make(Gateway::getAvailableDriversFor($order))->map->getName()->flip(),
         ]);
     }
 
