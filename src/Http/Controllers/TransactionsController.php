@@ -8,6 +8,7 @@ use Bazar\Models\Order;
 use Bazar\Models\Transaction;
 use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -38,13 +39,15 @@ class TransactionsController extends Controller
      */
     public function store(StoreRequest $request, Order $order): JsonResponse
     {
-        $method = $request->input('type') === Transaction::REFUND ? 'refund' : 'pay';
+        $data = $request->validated();
 
         try {
-            $transaction = call_user_func_array(
-                [Gateway::driver($request->input('driver')), $method],
-                [$order, $request->input('amount'), $request->only('key')]
-            );
+            $transaction = $data['type'] === Transaction::REFUND
+                ? Gateway::driver($data['driver'])->refund($order, $data['amount'])
+                : $order->pay($data['amount'], $data['driver'], array_merge(
+                    ['completed_at' => time()],
+                    Arr::except($data, ['type', 'amount', 'driver'])
+                ));
         } catch (Throwable $exception) {
             throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $exception->getMessage());
         }

@@ -66,8 +66,8 @@
                         {{ __('Leave it empty to apply the remaining amount automatically.') }}
                     </span>
                 </div>
-                <div class="form-group">
-                    <label for="amount">{{ __('Reference') }}</label>
+                <div v-if="transaction.type === 'payment'" class="form-group">
+                    <label for="key">{{ __('Reference') }}</label>
                     <input
                         class="form-control"
                         type="text"

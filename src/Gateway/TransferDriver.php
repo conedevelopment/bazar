@@ -12,12 +12,11 @@ class TransferDriver extends Driver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
-     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
+    public function pay(Order $order, ?float $amount = null): Transaction
     {
-        return $order->pay($amount, 'transfer', $attributes);
+        return $order->pay($amount, 'transfer');
     }
 
     /**
@@ -25,11 +24,10 @@ class TransferDriver extends Driver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
-     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
+    public function refund(Order $order, ?float $amount = null): Transaction
     {
-        return $order->refund($amount, 'transfer', $attributes);
+        return $order->refund($amount, 'transfer');
     }
 }

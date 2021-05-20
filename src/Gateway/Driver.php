@@ -18,20 +18,18 @@ abstract class Driver extends BaseDriver
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
-     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    abstract public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction;
+    abstract public function pay(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Process the refund.
      *
      * @param  \Bazar\Models\Order  $order
      * @param  float|null  $amount
-     * @param  array  $attributes
      * @return \Bazar\Models\Transaction
      */
-    abstract public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction;
+    abstract public function refund(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Get the URL of the transaction.
