@@ -3,9 +3,7 @@
 namespace Bazar\Contracts;
 
 use Bazar\Models\Item;
-use Bazar\Models\Shipping;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
@@ -26,13 +24,6 @@ interface Itemable extends Shippable
     public function products(): MorphToMany;
 
     /**
-     * Get the shipping for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
-     */
-    public function shipping(): MorphOne;
-
-    /**
      * Get the currency attribute.
      *
      * @param  string|null  $value
@@ -41,25 +32,18 @@ interface Itemable extends Shippable
     public function getCurrencyAttribute(?string $value = null): string;
 
     /**
-     * Get the shipping attribute.
-     *
-     * @return \Bazar\Models\Shipping
-     */
-    public function getShippingAttribute(): Shipping;
-
-    /**
-     * Get all the items of the model.
+     * Get the items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
     public function getItemsAttribute(): Collection;
 
     /**
-     * Get all the taxable items of the model.
+     * Get the taxable items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getTaxablesAttribute(): Collection;
+    public function getTaxableItemsAttribute(): Collection;
 
     /**
      * Get the total attibute.

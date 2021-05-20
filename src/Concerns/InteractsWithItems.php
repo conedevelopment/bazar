@@ -96,7 +96,7 @@ trait InteractsWithItems
     }
 
     /**
-     * Get all the items of the model.
+     * Get the items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -113,15 +113,13 @@ trait InteractsWithItems
     }
 
     /**
-     * Get all the taxable items of the model.
+     * Get the taxable items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getTaxablesAttribute(): Collection
+    public function getTaxableItemsAttribute(): Collection
     {
-        return $this->items->merge([$this->shipping])->filter(static function ($item): bool {
-            return $item instanceof Taxable;
-        })->values();
+        return $this->items->merge([$this->shipping]);
     }
 
     /**
@@ -171,7 +169,7 @@ trait InteractsWithItems
      */
     public function getTaxAttribute(): float
     {
-        $value = $this->taxables->sum(static function (Taxable $taxable): float {
+        $value = $this->taxableItems->sum(static function (Taxable $taxable): float {
             return $taxable->tax * $taxable->quantity;
         });
 
@@ -195,7 +193,7 @@ trait InteractsWithItems
      */
     public function total(): float
     {
-        $value = $this->taxables->reduce(static function (float $value, Taxable $item): float {
+        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
             return $value + $item->total;
         }, -$this->discount);
 
@@ -219,7 +217,7 @@ trait InteractsWithItems
      */
     public function netTotal(): float
     {
-        $value = $this->taxables->reduce(static function (float $value, Taxable $item): float {
+        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
             return $value + $item->netTotal;
         }, -$this->discount);
 
@@ -244,7 +242,7 @@ trait InteractsWithItems
      */
     public function tax(bool $update = true): float
     {
-        return $this->taxables->sum(static function (Taxable $taxable) use ($update): float {
+        return $this->taxableItems->sum(static function (Taxable $taxable) use ($update): float {
             return $taxable->tax($update) * $taxable->quantity;
         });
     }
