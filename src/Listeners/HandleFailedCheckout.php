@@ -9,7 +9,7 @@ class HandleFailedCheckout
     /**
      * Handle the event.
      *
-     * @param  \Bazar\Events\CheckoutFailing  $event
+     * @param  \Bazar\Events\CheckoutFailed  $event
      * @return void
      */
     public function handle(CheckoutFailed $event): void
