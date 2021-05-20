@@ -107,7 +107,7 @@ abstract class Driver
     }
 
     /**
-     * Remove the given item from the cart.
+     * Remove the given cart item.
      *
      * @param  string  $id
      * @return void
@@ -122,7 +122,22 @@ abstract class Driver
     }
 
     /**
-     * Update the cart items.
+     * Remove the given cart items.
+     *
+     * @param  array  $ids
+     * @return void
+     */
+    public function removeItems(array $ids): void
+    {
+        $count = $this->getModel()->products()->wherePivotIn('id', $ids)->detach();
+
+        if ($count > 0) {
+            $this->refresh();
+        }
+    }
+
+    /**
+     * Update the given cart item.
      *
      * @param  string  $id
      * @param  array  $properties
@@ -133,6 +148,25 @@ abstract class Driver
         if ($item = $this->getItem($id)) {
             $item->fill($properties)->save();
 
+            $this->refresh();
+        }
+    }
+
+    /**
+     * Update the given cart items.
+     *
+     * @param  array  $data
+     * @return void
+     */
+    public function updateItems(array $data): void
+    {
+        $items = $this->getItems()->whereIn('id', array_keys($data));
+
+        $items->each(static function (Item $item) use ($data): void {
+            $item->fill($data[$item->id])->save();
+        });
+
+        if ($items->isNotEmpty()) {
             $this->refresh();
         }
     }

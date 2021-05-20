@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.1 (2021-05-20)
+### Added
+- Added the `updateItems(array $data)` and the `removeItems(array $ids)` methods to the `Cart` driver
+
 ## v0.8.0 (2021-05-20)
 ### Changed
 - Changed the `Cart` Driver API

@@ -99,6 +99,10 @@ class CartManagerTest extends TestCase
 
         $this->assertEquals(1, $this->manager->count());
         $this->assertEquals(1, $this->manager->getItems()->count());
+
+        $this->manager->removeItems($this->manager->getItems()->pluck('id')->toArray());
+        $this->assertEquals(0, $this->manager->count());
+        $this->assertEquals(0, $this->manager->getItems()->count());
     }
 
     /** @test */
@@ -111,6 +115,14 @@ class CartManagerTest extends TestCase
         $this->manager->updateItem($item->id, ['quantity' => 10]);
 
         $this->assertEquals(11, $this->manager->count());
+        $this->assertEquals(2, $this->manager->getItems()->count());
+
+        $data = $this->manager->getItems()->mapWithKeys(function ($item) {
+            return [$item->id => ['quantity' => 3]];
+        })->toArray();
+
+        $this->manager->updateItems($data);
+        $this->assertEquals(6, $this->manager->count());
         $this->assertEquals(2, $this->manager->getItems()->count());
     }
 
