@@ -35,7 +35,13 @@ class ProductTest extends TestCase
     {
         $order = Order::factory()->create();
 
-        $this->product->orders()->attach($order, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
+        $this->product->items()->create([
+            'price' => 100,
+            'tax' => 0,
+            'quantity' => 3,
+            'itemable_id' => $order->id,
+            'itemable_type' => Order::class,
+        ]);
 
         $this->assertTrue(
             $this->product->orders->pluck('id')->contains($order->id)
@@ -47,7 +53,13 @@ class ProductTest extends TestCase
     {
         $cart = Cart::factory()->create();
 
-        $this->product->carts()->attach($cart, ['price' => 100, 'tax' => 0, 'quantity' => 3]);
+        $this->product->items()->create([
+            'price' => 100,
+            'tax' => 0,
+            'quantity' => 3,
+            'itemable_id' => $cart->id,
+            'itemable_type' => Cart::class,
+        ]);
 
         $this->assertTrue(
             $this->product->carts->pluck('id')->contains($cart->id)

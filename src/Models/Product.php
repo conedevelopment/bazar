@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -123,31 +123,35 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the orders for the product.
+     * Get the items for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function orders(): MorphToMany
+    public function items(): HasMany
     {
-        return $this->morphedByMany(Order::getProxiedClass(), 'itemable', 'bazar_items')
-                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
-                    ->withTimestamps()
-                    ->as('item')
-                    ->using(Item::class);
+        return $this->hasMany(Item::getProxiedClass());
+    }
+
+    /**
+     * Get the products for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function orders(): HasManyThrough
+    {
+        return $this->hasManyThrough(Order::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
+                    ->where('itemable_type', Order::getProxiedClass());
     }
 
     /**
      * Get the carts for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    public function carts(): MorphToMany
+    public function carts(): HasManyThrough
     {
-        return $this->morphedByMany(Cart::getProxiedClass(), 'itemable', 'bazar_items')
-                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
-                    ->withTimestamps()
-                    ->as('item')
-                    ->using(Item::class);
+        return $this->hasManyThrough(Cart::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
+                    ->where('itemable_type', Cart::getProxiedClass());
     }
 
     /**

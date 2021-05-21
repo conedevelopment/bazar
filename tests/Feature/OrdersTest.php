@@ -73,8 +73,8 @@ class OrdersTest extends TestCase
 
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.store'),
-            array_merge($order->toArray(), ['products' => [
-                $product->toArray() + ['item' => ['price' => $product->price, 'quantity' => 1, 'tax' => 10]],
+            array_merge($order->toArray(), ['items' => [
+                ['product_id' => $product->id, 'price' => $product->price, 'quantity' => 1, 'tax' => 10],
             ]])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 
@@ -94,7 +94,7 @@ class OrdersTest extends TestCase
             ->assertViewHas(
                 'page.props.order',
                 $this->order->refresh()->loadMissing([
-                    'address', 'products', 'transactions', 'shipping', 'shipping.address',
+                    'address', 'items', 'items.product', 'transactions', 'shipping', 'shipping.address',
                 ])->toArray()
             );
     }

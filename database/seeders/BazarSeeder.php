@@ -96,15 +96,15 @@ class BazarSeeder extends Seeder
 
             $order->save();
 
-            $data = Product::inRandomOrder()->take(mt_rand(1, 3))->get()->mapWithKeys(function ($product) {
-                return [$product->id => [
+            Product::inRandomOrder()->take(mt_rand(1, 3))->get()->each(function ($product) use ($order) {
+                $order->items()->create([
+                    'product_id' => $product->id,
                     'quantity' => mt_rand(1, 2),
                     'price' => $product->price,
                     'tax' => $product->price * 0.27,
-                ]];
-            })->all();
+                ]);
+            });
 
-            $order->products()->attach($data);
             $order->address()->save(AddressFactory::new()->make());
             $order->shipping()->save(ShippingFactory::new()->make());
             $order->shipping->address()->save(AddressFactory::new()->make());

@@ -8,12 +8,12 @@
                     endpoint="/bazar/users"
                     placeholder="Jane Doe"
                     :modelValue="form.data.user ? [form.data.user] : []"
-                    @update:modelValue="$event => form.data.user = $event[0] || {}"
+                    @update:modelValue="($event) => form.data.user = $event[0] || {}"
                     v-show="! form.data.user.id"
-                    #default="item"
+                    #default="user"
                 >
-                    <span>{{ item.name }}</span><br>
-                    <small>{{ item.email }}</small>
+                    <span>{{ user.name }}</span><br>
+                    <small>{{ user.email }}</small>
                 </data-form-input>
                 <div v-if="form.data.user.id" class="form-group mt-0">
                     <label>{{ __('User') }}</label>
@@ -277,7 +277,7 @@
                 ></data-form-input>
             </card>
             <card :title="__('Products')">
-                <products :currency="form.data.currency" v-model="form.data.products"></products>
+                <products :currency="form.data.currency" v-model="form.data.items"></products>
             </card>
         </div>
 
@@ -358,7 +358,7 @@
 
         computed: {
             action() {
-                return '/bazar/categories';
+                return '/bazar/orders';
             },
         },
 

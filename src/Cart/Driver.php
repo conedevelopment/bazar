@@ -129,7 +129,7 @@ abstract class Driver
      */
     public function removeItems(array $ids): void
     {
-        $count = $this->getModel()->products()->wherePivotIn('id', $ids)->detach();
+        $count = $this->getModel()->items()->whereIn('id', $ids)->delete();
 
         if ($count > 0) {
             $this->refresh();
@@ -256,7 +256,7 @@ abstract class Driver
      */
     public function empty(): void
     {
-        $this->getModel()->products()->detach();
+        $this->getModel()->items()->delete();
         $this->getModel()->shipping->update(['tax' => 0, 'cost' => 0]);
 
         $this->refresh();

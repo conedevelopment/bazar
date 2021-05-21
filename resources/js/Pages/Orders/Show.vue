@@ -6,7 +6,7 @@
                     <order-info :order="order"></order-info>
                 </card>
                 <card :title="__('Products')">
-                    <div v-if="! order.products.length" class="alert alert-info  mb-0">
+                    <div v-if="! order.items.length" class="alert alert-info  mb-0">
                         {{ __('There are no products yet.') }}
                     </div>
                     <products-table v-else :order="order"></products-table>

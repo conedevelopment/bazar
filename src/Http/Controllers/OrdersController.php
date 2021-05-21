@@ -75,7 +75,7 @@ class OrdersController extends Controller
             'countries' => Countries::all(),
             'currencies' => Bazar::currencies(),
             'statuses' => Order::proxy()::statuses(),
-            'drivers' => Collection::make(Shipping::getDrivers())->map->getName()->flip(),
+            'drivers' => Collection::make(Shipping::getAvailableDrivers($order))->map->getName()->flip(),
         ]);
     }
 
@@ -97,7 +97,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $order->products()->attach(array_column($data['products'], 'item', 'id'));
+        $order->items()->createMany($data['items']);
 
         return Redirect::route('bazar.orders.show', $order)
                         ->with('message', __('The order has been created.'));
@@ -111,7 +111,7 @@ class OrdersController extends Controller
      */
     public function show(Order $order): Response
     {
-        $order->loadMissing(['address', 'products', 'transactions', 'shipping', 'shipping.address']);
+        $order->loadMissing(['address', 'items', 'items.product', 'transactions', 'shipping', 'shipping.address']);
 
         return Inertia::render('Orders/Show', [
             'order' => $order,

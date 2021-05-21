@@ -3,18 +3,23 @@
 namespace Bazar\Models;
 
 use Bazar\Concerns\HasUuid;
+use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
+use Bazar\Contracts\Models\Item as Contract;
 use Bazar\Contracts\Stockable;
-use Bazar\Contracts\Taxable;
+use Bazar\Database\Factories\ItemFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
-class Item extends MorphPivot implements Taxable
+class Item extends Model implements Contract
 {
-    use InteractsWithTaxes;
+    use HasFactory;
     use HasUuid;
+    use InteractsWithProxy;
+    use InteractsWithTaxes;
 
     /**
      * The accessors to append to the model's array form.
@@ -60,6 +65,9 @@ class Item extends MorphPivot implements Taxable
         'price',
         'quantity',
         'properties',
+        'product_id',
+        'itemable_id',
+        'itemable_type',
     ];
 
     /**
@@ -75,9 +83,15 @@ class Item extends MorphPivot implements Taxable
      * @var array
      */
     protected $hidden = [
-        'product',
         'itemable',
     ];
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The table associated with the model.
@@ -117,6 +131,26 @@ class Item extends MorphPivot implements Taxable
     public static function resolvePropertyUsing(string $name, callable $callback): void
     {
         static::$propertyResolvers[$name] = $callback;
+    }
+
+    /**
+     * Get the proxied contract.
+     *
+     * @return string
+     */
+    public static function getProxiedContract(): string
+    {
+        return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Bazar\Database\Factories\ItemFactory
+     */
+    protected static function newFactory(): ItemFactory
+    {
+        return ItemFactory::new();
     }
 
     /**
