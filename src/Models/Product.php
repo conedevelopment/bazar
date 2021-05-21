@@ -129,7 +129,7 @@ class Product extends Model implements Contract
      */
     public function items(): HasMany
     {
-        return $this->hasMany(Item::class);
+        return $this->hasMany(Item::getProxiedClass());
     }
 
     /**
@@ -139,7 +139,7 @@ class Product extends Model implements Contract
      */
     public function orders(): HasManyThrough
     {
-        return $this->hasManyThrough(Order::getProxiedClass(), Item::class, 'product_id', 'id', 'id', 'itemable_id')
+        return $this->hasManyThrough(Order::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
                     ->where('itemable_type', Order::getProxiedClass());
     }
 
@@ -150,7 +150,7 @@ class Product extends Model implements Contract
      */
     public function carts(): HasManyThrough
     {
-        return $this->hasManyThrough(Cart::getProxiedClass(), Item::class, 'product_id', 'id', 'id', 'itemable_id')
+        return $this->hasManyThrough(Cart::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
                     ->where('itemable_type', Cart::getProxiedClass());
     }
 

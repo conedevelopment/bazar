@@ -54,7 +54,7 @@ trait InteractsWithItems
      */
     public function products(): HasManyThrough
     {
-        return $this->hasManyThrough(Product::getProxiedClass(), Item::class, 'itemable_id', 'id', 'id', 'product_id')
+        return $this->hasManyThrough(Product::getProxiedClass(), Item::getProxiedClass(), 'itemable_id', 'id', 'id', 'product_id')
                     ->where('itemable_type', static::class);
     }
 
@@ -65,7 +65,7 @@ trait InteractsWithItems
      */
     public function items(): MorphMany
     {
-        return $this->morphMany(Item::class, 'itemable');
+        return $this->morphMany(Item::getProxiedClass(), 'itemable');
     }
 
     /**
