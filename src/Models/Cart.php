@@ -184,10 +184,10 @@ class Cart extends Model implements Contract
             $this->order()->associate($this->order)->save();
         }
 
-        $this->order->items()->saveMany($this->items->all());
-        $this->order->address()->save($this->address);
-        $this->order->shipping()->save($this->shipping);
-        $this->order->shipping->address()->save($this->shipping->address);
+        $this->order->items()->createMany($this->items->toArray());
+        $this->order->address->fill($this->address->toArray())->save();
+        $this->order->shipping->fill($this->shipping->toArray())->save();
+        $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
 
         return $this->order;
     }
