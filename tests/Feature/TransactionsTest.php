@@ -44,10 +44,10 @@ class TransactionsTest extends TestCase
             Transaction::factory()->make(['driver' => 'fake', 'amount' => 0])
         );
 
-        $this->order->products()->attach(
-            $product = Product::factory()->create(),
-            ['quantity' => 1, 'tax' => 0, 'price' => $product->price],
-        );
+        $product = Product::factory()->create();
+        $this->order->items()->create([
+            'product_id' => $product->id, 'quantity' => 1, 'tax' => 0, 'price' => $product->price,
+        ]);
 
         $this->actingAs($this->user)
             ->post(URL::route('bazar.orders.transactions.store', $this->order))

@@ -20,6 +20,8 @@ class DownloadTest extends TestCase
         $medium = Medium::factory()->create();
         Storage::disk($medium->disk)->put($medium->path(), 'fake content');
 
+        $this->order = Order::factory()->create();
+
         $product = Product::factory()->create([
             'inventory' => [
                 'downloadable' => true,
@@ -30,8 +32,7 @@ class DownloadTest extends TestCase
             ],
         ]);
 
-        $this->order = Order::factory()->create();
-        $this->order->products()->attach($product, ['quantity' => 1, 'tax' => 0, 'price' => $product->price]);
+        $this->order->items()->create(['product_id' => $product->id, 'quantity' => 1, 'tax' => 0, 'price' => $product->price]);
     }
 
     /** @test */

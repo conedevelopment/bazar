@@ -28,18 +28,27 @@ class GatewayManagerTest extends TestCase
     {
         parent::setUp();
 
-        $products = Product::factory()->count(3)->create()->mapWithKeys(function ($product) {
-            return [$product->id => ['quantity' => mt_rand(1, 5), 'tax' => 0, 'price' => $product->price]];
-        });
-
         $this->cart = Cart::factory()->create();
         $this->cart->address()->save(Address::factory()->make());
         $this->cart->shipping->save();
         $this->cart->shipping->address()->save(Address::factory()->make());
-        $this->cart->products()->attach($products->all());
 
         $this->order = Order::factory()->create();
-        $this->order->products()->attach($products->all());
+
+        Product::factory()->count(3)->create()->each(function ($product) {
+            $this->cart->items()->create([
+                'product_id' => $product->id,
+                'quantity' => mt_rand(1, 5),
+                'tax' => 0,
+                'price' => $product->price,
+            ]);
+            $this->order->items()->create([
+                'product_id' => $product->id,
+                'quantity' => mt_rand(1, 5),
+                'tax' => 0,
+                'price' => $product->price,
+            ]);
+        });
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {

@@ -17,12 +17,15 @@ class DiscountRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $products = Product::factory()->count(2)->create()->mapWithKeys(function ($product) {
-            return [$product->id => ['price' => $product->price, 'quantity' => 1]];
-        })->toArray();
-
         $this->cart = Cart::factory()->create();
-        $this->cart->products()->attach($products);
+
+        Product::factory()->count(2)->create()->each(function ($product) {
+            $this->cart->items()->create([
+                'product_id' => $product->id,
+                'price' => $product->price,
+                'quantity' => 1,
+            ]);
+        });
 
         Discount::register('custom-30', 30);
     }

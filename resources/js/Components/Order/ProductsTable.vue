@@ -20,12 +20,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(product, index) in order.products" :key="index">
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.item.price }}</td>
-                    <td>{{ product.item.tax }}</td>
-                    <td>{{ product.item.quantity }}</td>
-                    <td>{{ total(product.item.total) }}</td>
+                <tr v-for="(item, index) in order.items" :key="index">
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.tax }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ total(item.total) }}</td>
                 </tr>
             </tbody>
         </table>

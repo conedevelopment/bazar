@@ -184,14 +184,7 @@ class Cart extends Model implements Contract
             $this->order()->associate($this->order)->save();
         }
 
-        $this->order->products()->attach(
-            $this->items->mapWithKeys(static function (Item $item): array {
-                return [$item->product_id => $item->only([
-                    'price', 'tax', 'quantity', 'properties',
-                ])];
-            })->toArray()
-        );
-
+        $this->order->items()->saveMany($this->items->all());
         $this->order->address()->save($this->address);
         $this->order->shipping()->save($this->shipping);
         $this->order->shipping->address()->save($this->shipping->address);

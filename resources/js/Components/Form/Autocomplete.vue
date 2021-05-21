@@ -67,7 +67,7 @@
 
         beforeMount() {
             Object.assign(this.query, {
-                exclude: this.modelValue.map((item) => item.id),
+                exclude: (this.modelValue || []).filter((item) => !! item.id).map((item) => item.id),
             });
         },
 
@@ -90,9 +90,13 @@
         watch: {
             modelValue: {
                 handler(newValue, oldValue) {
-                    Object.assign(this.query, {
-                        exclude: newValue.map((item) => item.id),
-                    });
+                    let values = JSON.stringify(newValue);
+
+                    if (values !== JSON.stringify(oldValue)) {
+                        values = JSON.parse(values);
+
+                        this.query.exclude = values.filter((item) => !! item.id).map((item) => item.id);
+                    }
                 },
                 deep: true,
             },

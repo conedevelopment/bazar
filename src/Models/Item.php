@@ -6,12 +6,12 @@ use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Item as Contract;
 use Bazar\Contracts\Stockable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
-class Item extends MorphPivot implements Contract
+class Item extends Model implements Contract
 {
     use InteractsWithTaxes;
     use HasUuid;
@@ -60,6 +60,9 @@ class Item extends MorphPivot implements Contract
         'price',
         'quantity',
         'properties',
+        'product_id',
+        'itemable_id',
+        'itemable_type',
     ];
 
     /**
@@ -75,9 +78,15 @@ class Item extends MorphPivot implements Contract
      * @var array
      */
     protected $hidden = [
-        'product',
         'itemable',
     ];
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * The table associated with the model.

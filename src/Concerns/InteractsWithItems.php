@@ -10,8 +10,9 @@ use Bazar\Models\Shipping;
 use Bazar\Models\User;
 use Bazar\Support\Facades\Shipping as ShippingManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -30,7 +31,7 @@ trait InteractsWithItems
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
-                $model->products()->detach();
+                $model->items()->delete();
                 $model->shipping()->delete();
             }
         });
@@ -49,15 +50,22 @@ trait InteractsWithItems
     /**
      * Get the products for the model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
-    public function products(): MorphToMany
+    public function products(): HasManyThrough
     {
-        return $this->morphToMany(Product::getProxiedClass(), 'itemable', 'bazar_items')
-                    ->withPivot(['id', 'price', 'tax', 'quantity', 'properties'])
-                    ->withTimestamps()
-                    ->as('item')
-                    ->using(Item::class);
+        return $this->hasManyThrough(Product::getProxiedClass(), Item::class, 'itemable_id', 'id', 'id', 'product_id')
+                    ->where('itemable_type', static::class);
+    }
+
+    /**
+     * Get the items for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function items(): MorphMany
+    {
+        return $this->morphMany(Item::class, 'itemable');
     }
 
     /**
@@ -93,23 +101,6 @@ trait InteractsWithItems
         return $this->getRelationValue('shipping')
                     ->setRelation('shippable', $this->withoutRelations()->makeHidden('shipping'))
                     ->makeHidden('shippable');
-    }
-
-    /**
-     * Get the items of the model.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getItemsAttribute(): Collection
-    {
-        return $this->products->map(function (Product $product): Item {
-            return (
-                $product->item instanceof Item
-                    ? $product->item
-                    : new Item((array) $product->item)
-            )->setRelation('product', $product)
-             ->setRelation('itemable', $this);
-        });
     }
 
     /**

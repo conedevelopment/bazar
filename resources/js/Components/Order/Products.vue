@@ -6,8 +6,7 @@
             endpoint="/bazar/products"
             placeholder="Hoodie"
             multiple
-            :modelValue="products"
-            @update:modelValue="update"
+            v-model="products"
             #default="item"
         >
             <span>{{ item.name }}</span>
@@ -33,18 +32,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(product, index) in products" :key="index">
-                        <td>{{ product.name }}</td>
+                    <tr v-for="(item, index) in modelValue" :key="index">
+                        <td>{{ products[index].name }}</td>
                         <td>
                             <data-form-input
                                 class="mb-0 form-group-sm"
                                 type="number"
                                 placeholder="0"
-                                step="0.01"
+                                step="0.1"
                                 min="0"
                                 size="3"
-                                :name="`products.${index}.price`"
-                                v-model="product.item.price"
+                                :name="`items.${index}.price`"
+                                v-model="item.price"
                             ></data-form-input>
                         </td>
                         <td>
@@ -52,11 +51,11 @@
                                 class="mb-0 form-group-sm"
                                 type="number"
                                 placeholder="0"
-                                step="0.01"
+                                step="0.1"
                                 min="0"
                                 size="3"
-                                :name="`products.${index}.tax`"
-                                v-model="product.item.tax"
+                                :name="`items.${index}.tax`"
+                                v-model="item.tax"
                             ></data-form-input>
                         </td>
                         <td>
@@ -64,14 +63,14 @@
                                 class="mb-0 form-group-sm"
                                 type="number"
                                 placeholder="1"
-                                step="0.01"
+                                step="0.1"
                                 min="0"
                                 size="3"
-                                :name="`products.${index}.quantity`"
-                                v-model="product.item.quantity"
+                                :name="`items.${index}.quantity`"
+                                v-model="item.quantity"
                             ></data-form-input>
                         </td>
-                        <td>{{ total(product) }}</td>
+                        <td>{{ total(item) }}</td>
                         <td>
                             <button
                                 type="button"
@@ -107,7 +106,16 @@
         watch: {
             products: {
                 handler(newValue, oldValue) {
-                    this.$emit('update:modelValue', newValue);
+                    const items = newValue.map((product) => {
+                        return {
+                            tax: 0,
+                            quantity: 1,
+                            product_id: product.id,
+                            price: this.price(product),
+                        };
+                    });
+
+                    this.$emit('update:modelValue', items);
                 },
                 deep: true,
             },
@@ -115,7 +123,7 @@
 
         data() {
             return {
-                products: Array.from(this.modelValue),
+                products: [],
             };
         },
 
@@ -123,25 +131,13 @@
             price(product) {
                 return product.prices[this.currency].default || 0;
             },
-            total(product) {
-                const total = (Number(product.item.price) + Number(product.item.tax || 0))
-                    * Number(product.item.quantity || 1);
+            total(item) {
+                const total = (Number(item.price) + Number(item.tax || 0)) * Number(item.quantity || 1);
 
                 return Number(total).toFixed(2);
             },
             remove(index) {
                 this.products.splice(index, 1);
-            },
-            update(value) {
-                this.products = value.map((product) => {
-                    return Object.assign({
-                        item: {
-                            tax: 0,
-                            quantity: 1,
-                            price: this.price(product),
-                        },
-                    }, product);
-                });
             },
         },
     }
