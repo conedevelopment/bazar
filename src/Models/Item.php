@@ -4,14 +4,14 @@ namespace Bazar\Models;
 
 use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithTaxes;
+use Bazar\Contracts\Models\Item as Contract;
 use Bazar\Contracts\Stockable;
-use Bazar\Contracts\Taxable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
-class Item extends MorphPivot implements Taxable
+class Item extends MorphPivot implements Contract
 {
     use InteractsWithTaxes;
     use HasUuid;
