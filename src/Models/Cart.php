@@ -179,6 +179,11 @@ class Cart extends Model implements Contract
     public function toOrder(): Order
     {
         $this->order->user()->associate($this->user)->save();
+
+        if ($this->order_id !== $this->order->id) {
+            $this->order()->associate($this->order)->save();
+        }
+
         $this->order->products()->attach(
             $this->items->mapWithKeys(static function (Item $item): array {
                 return [$item->product_id => $item->only([
