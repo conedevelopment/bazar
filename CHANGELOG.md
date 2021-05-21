@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.2 (2021-05-21)
+### Fixed
+- Fixed and reverted UUID for `Cart` as the primary key ([#158](https://github.com/conedevelopment/bazar/issues/158))
+
 ## v0.8.1 (2021-05-20)
 ### Added
 - Added the `updateItems(array $data)` and the `removeItems(array $ids)` methods to the `Cart` driver
