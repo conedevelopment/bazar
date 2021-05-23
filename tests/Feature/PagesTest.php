@@ -29,6 +29,6 @@ class PagesTest extends TestCase
         $this->actingAs($this->admin)
             ->get(URL::route('bazar.support'))
             ->assertOk()
-            ->assertViewHas('page.props.version', Bazar::version());
+            ->assertViewHas('page.props.version', Bazar::getVersion());
     }
 }

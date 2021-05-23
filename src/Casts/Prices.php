@@ -32,7 +32,7 @@ class Prices extends AttributeBag
      */
     public function format(?string $key = null): ?string
     {
-        $currency = $key ? explode('.', $key, 2)[0] : Bazar::currency();
+        $currency = $key ? explode('.', $key, 2)[0] : Bazar::getCurrency();
 
         $price = Arr::get(
             $this->toArray(), $key ?: "{$currency}.default"

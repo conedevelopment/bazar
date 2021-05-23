@@ -59,8 +59,8 @@ abstract class Driver
         if (is_null($this->cart)) {
             $this->cart = App::call(function (Request $request): Cart {
                 return tap($this->resolve($request), static function (Cart $cart): void {
-                    if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::currency()) {
-                        $cart->setAttribute('currency', Bazar::currency())->save();
+                    if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
+                        $cart->setAttribute('currency', Bazar::getCurrency())->save();
                     }
                 });
             });

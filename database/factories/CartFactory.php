@@ -24,7 +24,7 @@ class CartFactory extends Factory
     {
         return [
             'discount' => 0,
-            'currency' => Bazar::currency(),
+            'currency' => Bazar::getCurrency(),
         ];
     }
 }

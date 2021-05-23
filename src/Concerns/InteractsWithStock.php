@@ -35,7 +35,7 @@ trait InteractsWithStock
      */
     public function price(string $type = 'default', ?string $currency = null): ?float
     {
-        $currency = $currency ?: Bazar::currency();
+        $currency = $currency ?: Bazar::getCurrency();
 
         return $this->prices->get("{$currency}.{$type}");
     }
@@ -49,7 +49,7 @@ trait InteractsWithStock
      */
     public function formattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
-        $currency = $currency ?: Bazar::currency();
+        $currency = $currency ?: Bazar::getCurrency();
 
         return $this->prices->format("{$currency}.{$type}");
     }

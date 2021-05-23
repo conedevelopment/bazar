@@ -88,7 +88,7 @@ trait InteractsWithItems
      */
     public function getCurrencyAttribute(?string $value = null): string
     {
-        return $value ?: Bazar::currency();
+        return $value ?: Bazar::getCurrency();
     }
 
     /**

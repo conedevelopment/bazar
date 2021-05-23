@@ -70,7 +70,7 @@ class Cart extends Model implements Contract
     protected static function booted(): void
     {
         static::creating(static function (self $cart): void {
-            $cart->currency = $cart->currency ?: Bazar::currency();
+            $cart->currency = $cart->currency ?: Bazar::getCurrency();
         });
 
         static::updating(static function (self $cart): void {

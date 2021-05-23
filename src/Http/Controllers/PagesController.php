@@ -26,7 +26,7 @@ class PagesController extends Controller
     public function support(): Response
     {
         return Inertia::render('Support', [
-            'version' => Bazar::version(),
+            'version' => Bazar::getVersion(),
         ]);
     }
 }

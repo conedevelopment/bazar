@@ -27,7 +27,7 @@ trait InteractsWithTaxes
      */
     public function formattedTax(): string
     {
-        $currency = Bazar::currency();
+        $currency = Bazar::getCurrency();
 
         if ($this instanceof Item) {
             $currency = $this->itemable->currency;

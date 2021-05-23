@@ -29,13 +29,13 @@ abstract class Bazar
      *
      * @return string
      */
-    public static function version(): string
+    public static function getVersion(): string
     {
         return static::VERSION;
     }
 
     /**
-     * Get all the currencies.
+     * Get all the currenciess.
      *
      * @return array
      */
@@ -45,26 +45,32 @@ abstract class Bazar
     }
 
     /**
-     * Get or set the currency in use.
+     * Get the currency in use.
      *
-     * @param  string|null  $currency
      * @return string
+     */
+    public static function getCurrency(): string
+    {
+        return static::$currency ?: Config::get('bazar.currencies.default', 'usd');
+    }
+
+    /**
+     * Set the currency in use.
+     *
+     * @param  string  $currency
+     * @return void
      *
      * @throws \Bazar\Exceptions\InvalidCurrencyException
      */
-    public static function currency(?string $currency = null): string
+    public static function setCurrency(string $currency): void
     {
-        if (is_null($currency)) {
-            $currency = static::$currency ?: Config::get('bazar.currencies.default', 'usd');
-        }
-
         $currency = strtolower($currency);
 
         if (array_search($currency, static::getCurrencies()) === false) {
             throw new InvalidCurrencyException("The [{$currency}] currency is not registered.");
         }
 
-        return static::$currency = $currency;
+        static::$currency = $currency;
     }
 
     /**
