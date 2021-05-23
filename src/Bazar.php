@@ -39,7 +39,7 @@ abstract class Bazar
      *
      * @return array
      */
-    public static function currencies(): array
+    public static function getCurrencies(): array
     {
         return array_flip(Config::get('bazar.currencies.available', []));
     }
@@ -58,7 +58,9 @@ abstract class Bazar
             $currency = static::$currency ?: Config::get('bazar.currencies.default', 'usd');
         }
 
-        if (! in_array($currency, static::currencies())) {
+        $currency = strtolower($currency);
+
+        if (array_search($currency, static::getCurrencies()) === false) {
             throw new InvalidCurrencyException("The [{$currency}] currency is not registered.");
         }
 

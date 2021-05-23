@@ -71,7 +71,7 @@ class VariantsController extends Controller
         return Inertia::render('Variants/Create', [
             'product' => $product,
             'variant' => $variant,
-            'currencies' => Bazar::currencies(),
+            'currencies' => Bazar::getCurrencies(),
         ]);
     }
 
@@ -109,7 +109,7 @@ class VariantsController extends Controller
         return Inertia::render('Variants/Show', [
             'product' => $product,
             'variant' => $variant,
-            'currencies' => Bazar::currencies(),
+            'currencies' => Bazar::getCurrencies(),
         ]);
     }
 

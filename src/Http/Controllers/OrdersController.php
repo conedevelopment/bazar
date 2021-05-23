@@ -73,7 +73,7 @@ class OrdersController extends Controller
         return Inertia::render('Orders/Create', [
             'order' => $order,
             'countries' => Countries::all(),
-            'currencies' => Bazar::currencies(),
+            'currencies' => Bazar::getCurrencies(),
             'statuses' => Order::proxy()::statuses(),
             'drivers' => Collection::make(Shipping::getAvailableDrivers($order))->map->getName()->flip(),
         ]);

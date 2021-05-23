@@ -30,7 +30,7 @@ class OrderStoreRequest extends FormRequest
             'discount' => ['nullable', 'numeric', 'min:0'],
             'currency' => [
                 'required',
-                Rule::in(Bazar::currencies()),
+                Rule::in(Bazar::getCurrencies()),
             ],
             'status' => [
                 'required',

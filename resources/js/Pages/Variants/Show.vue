@@ -27,14 +27,14 @@
                 </div>
             </card>
             <card :title="__('Pricing')" class="mb-5">
-                <div v-for="(symbol, currency) in currencies" :key="currency" class="row">
+                <div v-for="(currency, symbol) in currencies" :key="currency" class="row">
                     <div class="col">
                         <data-form-input
                             type="number"
                             min="0"
                             step="0.1"
                             :name="`form.data.prices.${currency}.default`"
-                            :label="__('Price (:CURRENCY)', { currency })"
+                            :label="__('Price (:symbol)', { symbol })"
                             v-model="form.data.prices[currency].default"
                         ></data-form-input>
                     </div>
@@ -44,7 +44,7 @@
                             min="0"
                             step="0.1"
                             :name="`form.data.prices.${currency}.sale`"
-                            :label="__('Sale Price (:CURRENCY)', { currency })"
+                            :label="__('Sale Price (:symbol)', { symbol })"
                             v-model="form.data.prices[currency].sale"
                         ></data-form-input>
                     </div>

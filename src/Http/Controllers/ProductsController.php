@@ -69,7 +69,7 @@ class ProductsController extends Controller
 
         return Inertia::render('Products/Create', [
             'product' => $product,
-            'currencies' => Bazar::currencies(),
+            'currencies' => Bazar::getCurrencies(),
             'action' => URL::route('bazar.products.store'),
             'categories' => Category::proxy()->newQuery()->select(['id', 'name'])->get(),
         ]);
@@ -110,7 +110,7 @@ class ProductsController extends Controller
 
         return Inertia::render('Products/Show', [
             'product' => $product,
-            'currencies' => Bazar::currencies(),
+            'currencies' => Bazar::getCurrencies(),
             'action' => URL::route('bazar.products.update', $product),
             'categories' => Category::proxy()->newQuery()->select(['id', 'name'])->get(),
         ]);
