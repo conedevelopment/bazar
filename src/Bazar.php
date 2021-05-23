@@ -35,7 +35,7 @@ abstract class Bazar
     }
 
     /**
-     * Get all the currenciess.
+     * Get all the currencies.
      *
      * @return array
      */
