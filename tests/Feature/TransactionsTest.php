@@ -46,7 +46,11 @@ class TransactionsTest extends TestCase
 
         $product = Product::factory()->create();
         $this->order->items()->create([
-            'product_id' => $product->id, 'quantity' => 1, 'tax' => 0, 'price' => $product->price,
+            'buyable_id' => $product->id,
+            'buyable_type' => Product::class,
+            'quantity' => 1,
+            'tax' => 0,
+            'price' => $product->price,
         ]);
 
         $this->actingAs($this->user)

@@ -23,7 +23,7 @@ class OrderStoreRequest extends FormRequest
                 Rule::exists('users', 'id'),
             ],
             'items' => ['required', 'array'],
-            'items.*.product_id' => ['required', 'numeric'],
+            'items.*.buyable_id' => ['required', 'numeric'],
             'items.*.tax' => ['required', 'numeric', 'min:0'],
             'items.*.price' => ['required', 'numeric', 'min:0'],
             'items.*.quantity' => ['required', 'numeric', 'gt:0'],

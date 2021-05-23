@@ -7,6 +7,7 @@ use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
 use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
 use Bazar\Models\Address;
 use Bazar\Models\Order;
+use Bazar\Models\Product;
 use Bazar\Models\User;
 use Bazar\Support\Countries;
 use Bazar\Support\Facades\Discount;
@@ -97,7 +98,9 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $order->items()->createMany($data['items']);
+        $order->items()->createMany(array_map(static function (array $item): array {
+            return array_merge($item, ['buyable_type' => Product::getProxiedClass()]);
+        }, $data['items']));
 
         return Redirect::route('bazar.orders.show', $order)
                         ->with('message', __('The order has been created.'));

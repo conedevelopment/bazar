@@ -54,8 +54,9 @@ trait InteractsWithItems
      */
     public function products(): HasManyThrough
     {
-        return $this->hasManyThrough(Product::getProxiedClass(), Item::getProxiedClass(), 'itemable_id', 'id', 'id', 'product_id')
-                    ->where('itemable_type', static::class);
+        return $this->hasManyThrough(Product::getProxiedClass(), Item::getProxiedClass(), 'itemable_id', 'id', 'id', 'buyable_id')
+                    ->where('itemable_type', static::class)
+                    ->where('buyable_type', Product::getProxiedClass());
     }
 
     /**

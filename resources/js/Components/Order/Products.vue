@@ -110,7 +110,7 @@
                         return {
                             tax: 0,
                             quantity: 1,
-                            product_id: product.id,
+                            buyable_id: product.id,
                             price: this.price(product),
                         };
                     });

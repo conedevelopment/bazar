@@ -2,19 +2,17 @@
 
 namespace Bazar\Contracts\Models;
 
-use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 interface Item extends Taxable
 {
     /**
-     * Get the product for the item.
+     * Get the buyable model for the item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function product(): BelongsTo;
+    public function buyable(): MorphTo;
 
     /**
      * Get the itemable model for the item.
@@ -22,13 +20,6 @@ interface Item extends Taxable
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function itemable(): MorphTo;
-
-    /**
-     * Get the stockable attribute.
-     *
-     * @return \Bazar\Contracts\Stockable|null
-     */
-    public function getStockableAttribute(): ?Stockable;
 
     /**
      * Get the formatted price attribute.

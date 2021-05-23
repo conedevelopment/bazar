@@ -22,7 +22,8 @@ class TaxRepositoryTest extends TestCase
 
         Product::factory()->count(2)->create()->each(function ($product) {
             $this->cart->items()->create([
-                'product_id' => $product->id,
+                'buyable_id' => $product->id,
+                'buyable_type' => Product::class,
                 'price' => $product->price,
                 'tax' => 0,
                 'quantity' => 1,

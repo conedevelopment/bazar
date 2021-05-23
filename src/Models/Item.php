@@ -10,7 +10,6 @@ use Bazar\Contracts\Stockable;
 use Bazar\Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
@@ -65,7 +64,8 @@ class Item extends Model implements Contract
         'price',
         'quantity',
         'properties',
-        'product_id',
+        'buyable_id',
+        'buyable_type',
         'itemable_id',
         'itemable_type',
     ];
@@ -154,13 +154,13 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the product for the item.
+     * Get the buyable model for the item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function product(): BelongsTo
+    public function buyable(): MorphTo
     {
-        return $this->belongsTo(Product::getProxiedClass());
+        return $this->morphTo();
     }
 
     /**
@@ -180,11 +180,11 @@ class Item extends Model implements Contract
      */
     public function getStockableAttribute(): ?Stockable
     {
-        if (! $product = $this->product) {
+        if (! $buyable = $this->buyable) {
             return null;
         }
 
-        return $product->toVariant((array) $this->properties) ?: $product;
+        return $buyable->toVariant((array) $this->properties) ?: $buyable;
     }
 
     /**

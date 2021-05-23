@@ -3,21 +3,23 @@
 namespace Bazar\Contracts\Models;
 
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Buyable;
 use Bazar\Contracts\Stockable;
 use Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
-interface Product extends Breadcrumbable, Stockable
+interface Product extends Buyable, Breadcrumbable, Stockable
 {
     /**
      * Get the items for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function items(): HasMany;
+    public function items(): MorphMany;
 
     /**
      * Get the orders for the product.

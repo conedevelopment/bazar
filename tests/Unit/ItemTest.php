@@ -4,9 +4,9 @@ namespace Bazar\Tests\Unit;
 
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
+use Bazar\Models\Cart;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
-use Bazar\Support\Facades\Cart;
 use Bazar\Support\Facades\Tax;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
@@ -27,13 +27,18 @@ class ItemTest extends TestCase
             return $item->price * 0.1;
         });
 
+        $cart = Cart::factory()->create();
         $product = Product::factory()->create();
 
-        $this->item = Cart::addItem($product, 3, ['text' => 'test-text']);
+        $this->item = Item::factory()->make([
+            'properties' => ['text' => 'test-text'],
+        ]);
+
+        $this->item->buyable()->associate($product)->itemable()->associate($cart)->save();
     }
 
     /** @test */
-    public function it_is_taxable()
+    public function an_item_is_taxable()
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->formattedTax());
@@ -41,15 +46,15 @@ class ItemTest extends TestCase
     }
 
     /** @test */
-    public function it_has_stockable_attribute()
+    public function an_item_has_stockable_attribute()
     {
         $this->assertInstanceOf(Stockable::class, $this->item->stockable);
     }
 
     /** @test */
-    public function it_has_price_attribute()
+    public function an_item_has_price_attribute()
     {
-        $this->assertSame($this->item->product->price('sale') + 0.9, $this->item->price);
+        $this->assertSame($this->item->buyable->price('sale') + 0.9, $this->item->price);
         $this->assertSame($this->item->price, $this->item->price());
         $this->assertSame(
             Str::currency($this->item->price, $this->item->itemable->currency), $this->item->formattedPrice()
@@ -58,7 +63,7 @@ class ItemTest extends TestCase
     }
 
     /** @test */
-    public function it_has_total_attribute()
+    public function an_item_has_total_attribute()
     {
         $this->assertSame(
             ($this->item->price + $this->item->tax) * $this->item->quantity,

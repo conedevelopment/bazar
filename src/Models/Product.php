@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -125,11 +126,11 @@ class Product extends Model implements Contract
     /**
      * Get the items for the product.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function items(): HasMany
+    public function items(): MorphMany
     {
-        return $this->hasMany(Item::getProxiedClass());
+        return $this->morphMany(Item::getProxiedClass(), 'buyable');
     }
 
     /**
@@ -139,8 +140,9 @@ class Product extends Model implements Contract
      */
     public function orders(): HasManyThrough
     {
-        return $this->hasManyThrough(Order::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
-                    ->where('itemable_type', Order::getProxiedClass());
+        return $this->hasManyThrough(Order::getProxiedClass(), Item::getProxiedClass(), 'buyable_id', 'id', 'id', 'itemable_id')
+                    ->where('itemable_type', Order::getProxiedClass())
+                    ->where('buyable_type', static::class);
     }
 
     /**
@@ -150,8 +152,9 @@ class Product extends Model implements Contract
      */
     public function carts(): HasManyThrough
     {
-        return $this->hasManyThrough(Cart::getProxiedClass(), Item::getProxiedClass(), 'product_id', 'id', 'id', 'itemable_id')
-                    ->where('itemable_type', Cart::getProxiedClass());
+        return $this->hasManyThrough(Cart::getProxiedClass(), Item::getProxiedClass(), 'buyable_id', 'id', 'id', 'itemable_id')
+                    ->where('itemable_type', Cart::getProxiedClass())
+                    ->where('buyable_type', static::class);;
     }
 
     /**

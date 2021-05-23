@@ -37,13 +37,16 @@ class GatewayManagerTest extends TestCase
 
         Product::factory()->count(3)->create()->each(function ($product) {
             $this->cart->items()->create([
-                'product_id' => $product->id,
+                'buyable_id' => $product->id,
+                'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->price,
             ]);
             $this->order->items()->create([
-                'product_id' => $product->id,
+
+                'buyable_id' => $product->id,
+                'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->price,

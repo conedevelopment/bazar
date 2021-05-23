@@ -15,7 +15,7 @@ class CreateBazarItemsTable extends Migration
     {
         Schema::create('bazar_items', static function (Blueprint $table): void {
             $table->uuid('id')->primary();
-            $table->foreignId('product_id')->nullable()->constrained('bazar_products')->nullOnDelete();
+            $table->morphs('buyable');
             $table->morphs('itemable');
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('tax')->default(0);

@@ -74,7 +74,12 @@ class OrdersTest extends TestCase
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.store'),
             array_merge($order->toArray(), ['items' => [
-                ['product_id' => $product->id, 'price' => $product->price, 'quantity' => 1, 'tax' => 10],
+                [
+                    'buyable_id' => $product->id,
+                    'buyable_type' => Product::class,
+                    'price' => $product->price,
+                    'quantity' => 1, 'tax' => 10
+                ],
             ]])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 

@@ -18,14 +18,14 @@ abstract class Bazar
     public const VERSION = '0.8.2';
 
     /**
-     * The default currency.
+     * The currency in use.
      *
      * @var string|null
      */
     protected static ?string $currency = null;
 
     /**
-     * Get the version.
+     * Get the package version.
      *
      * @return string
      */
@@ -35,7 +35,7 @@ abstract class Bazar
     }
 
     /**
-     * Get all the currencies.
+     * Get all the available currencies.
      *
      * @return array
      */

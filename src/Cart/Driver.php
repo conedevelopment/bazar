@@ -3,11 +3,11 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
+use Bazar\Contracts\Buyable;
 use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
 use Bazar\Models\Order;
-use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
@@ -83,16 +83,17 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Buyable  $buyable
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Bazar\Models\Item
      */
-    public function addItem(Product $product, float $quantity = 1, array $properties = []): Item
+    public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
         $item = $this->getModel()->findItemOrNew([
             'properties' => $properties,
-            'product_id' => $product->id,
+            'buyable_id' => $buyable->id,
+            'buyable_type' => get_class($buyable),
             'itemable_id' => $this->getModel()->id,
             'itemable_type' => get_class($this->getModel()),
         ]);
