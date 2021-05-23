@@ -76,24 +76,6 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_products()
-    {
-        $product = Product::factory()->create();
-
-        $this->cart->items()->create([
-            'buyable_id' => $product->id,
-            'buyable_type' => Product::class,
-            'price' => 100,
-            'tax' => 0,
-            'quantity' => 3,
-        ]);
-
-        $this->assertTrue(
-            $this->cart->products->pluck('id')->contains($product->id)
-        );
-    }
-
-    /** @test */
     public function it_has_total_attribute()
     {
         $total = $this->cart->items->sum(function ($item) {

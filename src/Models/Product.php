@@ -7,6 +7,7 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithItemables;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
@@ -17,8 +18,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -28,9 +27,10 @@ class Product extends Model implements Contract
 {
     use BazarRoutable;
     use HasFactory;
+    use HasMedia;
     use InteractsWithProxy;
     use InteractsWithStock;
-    use HasMedia;
+    use InteractsWithItemables;
     use Sluggable;
     use SoftDeletes;
     use Filterable {
@@ -121,40 +121,6 @@ class Product extends Model implements Contract
         return array_merge(static::defaultFilters($request), [
             'category' => array_map('__', Category::proxy()->newQuery()->pluck('id', 'name')->toArray()),
         ]);
-    }
-
-    /**
-     * Get the items for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function items(): MorphMany
-    {
-        return $this->morphMany(Item::getProxiedClass(), 'buyable');
-    }
-
-    /**
-     * Get the products for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function orders(): HasManyThrough
-    {
-        return $this->hasManyThrough(Order::getProxiedClass(), Item::getProxiedClass(), 'buyable_id', 'id', 'id', 'itemable_id')
-                    ->where('itemable_type', Order::getProxiedClass())
-                    ->where('buyable_type', static::class);
-    }
-
-    /**
-     * Get the carts for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function carts(): HasManyThrough
-    {
-        return $this->hasManyThrough(Cart::getProxiedClass(), Item::getProxiedClass(), 'buyable_id', 'id', 'id', 'itemable_id')
-                    ->where('itemable_type', Cart::getProxiedClass())
-                    ->where('buyable_type', static::class);;
     }
 
     /**

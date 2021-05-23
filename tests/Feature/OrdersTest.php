@@ -36,7 +36,7 @@ class OrdersTest extends TestCase
             ->assertOk()
             ->assertViewHas(
                 'page.props.response',
-                Order::query()->with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
+                Order::query()->with(['address', 'items', 'transactions', 'shipping'])->paginate()->toArray()
             );
     }
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \Bazar\Models\Cart getModel()
  * @method static \Bazar\Models\Item|null getItem(string $id)
- * @method static \Bazar\Models\Item addItem(\Bazar\Models\Product $product, float $quantity, array $properties)
+ * @method static \Bazar\Models\Item addItem(\Bazar\Contracts\Buyable $buyable, float $quantity, array $properties)
  * @method static void removeItem(string $id)
  * @method static void removeItems(array $ids)
  * @method static void updateItem(string $id, array $properties)

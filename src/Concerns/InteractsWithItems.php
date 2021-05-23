@@ -3,14 +3,13 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
-use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Models\User;
 use Bazar\Support\Facades\Shipping as ShippingManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,18 +44,6 @@ trait InteractsWithItems
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::getProxiedClass());
-    }
-
-    /**
-     * Get the products for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function products(): HasManyThrough
-    {
-        return $this->hasManyThrough(Product::getProxiedClass(), Item::getProxiedClass(), 'itemable_id', 'id', 'id', 'buyable_id')
-                    ->where('itemable_type', static::class)
-                    ->where('buyable_type', Product::getProxiedClass());
     }
 
     /**
@@ -256,10 +243,13 @@ trait InteractsWithItems
      */
     public function downloads(): Collection
     {
-        return $this->products->filter(static function (Product $product): bool {
-            return $product->inventory->downloadable();
-        })->flatMap(static function (Product $product): array {
-            return $product->inventory->get('files', []);
+        $this->loadMissing(['items', 'items.buyable']);
+
+        return $this->items->filter(static function (Item $item): bool {
+            return $item->buyable instanceof Stockable
+                && $item->buyable->inventory->downloadable();
+        })->flatMap(static function (Item $item): array {
+            return $item->buyable->inventory->get('files', []);
         })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 

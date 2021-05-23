@@ -4,7 +4,6 @@ namespace Bazar\Contracts;
 
 use Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 
@@ -16,13 +15,6 @@ interface Itemable extends Shippable
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(): BelongsTo;
-
-    /**
-     * Get the products for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function products(): HasManyThrough;
 
     /**
      * Get the items for the model.

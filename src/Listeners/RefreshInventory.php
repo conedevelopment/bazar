@@ -16,7 +16,7 @@ class RefreshInventory
      */
     public function handle(CheckoutProcessed $event): void
     {
-        $event->order->loadMissing(['products', 'products.variants']);
+        $event->order->loadMissing(['items', 'items.buyable']);
 
         $event->order->items->each(static function (Item $item): void {
             if (($model = $item->stockable) instanceof Stockable && $model->inventory->tracksQuantity()) {

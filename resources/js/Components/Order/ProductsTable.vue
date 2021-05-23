@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in order.items" :key="index">
-                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.buyable.name }}</td>
                     <td>{{ item.price }}</td>
                     <td>{{ item.tax }}</td>
                     <td>{{ item.quantity }}</td>

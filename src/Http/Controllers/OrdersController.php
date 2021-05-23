@@ -46,7 +46,7 @@ class OrdersController extends Controller
     {
         $orders = Order::proxy()
                     ->newQuery()
-                    ->with(['address', 'products', 'transactions', 'shipping'])
+                    ->with(['address', 'items', 'transactions', 'shipping'])
                     ->filter($request)
                     ->latest()
                     ->paginate($request->input('per_page'));
@@ -114,7 +114,7 @@ class OrdersController extends Controller
      */
     public function show(Order $order): Response
     {
-        $order->loadMissing(['address', 'items', 'items.product', 'transactions', 'shipping', 'shipping.address']);
+        $order->loadMissing(['address', 'items', 'items.buyable', 'transactions', 'shipping', 'shipping.address']);
 
         return Inertia::render('Orders/Show', [
             'order' => $order,
