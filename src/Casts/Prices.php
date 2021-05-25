@@ -17,8 +17,7 @@ class Prices extends AttributeBag
     public function __construct(array $items = [])
     {
         $this->defaults = array_fill_keys(
-            array_keys(Bazar::getCurrencies()),
-            ['default' => null]
+            Bazar::getCurrencies(), ['default' => null]
         );
 
         parent::__construct($items);
