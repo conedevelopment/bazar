@@ -76,28 +76,28 @@ interface Shipping extends Taxable
      *
      * @return float
      */
-    public function total(): float;
+    public function getTotal(): float;
 
     /**
      * Get the shipping's formatted total.
      *
      * @return string
      */
-    public function formattedTotal(): string;
+    public function getFormattedTotal(): string;
 
     /**
      * Get the shipping's net total.
      *
      * @return float
      */
-    public function netTotal(): float;
+    public function getNetTotal(): float;
 
     /**
      * Get the shipping's formatted net total.
      *
      * @return string
      */
-    public function formattedNetTotal(): string;
+    public function getFormattedNetTotal(): string;
 
     /**
      * Calculate the cost.

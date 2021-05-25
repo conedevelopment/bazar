@@ -43,7 +43,7 @@ class DiscountRepositoryTest extends TestCase
             return 100;
         });
 
-        $this->assertEquals(330, $this->cart->discount());
+        $this->assertEquals(330, $this->cart->calculateDiscount());
     }
 
     /** @test */
@@ -51,23 +51,23 @@ class DiscountRepositoryTest extends TestCase
     {
         Discount::remove('custom-30');
 
-        $this->assertEquals(0, $this->cart->discount());
+        $this->assertEquals(0, $this->cart->calculateDiscount());
     }
 
     /** @test */
     public function it_can_disable_discounts()
     {
-        $this->assertEquals(30, $this->cart->discount());
+        $this->assertEquals(30, $this->cart->calculateDiscount());
 
         Discount::disable();
 
         Discount::register('custom-10', 10);
 
-        $this->assertEquals(30, $this->cart->discount());
+        $this->assertEquals(30, $this->cart->calculateDiscount());
 
         Discount::enable();
 
-        $this->assertEquals(40, $this->cart->discount());
+        $this->assertEquals(40, $this->cart->calculateDiscount());
     }
 }
 

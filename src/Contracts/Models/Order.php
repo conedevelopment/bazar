@@ -71,28 +71,28 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      *
      * @return float
      */
-    public function totalPaid(): float;
+    public function getTotalPaid(): float;
 
     /**
      * Get the total refunded amount.
      *
      * @return float
      */
-    public function totalRefunded(): float;
+    public function getTotalRefunded(): float;
 
     /**
      * Get the total payable amount.
      *
      * @return float
      */
-    public function totalPayable(): float;
+    public function getTotalPayable(): float;
 
     /**
      * Get the total refundabke amount.
      *
      * @return float
      */
-    public function totalRefundable(): float;
+    public function getTotalRefundable(): float;
 
     /**
      * Determine if the order is fully paid.

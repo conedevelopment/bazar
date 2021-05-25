@@ -41,8 +41,8 @@ class ItemTest extends TestCase
     public function an_item_is_taxable()
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
-        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->formattedTax());
-        $this->assertSame($this->item->formattedTax(), $this->item->formattedTax);
+        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->getFormattedTax());
+        $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
     }
 
     /** @test */
@@ -54,12 +54,12 @@ class ItemTest extends TestCase
     /** @test */
     public function an_item_has_price_attribute()
     {
-        $this->assertSame($this->item->buyable->price('sale') + 0.9, $this->item->price);
-        $this->assertSame($this->item->price, $this->item->price());
+        $this->assertSame($this->item->buyable->getPrice('sale') + 0.9, $this->item->price);
+        $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
-            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->formattedPrice()
+            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->getFormattedPrice()
         );
-        $this->assertSame($this->item->formattedPrice(), $this->item->formattedPrice);
+        $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
     }
 
     /** @test */
@@ -67,20 +67,20 @@ class ItemTest extends TestCase
     {
         $this->assertSame(
             ($this->item->price + $this->item->tax) * $this->item->quantity,
-            $this->item->total()
+            $this->item->getTotal()
         );
-        $this->assertSame($this->item->total(), $this->item->total);
+        $this->assertSame($this->item->getTotal(), $this->item->total);
         $this->assertSame(
             Str::currency($this->item->total, $this->item->itemable->currency),
-            $this->item->formattedTotal()
+            $this->item->getFormattedTotal()
         );
-        $this->assertSame($this->item->formattedTotal(), $this->item->formattedTotal);
-        $this->assertSame($this->item->price * $this->item->quantity, $this->item->netTotal());
-        $this->assertSame($this->item->netTotal(), $this->item->netTotal);
+        $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
+        $this->assertSame($this->item->price * $this->item->quantity, $this->item->getNetTotal());
+        $this->assertSame($this->item->getNetTotal(), $this->item->netTotal);
         $this->assertSame(
             Str::currency($this->item->netTotal, $this->item->itemable->currency),
-            $this->item->formattedNetTotal()
+            $this->item->getFormattedNetTotal()
         );
-        $this->assertSame($this->item->formattedNetTotal(), $this->item->formattedNetTotal);
+        $this->assertSame($this->item->getFormattedNetTotal(), $this->item->formattedNetTotal);
     }
 }

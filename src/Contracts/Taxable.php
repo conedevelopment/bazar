@@ -5,18 +5,18 @@ namespace Bazar\Contracts;
 interface Taxable
 {
     /**
-     * Get the formatted tax attribute.
+     * Get the tax.
      *
-     * @return string
+     * @return float
      */
-    public function getFormattedTaxAttribute(): string;
+    public function getTax(): float;
 
     /**
      * Get the formatted tax.
      *
      * @return string
      */
-    public function formattedTax(): string;
+    public function getFormattedTax(): string;
 
     /**
      * Calculate the tax.
@@ -24,5 +24,5 @@ interface Taxable
      * @param  bool  $update
      * @return float
      */
-    public function tax(bool $update = true): float;
+    public function calculateTax(bool $update = true): float;
 }

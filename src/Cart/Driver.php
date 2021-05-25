@@ -241,10 +241,10 @@ abstract class Driver
     public function refresh(): void
     {
         $this->getShipping()->cost(false);
-        $this->getShipping()->tax(false);
+        $this->getShipping()->calculateTax(false);
         $this->getShipping()->save();
 
-        $this->getModel()->discount(false);
+        $this->getModel()->calculateDiscount(false);
         $this->getModel()->save();
 
         $this->getModel()->refresh();

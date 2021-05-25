@@ -24,111 +24,61 @@ interface Itemable extends Shippable
     public function items(): MorphMany;
 
     /**
-     * Get the currency attribute.
-     *
-     * @param  string|null  $value
-     * @return string
-     */
-    public function getCurrencyAttribute(?string $value = null): string;
-
-    /**
-     * Get the taxable items of the model.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getTaxableItemsAttribute(): Collection;
-
-    /**
-     * Get the total attibute.
+     * Get the total.
      *
      * @return float
      */
-    public function getTotalAttribute(): float;
-
-    /**
-     * Get the formatted total attribute.
-     *
-     * @return string
-     */
-    public function getFormattedTotalAttribute(): string;
-
-    /**
-     * Get the net total attribute.
-     *
-     * @return float
-     */
-    public function getNetTotalAttribute(): float;
-
-    /**
-     * Get the formatted net total attribute.
-     *
-     * @return string
-     */
-    public function getFormattedNetTotalAttribute(): string;
-
-    /**
-     * Get the tax attribute.
-     *
-     * @return float
-     */
-    public function getTaxAttribute(): float;
-
-    /**
-     * Get the formatted tax attribute.
-     *
-     * @return string
-     */
-    public function getFormattedTaxAttribute(): string;
-
-    /**
-     * Get the itemable model's total.
-     *
-     * @return float
-     */
-    public function total(): float;
+    public function getTotal(): float;
 
     /**
      * Get the formatted total.
      *
      * @return string
      */
-    public function formattedTotal(): string;
+    public function getFormattedTotal(): string;
 
     /**
-     * Get the itemable model's total.
+     * Get the net total.
      *
      * @return float
      */
-    public function netTotal(): float;
+    public function getNetTotal(): float;
 
     /**
      * Get the formatted net total.
      *
      * @return string
      */
-    public function formattedNetTotal(): string;
+    public function getFormattedNetTotal(): string;
 
     /**
-     * Get the total tax.
+     * Get the tax.
      *
-     * @param  bool  $update
      * @return float
      */
-    public function tax(bool $update = true): float;
+    public function getTax(): float;
 
     /**
      * Get the formatted tax.
      *
      * @return string
      */
-    public function formattedTax(): string;
+    public function getFormattedTax(): string;
+
+    /**
+     * Calculate the tax.
+     *
+     * @param  bool  $update
+     * @return float
+     */
+    public function calculateTax(bool $update = true): float;
 
     /**
      * Get the downloadable files with their signed URL.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function downloads(): Collection;
+    public function getDownloads(): Collection;
 
     /**
      * Find an item by its attributes or make a new instance.

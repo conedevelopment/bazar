@@ -108,7 +108,7 @@ trait InteractsWithItems
      */
     public function getTotalAttribute(): float
     {
-        return $this->total();
+        return $this->getTotal();
     }
 
     /**
@@ -118,7 +118,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotalAttribute(): string
     {
-        return $this->formattedTotal();
+        return $this->getFormattedTotal();
     }
 
     /**
@@ -128,7 +128,7 @@ trait InteractsWithItems
      */
     public function getNetTotalAttribute(): float
     {
-        return $this->netTotal();
+        return $this->getNetTotal();
     }
 
     /**
@@ -138,7 +138,7 @@ trait InteractsWithItems
      */
     public function getFormattedNetTotalAttribute(): string
     {
-        return $this->formattedNetTotal();
+        return $this->getFormattedNetTotal();
     }
 
     /**
@@ -148,11 +148,7 @@ trait InteractsWithItems
      */
     public function getTaxAttribute(): float
     {
-        $value = $this->taxableItems->sum(static function (Taxable $taxable): float {
-            return $taxable->tax * $taxable->quantity;
-        });
-
-        return round($value, 2);
+        return $this->getTax();
     }
 
     /**
@@ -162,7 +158,7 @@ trait InteractsWithItems
      */
     public function getFormattedTaxAttribute(): string
     {
-        return $this->formattedTax();
+        return $this->getFormattedTax();
     }
 
     /**
@@ -170,10 +166,10 @@ trait InteractsWithItems
      *
      * @return float
      */
-    public function total(): float
+    public function getTotal(): float
     {
         $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
-            return $value + $item->total;
+            return $value + $item->getTotal();
         }, -$this->discount);
 
         return round($value < 0 ? 0 : $value, 2);
@@ -184,9 +180,9 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedTotal(): string
+    public function getFormattedTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->currency);
     }
 
     /**
@@ -194,10 +190,10 @@ trait InteractsWithItems
      *
      * @return float
      */
-    public function netTotal(): float
+    public function getNetTotal(): float
     {
         $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
-            return $value + $item->netTotal;
+            return $value + $item->getNetTotal();
         }, -$this->discount);
 
         return round($value < 0 ? 0 : $value, 2);
@@ -208,22 +204,23 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedNetTotal(): string
+    public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->currency);
     }
 
     /**
-     * Get the total tax.
+     * Get the tax.
      *
-     * @param  bool  $update
      * @return float
      */
-    public function tax(bool $update = true): float
+    public function getTax(): float
     {
-        return $this->taxableItems->sum(static function (Taxable $taxable) use ($update): float {
-            return $taxable->tax($update) * $taxable->quantity;
+        $value = $this->taxableItems->sum(static function (Taxable $taxable): float {
+            return $taxable->getTax() * $taxable->quantity;
         });
+
+        return round($value, 2);
     }
 
     /**
@@ -231,9 +228,22 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedTax(): string
+    public function getFormattedTax(): string
     {
-        return Str::currency($this->tax, $this->currency);
+        return Str::currency($this->getTax(), $this->currency);
+    }
+
+    /**
+     * Calculate the tax.
+     *
+     * @param  bool  $update
+     * @return float
+     */
+    public function calculateTax(bool $update = true): float
+    {
+        return $this->taxableItems->sum(static function (Taxable $taxable) use ($update): float {
+            return $taxable->calculateTax($update) * $taxable->quantity;
+        });
     }
 
     /**
@@ -241,7 +251,7 @@ trait InteractsWithItems
      *
      * @return \Illuminate\Support\Collection
      */
-    public function downloads(): Collection
+    public function getDownloads(): Collection
     {
         $this->loadMissing(['items', 'items.buyable']);
 

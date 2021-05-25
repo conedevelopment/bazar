@@ -155,11 +155,11 @@ class Variant extends Model implements Contract
      * @param  string|null  $currency
      * @return float|null
      */
-    public function price(string $type = 'default', ?string $currency = null): ?float
+    public function getPrice(string $type = 'default', ?string $currency = null): ?float
     {
         $currency = $currency ?: Bazar::getCurrency();
 
-        return $this->prices->get("{$currency}.{$type}") ?: $this->product->price($type, $currency);
+        return $this->prices->get("{$currency}.{$type}") ?: $this->product->getPrice($type, $currency);
     }
 
     /**
@@ -169,7 +169,7 @@ class Variant extends Model implements Contract
      * @param  string|null  $currency
      * @return string|null
      */
-    public function formattedPrice(string $type = 'default', ?string $currency = null): ?string
+    public function getFormattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
         $currency = $currency ?: Bazar::getCurrency();
 

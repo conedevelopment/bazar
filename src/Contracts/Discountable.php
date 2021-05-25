@@ -5,18 +5,18 @@ namespace Bazar\Contracts;
 interface Discountable
 {
     /**
-     * Get the formatted discount attribute.
+     * Get the discount.
      *
-     * @return string
+     * @return float
      */
-    public function getFormattedDiscountAttribute(): string;
+    public function getDiscount(): float;
 
     /**
      * Get the formatted discount.
      *
      * @return string
      */
-    public function formattedDiscount(): string;
+    public function getFormattedDiscount(): string;
 
     /**
      * Calculate the discount.
@@ -24,5 +24,5 @@ interface Discountable
      * @param  bool  $update
      * @return float
      */
-    public function discount(bool $update = true): float;
+    public function calculateDiscount(bool $update = true): float;
 }

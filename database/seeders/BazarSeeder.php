@@ -111,7 +111,7 @@ class BazarSeeder extends Seeder
             $order->transactions()->create([
                 'driver' => 'cash',
                 'type' => 'payment',
-                'amount' => $order->total(),
+                'amount' => $order->getTotal(),
             ]);
         });
     }

@@ -163,26 +163,26 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_total()
+    public function it_has_getTotal()
     {
         $this->assertEquals(
-            $this->manager->getModel()->total, $this->manager->total()
+            $this->manager->getModel()->total, $this->manager->getTotal()
         );
     }
 
     /** @test */
-    public function it_has_tax()
+    public function it_has_calculateTax()
     {
         $this->assertEquals(
-            $this->manager->getModel()->tax, $this->manager->tax()
+            $this->manager->getModel()->tax, $this->manager->calculateTax()
         );
     }
 
     /** @test */
-    public function it_has_discount()
+    public function it_has_calculateDiscount()
     {
         $this->assertEquals(
-            $this->manager->getModel()->discount, $this->manager->discount()
+            $this->manager->getModel()->discount, $this->manager->calculateDiscount()
         );
     }
 

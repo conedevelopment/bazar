@@ -17,7 +17,17 @@ trait InteractsWithTaxes
      */
     public function getFormattedTaxAttribute(): string
     {
-        return $this->formattedTax();
+        return $this->getFormattedTax();
+    }
+
+    /**
+     * Get the tax.
+     *
+     * @return float
+     */
+    public function getTax(): float
+    {
+        return $this->tax;
     }
 
     /**
@@ -25,7 +35,7 @@ trait InteractsWithTaxes
      *
      * @return string
      */
-    public function formattedTax(): string
+    public function getFormattedTax(): string
     {
         $currency = Bazar::getCurrency();
 
@@ -37,7 +47,7 @@ trait InteractsWithTaxes
             $currency = $this->shippable->currency;
         }
 
-        return Str::currency($this->tax, $currency);
+        return Str::currency($this->getTax(), $currency);
     }
 
     /**
@@ -46,7 +56,7 @@ trait InteractsWithTaxes
      * @param  bool  $update
      * @return float
      */
-    public function tax(bool $update = true): float
+    public function calculateTax(bool $update = true): float
     {
         $tax = Tax::calculate($this);
 

@@ -75,7 +75,7 @@ class TransactionsTest extends TestCase
             $payment = Transaction::factory()->make([
                 'type' => 'payment',
                 'driver' => 'cash',
-                'amount' => $this->order->fresh()->totalPayable(),
+                'amount' => $this->order->fresh()->getTotalPayable(),
             ])->toArray()
         )->assertCreated()
          ->assertJson($payment);
@@ -85,7 +85,7 @@ class TransactionsTest extends TestCase
             $refund = Transaction::factory()->make([
                 'type' => 'refund',
                 'driver' => 'cash',
-                'amount' => $this->order->totalRefundable(),
+                'amount' => $this->order->getTotalRefundable(),
             ])->toArray()
         )->assertCreated()
          ->assertJson($refund);

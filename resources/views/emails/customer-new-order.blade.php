@@ -13,20 +13,20 @@ Your order has been received and now being processed. Your orders are shown belo
 | Product | Quantity | Price |
 |:--------|:--------:|------:|
 @foreach ($order->products as $product)
-| {{ $product->name }} | {{ $product->item->quantity }} | {{ $product->item->formattedPrice() }} |
+| {{ $product->name }} | {{ $product->item->quantity }} | {{ $product->item->getFormattedPrice() }} |
 @endforeach
 | **Subtotal** || {{ Str::currency($order->items->sum('total'), $order->currency) }} |
 @endcomponent
 
-**Discount**: {{ $order->formattedDiscount() }}
+**Discount**: {{ $order->getFormattedDiscount() }}
 
-**Shipping** (via {{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal() }}
+**Shipping** (via {{ $order->shipping->driverName }}): {{ $order->shipping->getFormattedTotal() }}
 
-**Tax**: {{ $order->formattedTax() }}
+**Tax**: {{ $order->getFormattedTax() }}
 
-**Net. Total**: {{ $order->formattedNetTotal() }}
+**Net. Total**: {{ $order->getFormattedNetTotal() }}
 
-**Gross Total**: {{ $order->formattedTotal() }}
+**Gross Total**: {{ $order->getFormattedTotal() }}
 
 # Billing details
 

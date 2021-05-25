@@ -14,7 +14,17 @@ trait InteractsWithDiscounts
      */
     public function getFormattedDiscountAttribute(): string
     {
-        return $this->formattedDiscount();
+        return $this->getFormattedDiscount();
+    }
+
+    /**
+     * Get the discount.
+     *
+     * @return float
+     */
+    public function getDiscount(): float
+    {
+        return $this->discount;
     }
 
     /**
@@ -22,9 +32,9 @@ trait InteractsWithDiscounts
      *
      * @return string
      */
-    public function formattedDiscount(): string
+    public function getFormattedDiscount(): string
     {
-        return Str::currency($this->discount, $this->currency);
+        return Str::currency($this->getDiscount(), $this->currency);
     }
 
     /**
@@ -33,7 +43,7 @@ trait InteractsWithDiscounts
      * @param  bool  $update
      * @return float
      */
-    public function discount(bool $update = true): float
+    public function calculateDiscount(bool $update = true): float
     {
         $discount = Discount::calculate($this);
 

@@ -13,7 +13,7 @@ trait InteractsWithStock
      */
     public function getPriceAttribute(): ?float
     {
-        return $this->price();
+        return $this->getPrice();
     }
 
     /**
@@ -23,7 +23,7 @@ trait InteractsWithStock
      */
     public function getFormattedPriceAttribute(): ?string
     {
-        return $this->formattedPrice();
+        return $this->getFormattedPrice();
     }
 
     /**
@@ -33,7 +33,7 @@ trait InteractsWithStock
      * @param  string|null  $currency
      * @return float|null
      */
-    public function price(string $type = 'default', ?string $currency = null): ?float
+    public function getPrice(string $type = 'default', ?string $currency = null): ?float
     {
         $currency = $currency ?: Bazar::getCurrency();
 
@@ -47,7 +47,7 @@ trait InteractsWithStock
      * @param  string|null  $currency
      * @return string|null
      */
-    public function formattedPrice(string $type = 'default', ?string $currency = null): ?string
+    public function getFormattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
         $currency = $currency ?: Bazar::getCurrency();
 
@@ -71,7 +71,7 @@ trait InteractsWithStock
      */
     public function onSale(): bool
     {
-        $price = $this->price('sale');
+        $price = $this->getPrice('sale');
 
         return ! is_null($price) && $price < $this->price;
     }

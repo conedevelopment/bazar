@@ -61,40 +61,40 @@ interface Item extends Taxable
      *
      * @return float
      */
-    public function price(): float;
+    public function getPrice(): float;
 
     /**
      * Get the item's formatted price.
      *
      * @return string
      */
-    public function formattedPrice(): string;
+    public function getFormattedPrice(): string;
 
     /**
      * Get the item's total.
      *
      * @return float
      */
-    public function total(): float;
+    public function getTotal(): float;
 
     /**
      * Get the item's formatted total.
      *
      * @return string
      */
-    public function formattedTotal(): string;
+    public function getFormattedTotal(): string;
 
     /**
      * Get the item's net total.
      *
      * @return float
      */
-    public function netTotal(): float;
+    public function getNetTotal(): float;
 
     /**
      * Get the item's formatted net total.
      *
      * @return string
      */
-    public function formattedNetTotal(): string;
+    public function getFormattedNetTotal(): string;
 }

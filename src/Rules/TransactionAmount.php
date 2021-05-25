@@ -34,8 +34,8 @@ class TransactionAmount implements Rule
         $this->type = $type ?: $this->type;
 
         $this->amount = $this->type === Transaction::PAYMENT
-            ? $order->totalPayable()
-            : $order->totalRefundable();
+            ? $order->getTotalPayable()
+            : $order->getTotalRefundable();
     }
 
     /**

@@ -116,7 +116,7 @@ class Item extends Model implements Contract
     {
         static::saving(static function (self $item): void {
             if ($item->itemable_type === Cart::class || is_subclass_of($item->itemable_type, Cart::class)) {
-                $item->fillFromStockable()->resolveProperties()->tax(false);
+                $item->fillFromStockable()->resolveProperties()->calculateTax(false);
             }
         });
     }
@@ -194,7 +194,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedPriceAttribute(): string
     {
-        return $this->formattedPrice();
+        return $this->getFormattedPrice();
     }
 
     /**
@@ -204,7 +204,7 @@ class Item extends Model implements Contract
      */
     public function getTotalAttribute(): float
     {
-        return $this->total();
+        return $this->getTotal();
     }
 
     /**
@@ -214,7 +214,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTotalAttribute(): string
     {
-        return $this->formattedTotal();
+        return $this->getFormattedTotal();
     }
 
     /**
@@ -224,7 +224,7 @@ class Item extends Model implements Contract
      */
     public function getNetTotalAttribute(): float
     {
-        return $this->netTotal();
+        return $this->getNetTotal();
     }
 
     /**
@@ -234,7 +234,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedNetTotalAttribute(): string
     {
-        return $this->formattedNetTotal();
+        return $this->getFormattedNetTotal();
     }
 
     /**
@@ -242,7 +242,7 @@ class Item extends Model implements Contract
      *
      * @return float
      */
-    public function price(): float
+    public function getPrice(): float
     {
         return $this->price;
     }
@@ -252,9 +252,9 @@ class Item extends Model implements Contract
      *
      * @return string
      */
-    public function formattedPrice(): string
+    public function getFormattedPrice(): string
     {
-        return Str::currency($this->price(), $this->itemable->currency);
+        return Str::currency($this->getPrice(), $this->itemable->currency);
     }
 
     /**
@@ -262,7 +262,7 @@ class Item extends Model implements Contract
      *
      * @return float
      */
-    public function total(): float
+    public function getTotal(): float
     {
         return ($this->price + $this->tax) * $this->quantity;
     }
@@ -272,9 +272,9 @@ class Item extends Model implements Contract
      *
      * @return string
      */
-    public function formattedTotal(): string
+    public function getFormattedTotal(): string
     {
-        return Str::currency($this->total(), $this->itemable->currency);
+        return Str::currency($this->getTotal(), $this->itemable->currency);
     }
 
     /**
@@ -282,7 +282,7 @@ class Item extends Model implements Contract
      *
      * @return float
      */
-    public function netTotal(): float
+    public function getNetTotal(): float
     {
         return $this->price * $this->quantity;
     }
@@ -292,9 +292,9 @@ class Item extends Model implements Contract
      *
      * @return string
      */
-    public function formattedNetTotal(): string
+    public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->itemable->currency);
+        return Str::currency($this->getNetTotal(), $this->itemable->currency);
     }
 
     /**
@@ -305,8 +305,8 @@ class Item extends Model implements Contract
     protected function fillFromStockable(): Item
     {
         if ($stockable = $this->stockable) {
-            $this->price = $stockable->price('sale', $this->itemable->currency)
-                        ?: $stockable->price('default', $this->itemable->currency);
+            $this->price = $stockable->getPrice('sale', $this->itemable->currency)
+                        ?: $stockable->getPrice('default', $this->itemable->currency);
 
             $stock = $stockable->inventory['quantity'] ?? null;
 
