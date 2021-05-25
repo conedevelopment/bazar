@@ -20,4 +20,11 @@ interface Item extends LineItem
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function itemable(): MorphTo;
+
+    /**
+     * Sync the item by its parent models.
+     *
+     * @return void
+     */
+    public function sync(): void;
 }

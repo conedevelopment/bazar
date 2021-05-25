@@ -75,7 +75,7 @@ class Cart extends Model implements Contract
 
         static::updating(static function (self $cart): void {
             if (! $cart->locked && $cart->getOriginal('currency') !== $cart->currency) {
-                $cart->items->each->save();
+                $cart->items->each->sync();
                 $cart->calculateDiscount(false);
             }
         });
