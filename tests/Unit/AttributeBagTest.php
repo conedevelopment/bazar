@@ -26,12 +26,12 @@ class AttributeBagTest extends TestCase
 
         $this->assertSame(
             sprintf('%s mm', implode('x', [$inventory['length'], $inventory['width'], $inventory['height']])),
-            $inventory->formattedDimensions('x')
+            $inventory->getFormattedDimensions('x')
         );
-        $this->assertNull((new Inventory)->formattedDimensions());
+        $this->assertNull((new Inventory)->getFormattedDimensions());
 
-        $this->assertSame(sprintf('%s g', $inventory['weight']), $inventory->formattedWeight());
-        $this->assertNull((new Inventory)->formattedWeight());
+        $this->assertSame(sprintf('%s g', $inventory['weight']), $inventory->getFormattedWeight());
+        $this->assertNull((new Inventory)->getFormattedWeight());
 
         $this->assertTrue($inventory->tracksQuantity());
         $this->assertTrue($inventory->available());

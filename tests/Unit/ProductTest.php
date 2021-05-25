@@ -41,6 +41,7 @@ class ProductTest extends TestCase
             'quantity' => 3,
             'itemable_id' => $order->id,
             'itemable_type' => Order::class,
+            'name' => $this->product->name,
         ]);
 
         $this->assertTrue(
@@ -59,6 +60,7 @@ class ProductTest extends TestCase
             'quantity' => 3,
             'itemable_id' => $cart->id,
             'itemable_type' => Cart::class,
+            'name' => $this->product->name,
         ]);
 
         $this->assertTrue(

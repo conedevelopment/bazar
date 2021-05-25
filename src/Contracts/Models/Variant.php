@@ -3,10 +3,11 @@
 namespace Bazar\Contracts\Models;
 
 use Bazar\Contracts\Breadcrumbable;
+use Bazar\Contracts\Buyable;
 use Bazar\Contracts\Stockable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-interface Variant extends Breadcrumbable, Stockable
+interface Variant extends Buyable, Breadcrumbable, Stockable
 {
     /**
      * Get the product for the transaction.

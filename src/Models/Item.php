@@ -6,7 +6,6 @@ use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Item as Contract;
-use Bazar\Contracts\Stockable;
 use Bazar\Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -61,6 +60,7 @@ class Item extends Model implements Contract
      */
     protected $fillable = [
         'tax',
+        'name',
         'price',
         'quantity',
         'properties',
@@ -101,39 +101,6 @@ class Item extends Model implements Contract
     protected $table = 'bazar_items';
 
     /**
-     * The registered property resolver callbacks.
-     *
-     * @var array
-     */
-    protected static $propertyResolvers = [];
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted(): void
-    {
-        static::saving(static function (self $item): void {
-            if ($item->itemable_type === Cart::class || is_subclass_of($item->itemable_type, Cart::class)) {
-                $item->fillFromStockable()->resolveProperties()->calculateTax(false);
-            }
-        });
-    }
-
-    /**
-     * Define a property resolver.
-     *
-     * @param  string  $name
-     * @param  callable  $callback
-     * @return void
-     */
-    public static function resolvePropertyUsing(string $name, callable $callback): void
-    {
-        static::$propertyResolvers[$name] = $callback;
-    }
-
-    /**
      * Get the proxied contract.
      *
      * @return string
@@ -171,20 +138,6 @@ class Item extends Model implements Contract
     public function itemable(): MorphTo
     {
         return $this->morphTo();
-    }
-
-    /**
-     * Get the stockable attribute.
-     *
-     * @return \Bazar\Contracts\Stockable|null
-     */
-    public function getStockableAttribute(): ?Stockable
-    {
-        if (! $buyable = $this->buyable) {
-            return null;
-        }
-
-        return $buyable->toVariant((array) $this->properties) ?: $buyable;
     }
 
     /**
@@ -305,40 +258,5 @@ class Item extends Model implements Contract
     public function getQuantity(): float
     {
         return $this->quantity;
-    }
-
-    /**
-     * Fill the properties from the stockable model.
-     *
-     * @return $this
-     */
-    protected function fillFromStockable(): Item
-    {
-        if ($stockable = $this->stockable) {
-            $this->price = $stockable->getPrice('sale', $this->itemable->getCurrency())
-                        ?: $stockable->getPrice('default', $this->itemable->getCurrency());
-
-            $stock = $stockable->inventory['quantity'] ?? null;
-
-            $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Resolve the registered properties.
-     *
-     * @return $this
-     */
-    public function resolveProperties(): Item
-    {
-        foreach ((array) $this->properties as $name => $value) {
-            if ($resolver = static::$propertyResolvers[$name] ?? null) {
-                call_user_func_array($resolver, [$this, $value]);
-            }
-        }
-
-        return $this;
     }
 }

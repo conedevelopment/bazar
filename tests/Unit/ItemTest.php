@@ -2,7 +2,6 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
@@ -18,10 +17,6 @@ class ItemTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Item::resolvePropertyUsing('text', function (Item $item, string $value) {
-            return $item->price += mb_strlen($value) * 0.1;
-        });
 
         Tax::register('fix-10%', function (Taxable $item) {
             return $item->price * 0.1;
@@ -46,15 +41,8 @@ class ItemTest extends TestCase
     }
 
     /** @test */
-    public function an_item_has_stockable_attribute()
-    {
-        $this->assertInstanceOf(Stockable::class, $this->item->stockable);
-    }
-
-    /** @test */
     public function an_item_has_price_attribute()
     {
-        $this->assertSame($this->item->buyable->getPrice('sale') + 0.9, $this->item->price);
         $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
             Str::currency($this->item->price, $this->item->itemable->currency), $this->item->getFormattedPrice()

@@ -27,6 +27,7 @@ class TaxRepositoryTest extends TestCase
                 'price' => $product->price,
                 'tax' => 0,
                 'quantity' => 1,
+                'name' => $product->name,
             ]);
         });
 

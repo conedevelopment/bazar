@@ -27,6 +27,7 @@ class CartTest extends TestCase
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->getPrice('sale') ?: $product->getPrice(),
+                'name' => $product->name,
             ]);
         });
     }

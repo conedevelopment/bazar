@@ -11,6 +11,7 @@ use Bazar\Concerns\InteractsWithItemables;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
 use Bazar\Concerns\Sluggable;
+use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Product as Contract;
 use Bazar\Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+
 use Illuminate\Support\Facades\Route;
 
 class Product extends Model implements Contract
@@ -28,9 +30,9 @@ class Product extends Model implements Contract
     use BazarRoutable;
     use HasFactory;
     use HasMedia;
+    use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
-    use InteractsWithItemables;
     use Sluggable;
     use SoftDeletes;
     use Filterable {
@@ -154,6 +156,55 @@ class Product extends Model implements Contract
             $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
                     ->makeHidden('product');
         });
+    }
+
+    /**
+     * Get the buyable price.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return float
+     */
+    public function getBuyablePrice(Itemable $itemable, array $properties = []): float
+    {
+        if ($variant = $this->toVariant($properties)) {
+            return $variant->getBuyablePrice($itemable, $properties);
+        }
+
+        return $this->getPrice('sale', $itemable->getCurrency())
+            ?: $this->getPrice('default', $itemable->getCurrency());
+    }
+
+    /**
+     * Get the buyable name.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties*
+     * @return string
+     */
+    public function getBuyableName(Itemable $itemable, array $properties = []): string
+    {
+        if ($variant = $this->toVariant($properties)) {
+            return $variant->getBuyableName($itemable, $properties);
+        }
+
+        return $this->name;
+    }
+
+    /**
+     * Get the buyable quantity.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return float|null
+     */
+    public function getBuyableQuantity(Itemable $itemable, array $properties = []): ?float
+    {
+        if ($variant = $this->toVariant($properties)) {
+            return $variant->getBuyableQuantity($itemable, $properties);
+        }
+
+        return $this->inventory['quantity'] ?? null;
     }
 
     /**

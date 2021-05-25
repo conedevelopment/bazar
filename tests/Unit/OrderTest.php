@@ -27,6 +27,7 @@ class OrderTest extends TestCase
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->price,
+                'name' => $product->name,
             ]);
         });
     }

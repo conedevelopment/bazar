@@ -8,8 +8,10 @@ use Bazar\Casts\Prices;
 use Bazar\Concerns\BazarRoutable;
 use Bazar\Concerns\Filterable;
 use Bazar\Concerns\HasMedia;
+use Bazar\Concerns\InteractsWithItemables;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
+use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Variant as Contract;
 use Bazar\Database\Factories\VariantFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +27,7 @@ class Variant extends Model implements Contract
     use Filterable;
     use HasFactory;
     use HasMedia;
+    use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
     use SoftDeletes;
@@ -138,17 +141,6 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->alias;
-    }
-
-    /**
      * Get the price by the given type and currency.
      *
      * @param  string  $type
@@ -159,7 +151,8 @@ class Variant extends Model implements Contract
     {
         $currency = $currency ?: Bazar::getCurrency();
 
-        return $this->prices->get("{$currency}.{$type}") ?: $this->product->getPrice($type, $currency);
+        return $this->prices->get("{$currency}.{$type}")
+            ?: $this->product->getPrice($type, $currency);
     }
 
     /**
@@ -173,7 +166,47 @@ class Variant extends Model implements Contract
     {
         $currency = $currency ?: Bazar::getCurrency();
 
-        return $this->prices->format("{$currency}.{$type}") ?: $this->product->prices->format("{$currency}.{$type}");
+        return $this->prices->format("{$currency}.{$type}")
+            ?: $this->product->prices->format("{$currency}.{$type}");
+    }
+
+    /**
+     * Get the buyable price.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return float
+     */
+    public function getBuyablePrice(Itemable $itemable, array $properties = []): float
+    {
+        return $this->getPrice('sale', $itemable->getCurrency())
+            ?: $this->getPrice('default', $itemable->getCurrency());
+    }
+
+    /**
+     * Get the buyable name.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties*
+     * @return string
+     */
+    public function getBuyableName(Itemable $itemable, array $properties = []): string
+    {
+        return sprintf('%s - %s', $this->product->name, $this->alias);
+    }
+
+    /**
+     * Get the buyable quantity.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return float|null
+     */
+    public function getBuyableQuantity(Itemable $itemable, array $properties = []): ?float
+    {
+        return $this->inventory->tracksQuantity()
+            ? $this->inventory['quantity']
+            : ($this->product->inventory['quantity'] ?? null);
     }
 
     /**
@@ -186,5 +219,16 @@ class Variant extends Model implements Contract
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
+    }
+
+    /**
+     * Get the breadcrumb representation of the object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    public function toBreadcrumb(Request $request): string
+    {
+        return $this->alias;
     }
 }

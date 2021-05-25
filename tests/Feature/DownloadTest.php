@@ -38,11 +38,12 @@ class DownloadTest extends TestCase
             'quantity' => 1,
             'tax' => 0,
             'price' => $product->price,
+            'name' => $product->name,
         ]);
     }
 
     /** @test */
-    public function an_order_has_getDownloads()
+    public function an_order_has_downloads()
     {
         $this->assertEquals(2, $this->order->getDownloads()->count());
     }

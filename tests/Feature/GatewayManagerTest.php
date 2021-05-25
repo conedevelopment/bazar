@@ -42,6 +42,7 @@ class GatewayManagerTest extends TestCase
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->price,
+                'name' => $product->name,
             ]);
             $this->order->items()->create([
 
@@ -50,6 +51,7 @@ class GatewayManagerTest extends TestCase
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
                 'price' => $product->price,
+                'name' => $product->name,
             ]);
         });
 

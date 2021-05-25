@@ -276,9 +276,8 @@
                     v-model="form.data.shipping.address.secondary_address"
                 ></data-form-input>
             </card>
-            <card :title="__('Products')">
-                <products :currency="form.data.currency" v-model="form.data.items"></products>
-            </card>
+
+            <items :currency="form.data.currency" v-model="form.data.items"></items>
         </div>
 
         <div class="col-12 col-lg-5 col-xl-4 mt-5 mt-lg-0 form__sidebar">
@@ -321,11 +320,11 @@
 </template>
 
 <script>
-    import Products from './../../Components/Order/Products';
+    import Items from './../../Components/Order/Items';
 
     export default {
         components: {
-            Products,
+            Items,
         },
 
         props: {

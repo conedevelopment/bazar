@@ -25,6 +25,7 @@ class DiscountRepositoryTest extends TestCase
                 'buyable_type' => Product::class,
                 'price' => $product->price,
                 'quantity' => 1,
+                'name' => $product->name,
             ]);
         });
 

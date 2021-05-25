@@ -51,6 +51,7 @@ class TransactionsTest extends TestCase
             'quantity' => 1,
             'tax' => 0,
             'price' => $product->price,
+            'name' => $product->name,
         ]);
 
         $this->actingAs($this->user)

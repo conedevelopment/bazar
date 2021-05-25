@@ -98,9 +98,7 @@ class OrdersController extends Controller
         $order->shipping->fill($data['shipping'])->save();
         $order->shipping->address->fill($data['shipping']['address'])->save();
 
-        $order->items()->createMany(array_map(static function (array $item): array {
-            return array_merge($item, ['buyable_type' => Product::getProxiedClass()]);
-        }, $data['items']));
+        $order->items()->createMany($data['items']);
 
         return Redirect::route('bazar.orders.show', $order)
                         ->with('message', __('The order has been created.'));

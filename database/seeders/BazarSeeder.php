@@ -101,6 +101,7 @@ class BazarSeeder extends Seeder
                     'quantity' => mt_rand(1, 2),
                     'price' => $product->price,
                     'tax' => $product->price * 0.27,
+                    'name' => $product->name,
                 ]);
             });
 

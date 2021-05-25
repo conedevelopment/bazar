@@ -75,10 +75,10 @@ class OrdersTest extends TestCase
             URL::route('bazar.orders.store'),
             array_merge($order->toArray(), ['items' => [
                 [
-                    'buyable_id' => $product->id,
-                    'buyable_type' => Product::class,
+                    'tax' => 10,
+                    'quantity' => 1,
+                    'name' => $product->name,
                     'price' => $product->price,
-                    'quantity' => 1, 'tax' => 10
                 ],
             ]])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));

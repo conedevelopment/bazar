@@ -17,6 +17,7 @@ class CreateBazarItemsTable extends Migration
             $table->uuid('id')->primary();
             $table->morphs('itemable');
             $table->nullableMorphs('buyable');
+            $table->string('name');
             $table->unsignedDecimal('price');
             $table->unsignedDecimal('tax')->default(0);
             $table->unsignedDecimal('quantity');

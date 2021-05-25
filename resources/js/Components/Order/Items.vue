@@ -1,31 +1,20 @@
 <template>
-    <div>
-        <data-form-input
-            handler="autocomplete"
-            name="products"
-            endpoint="/bazar/products"
-            placeholder="Hoodie"
-            multiple
-            v-model="products"
-            #default="item"
-        >
-            <span>{{ item.name }}</span>
-        </data-form-input>
+    <card :title="__('Items')">
+        <template #header>
+            <button type="button" class="btn btn-primary btn-sm" @click="add">
+                {{ __('Add Item') }}
+            </button>
+        </template>
         <div class="table-responsive">
-            <table v-show="products.length" class="table table-hover has-filled-header mb-0 mt-3">
+            <table v-if="modelValue.length" class="table table-hover has-filled-header mb-0">
                 <thead>
                     <tr>
                         <th scope="col">{{ __('Name') }}</th>
-                        <th scope="col">
-                            {{ __('Price') }}
-                            <span class="badge badge-light text-uppercase">{{ currency }}</span>
-                        </th>
-                        <th scope="col">
-                            {{ __('Tax') }}
-                            <span class="badge badge-light text-uppercase">{{ currency }}</span>
-                        </th>
+                        <th scope="col">{{ __('Price') }}</th>
+                        <th scope="col">{{ __('Tax') }}</th>
                         <th scope="col">{{ __('Qty') }}</th>
-                        <th scope="col">{{ __('Total') }}
+                        <th scope="col">
+                            {{ __('Total') }}
                             <span class="badge badge-light text-uppercase">{{ currency }}</span>
                         </th>
                         <th scope="col"></th>
@@ -33,7 +22,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in modelValue" :key="index">
-                        <td>{{ products[index].name }}</td>
+                        <td style="max-width: 160px;">
+                            <data-form-input
+                                class="mb-0 form-group-sm"
+                                :name="`items.${index}.name`"
+                                v-model="item.name"
+                            ></data-form-input>
+                        </td>
                         <td>
                             <data-form-input
                                 class="mb-0 form-group-sm"
@@ -84,8 +79,11 @@
                     </tr>
                 </tbody>
             </table>
+            <div v-else class="alert alert-info mb-0">
+                {{ __('Add an item to the order.') }}
+            </div>
         </div>
-    </div>
+    </card>
 </template>
 
 <script>
@@ -103,41 +101,26 @@
 
         emits: ['update:modelValue'],
 
-        watch: {
-            products: {
-                handler(newValue, oldValue) {
-                    const items = newValue.map((product) => {
-                        return {
-                            tax: 0,
-                            quantity: 1,
-                            buyable_id: product.id,
-                            price: this.price(product),
-                        };
-                    });
-
-                    this.$emit('update:modelValue', items);
-                },
-                deep: true,
-            },
-        },
-
-        data() {
-            return {
-                products: [],
-            };
-        },
-
         methods: {
-            price(product) {
-                return product.prices[this.currency].default || 0;
-            },
             total(item) {
                 const total = (Number(item.price) + Number(item.tax || 0)) * Number(item.quantity || 1);
 
                 return Number(total).toFixed(2);
             },
+            add() {
+                this.modelValue.push({
+                    tax: 0,
+                    name: null,
+                    price: null,
+                    quantity: 1,
+                });
+
+                this.$emit('update:modelValue', this.modelValue);
+            },
             remove(index) {
-                this.products.splice(index, 1);
+                this.modelValue.splice(index, 1);
+
+                this.$emit('update:modelValue', this.modelValue);
             },
         },
     }

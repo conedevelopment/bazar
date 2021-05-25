@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response as ResponseFactory;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -36,9 +35,9 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Inertia\Response|\Illuminate\Http\JsonResponse
+     * @return \Inertia\Response
      */
-    public function index(Request $request) //: Response
+    public function index(Request $request): Response
     {
         $products = Product::proxy()
                         ->newQuery()
@@ -47,12 +46,10 @@ class ProductsController extends Controller
                         ->latest()
                         ->paginate($request->input('per_page'));
 
-        return $request->expectsJson()
-            ? ResponseFactory::json($products)
-            : Inertia::render('Products/Index', [
-                'response' => $products,
-                'filters' => Product::proxy()::filters($request),
-            ]);
+        return Inertia::render('Products/Index', [
+            'response' => $products,
+            'filters' => Product::proxy()::filters($request),
+        ]);
     }
 
     /**
