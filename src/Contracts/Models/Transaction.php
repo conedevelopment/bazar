@@ -15,20 +15,6 @@ interface Transaction
     public function order(): BelongsTo;
 
     /**
-     * Get the name of the gateway driver.
-     *
-     * @return string
-     */
-    public function getDriverNameAttribute(): string;
-
-    /**
-     * Get the URL of the transaction.
-     *
-     * @return string|null
-     */
-    public function getUrlAttribute(): ?string;
-
-    /**
      * Determine if the payment is completed.
      *
      * @return bool

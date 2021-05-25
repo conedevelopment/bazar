@@ -31,13 +31,6 @@ interface User extends Breadcrumbable
     public function addresses(): MorphMany;
 
     /**
-     * Get the avatar attribute.
-     *
-     * @return string
-     */
-    public function getAvatarAttribute(): string;
-
-    /**
      * Determine if the user is admin.
      *
      * @return bool

@@ -5,20 +5,6 @@ namespace Bazar\Contracts\Models;
 interface Medium
 {
     /**
-     * Determine if the file is image.
-     *
-     * @return bool
-     */
-    public function getIsImageAttribute(): bool;
-
-    /**
-     * Get the conversion URLs.
-     *
-     * @return array
-     */
-    public function getUrlsAttribute(): array;
-
-    /**
      * Perform the conversions on the medium.
      *
      * @return $this

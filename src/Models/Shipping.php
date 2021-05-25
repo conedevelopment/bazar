@@ -165,26 +165,6 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the quantity attribute.
-     *
-     * @return int
-     */
-    public function getQuantityAttribute(): int
-    {
-        return 1;
-    }
-
-    /**
-     * Get the price attribute.
-     *
-     * @return float
-     */
-    public function getPriceAttribute(): float
-    {
-        return $this->cost;
-    }
-
-    /**
      * Get the name of the shipping method.
      *
      * @return string
@@ -199,13 +179,33 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the price.
+     *
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->cost;
+    }
+
+    /**
+     * Get the formatted price.
+     *
+     * @return string
+     */
+    public function getFormattedPrice(): string
+    {
+        return Str::currency($this->getPrice(), $this->shippable->getCurrency());
+    }
+
+    /**
      * Get the shipping's total.
      *
      * @return float
      */
     public function getTotal(): float
     {
-        return $this->cost + $this->tax;
+        return $this->getPrice() + $this->getTax();
     }
 
     /**
@@ -215,7 +215,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getTotal(), $this->shippable->currency);
+        return Str::currency($this->getTotal(), $this->shippable->getCurrency());
     }
 
     /**
@@ -225,7 +225,7 @@ class Shipping extends Model implements Contract
      */
     public function getNetTotal(): float
     {
-        return $this->cost;
+        return $this->getPrice();
     }
 
     /**
@@ -235,7 +235,17 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->shippable->currency);
+        return Str::currency($this->getNetTotal(), $this->shippable->getCurrency());
+    }
+
+    /**
+     * Get the quantity.
+     *
+     * @return float
+     */
+    public function getQuantity(): float
+    {
+        return 1;
     }
 
     /**
@@ -244,7 +254,7 @@ class Shipping extends Model implements Contract
      * @param  bool  $update
      * @return float
      */
-    public function cost(bool $update = true): float
+    public function calculateCost(bool $update = true): float
     {
         try {
             $this->cost = Manager::driver($this->driver)->calculate($this->shippable);

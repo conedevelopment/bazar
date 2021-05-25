@@ -238,7 +238,7 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the item's price.
+     * Get the price.
      *
      * @return float
      */
@@ -248,53 +248,63 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the item's formatted price.
+     * Get the formatted price.
      *
      * @return string
      */
     public function getFormattedPrice(): string
     {
-        return Str::currency($this->getPrice(), $this->itemable->currency);
+        return Str::currency($this->getPrice(), $this->itemable->getCurrency());
     }
 
     /**
-     * Get the item's total.
+     * Get the total.
      *
      * @return float
      */
     public function getTotal(): float
     {
-        return ($this->price + $this->tax) * $this->quantity;
+        return ($this->getPrice() + $this->getTax()) * $this->getQuantity();
     }
 
     /**
-     * Get the item's formatted total.
+     * Get the formatted total.
      *
      * @return string
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getTotal(), $this->itemable->currency);
+        return Str::currency($this->getTotal(), $this->itemable->getCurrency());
     }
 
     /**
-     * Get the item's net total.
+     * Get the net total.
      *
      * @return float
      */
     public function getNetTotal(): float
     {
-        return $this->price * $this->quantity;
+        return $this->getPrice() * $this->getQuantity();
     }
 
     /**
-     * Get the item's formatted net total.
+     * Get the formatted net total.
      *
      * @return string
      */
     public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->itemable->currency);
+        return Str::currency($this->getNetTotal(), $this->itemable->getCurrency());
+    }
+
+    /**
+     * Get the quantity.
+     *
+     * @return float
+     */
+    public function getQuantity(): float
+    {
+        return $this->quantity;
     }
 
     /**
@@ -305,8 +315,8 @@ class Item extends Model implements Contract
     protected function fillFromStockable(): Item
     {
         if ($stockable = $this->stockable) {
-            $this->price = $stockable->getPrice('sale', $this->itemable->currency)
-                        ?: $stockable->getPrice('default', $this->itemable->currency);
+            $this->price = $stockable->getPrice('sale', $this->itemable->getCurrency())
+                        ?: $stockable->getPrice('default', $this->itemable->getCurrency());
 
             $stock = $stockable->inventory['quantity'] ?? null;
 

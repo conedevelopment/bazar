@@ -74,9 +74,9 @@ class ShippingTest extends TestCase
     }
 
     /** @test */
-    public function it_can_calculate_cost()
+    public function it_can_calculate_calculateCost()
     {
-        $cost = $this->shipping->cost();
+        $cost = $this->shipping->calculateCost();
         $this->assertSame($cost, $this->shipping->cost);
     }
 
@@ -94,16 +94,10 @@ class ShippingTest extends TestCase
     }
 
     /** @test */
-    public function it_has_price_attribute()
-    {
-        $this->assertSame($this->shipping->cost, $this->shipping->price);
-    }
-
-    /** @test */
     public function it_has_total_attribute()
     {
         $this->assertSame(
-            ($this->shipping->price + $this->shipping->tax) * $this->shipping->quantity,
+            $this->shipping->cost + $this->shipping->tax,
             $this->shipping->getTotal()
         );
         $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
@@ -112,7 +106,7 @@ class ShippingTest extends TestCase
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
-        $this->assertSame($this->shipping->price * $this->shipping->quantity, $this->shipping->getNetTotal());
+        $this->assertSame($this->shipping->cost, $this->shipping->getNetTotal());
         $this->assertSame($this->shipping->getNetTotal(), $this->shipping->netTotal);
         $this->assertSame(
             Str::currency($this->shipping->netTotal, $this->shipping->shippable->currency),

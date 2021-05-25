@@ -8,7 +8,6 @@ use Bazar\Contracts\Stockable;
 use Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
 
 interface Product extends Buyable, Breadcrumbable, Stockable
 {
@@ -25,13 +24,6 @@ interface Product extends Buyable, Breadcrumbable, Stockable
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function variants(): HasMany;
-
-    /**
-     * Get the variants attribute.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getVariantsAttribute(): Collection;
 
     /**
      * Get the variant of the given option.

@@ -240,7 +240,7 @@ abstract class Driver
      */
     public function refresh(): void
     {
-        $this->getShipping()->cost(false);
+        $this->getShipping()->calculateCost(false);
         $this->getShipping()->calculateTax(false);
         $this->getShipping()->save();
 

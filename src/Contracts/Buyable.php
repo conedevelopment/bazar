@@ -27,4 +27,25 @@ interface Buyable
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
      */
     public function carts(): HasManyThrough;
+
+    /**
+     * Get the buyable price.
+     *
+     * @return float
+     */
+    // public function getBuyablePrice(Itemable $model): float;
+
+    /**
+     * Get the buyable name.
+     *
+     * @return string
+     */
+    // public function getBuyableName(Itemable $model): string;
+
+    /**
+     * Get the buyable quantity.
+     *
+     * @return float|null
+     */
+    // public function getBuyableQuantity(Itemable $model): ?float;
 }

@@ -3,6 +3,7 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Contracts\LineItem;
 use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
@@ -92,11 +93,11 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the taxable items of the model.
+     * Get the line items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getTaxableItemsAttribute(): Collection
+    public function getLineItemsAttribute(): Collection
     {
         return $this->items->merge([$this->shipping]);
     }
@@ -162,13 +163,23 @@ trait InteractsWithItems
     }
 
     /**
+     * Get the currency.
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
      * Get the itemable model's total.
      *
      * @return float
      */
     public function getTotal(): float
     {
-        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
+        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
             return $value + $item->getTotal();
         }, -$this->discount);
 
@@ -182,7 +193,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->getCurrency());
     }
 
     /**
@@ -192,7 +203,7 @@ trait InteractsWithItems
      */
     public function getNetTotal(): float
     {
-        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
+        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
             return $value + $item->getNetTotal();
         }, -$this->discount);
 
@@ -206,7 +217,7 @@ trait InteractsWithItems
      */
     public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->getCurrency());
     }
 
     /**
@@ -216,8 +227,8 @@ trait InteractsWithItems
      */
     public function getTax(): float
     {
-        $value = $this->taxableItems->sum(static function (Taxable $taxable): float {
-            return $taxable->getTax() * $taxable->quantity;
+        $value = $this->lineItems->sum(static function (LineItem $item): float {
+            return $item->getTax() * $item->getQuantity();
         });
 
         return round($value, 2);
@@ -230,7 +241,7 @@ trait InteractsWithItems
      */
     public function getFormattedTax(): string
     {
-        return Str::currency($this->getTax(), $this->currency);
+        return Str::currency($this->getTax(), $this->getCurrency());
     }
 
     /**
@@ -241,8 +252,8 @@ trait InteractsWithItems
      */
     public function calculateTax(bool $update = true): float
     {
-        return $this->taxableItems->sum(static function (Taxable $taxable) use ($update): float {
-            return $taxable->calculateTax($update) * $taxable->quantity;
+        return $this->lineItems->sum(static function (LineItem $item) use ($update): float {
+            return $item->calculateTax($update) * $item->getQuantity();
         });
     }
 

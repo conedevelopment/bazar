@@ -24,6 +24,13 @@ interface Itemable extends Shippable
     public function items(): MorphMany;
 
     /**
+     * Get the currency.
+     *
+     * @return string
+     */
+    public function getCurrency(): string;
+
+    /**
      * Get the total.
      *
      * @return float
