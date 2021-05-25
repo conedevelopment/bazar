@@ -93,5 +93,5 @@ interface Itemable extends Shippable
      * @param  array  $attributes
      * @return \Bazar\Models\Item
      */
-    public function findItemOrNew(array $attributes): Item;
+    public function findOrNewItem(array $attributes): Item;
 }

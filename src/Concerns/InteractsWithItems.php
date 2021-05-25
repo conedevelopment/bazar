@@ -301,7 +301,7 @@ trait InteractsWithItems
      * @param  array  $attributes
      * @return \Bazar\Models\Item
      */
-    public function findItemOrNew(array $attributes): Item
+    public function findOrNewItem(array $attributes): Item
     {
         return $this->items->first(static function (Item $item) use ($attributes): bool {
             return empty(array_diff(

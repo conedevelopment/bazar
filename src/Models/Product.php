@@ -158,6 +158,38 @@ class Product extends Model implements Contract
     }
 
     /**
+     * Get the buyable ID.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return int|null
+     */
+    public function getBuyableId(Itemable $itemable, array $properties = []): ?int
+    {
+        if ($variant = $this->toVariant($properties)) {
+            return $variant->getBuyableId($itemable, $properties);
+        }
+
+        return $this->id;
+    }
+
+    /**
+     * Get the buyable type.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  array  $properties
+     * @return string|null
+     */
+    public function getBuyableType(Itemable $itemable, array $properties = []): ?string
+    {
+        if ($variant = $this->toVariant($properties)) {
+            return $variant->getBuyableType($itemable, $properties);
+        }
+
+        return static::class;
+    }
+
+    /**
      * Get the buyable price.
      *
      * @param  \Bazar\Contracts\Itemable  $itemable
