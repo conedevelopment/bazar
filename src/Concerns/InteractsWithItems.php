@@ -93,7 +93,19 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the line items of the model.
+     * Get the items attribute.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getItemsAttribute(): Collection
+    {
+        return $this->getRelationValue('items')->each(function (Item $item): void {
+            $item->setRelation('itemable', $this->withoutRelations());
+        });
+    }
+
+    /**
+     * Get the line items attribute.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -292,7 +304,9 @@ trait InteractsWithItems
     public function findItemOrNew(array $attributes): Item
     {
         return $this->items->first(static function (Item $item) use ($attributes): bool {
-            return empty(array_diff(Arr::dot($attributes), Arr::dot($item->toArray())));
-        }, (new Item)->forceFill($attributes));
+            return empty(array_diff(
+                Arr::dot($attributes), Arr::dot($item->withoutRelations()->toArray())
+            ));
+        }, new Item($attributes));
     }
 }

@@ -171,7 +171,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_calculateTax()
+    public function it_has_calculates_tax()
     {
         $this->assertEquals(
             $this->manager->getModel()->tax, $this->manager->calculateTax()
@@ -179,7 +179,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_calculateDiscount()
+    public function it_has_calculates_discount()
     {
         $this->assertEquals(
             $this->manager->getModel()->discount, $this->manager->calculateDiscount()

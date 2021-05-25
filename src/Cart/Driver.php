@@ -60,7 +60,7 @@ abstract class Driver
             $this->cart = App::call(function (Request $request): Cart {
                 return tap($this->resolve($request), static function (Cart $cart): void {
                     if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
-                        $cart->setAttribute('currency', Bazar::getCurrency())->save();
+                        $cart->setAttribute('currency', Bazar::getCurrency());
                     }
                 });
             });
@@ -106,6 +106,8 @@ abstract class Driver
         $item->calculateTax(false);
         $item->save();
 
+        $this->getItems()->push($item);
+
         $this->refresh();
 
         return $item;
@@ -122,6 +124,12 @@ abstract class Driver
         if ($item = $this->getItem($id)) {
             $item->delete();
 
+            $key = $this->getItems()->search(static function (Item $item) use ($id) {
+                return $item->id === $id;
+            });
+
+            $this->getItems()->forget($key);
+
             $this->refresh();
         }
     }
@@ -137,6 +145,12 @@ abstract class Driver
         $count = $this->getModel()->items()->whereIn('id', $ids)->delete();
 
         if ($count > 0) {
+            $keys = $this->getItems()->reduce(static function (array $keys, Item $item, int $key) use ($ids): array {
+                return in_array($item->id, $ids) ? array_merge($keys, [$key]) : $keys;
+            }, []);
+
+            $this->getItems()->forget($keys);
+
             $this->refresh();
         }
     }
@@ -248,6 +262,7 @@ abstract class Driver
         $this->getShipping()->calculateTax(false);
         $this->getShipping()->save();
 
+        $this->getItems()->each->sync();
         $this->getModel()->calculateDiscount(false);
         $this->getModel()->save();
 

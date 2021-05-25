@@ -72,13 +72,6 @@ class Cart extends Model implements Contract
         static::creating(static function (self $cart): void {
             $cart->currency = $cart->currency ?: Bazar::getCurrency();
         });
-
-        static::updating(static function (self $cart): void {
-            if (! $cart->locked && $cart->getOriginal('currency') !== $cart->currency) {
-                $cart->items->each->sync();
-                $cart->calculateDiscount(false);
-            }
-        });
     }
 
     /**
