@@ -74,51 +74,45 @@ class ShippingTest extends TestCase
     }
 
     /** @test */
-    public function it_can_calculate_cost()
+    public function it_can_calculate_calculateCost()
     {
-        $cost = $this->shipping->cost();
+        $cost = $this->shipping->calculateCost();
         $this->assertSame($cost, $this->shipping->cost);
     }
 
     /** @test */
     public function it_is_taxable()
     {
-        $this->shipping->tax();
+        $this->shipping->calculateTax();
 
         $this->assertInstanceOf(Taxable::class, $this->shipping);
         $this->assertSame($this->shipping->price * 0.1, $this->shipping->tax);
         $this->assertSame(
-            Str::currency($this->shipping->tax, $this->shipping->shippable->currency), $this->shipping->formattedTax()
+            Str::currency($this->shipping->tax, $this->shipping->shippable->currency), $this->shipping->getFormattedTax()
         );
-        $this->assertSame($this->shipping->formattedTax(), $this->shipping->formattedTax);
-    }
-
-    /** @test */
-    public function it_has_price_attribute()
-    {
-        $this->assertSame($this->shipping->cost, $this->shipping->price);
+        $this->assertSame($this->shipping->getFormattedTax(), $this->shipping->formattedTax);
     }
 
     /** @test */
     public function it_has_total_attribute()
     {
         $this->assertSame(
-            ($this->shipping->price + $this->shipping->tax) * $this->shipping->quantity,
-            $this->shipping->total()
+            $this->shipping->cost + $this->shipping->tax,
+            $this->shipping->getTotal()
         );
-        $this->assertSame($this->shipping->total(), $this->shipping->total);
+        $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
         $this->assertSame(
             Str::currency($this->shipping->total, $this->shipping->shippable->currency),
-            $this->shipping->formattedTotal()
+            $this->shipping->getFormattedTotal()
         );
-        $this->assertSame($this->shipping->formattedTotal(), $this->shipping->formattedTotal);
-        $this->assertSame($this->shipping->price * $this->shipping->quantity, $this->shipping->netTotal());
-        $this->assertSame($this->shipping->netTotal(), $this->shipping->netTotal);
+        $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
+        $this->assertSame($this->shipping->cost, $this->shipping->getNetTotal());
+        $this->assertSame($this->shipping->getNetTotal(), $this->shipping->netTotal);
         $this->assertSame(
             Str::currency($this->shipping->netTotal, $this->shipping->shippable->currency),
-            $this->shipping->formattedNetTotal()
+            $this->shipping->getFormattedNetTotal()
         );
-        $this->assertSame($this->shipping->formattedNetTotal(), $this->shipping->formattedNetTotal);
+        $this->assertSame($this->shipping->getFormattedNetTotal(), $this->shipping->formattedNetTotal);
     }
 
     /** @test */

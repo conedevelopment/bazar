@@ -6,11 +6,9 @@ use Bazar\Concerns\HasUuid;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithTaxes;
 use Bazar\Contracts\Models\Item as Contract;
-use Bazar\Contracts\Stockable;
 use Bazar\Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Str;
 
@@ -62,10 +60,12 @@ class Item extends Model implements Contract
      */
     protected $fillable = [
         'tax',
+        'name',
         'price',
         'quantity',
         'properties',
-        'product_id',
+        'buyable_id',
+        'buyable_type',
         'itemable_id',
         'itemable_type',
     ];
@@ -101,39 +101,6 @@ class Item extends Model implements Contract
     protected $table = 'bazar_items';
 
     /**
-     * The registered property resolver callbacks.
-     *
-     * @var array
-     */
-    protected static $propertyResolvers = [];
-
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
-    protected static function booted(): void
-    {
-        static::saving(static function (self $item): void {
-            if ($item->itemable_type === Cart::class || is_subclass_of($item->itemable_type, Cart::class)) {
-                $item->fillFromStockable()->resolveProperties()->tax(false);
-            }
-        });
-    }
-
-    /**
-     * Define a property resolver.
-     *
-     * @param  string  $name
-     * @param  callable  $callback
-     * @return void
-     */
-    public static function resolvePropertyUsing(string $name, callable $callback): void
-    {
-        static::$propertyResolvers[$name] = $callback;
-    }
-
-    /**
      * Get the proxied contract.
      *
      * @return string
@@ -154,13 +121,13 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the product for the item.
+     * Get the buyable model for the item.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function product(): BelongsTo
+    public function buyable(): MorphTo
     {
-        return $this->belongsTo(Product::getProxiedClass());
+        return $this->morphTo();
     }
 
     /**
@@ -174,27 +141,13 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the stockable attribute.
-     *
-     * @return \Bazar\Contracts\Stockable|null
-     */
-    public function getStockableAttribute(): ?Stockable
-    {
-        if (! $product = $this->product) {
-            return null;
-        }
-
-        return $product->toVariant((array) $this->properties) ?: $product;
-    }
-
-    /**
      * Get the formatted price attribute.
      *
      * @return string
      */
     public function getFormattedPriceAttribute(): string
     {
-        return $this->formattedPrice();
+        return $this->getFormattedPrice();
     }
 
     /**
@@ -204,7 +157,7 @@ class Item extends Model implements Contract
      */
     public function getTotalAttribute(): float
     {
-        return $this->total();
+        return $this->getTotal();
     }
 
     /**
@@ -214,7 +167,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTotalAttribute(): string
     {
-        return $this->formattedTotal();
+        return $this->getFormattedTotal();
     }
 
     /**
@@ -224,7 +177,7 @@ class Item extends Model implements Contract
      */
     public function getNetTotalAttribute(): float
     {
-        return $this->netTotal();
+        return $this->getNetTotal();
     }
 
     /**
@@ -234,101 +187,92 @@ class Item extends Model implements Contract
      */
     public function getFormattedNetTotalAttribute(): string
     {
-        return $this->formattedNetTotal();
+        return $this->getFormattedNetTotal();
     }
 
     /**
-     * Get the item's price.
+     * Get the price.
      *
      * @return float
      */
-    public function price(): float
+    public function getPrice(): float
     {
         return $this->price;
     }
 
     /**
-     * Get the item's formatted price.
+     * Get the formatted price.
      *
      * @return string
      */
-    public function formattedPrice(): string
+    public function getFormattedPrice(): string
     {
-        return Str::currency($this->price(), $this->itemable->currency);
+        return Str::currency($this->getPrice(), $this->itemable->getCurrency());
     }
 
     /**
-     * Get the item's total.
+     * Get the total.
      *
      * @return float
      */
-    public function total(): float
+    public function getTotal(): float
     {
-        return ($this->price + $this->tax) * $this->quantity;
+        return ($this->getPrice() + $this->getTax()) * $this->getQuantity();
     }
 
     /**
-     * Get the item's formatted total.
+     * Get the formatted total.
      *
      * @return string
      */
-    public function formattedTotal(): string
+    public function getFormattedTotal(): string
     {
-        return Str::currency($this->total(), $this->itemable->currency);
+        return Str::currency($this->getTotal(), $this->itemable->getCurrency());
     }
 
     /**
-     * Get the item's net total.
+     * Get the net total.
      *
      * @return float
      */
-    public function netTotal(): float
+    public function getNetTotal(): float
     {
-        return $this->price * $this->quantity;
+        return $this->getPrice() * $this->getQuantity();
     }
 
     /**
-     * Get the item's formatted net total.
+     * Get the formatted net total.
      *
      * @return string
      */
-    public function formattedNetTotal(): string
+    public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->itemable->currency);
+        return Str::currency($this->getNetTotal(), $this->itemable->getCurrency());
     }
 
     /**
-     * Fill the properties from the stockable model.
+     * Get the quantity.
      *
-     * @return $this
+     * @return float
      */
-    protected function fillFromStockable(): Item
+    public function getQuantity(): float
     {
-        if ($stockable = $this->stockable) {
-            $this->price = $stockable->price('sale', $this->itemable->currency)
-                        ?: $stockable->price('default', $this->itemable->currency);
-
-            $stock = $stockable->inventory['quantity'] ?? null;
-
-            $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
-        }
-
-        return $this;
+        return $this->quantity;
     }
 
     /**
-     * Resolve the registered properties.
+     * Sync the item by its parent models.
      *
-     * @return $this
+     * @return void
      */
-    public function resolveProperties(): Item
+    public function sync(): void
     {
-        foreach ((array) $this->properties as $name => $value) {
-            if ($resolver = static::$propertyResolvers[$name] ?? null) {
-                call_user_func_array($resolver, [$this, $value]);
-            }
-        }
+        if ($this->buyable && $this->itemable) {
+            $this->price = $this->buyable->getBuyablePrice($this->itemable, $this->properties);
 
-        return $this;
+            $this->calculateTax(false);
+
+            $this->save();
+        }
     }
 }

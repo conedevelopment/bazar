@@ -29,7 +29,7 @@ class Inventory extends AttributeBag
      * @param  string  $glue
      * @return string|null
      */
-    public function formattedDimensions(string $glue = 'x'): ?string
+    public function getFormattedDimensions(string $glue = 'x'): ?string
     {
         $dimensions = array_filter([$this['length'], $this['width'], $this['height']]);
 
@@ -45,7 +45,7 @@ class Inventory extends AttributeBag
      *
      * @return string|null
      */
-    public function formattedWeight(): ?string
+    public function getFormattedWeight(): ?string
     {
         if (! $weight = $this['weight']) {
             return null;

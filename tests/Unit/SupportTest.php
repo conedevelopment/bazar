@@ -42,8 +42,8 @@ class SupportTest extends TestCase
     {
         $inventory = new Inventory();
 
-        $this->assertNull($inventory->formattedDimensions());
-        $this->assertNull($inventory->formattedWeight());
+        $this->assertNull($inventory->getFormattedDimensions());
+        $this->assertNull($inventory->getFormattedWeight());
 
         $this->assertFalse($inventory->virtual());
         $inventory['virtual'] = true;

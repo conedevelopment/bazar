@@ -23,6 +23,7 @@ class ItemFactory extends Factory
     {
         return [
             'tax' => mt_rand(10, 100),
+            'name' => $this->faker->company(),
             'price' => mt_rand(10, 100),
             'quantity' => mt_rand(1, 10),
         ];

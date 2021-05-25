@@ -7,7 +7,6 @@ use Bazar\Contracts\Discountable;
 use Bazar\Contracts\Itemable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Collection;
 
 interface Order extends Breadcrumbable, Discountable, Itemable
 {
@@ -24,27 +23,6 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function transactions(): HasMany;
-
-    /**
-     * Get all the payment transactions.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getPaymentsAttribute(): Collection;
-
-    /**
-     * Get all the refunds transactions.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getRefundsAttribute(): Collection;
-
-    /**
-     * Get the status name attribute.
-     *
-     * @return string
-     */
-    public function getStatusNameAttribute(): string;
 
     /**
      * Create a payment transaction for the order.
@@ -71,28 +49,28 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      *
      * @return float
      */
-    public function totalPaid(): float;
+    public function getTotalPaid(): float;
 
     /**
      * Get the total refunded amount.
      *
      * @return float
      */
-    public function totalRefunded(): float;
+    public function getTotalRefunded(): float;
 
     /**
      * Get the total payable amount.
      *
      * @return float
      */
-    public function totalPayable(): float;
+    public function getTotalPayable(): float;
 
     /**
      * Get the total refundabke amount.
      *
      * @return float
      */
-    public function totalRefundable(): float;
+    public function getTotalRefundable(): float;
 
     /**
      * Determine if the order is fully paid.

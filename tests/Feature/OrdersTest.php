@@ -36,7 +36,7 @@ class OrdersTest extends TestCase
             ->assertOk()
             ->assertViewHas(
                 'page.props.response',
-                Order::query()->with(['address', 'products', 'transactions', 'shipping'])->paginate()->toArray()
+                Order::query()->with(['address', 'items', 'transactions', 'shipping'])->paginate()->toArray()
             );
     }
 
@@ -74,7 +74,12 @@ class OrdersTest extends TestCase
         $this->actingAs($this->admin)->post(
             URL::route('bazar.orders.store'),
             array_merge($order->toArray(), ['items' => [
-                ['product_id' => $product->id, 'price' => $product->price, 'quantity' => 1, 'tax' => 10],
+                [
+                    'tax' => 10,
+                    'quantity' => 1,
+                    'name' => $product->name,
+                    'price' => $product->price,
+                ],
             ]])
         )->assertRedirect(URL::route('bazar.orders.show', Order::find(2)));
 

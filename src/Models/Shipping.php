@@ -131,7 +131,7 @@ class Shipping extends Model implements Contract
      */
     public function getTotalAttribute(): float
     {
-        return $this->total();
+        return $this->getTotal();
     }
 
     /**
@@ -141,7 +141,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTotalAttribute(): string
     {
-        return $this->formattedTotal();
+        return $this->getFormattedTotal();
     }
 
     /**
@@ -151,7 +151,7 @@ class Shipping extends Model implements Contract
      */
     public function getNetTotalAttribute(): float
     {
-        return $this->netTotal();
+        return $this->getNetTotal();
     }
 
     /**
@@ -161,27 +161,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedNetTotalAttribute(): string
     {
-        return $this->formattedNetTotal();
-    }
-
-    /**
-     * Get the quantity attribute.
-     *
-     * @return int
-     */
-    public function getQuantityAttribute(): int
-    {
-        return 1;
-    }
-
-    /**
-     * Get the price attribute.
-     *
-     * @return float
-     */
-    public function getPriceAttribute(): float
-    {
-        return $this->cost;
+        return $this->getFormattedNetTotal();
     }
 
     /**
@@ -199,13 +179,33 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the price.
+     *
+     * @return float
+     */
+    public function getPrice(): float
+    {
+        return $this->cost;
+    }
+
+    /**
+     * Get the formatted price.
+     *
+     * @return string
+     */
+    public function getFormattedPrice(): string
+    {
+        return Str::currency($this->getPrice(), $this->shippable->getCurrency());
+    }
+
+    /**
      * Get the shipping's total.
      *
      * @return float
      */
-    public function total(): float
+    public function getTotal(): float
     {
-        return $this->cost + $this->tax;
+        return $this->getPrice() + $this->getTax();
     }
 
     /**
@@ -213,9 +213,9 @@ class Shipping extends Model implements Contract
      *
      * @return string
      */
-    public function formattedTotal(): string
+    public function getFormattedTotal(): string
     {
-        return Str::currency($this->total(), $this->shippable->currency);
+        return Str::currency($this->getTotal(), $this->shippable->getCurrency());
     }
 
     /**
@@ -223,9 +223,9 @@ class Shipping extends Model implements Contract
      *
      * @return float
      */
-    public function netTotal(): float
+    public function getNetTotal(): float
     {
-        return $this->cost;
+        return $this->getPrice();
     }
 
     /**
@@ -233,9 +233,19 @@ class Shipping extends Model implements Contract
      *
      * @return string
      */
-    public function formattedNetTotal(): string
+    public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->shippable->currency);
+        return Str::currency($this->getNetTotal(), $this->shippable->getCurrency());
+    }
+
+    /**
+     * Get the quantity.
+     *
+     * @return float
+     */
+    public function getQuantity(): float
+    {
+        return 1;
     }
 
     /**
@@ -244,7 +254,7 @@ class Shipping extends Model implements Contract
      * @param  bool  $update
      * @return float
      */
-    public function cost(bool $update = true): float
+    public function calculateCost(bool $update = true): float
     {
         try {
             $this->cost = Manager::driver($this->driver)->calculate($this->shippable);

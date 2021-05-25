@@ -203,14 +203,14 @@ class Order extends Model implements Contract
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->totalPayable() === 0.0 || $this->paid()) {
+        if ($this->getTotalPayable() === 0.0 || $this->paid()) {
             throw new TransactionFailedException("Order #{$this->id} is fully paid.");
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
             'type' => Transaction::PAYMENT,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
-            'amount' => is_null($amount) ? $this->totalPayable() : min($amount, $this->totalPayable()),
+            'amount' => is_null($amount) ? $this->getTotalPayable() : min($amount, $this->getTotalPayable()),
         ]));
 
         $this->transactions->push($transaction);
@@ -230,14 +230,14 @@ class Order extends Model implements Contract
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->totalRefundable() === 0.0 || $this->refunded()) {
+        if ($this->getTotalRefundable() === 0.0 || $this->refunded()) {
             throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
             'type' => Transaction::REFUND,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
-            'amount' => is_null($amount) ? $this->totalRefundable() : min($amount, $this->totalRefundable()),
+            'amount' => is_null($amount) ? $this->getTotalRefundable() : min($amount, $this->getTotalRefundable()),
         ]));
 
         $this->transactions->push($transaction);
@@ -250,7 +250,7 @@ class Order extends Model implements Contract
      *
      * @return float
      */
-    public function totalPaid(): float
+    public function getTotalPaid(): float
     {
         return $this->payments->sum('amount');
     }
@@ -260,7 +260,7 @@ class Order extends Model implements Contract
      *
      * @return float
      */
-    public function totalRefunded(): float
+    public function getTotalRefunded(): float
     {
         return $this->refunds->sum('amount');
     }
@@ -270,9 +270,9 @@ class Order extends Model implements Contract
      *
      * @return float
      */
-    public function totalPayable(): float
+    public function getTotalPayable(): float
     {
-        return $this->total() - $this->totalPaid();
+        return $this->getTotal() - $this->getTotalPaid();
     }
 
     /**
@@ -280,9 +280,9 @@ class Order extends Model implements Contract
      *
      * @return float
      */
-    public function totalRefundable(): float
+    public function getTotalRefundable(): float
     {
-        return $this->totalPaid() - $this->totalRefunded();
+        return $this->getTotalPaid() - $this->getTotalRefunded();
     }
 
     /**
@@ -292,7 +292,7 @@ class Order extends Model implements Contract
      */
     public function paid(): bool
     {
-        return $this->payments->isNotEmpty() && $this->total() <= $this->totalPaid();
+        return $this->payments->isNotEmpty() && $this->getTotal() <= $this->getTotalPaid();
     }
 
     /**
@@ -302,7 +302,7 @@ class Order extends Model implements Contract
      */
     public function refunded(): bool
     {
-        return $this->refunds->isNotEmpty() && $this->totalPaid() <= $this->totalRefunded();
+        return $this->refunds->isNotEmpty() && $this->getTotalPaid() <= $this->getTotalRefunded();
     }
 
     /**

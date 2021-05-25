@@ -15,28 +15,6 @@ interface Address extends Breadcrumbable
     public function addressable(): MorphTo;
 
     /**
-     * Get the alias attribute.
-     *
-     * @param  string|null  $value
-     * @return string|null
-     */
-    public function getAliasAttribute(?string $value = null): ?string;
-
-    /**
-     * Get the name attribute.
-     *
-     * @return string
-     */
-    public function getNameAttribute(): string;
-
-    /**
-     * Get the country name attribute.
-     *
-     * @return string|null
-     */
-    public function getCountryNameAttribute(): ?string;
-
-    /**
      * Get a custom property.
      *
      * @param  string  $key

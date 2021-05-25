@@ -2,11 +2,10 @@
 
 namespace Bazar\Tests\Unit;
 
-use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
+use Bazar\Models\Cart;
 use Bazar\Models\Item;
 use Bazar\Models\Product;
-use Bazar\Support\Facades\Cart;
 use Bazar\Support\Facades\Tax;
 use Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
@@ -19,63 +18,57 @@ class ItemTest extends TestCase
     {
         parent::setUp();
 
-        Item::resolvePropertyUsing('text', function (Item $item, string $value) {
-            return $item->price += mb_strlen($value) * 0.1;
-        });
-
         Tax::register('fix-10%', function (Taxable $item) {
             return $item->price * 0.1;
         });
 
+        $cart = Cart::factory()->create();
         $product = Product::factory()->create();
 
-        $this->item = Cart::addItem($product, 3, ['text' => 'test-text']);
+        $this->item = Item::factory()->make([
+            'properties' => ['text' => 'test-text'],
+        ]);
+
+        $this->item->buyable()->associate($product)->itemable()->associate($cart)->save();
     }
 
     /** @test */
-    public function it_is_taxable()
+    public function an_item_is_taxable()
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
-        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->formattedTax());
-        $this->assertSame($this->item->formattedTax(), $this->item->formattedTax);
+        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->getFormattedTax());
+        $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
     }
 
     /** @test */
-    public function it_has_stockable_attribute()
+    public function an_item_has_price_attribute()
     {
-        $this->assertInstanceOf(Stockable::class, $this->item->stockable);
-    }
-
-    /** @test */
-    public function it_has_price_attribute()
-    {
-        $this->assertSame($this->item->product->price('sale') + 0.9, $this->item->price);
-        $this->assertSame($this->item->price, $this->item->price());
+        $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
-            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->formattedPrice()
+            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->getFormattedPrice()
         );
-        $this->assertSame($this->item->formattedPrice(), $this->item->formattedPrice);
+        $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
     }
 
     /** @test */
-    public function it_has_total_attribute()
+    public function an_item_has_total_attribute()
     {
         $this->assertSame(
             ($this->item->price + $this->item->tax) * $this->item->quantity,
-            $this->item->total()
+            $this->item->getTotal()
         );
-        $this->assertSame($this->item->total(), $this->item->total);
+        $this->assertSame($this->item->getTotal(), $this->item->total);
         $this->assertSame(
             Str::currency($this->item->total, $this->item->itemable->currency),
-            $this->item->formattedTotal()
+            $this->item->getFormattedTotal()
         );
-        $this->assertSame($this->item->formattedTotal(), $this->item->formattedTotal);
-        $this->assertSame($this->item->price * $this->item->quantity, $this->item->netTotal());
-        $this->assertSame($this->item->netTotal(), $this->item->netTotal);
+        $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
+        $this->assertSame($this->item->price * $this->item->quantity, $this->item->getNetTotal());
+        $this->assertSame($this->item->getNetTotal(), $this->item->netTotal);
         $this->assertSame(
             Str::currency($this->item->netTotal, $this->item->itemable->currency),
-            $this->item->formattedNetTotal()
+            $this->item->getFormattedNetTotal()
         );
-        $this->assertSame($this->item->formattedNetTotal(), $this->item->formattedNetTotal);
+        $this->assertSame($this->item->getFormattedNetTotal(), $this->item->formattedNetTotal);
     }
 }

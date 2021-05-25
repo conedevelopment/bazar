@@ -22,10 +22,12 @@ class TaxRepositoryTest extends TestCase
 
         Product::factory()->count(2)->create()->each(function ($product) {
             $this->cart->items()->create([
-                'product_id' => $product->id,
+                'buyable_id' => $product->id,
+                'buyable_type' => Product::class,
                 'price' => $product->price,
                 'tax' => 0,
                 'quantity' => 1,
+                'name' => $product->name,
             ]);
         });
 
@@ -44,7 +46,7 @@ class TaxRepositoryTest extends TestCase
             return $model instanceof Shipping ? 20 : 30;
         });
 
-        $this->assertEquals(770, $this->cart->tax());
+        $this->assertEquals(770, $this->cart->calculateTax());
     }
 
     /** @test */
@@ -52,23 +54,23 @@ class TaxRepositoryTest extends TestCase
     {
         Tax::remove('custom-30');
 
-        $this->assertEquals(0, $this->cart->tax());
+        $this->assertEquals(0, $this->cart->calculateTax());
     }
 
     /** @test */
     public function it_can_disable_taxes()
     {
-        $this->assertEquals(90, $this->cart->tax());
+        $this->assertEquals(90, $this->cart->calculateTax());
 
         Tax::disable();
 
         Tax::register('custom-10', 10);
 
-        $this->assertEquals(90, $this->cart->tax());
+        $this->assertEquals(90, $this->cart->calculateTax());
 
         Tax::enable();
 
-        $this->assertEquals(120, $this->cart->tax());
+        $this->assertEquals(120, $this->cart->calculateTax());
     }
 }
 

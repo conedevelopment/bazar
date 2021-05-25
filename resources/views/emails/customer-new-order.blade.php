@@ -10,23 +10,23 @@ Your order has been received and now being processed. Your orders are shown belo
 # Order details
 
 @component ('mail::table')
-| Product | Quantity | Price |
-|:--------|:--------:|------:|
-@foreach ($order->products as $product)
-| {{ $product->name }} | {{ $product->item->quantity }} | {{ $product->item->formattedPrice() }} |
+| Product | Quantity | Tax | Price |
+|:--------|:--------:|:---:|:-----:|
+@foreach ($order->items as $item)
+| {{ $item->name }} | {{ $item->quantity }} | {{ $item->formattedTax }} | {{ $item->formattedPrice }} |
 @endforeach
-| **Subtotal** || {{ Str::currency($order->items->sum('total'), $order->currency) }} |
+| **Subtotal** ||| {{ Str::currency($order->items->sum('total'), $order->currency) }} |
 @endcomponent
 
-**Discount**: {{ $order->formattedDiscount() }}
+**Discount**: {{ $order->formattedDiscount }}
 
-**Shipping** (via {{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal() }}
+**Shipping** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
 
-**Tax**: {{ $order->formattedTax() }}
+**Tax**: {{ $order->formattedTax }}
 
-**Net. Total**: {{ $order->formattedNetTotal() }}
+**Net. Total**: {{ $order->formattedNetTotal }}
 
-**Gross Total**: {{ $order->formattedTotal() }}
+**Gross Total**: {{ $order->formattedTotal }}
 
 # Billing details
 

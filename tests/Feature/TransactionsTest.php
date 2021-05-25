@@ -46,7 +46,12 @@ class TransactionsTest extends TestCase
 
         $product = Product::factory()->create();
         $this->order->items()->create([
-            'product_id' => $product->id, 'quantity' => 1, 'tax' => 0, 'price' => $product->price,
+            'buyable_id' => $product->id,
+            'buyable_type' => Product::class,
+            'quantity' => 1,
+            'tax' => 0,
+            'price' => $product->price,
+            'name' => $product->name,
         ]);
 
         $this->actingAs($this->user)
@@ -71,7 +76,7 @@ class TransactionsTest extends TestCase
             $payment = Transaction::factory()->make([
                 'type' => 'payment',
                 'driver' => 'cash',
-                'amount' => $this->order->fresh()->totalPayable(),
+                'amount' => $this->order->fresh()->getTotalPayable(),
             ])->toArray()
         )->assertCreated()
          ->assertJson($payment);
@@ -81,7 +86,7 @@ class TransactionsTest extends TestCase
             $refund = Transaction::factory()->make([
                 'type' => 'refund',
                 'driver' => 'cash',
-                'amount' => $this->order->totalRefundable(),
+                'amount' => $this->order->getTotalRefundable(),
             ])->toArray()
         )->assertCreated()
          ->assertJson($refund);

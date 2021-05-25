@@ -41,6 +41,7 @@ class ProductTest extends TestCase
             'quantity' => 3,
             'itemable_id' => $order->id,
             'itemable_type' => Order::class,
+            'name' => $this->product->name,
         ]);
 
         $this->assertTrue(
@@ -59,6 +60,7 @@ class ProductTest extends TestCase
             'quantity' => 3,
             'itemable_id' => $cart->id,
             'itemable_type' => Cart::class,
+            'name' => $this->product->name,
         ]);
 
         $this->assertTrue(
@@ -116,12 +118,12 @@ class ProductTest extends TestCase
     public function it_manages_prices()
     {
         $this->assertInstanceOf(Prices::class, $this->product->prices);
-        $this->assertEquals($this->product->prices['usd']['default'], $this->product->price('default', 'usd'));
-        $this->assertSame($this->product->price(), $this->product->price);
+        $this->assertEquals($this->product->prices['usd']['default'], $this->product->getPrice('default', 'usd'));
+        $this->assertSame($this->product->getPrice(), $this->product->price);
         $this->assertSame(
-            Str::currency($this->product->prices['usd']['default'], 'usd'), $this->product->formattedPrice('default', 'usd')
+            Str::currency($this->product->prices['usd']['default'], 'usd'), $this->product->getFormattedPrice('default', 'usd')
         );
-        $this->assertSame($this->product->formattedPrice(), $this->product->formattedPrice);
+        $this->assertSame($this->product->getFormattedPrice(), $this->product->formattedPrice);
         $this->assertFalse($this->product->free());
         $this->assertTrue($this->product->onSale());
 

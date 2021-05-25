@@ -5,11 +5,11 @@
                 <card :title="__('General')" class="mb-5">
                     <order-info :order="order"></order-info>
                 </card>
-                <card :title="__('Products')">
-                    <div v-if="! order.items.length" class="alert alert-info  mb-0">
-                        {{ __('There are no products yet.') }}
+                <card :title="__('Items')">
+                    <div v-if="! order.items.length" class="alert alert-info mb-0">
+                        {{ __('There are no items.') }}
                     </div>
-                    <products-table v-else :order="order"></products-table>
+                    <items-table v-else :order="order"></items-table>
                 </card>
             </div>
 
@@ -63,14 +63,14 @@
 
 <script>
     import OrderInfo from './../../Components/Order/OrderInfo';
+    import ItemsTable from './../../Components/Order/ItemsTable';
     import Transactions from './../../Components/Order/Transactions';
-    import ProductsTable from './../../Components/Order/ProductsTable';
 
     export default {
         components: {
             OrderInfo,
+            ItemsTable,
             Transactions,
-            ProductsTable,
         },
 
         props: {

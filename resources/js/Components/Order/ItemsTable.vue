@@ -4,14 +4,8 @@
             <thead>
                 <tr>
                     <th scope="col">{{ __('Name') }}</th>
-                    <th scope="col">
-                        {{ __('Price') }}
-                        <span class="badge badge-light text-uppercase">{{ order.currency }}</span>
-                    </th>
-                    <th scope="col">
-                        {{ __('Tax') }}
-                        <span class="badge badge-light text-uppercase">{{ order.currency }}</span>
-                    </th>
+                    <th scope="col">{{ __('Price') }}</th>
+                    <th scope="col">{{ __('Tax') }}</th>
                     <th scope="col">{{ __('Qty') }}</th>
                     <th scope="col">
                         {{ __('Total') }}
@@ -21,7 +15,7 @@
             </thead>
             <tbody>
                 <tr v-for="(item, index) in order.items" :key="index">
-                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.name }}</td>
                     <td>{{ item.price }}</td>
                     <td>{{ item.tax }}</td>
                     <td>{{ item.quantity }}</td>

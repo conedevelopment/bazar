@@ -3,14 +3,14 @@
 namespace Bazar\Concerns;
 
 use Bazar\Bazar;
+use Bazar\Contracts\LineItem;
+use Bazar\Contracts\Stockable;
 use Bazar\Contracts\Taxable;
 use Bazar\Models\Item;
-use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Models\User;
 use Bazar\Support\Facades\Shipping as ShippingManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -45,17 +45,6 @@ trait InteractsWithItems
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::getProxiedClass());
-    }
-
-    /**
-     * Get the products for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
-    public function products(): HasManyThrough
-    {
-        return $this->hasManyThrough(Product::getProxiedClass(), Item::getProxiedClass(), 'itemable_id', 'id', 'id', 'product_id')
-                    ->where('itemable_type', static::class);
     }
 
     /**
@@ -104,11 +93,11 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the taxable items of the model.
+     * Get the line items of the model.
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getTaxableItemsAttribute(): Collection
+    public function getLineItemsAttribute(): Collection
     {
         return $this->items->merge([$this->shipping]);
     }
@@ -120,7 +109,7 @@ trait InteractsWithItems
      */
     public function getTotalAttribute(): float
     {
-        return $this->total();
+        return $this->getTotal();
     }
 
     /**
@@ -130,7 +119,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotalAttribute(): string
     {
-        return $this->formattedTotal();
+        return $this->getFormattedTotal();
     }
 
     /**
@@ -140,7 +129,7 @@ trait InteractsWithItems
      */
     public function getNetTotalAttribute(): float
     {
-        return $this->netTotal();
+        return $this->getNetTotal();
     }
 
     /**
@@ -150,7 +139,7 @@ trait InteractsWithItems
      */
     public function getFormattedNetTotalAttribute(): string
     {
-        return $this->formattedNetTotal();
+        return $this->getFormattedNetTotal();
     }
 
     /**
@@ -160,11 +149,7 @@ trait InteractsWithItems
      */
     public function getTaxAttribute(): float
     {
-        $value = $this->taxableItems->sum(static function (Taxable $taxable): float {
-            return $taxable->tax * $taxable->quantity;
-        });
-
-        return round($value, 2);
+        return $this->getTax();
     }
 
     /**
@@ -174,7 +159,17 @@ trait InteractsWithItems
      */
     public function getFormattedTaxAttribute(): string
     {
-        return $this->formattedTax();
+        return $this->getFormattedTax();
+    }
+
+    /**
+     * Get the currency.
+     *
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
     }
 
     /**
@@ -182,10 +177,10 @@ trait InteractsWithItems
      *
      * @return float
      */
-    public function total(): float
+    public function getTotal(): float
     {
-        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
-            return $value + $item->total;
+        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
+            return $value + $item->getTotal();
         }, -$this->discount);
 
         return round($value < 0 ? 0 : $value, 2);
@@ -196,9 +191,9 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedTotal(): string
+    public function getFormattedTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->getCurrency());
     }
 
     /**
@@ -206,10 +201,10 @@ trait InteractsWithItems
      *
      * @return float
      */
-    public function netTotal(): float
+    public function getNetTotal(): float
     {
-        $value = $this->taxableItems->reduce(static function (float $value, Taxable $item): float {
-            return $value + $item->netTotal;
+        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
+            return $value + $item->getNetTotal();
         }, -$this->discount);
 
         return round($value < 0 ? 0 : $value, 2);
@@ -220,22 +215,23 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedNetTotal(): string
+    public function getFormattedNetTotal(): string
     {
-        return Str::currency($this->netTotal(), $this->currency);
+        return Str::currency($this->getNetTotal(), $this->getCurrency());
     }
 
     /**
-     * Get the total tax.
+     * Get the tax.
      *
-     * @param  bool  $update
      * @return float
      */
-    public function tax(bool $update = true): float
+    public function getTax(): float
     {
-        return $this->taxableItems->sum(static function (Taxable $taxable) use ($update): float {
-            return $taxable->tax($update) * $taxable->quantity;
+        $value = $this->lineItems->sum(static function (LineItem $item): float {
+            return $item->getTax() * $item->getQuantity();
         });
+
+        return round($value, 2);
     }
 
     /**
@@ -243,9 +239,22 @@ trait InteractsWithItems
      *
      * @return string
      */
-    public function formattedTax(): string
+    public function getFormattedTax(): string
     {
-        return Str::currency($this->tax, $this->currency);
+        return Str::currency($this->getTax(), $this->getCurrency());
+    }
+
+    /**
+     * Calculate the tax.
+     *
+     * @param  bool  $update
+     * @return float
+     */
+    public function calculateTax(bool $update = true): float
+    {
+        return $this->lineItems->sum(static function (LineItem $item) use ($update): float {
+            return $item->calculateTax($update) * $item->getQuantity();
+        });
     }
 
     /**
@@ -253,12 +262,15 @@ trait InteractsWithItems
      *
      * @return \Illuminate\Support\Collection
      */
-    public function downloads(): Collection
+    public function getDownloads(): Collection
     {
-        return $this->products->filter(static function (Product $product): bool {
-            return $product->inventory->downloadable();
-        })->flatMap(static function (Product $product): array {
-            return $product->inventory->get('files', []);
+        $this->loadMissing(['items', 'items.buyable']);
+
+        return $this->items->filter(static function (Item $item): bool {
+            return $item->buyable instanceof Stockable
+                && $item->buyable->inventory->downloadable();
+        })->flatMap(static function (Item $item): array {
+            return $item->buyable->inventory->get('files', []);
         })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 

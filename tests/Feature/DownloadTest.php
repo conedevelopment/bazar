@@ -32,13 +32,20 @@ class DownloadTest extends TestCase
             ],
         ]);
 
-        $this->order->items()->create(['product_id' => $product->id, 'quantity' => 1, 'tax' => 0, 'price' => $product->price]);
+        $this->order->items()->create([
+            'buyable_id' => $product->id,
+            'buyable_type' => Product::class,
+            'quantity' => 1,
+            'tax' => 0,
+            'price' => $product->price,
+            'name' => $product->name,
+        ]);
     }
 
     /** @test */
     public function an_order_has_downloads()
     {
-        $this->assertEquals(2, $this->order->downloads()->count());
+        $this->assertEquals(2, $this->order->getDownloads()->count());
     }
 
     /** @test */
@@ -46,14 +53,14 @@ class DownloadTest extends TestCase
     {
         $this->travel(2)->days();
 
-        $valid = $this->order->downloads()->firstWhere('name', 'Valid');
+        $valid = $this->order->getDownloads()->firstWhere('name', 'Valid');
         $response = $this->get($valid['url'])
             ->assertOk()
             ->assertHeader('Content-Disposition');
 
         $this->assertSame('fake content', $response->streamedContent());
 
-        $expired = $this->order->downloads()->firstWhere('name', 'Expired');
+        $expired = $this->order->getDownloads()->firstWhere('name', 'Expired');
         $this->get($expired['url'])->assertForbidden();
 
         $invalid = URL::signedRoute('bazar.download', ['url' => 'fake_url'], 7);

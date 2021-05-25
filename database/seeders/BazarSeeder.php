@@ -2,16 +2,14 @@
 
 namespace Bazar\Database\Seeders;
 
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Database\Factories\CategoryFactory;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Database\Factories\ProductFactory;
-use Bazar\Database\Factories\ShippingFactory;
 use Bazar\Jobs\MoveFile;
 use Bazar\Jobs\PerformConversions;
+use Bazar\Models\Address;
 use Bazar\Models\Category;
 use Bazar\Models\Medium;
+use Bazar\Models\Order;
 use Bazar\Models\Product;
+use Bazar\Models\Shipping;
 use Bazar\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Date;
@@ -65,7 +63,7 @@ class BazarSeeder extends Seeder
         $categories = ['Software', 'Sport', 'Cars', 'Food'];
 
         foreach ($categories as $name) {
-            CategoryFactory::new()->create(compact('name'));
+            Category::factory()->create(compact('name'));
         }
     }
 
@@ -76,7 +74,7 @@ class BazarSeeder extends Seeder
      */
     protected function seedProducts(): void
     {
-        ProductFactory::new()->count(4)->create()->each(function ($product) {
+        Product::factory()->count(4)->create()->each(function ($product) {
             $product->categories()->attach(Category::inRandomOrder()->take(2)->get());
             $product->media()->attach(Medium::inRandomOrder()->first());
         });
@@ -89,7 +87,7 @@ class BazarSeeder extends Seeder
      */
     protected function seedOrders(): void
     {
-        $orders = OrderFactory::new()->count(15)->make();
+        $orders = Order::factory()->count(15)->make();
 
         $orders->each(function ($order, $key) {
             $order->created_at = Date::now()->subDays(15 - $key);
@@ -98,21 +96,23 @@ class BazarSeeder extends Seeder
 
             Product::inRandomOrder()->take(mt_rand(1, 3))->get()->each(function ($product) use ($order) {
                 $order->items()->create([
-                    'product_id' => $product->id,
+                    'buyable_id' => $product->id,
+                    'buyable_type' => Product::class,
                     'quantity' => mt_rand(1, 2),
                     'price' => $product->price,
                     'tax' => $product->price * 0.27,
+                    'name' => $product->name,
                 ]);
             });
 
-            $order->address()->save(AddressFactory::new()->make());
-            $order->shipping()->save(ShippingFactory::new()->make());
-            $order->shipping->address()->save(AddressFactory::new()->make());
+            $order->address()->save(Address::factory()->make());
+            $order->shipping()->save(Shipping::factory()->make());
+            $order->shipping->address()->save(Address::factory()->make());
 
             $order->transactions()->create([
                 'driver' => 'cash',
                 'type' => 'payment',
-                'amount' => $order->total(),
+                'amount' => $order->getTotal(),
             ]);
         });
     }

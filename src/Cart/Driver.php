@@ -3,11 +3,11 @@
 namespace Bazar\Cart;
 
 use Bazar\Bazar;
+use Bazar\Contracts\Buyable;
 use Bazar\Models\Address;
 use Bazar\Models\Cart;
 use Bazar\Models\Item;
 use Bazar\Models\Order;
-use Bazar\Models\Product;
 use Bazar\Models\Shipping;
 use Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
@@ -83,22 +83,27 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Bazar\Contracts\Buyable  $buyable
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Bazar\Models\Item
      */
-    public function addItem(Product $product, float $quantity = 1, array $properties = []): Item
+    public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
         $item = $this->getModel()->findItemOrNew([
             'properties' => $properties,
-            'product_id' => $product->id,
+            'buyable_id' => $buyable->id,
+            'buyable_type' => get_class($buyable),
             'itemable_id' => $this->getModel()->id,
             'itemable_type' => get_class($this->getModel()),
         ]);
 
-        $item->quantity += $quantity;
-
+        $quantity = $item->quantity + $quantity;
+        $stock = $buyable->getBuyableQuantity($this->getModel(), $properties);
+        $item->quantity = (is_null($stock) || $stock >= $quantity) ? $quantity : $stock;
+        $item->name = $buyable->getBuyableName($this->getModel(), $properties);
+        $item->price = $buyable->getBuyablePrice($this->getModel(), $properties);
+        $item->calculateTax(false);
         $item->save();
 
         $this->refresh();
@@ -239,11 +244,11 @@ abstract class Driver
      */
     public function refresh(): void
     {
-        $this->getShipping()->cost(false);
-        $this->getShipping()->tax(false);
+        $this->getShipping()->calculateCost(false);
+        $this->getShipping()->calculateTax(false);
         $this->getShipping()->save();
 
-        $this->getModel()->discount(false);
+        $this->getModel()->calculateDiscount(false);
         $this->getModel()->save();
 
         $this->getModel()->refresh();

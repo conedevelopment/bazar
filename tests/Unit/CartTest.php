@@ -22,10 +22,12 @@ class CartTest extends TestCase
 
         Product::factory()->count(3)->create()->each(function ($product) {
             $this->cart->items()->create([
-                'product_id' => $product->id,
+                'buyable_id' => $product->id,
+                'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
-                'price' => $product->price('sale') ?: $product->price(),
+                'price' => $product->getPrice('sale') ?: $product->getPrice(),
+                'name' => $product->name,
             ]);
         });
     }
@@ -72,23 +74,6 @@ class CartTest extends TestCase
         );
 
         $this->assertSame($address->id, $this->cart->address->id);
-    }
-
-    /** @test */
-    public function it_has_products()
-    {
-        $product = Product::factory()->create();
-
-        $this->cart->items()->create([
-            'product_id' => $product->id,
-            'price' => 100,
-            'tax' => 0,
-            'quantity' => 3,
-        ]);
-
-        $this->assertTrue(
-            $this->cart->products->pluck('id')->contains($product->id)
-        );
     }
 
     /** @test */
