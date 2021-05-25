@@ -58,9 +58,11 @@ abstract class Driver
     {
         if (is_null($this->cart)) {
             $this->cart = App::call(function (Request $request): Cart {
-                return tap($this->resolve($request), static function (Cart $cart): void {
+                return tap($this->resolve($request), function (Cart $cart): void {
                     if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
                         $cart->setAttribute('currency', Bazar::getCurrency());
+
+                        $cart->sync();
                     }
                 });
             });
@@ -108,7 +110,7 @@ abstract class Driver
 
         $this->getItems()->push($item);
 
-        $this->refresh();
+        $this->sync();
 
         return $item;
     }
@@ -130,7 +132,7 @@ abstract class Driver
 
             $this->getItems()->forget($key);
 
-            $this->refresh();
+            $this->sync();
         }
     }
 
@@ -151,7 +153,7 @@ abstract class Driver
 
             $this->getItems()->forget($keys);
 
-            $this->refresh();
+            $this->sync();
         }
     }
 
@@ -167,7 +169,7 @@ abstract class Driver
         if ($item = $this->getItem($id)) {
             $item->fill($properties)->save();
 
-            $this->refresh();
+            $this->sync();
         }
     }
 
@@ -186,7 +188,7 @@ abstract class Driver
         });
 
         if ($items->isNotEmpty()) {
-            $this->refresh();
+            $this->sync();
         }
     }
 
@@ -220,7 +222,7 @@ abstract class Driver
     {
         $this->getBilling()->fill($attributes)->save();
 
-        $this->refresh();
+        $this->sync();
     }
 
     /**
@@ -248,25 +250,7 @@ abstract class Driver
             $this->getShipping()->setAttribute('driver', $driver);
         }
 
-        $this->refresh();
-    }
-
-    /**
-     * Refresh and recalculate the cart contents.
-     *
-     * @return void
-     */
-    public function refresh(): void
-    {
-        $this->getShipping()->calculateCost(false);
-        $this->getShipping()->calculateTax(false);
-        $this->getShipping()->save();
-
-        $this->getItems()->each->sync();
-        $this->getModel()->calculateDiscount(false);
-        $this->getModel()->save();
-
-        $this->getModel()->refresh();
+        $this->sync();
     }
 
     /**
@@ -279,7 +263,7 @@ abstract class Driver
         $this->getModel()->items()->delete();
         $this->getModel()->shipping->update(['tax' => 0, 'cost' => 0]);
 
-        $this->refresh();
+        $this->sync();
     }
 
     /**

@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static void updateBilling(array $attributes)
  * @method static \Bazar\Models\Shipping getShipping()
  * @method static void updateShipping(array $attributes, string $driver)
- * @method static void refresh()
  * @method static void empty()
  * @method static float count()
  * @method static bool isEmpty()

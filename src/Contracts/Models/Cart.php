@@ -14,6 +14,14 @@ interface Cart extends Discountable, Itemable
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo;
+
+    /**
+     * Sync the cart.
+     *
+     * @return void
+     */
+    public function sync(): void;
+
     /**
      * Lock the cart.
      *

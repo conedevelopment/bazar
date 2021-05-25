@@ -22,7 +22,7 @@ class CookieDriver extends Driver
                     ->newQuery()
                     ->firstOrCreate(['id' => $request->cookie('cart_id')])
                     ->setRelation('user', $user)
-                    ->load(['items', 'items.buyable']);
+                    ->loadMissing(['items', 'items.buyable']);
 
         if ($user && $cart->user_id !== $user->id) {
             Cart::proxy()->newQuery()->where('user_id', $user->id)->delete();
