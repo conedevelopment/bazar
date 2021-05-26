@@ -303,6 +303,11 @@ trait InteractsWithItems
      */
     public function findOrNewItem(array $attributes): Item
     {
+        $attributes = array_merge($attributes, [
+            'itemable_id' => $this->id,
+            'itemable_type' => static::class,
+        ]);
+
         return $this->items->first(static function (Item $item) use ($attributes): bool {
             return empty(array_diff(
                 Arr::dot($attributes), Arr::dot($item->withoutRelations()->toArray())

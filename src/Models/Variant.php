@@ -194,8 +194,6 @@ class Variant extends Model implements Contract
     {
         return tap($itemable->findOrNewItem([
             'properties' => $properties,
-            'itemable_id' => $itemable->id,
-            'itemable_type' => get_class($itemable),
             'buyable_id' => $this->id,
             'buyable_type' => static::class,
         ]), function (Item $item) use ($itemable, $quantity): void {
