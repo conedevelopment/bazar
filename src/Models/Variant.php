@@ -206,10 +206,7 @@ class Variant extends Model implements Contract
                 $quantity + $item->quantity,
                 $this->inventory->get('quantity') ?? $this->product->inventory->get('quantity', INF)
             );
-        })->setRelations([
-            'itemable' => $itemable->withoutRelations(),
-            'buyalbe' => $this,
-        ]);
+        })->setRelation('buyalbe', $this);
     }
 
     /**

@@ -310,8 +310,9 @@ trait InteractsWithItems
 
         return $this->items->first(static function (Item $item) use ($attributes): bool {
             return empty(array_diff(
-                Arr::dot($attributes), Arr::dot($item->withoutRelations()->toArray())
+                Arr::dot($attributes),
+                Arr::dot($item->withoutRelations()->toArray())
             ));
-        }, new Item($attributes));
+        }, Item::make($attributes)->setRelation('itemable', $this->withoutRelations()));
     }
 }
