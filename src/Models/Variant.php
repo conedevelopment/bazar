@@ -171,69 +171,6 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the buyable ID.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return int|null
-     */
-    public function getBuyableId(Itemable $itemable, array $properties = []): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * Get the buyable type.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return string|null
-     */
-    public function getBuyableType(Itemable $itemable, array $properties = []): ?string
-    {
-        return static::class;
-    }
-
-    /**
-     * Get the buyable price.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return float
-     */
-    public function getBuyablePrice(Itemable $itemable, array $properties = []): float
-    {
-        return $this->getPrice('sale', $itemable->getCurrency())
-            ?: $this->getPrice('default', $itemable->getCurrency());
-    }
-
-    /**
-     * Get the buyable name.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties*
-     * @return string
-     */
-    public function getBuyableName(Itemable $itemable, array $properties = []): string
-    {
-        return sprintf('%s - %s', $this->product->name, $this->alias);
-    }
-
-    /**
-     * Get the buyable quantity.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return float|null
-     */
-    public function getBuyableQuantity(Itemable $itemable, array $properties = []): ?float
-    {
-        return $this->inventory->tracksQuantity()
-            ? $this->inventory['quantity']
-            : ($this->product->inventory['quantity'] ?? null);
-    }
-
-    /**
      * Scope the query only to the given search term.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -243,6 +180,38 @@ class Variant extends Model implements Contract
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
+    }
+
+    /**
+     * Get the item representation of the buyable instance.
+     *
+     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  float|null  $quantity
+     * @param  array  $properties
+     * @return \Bazar\Models\Item
+     */
+    public function toItem(Itemable $itemable, ?float $quantity = null, array $properties = []): Item
+    {
+        return tap($itemable->findOrNewItem([
+            'properties' => $properties,
+            'itemable_id' => $itemable->id,
+            'itemable_type' => get_class($itemable),
+            'buyable_id' => $this->id,
+            'buyable_type' => static::class,
+        ]), function (Item $item) use ($itemable, $quantity): void {
+            $item->name = sprintf('%s - %s', $this->product->name, $this->alias);
+
+            $item->price = $this->getPrice('sale', $itemable->getCurrency())
+                        ?: $this->getPrice('default', $itemable->getCurrency());
+
+            $item->quantity = min(
+                $quantity + $item->quantity,
+                $this->inventory->get('quantity') ?? $this->product->inventory->get('quantity', INF)
+            );
+        })->setRelations([
+            'itemable' => $itemable->withoutRelations(),
+            'buyalbe' => $this,
+        ]);
     }
 
     /**

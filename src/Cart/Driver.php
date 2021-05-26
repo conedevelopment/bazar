@@ -92,15 +92,9 @@ abstract class Driver
      */
     public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
-        $item = $this->getModel()->findOrNewItem([
-            'properties' => $properties,
-            'itemable_id' => $this->getModel()->id,
-            'itemable_type' => get_class($this->getModel()),
-            'buyable_id' => $buyable->getBuyableId($this->getModel(), $properties),
-            'buyable_type' => $buyable->getBuyableType($this->getModel(), $properties),
-        ]);
+        $item = $buyable->toItem($this->getModel(), $quantity, $properties);
 
-        $item->quantity += $quantity;
+        $item->save();
 
         $this->getItems()->push($item);
 

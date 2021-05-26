@@ -117,7 +117,14 @@ class Cart extends Model implements Contract
         $this->shipping->calculateTax(false);
         $this->shipping->save();
 
-        $this->items->each->sync();
+        $this->items->each(function (Item $item): void {
+            if ($item->buyable && $item->itemable) {
+                $data = $item->buyable->toItem($item->itemable, null, $item->properties)->toArray();
+
+                $item->fill($data)->save();
+            }
+        });
+
         $this->calculateDiscount(false);
         $this->save();
 

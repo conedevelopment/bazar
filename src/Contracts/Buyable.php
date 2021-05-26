@@ -2,50 +2,17 @@
 
 namespace Bazar\Contracts;
 
+use Bazar\Models\Item;
+
 interface Buyable
 {
     /**
-     * Get the buyable ID.
+     * Get the item representation of the buyable instance.
      *
      * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  float|null  $quantity
      * @param  array  $properties
-     * @return int|null
+     * @return \Bazar\Models\Item
      */
-    public function getBuyableId(Itemable $itemable, array $properties = []): ?int;
-
-    /**
-     * Get the buyable type.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return string|null
-     */
-    public function getBuyableType(Itemable $itemable, array $properties = []): ?string;
-
-    /**
-     * Get the buyable price.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return float
-     */
-    public function getBuyablePrice(Itemable $itemable, array $properties = []): float;
-
-    /**
-     * Get the buyable name.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return string
-     */
-    public function getBuyableName(Itemable $itemable, array $properties = []): string;
-
-    /**
-     * Get the buyable quantity.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $properties
-     * @return float|null
-     */
-    public function getBuyableQuantity(Itemable $itemable, array $properties = []): ?float;
+    public function toItem(Itemable $itemable, ?float $quantity = null, array $properties = []): Item;
 }

@@ -259,26 +259,4 @@ class Item extends Model implements Contract
     {
         return $this->quantity;
     }
-
-    /**
-     * Sync the item by its parent models.
-     *
-     * @return void
-     */
-    public function sync(): void
-    {
-        if ($this->buyable && $this->itemable) {
-            $this->name = $this->buyable->getBuyableName($this->itemable, $this->properties);
-
-            $this->price = $this->buyable->getBuyablePrice($this->itemable, $this->properties);
-
-            $stock = $this->buyable->getBuyableQuantity($this->itemable, $this->properties);
-
-            $this->quantity = (is_null($stock) || $stock >= $this->quantity) ? $this->quantity : $stock;
-
-            $this->calculateTax(false);
-
-            $this->save();
-        }
-    }
 }
