@@ -276,7 +276,7 @@ class Product extends Model implements Contract
                         ?: $this->getPrice('default', $itemable->getCurrency());
 
             $item->quantity = min($quantity + $item->quantity, $this->inventory->get('quantity', INF));
-        })->setRelation('buyalbe', $this);
+        })->setRelation('buyable', $this);
     }
 
     /**
