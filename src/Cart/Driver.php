@@ -100,13 +100,7 @@ abstract class Driver
             'buyable_type' => $buyable->getBuyableType($this->getModel(), $properties),
         ]);
 
-        $quantity = $item->quantity + $quantity;
-        $stock = $buyable->getBuyableQuantity($this->getModel(), $properties);
-        $item->quantity = (is_null($stock) || $stock >= $quantity) ? $quantity : $stock;
-        $item->name = $buyable->getBuyableName($this->getModel(), $properties);
-        $item->price = $buyable->getBuyablePrice($this->getModel(), $properties);
-        $item->calculateTax(false);
-        $item->save();
+        $item->quantity += $quantity;
 
         $this->getItems()->push($item);
 
