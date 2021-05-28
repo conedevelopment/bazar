@@ -53,7 +53,8 @@ abstract class Driver
      * The callback after the cart instance is resolved.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Models\Cart
+     * @param  \Bazar\Models\Cart  $cart
+     * @return void
      */
     protected function resolved(Request $request, Cart $cart): void
     {
