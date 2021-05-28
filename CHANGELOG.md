@@ -1,17 +1,23 @@
 # Changelog
 
-## v0.9.0 (Unreleased)
+## v0.9.0 (2021-05-28)
 
 - Added the `Bazar\Contracts\Buyable` interface
-- Added the `name` attribute and the `buyable` polymorohic relation to the `Bazar\Models\Item` model
-- Renamed methods in getter/setter style
-- Fixed `Autocomplete` component's extra AJAX queries
-- Reworked the order creation form
+- Added the `name` attribute and the `buyable` nullable-polymorohic relation to the `Bazar\Models\Item` model
 - Added the `Bazar\Contracts\Models\Item` interface
-- The `Bazar\Models\Item` model is now proxyable
-- Reworked the `Cart` driver due to the new `Buyable` contract
+- Added the `Bazar\Databe\Factories\ItemFactory` class
+- Added the `carts` relation to the `Bazar\Models\User` model
+- Added the `resolved` callback to the `Bazar\Cart\Driver` class
+- Changed the `cart` relation from `HasOne` to `HasOne->ofMany` on the `Bazar\Models\User` model
+- Changed the order creation form
+- Changed the `Cart` driver due to the new `Buyable` contract
+- Fixed `Autocomplete` component's extra AJAX queries
 - Fixed flipped price keys
+- Renamed methods in getter/setter style
+- Renamed `tax()` to `caculateTax()`, `cost()` to `calculateCost()`, `discount()` to `calculateDiscount()`
 - Removed attribute getters from contracts
+- Removed the custom property resolvers from the `Bazar\Models\Item` class, use the `Buyable` interface's `toItem()` method
+- The `Bazar\Models\Item` model is now proxyable
 
 ## v0.8.2 (2021-05-21)
 
