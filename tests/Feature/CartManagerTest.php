@@ -2,6 +2,7 @@
 
 namespace Bazar\Tests\Feature;
 
+use Bazar\Bazar;
 use Bazar\Cart\CookieDriver;
 use Bazar\Cart\Manager;
 use Bazar\Cart\SessionDriver;
@@ -25,10 +26,12 @@ class CartManagerTest extends TestCase
         parent::setUp();
 
         $this->manager = $this->app->make(Manager::class);
-        $this->product = Product::factory()->create(['prices' => ['usd' => ['default' => 100]]]);
+        $this->product = Product::factory()->create([
+            'prices' => ['usd' => ['default' => 100], 'eur' => ['default' => 2000]],
+        ]);
         $this->variant = $this->product->variants()->save(Variant::factory()->make([
             'variation' => ['Size' => 'S'],
-            'prices' => ['usd' => ['default' => 150]],
+            'prices' => ['usd' => ['default' => 150], 'eur' => ['default' => 2500]],
         ]));
 
         $this->manager->addItem($this->product, 2, ['Size' => 'L']);
@@ -36,7 +39,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_resolved_via_facade()
+    public function a_manager_can_be_resolved_via_facade()
     {
         $this->mock(Manager::class, function ($mock) {
             return $mock->shouldReceive('getModel')
@@ -48,14 +51,14 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_cookie_driver()
+    public function a_manager_has_cookie_driver()
     {
         $this->assertInstanceOf(CookieDriver::class, $this->manager->driver('cookie'));
         $this->assertInstanceOf(Cart::class, $this->manager->driver('cookie')->getModel());
     }
 
     /** @test */
-    public function it_has_session_driver()
+    public function a_manager_has_session_driver()
     {
         $this->session([]);
 
@@ -66,7 +69,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_add_products()
+    public function a_manager_can_add_products()
     {
         $this->manager->addItem($this->product, 2, ['Size' => 'L']);
 
@@ -74,16 +77,12 @@ class CartManagerTest extends TestCase
         $this->assertEquals(2, $this->manager->getItems()->count());
 
         $product = $this->manager->getModel()->findItem([
-            'buyable_id' => $this->product->id,
-            'buyable_type' => Product::class,
             'properties' => ['Size' => 'L'],
         ]);
         $this->assertEquals(100, $product->price);
         $this->assertEquals(4, $product->quantity);
 
         $variant = $this->manager->getModel()->findItem([
-            'buyable_id' => $this->variant->id,
-            'buyable_type' => Variant::class,
             'properties' => ['Size' => 'S'],
         ]);
 
@@ -92,10 +91,9 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_remove_items()
+    public function a_manager_can_remove_items()
     {
         $item = $this->manager->getModel()->findItem([
-            'product_id' => $this->product->id,
             'properties' => ['Size' => 'L'],
         ]);
         $this->manager->removeItem($item->id);
@@ -109,10 +107,9 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_items()
+    public function a_manager_can_update_items()
     {
         $item = $this->manager->getModel()->findItem([
-            'product_id' => $this->product->id,
             'properties' => ['Size' => 'L'],
         ]);
         $this->manager->updateItem($item->id, ['quantity' => 10]);
@@ -130,7 +127,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_emptied()
+    public function a_manager_can_be_emptied()
     {
         $this->assertTrue($this->manager->isNotEmpty());
         $this->manager->empty();
@@ -138,13 +135,13 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_shipping()
+    public function a_manager_has_shipping()
     {
         $this->assertInstanceOf(Shipping::class, $this->manager->getShipping());
     }
 
     /** @test */
-    public function it_updates_shipping()
+    public function a_manager_updates_shipping()
     {
         $this->manager->updateShipping(['first_name' => 'Test'], 'local-pickup');
 
@@ -152,13 +149,13 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_billing()
+    public function a_manager_has_billing()
     {
         $this->assertInstanceOf(Address::class, $this->manager->getBilling());
     }
 
     /** @test */
-    public function it_updates_billing()
+    public function a_manager_updates_billing()
     {
         $this->manager->updateBilling(['first_name' => 'Test']);
 
@@ -166,7 +163,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_getTotal()
+    public function a_manager_has_getTotal()
     {
         $this->assertEquals(
             $this->manager->getModel()->total, $this->manager->getTotal()
@@ -174,7 +171,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_calculates_tax()
+    public function a_manager_has_calculates_tax()
     {
         $this->assertEquals(
             $this->manager->getModel()->tax, $this->manager->calculateTax()
@@ -182,7 +179,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_has_calculates_discount()
+    public function a_manager_has_calculates_discount()
     {
         $this->assertEquals(
             $this->manager->getModel()->discount, $this->manager->calculateDiscount()
@@ -190,7 +187,7 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_checkout()
+    public function a_manager_can_checkout()
     {
         Event::fake([CheckoutProcessing::class, CheckoutProcessed::class]);
 
@@ -198,5 +195,19 @@ class CartManagerTest extends TestCase
 
         Event::assertDispatched(CheckoutProcessing::class);
         Event::assertDispatched(CheckoutProcessed::class);
+    }
+
+    /** @test */
+    public function a_manager_can_sync_items()
+    {
+        $this->assertEquals(350, $this->manager->getTotal());
+
+        Bazar::setCurrency('eur');
+
+        $this->assertEquals(6500, $this->manager->getTotal());
+
+        Bazar::setCurrency('usd');
+
+        $this->assertEquals(350, $this->manager->getTotal());
     }
 }

@@ -114,13 +114,23 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     }
 
     /**
-     * Get the cart for the user.
+     * Get the active cart for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function cart(): HasOne
     {
-        return $this->hasOne(Cart::getProxiedClass());
+        return $this->hasOne(Cart::getProxiedClass())->latestOfMany();
+    }
+
+    /**
+     * Get the carts for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\v
+     */
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::getProxiedClass());
     }
 
     /**

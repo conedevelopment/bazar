@@ -11,7 +11,6 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithItemables;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
-use Bazar\Contracts\Buyable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Variant as Contract;
 use Bazar\Database\Factories\VariantFactory;

@@ -50,6 +50,21 @@ abstract class Driver
     abstract protected function resolve(Request $request): Cart;
 
     /**
+     * The callback after the cart instance is resolved.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Bazar\Models\Cart
+     */
+    protected function resolved(Request $request, Cart $cart): void
+    {
+        if (! $cart->exists || ($request->user() && $cart->user_id !== $request->user()->id)) {
+            $cart->user()->associate($request->user())->save();
+        }
+
+        $cart->loadMissing(['items', 'items.buyable']);
+    }
+
+    /**
      * Get the cart model.
      *
      * @return \Bazar\Models\Cart
@@ -58,19 +73,21 @@ abstract class Driver
     {
         if (is_null($this->cart)) {
             $this->cart = App::call(function (Request $request): Cart {
-                return tap($this->resolve($request), function (Cart $cart): void {
-                    if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
-                        $cart->setAttribute('currency', Bazar::getCurrency());
-                        $cart->syncItems();
-                        $cart->shipping->calculateCost(false);
-                        $cart->shipping->calculateTax();
-                        $cart->calculateDiscount();
-                    }
+                return tap($this->resolve($request), function (Cart $cart) use ($request): void {
+                    $this->resolved($request, $cart);
                 });
             });
         }
 
-        return $this->cart;
+        return tap($this->cart, static function (Cart $cart): void {
+            if (! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
+                $cart->setAttribute('currency', Bazar::getCurrency());
+                $cart->syncItems();
+                $cart->shipping->calculateCost(false);
+                $cart->shipping->calculateTax();
+                $cart->calculateDiscount();
+            }
+        });
     }
 
     /**

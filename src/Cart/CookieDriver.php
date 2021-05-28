@@ -16,22 +16,21 @@ class CookieDriver extends Driver
      */
     protected function resolve(Request $request): Cart
     {
-        $user = $request->user();
-
-        $cart = Cart::proxy()
+        return Cart::proxy()
                     ->newQuery()
-                    ->firstOrCreate(['id' => $request->cookie('cart_id')])
-                    ->setRelation('user', $user)
-                    ->loadMissing(['items', 'items.buyable']);
+                    ->firstOrNew(['id' => $request->cookie('cart_id')]);
+    }
 
-        if ($user && $cart->user_id !== $user->id) {
-            Cart::proxy()->newQuery()->where('user_id', $user->id)->delete();
-
-            $cart->user()->associate($user)->save();
-        }
+    /**
+     * The callback after the cart instance is resolved.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Bazar\Models\Cart
+     */
+    protected function resolved(Request $request, Cart $cart): void
+    {
+        parent::resolved($request, $cart);
 
         Cookie::queue('cart_id', $cart->id, $this->config['expiration'] ?? 4320);
-
-        return $cart;
     }
 }
