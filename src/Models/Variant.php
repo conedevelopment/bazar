@@ -11,6 +11,7 @@ use Bazar\Concerns\HasMedia;
 use Bazar\Concerns\InteractsWithItemables;
 use Bazar\Concerns\InteractsWithProxy;
 use Bazar\Concerns\InteractsWithStock;
+use Bazar\Contracts\Buyable;
 use Bazar\Contracts\Itemable;
 use Bazar\Contracts\Models\Variant as Contract;
 use Bazar\Database\Factories\VariantFactory;
@@ -186,27 +187,16 @@ class Variant extends Model implements Contract
      * Get the item representation of the buyable instance.
      *
      * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  float|null  $quantity
-     * @param  array  $properties
+     * @param  array  $attributes
      * @return \Bazar\Models\Item
      */
-    public function toItem(Itemable $itemable, ?float $quantity = null, array $properties = []): Item
+    public function toItem(Itemable $itemable, array $attributes = []): Item
     {
-        return tap($itemable->findOrNewItem([
-            'properties' => $properties,
-            'buyable_id' => $this->id,
-            'buyable_type' => static::class,
-        ]), function (Item $item) use ($itemable, $quantity): void {
-            $item->name = sprintf('%s - %s', $this->product->name, $this->alias);
-
-            $item->price = $this->getPrice('sale', $itemable->getCurrency())
-                        ?: $this->getPrice('default', $itemable->getCurrency());
-
-            $item->quantity = min(
-                $quantity + $item->quantity,
-                $this->inventory->get('quantity') ?? $this->product->inventory->get('quantity', INF)
-            );
-        })->setRelation('buyable', $this);
+        return $this->items()->make(array_merge($attributes, [
+            'name' => sprintf('%s - %s', $this->name, $this->alias),
+            'price' => $this->getPrice('sale', $itemable->getCurrency())
+                    ?: $this->getPrice('default', $itemable->getCurrency())
+        ]))->setRelation('buyable', $this);
     }
 
     /**

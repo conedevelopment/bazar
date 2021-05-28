@@ -107,31 +107,6 @@ class Cart extends Model implements Contract
     }
 
     /**
-     * Sync the cart.
-     *
-     * @return void
-     */
-    public function sync(): void
-    {
-        $this->shipping->calculateCost(false);
-        $this->shipping->calculateTax(false);
-        $this->shipping->save();
-
-        $this->items->each(function (Item $item): void {
-            if ($item->buyable && $item->itemable) {
-                $data = $item->buyable->toItem($item->itemable, null, $item->properties)->toArray();
-
-                $item->fill($data)->save();
-            }
-        });
-
-        $this->calculateDiscount(false);
-        $this->save();
-
-        $this->refresh();
-    }
-
-    /**
      * Lock the cart.
      *
      * @return void

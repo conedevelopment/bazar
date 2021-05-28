@@ -91,7 +91,22 @@ interface Itemable extends Shippable
      * Find an item by its attributes or make a new instance.
      *
      * @param  array  $attributes
+     * @return \Bazar\Models\Item|null
+     */
+    public function findItem(array $attributes): ?Item;
+
+    /**
+     * Merge the given item into the collection.
+     *
+     * @param  \Bazar\Models\Item  $items
      * @return \Bazar\Models\Item
      */
-    public function findOrNewItem(array $attributes): Item;
+    public function mergeItem(Item $item): Item;
+
+    /**
+     * Sync the items.
+     *
+     * @return void
+     */
+    public function syncItems(): void;
 }

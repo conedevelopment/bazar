@@ -73,17 +73,20 @@ class CartManagerTest extends TestCase
         $this->assertEquals(5, $this->manager->count());
         $this->assertEquals(2, $this->manager->getItems()->count());
 
-        $product = $this->manager->getModel()->findOrNewItem([
-            'product_id' => $this->product->id,
+        $product = $this->manager->getModel()->findItem([
+            'buyable_id' => $this->product->id,
+            'buyable_type' => Product::class,
             'properties' => ['Size' => 'L'],
         ]);
         $this->assertEquals(100, $product->price);
         $this->assertEquals(4, $product->quantity);
 
-        $variant = $this->manager->getModel()->findOrNewItem([
-            'product_id' => $this->product->id,
+        $variant = $this->manager->getModel()->findItem([
+            'buyable_id' => $this->variant->id,
+            'buyable_type' => Variant::class,
             'properties' => ['Size' => 'S'],
         ]);
+
         $this->assertEquals(150, $variant->price);
         $this->assertEquals(1, $variant->quantity);
     }
@@ -91,7 +94,7 @@ class CartManagerTest extends TestCase
     /** @test */
     public function it_can_remove_items()
     {
-        $item = $this->manager->getModel()->findOrNewItem([
+        $item = $this->manager->getModel()->findItem([
             'product_id' => $this->product->id,
             'properties' => ['Size' => 'L'],
         ]);
@@ -108,7 +111,7 @@ class CartManagerTest extends TestCase
     /** @test */
     public function it_can_update_items()
     {
-        $item = $this->manager->getModel()->findOrNewItem([
+        $item = $this->manager->getModel()->findItem([
             'product_id' => $this->product->id,
             'properties' => ['Size' => 'L'],
         ]);

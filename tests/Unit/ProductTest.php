@@ -7,6 +7,7 @@ use Bazar\Casts\Prices;
 use Bazar\Contracts\Breadcrumbable;
 use Bazar\Models\Cart;
 use Bazar\Models\Category;
+use Bazar\Models\Item;
 use Bazar\Models\Medium;
 use Bazar\Models\Order;
 use Bazar\Models\Product;
@@ -35,14 +36,14 @@ class ProductTest extends TestCase
     {
         $order = Order::factory()->create();
 
-        $this->product->items()->create([
+        $item = Item::factory()->make([
             'price' => 100,
             'tax' => 0,
             'quantity' => 3,
-            'itemable_id' => $order->id,
-            'itemable_type' => Order::class,
             'name' => $this->product->name,
-        ]);
+        ])->itemable()->associate($order);
+
+        $this->product->items()->save($item);
 
         $this->assertTrue(
             $this->product->orders->pluck('id')->contains($order->id)
@@ -54,14 +55,14 @@ class ProductTest extends TestCase
     {
         $cart = Cart::factory()->create();
 
-        $this->product->items()->create([
+        $item = Item::factory()->make([
             'price' => 100,
             'tax' => 0,
             'quantity' => 3,
-            'itemable_id' => $cart->id,
-            'itemable_type' => Cart::class,
             'name' => $this->product->name,
-        ]);
+        ])->itemable()->associate($cart);
+
+        $this->product->items()->save($item);
 
         $this->assertTrue(
             $this->product->carts->pluck('id')->contains($cart->id)

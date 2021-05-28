@@ -45,12 +45,12 @@ trait InteractsWithDiscounts
      */
     public function calculateDiscount(bool $update = true): float
     {
-        $discount = Discount::calculate($this);
+        $this->discount = Discount::calculate($this);
 
-        if ($this->exists && $update) {
-            $this->update(['discount' => $discount]);
+        if ($update) {
+            $this->save();
         }
 
-        return $this->discount = $discount;
+        return $this->discount;
     }
 }

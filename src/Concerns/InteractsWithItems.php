@@ -299,9 +299,9 @@ trait InteractsWithItems
      * Find an item by its attributes or make a new instance.
      *
      * @param  array  $attributes
-     * @return \Bazar\Models\Item
+     * @return \Bazar\Models\Item|null
      */
-    public function findOrNewItem(array $attributes): Item
+    public function findItem(array $attributes): ?Item
     {
         $attributes = array_merge($attributes, [
             'itemable_id' => $this->id,
@@ -313,6 +313,49 @@ trait InteractsWithItems
                 Arr::dot($attributes),
                 Arr::dot($item->withoutRelations()->toArray())
             ));
-        }, Item::make($attributes)->setRelation('itemable', $this->withoutRelations()));
+        });
+    }
+
+    /**
+     * Merge the given item into the collection.
+     *
+     * @param  \Bazar\Models\Item  $items
+     * @return \Bazar\Models\Item
+     */
+    public function mergeItem(Item $item): Item
+    {
+        $stored = $this->findItem(
+            $item->only(['properties', 'buyable_id', 'buyable_type'])
+        );
+
+        if (is_null($stored)) {
+            $item->itemable()->associate($this);
+
+            $item->setRelation('itemable', $this->withoutRelations());
+
+            $this->items->push($item);
+
+            return $item;
+        }
+
+        $stored->quantity += $item->quantity;
+
+        return $stored;
+    }
+
+    /**
+     * Sync the items.
+     *
+     * @return void
+     */
+    public function syncItems(): void
+    {
+        $this->items->each(function (Item $item): void {
+            if ($item->buyable && $item->itemable) {
+                $data = $item->buyable->toItem($item->itemable, $item->only('properties'))->only('price');
+
+                $item->fill($data)->calculateTax();
+            }
+        });
     }
 }

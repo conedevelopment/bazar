@@ -61,8 +61,10 @@ abstract class Driver
                 return tap($this->resolve($request), function (Cart $cart): void {
                     if (! $cart->wasRecentlyCreated && ! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
                         $cart->setAttribute('currency', Bazar::getCurrency());
-
-                        $cart->sync();
+                        $cart->syncItems();
+                        $cart->shipping->calculateCost(false);
+                        $cart->shipping->calculateTax();
+                        $cart->calculateDiscount();
                     }
                 });
             });
@@ -92,11 +94,12 @@ abstract class Driver
      */
     public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
-        $item = $buyable->toItem($this->getModel(), $quantity, $properties);
+        $item = $buyable->toItem(
+            $this->getModel(),
+            ['quantity' => $quantity, 'properties' => $properties]
+        );
 
-        $item->save();
-
-        $this->getItems()->push($item);
+        $this->getModel()->mergeItem($item)->save();
 
         $this->sync();
 
@@ -155,7 +158,7 @@ abstract class Driver
     public function updateItem(string $id, array $properties = []): void
     {
         if ($item = $this->getItem($id)) {
-            $item->fill($properties)->save();
+            $item->fill($properties)->calculateTax();
 
             $this->sync();
         }
@@ -172,7 +175,7 @@ abstract class Driver
         $items = $this->getItems()->whereIn('id', array_keys($data));
 
         $items->each(static function (Item $item) use ($data): void {
-            $item->fill($data[$item->id])->save();
+            $item->fill($data[$item->id])->calculateTax();
         });
 
         if ($items->isNotEmpty()) {
@@ -230,15 +233,19 @@ abstract class Driver
      * @param  string|null  $driver
      * @return void
      */
-    public function updateShipping(array $attributes, ?string $driver = null): void
+    public function updateShipping(array $attributes = [], ?string $driver = null): void
     {
-        $this->getShipping()->address->fill($attributes)->save();
-
         if (! is_null($driver)) {
             $this->getShipping()->setAttribute('driver', $driver);
         }
 
-        $this->sync();
+        $this->getShipping()->address->fill($attributes);
+
+        if (! empty($attributes) || ! is_null($driver)) {
+            $this->sync();
+        }
+
+        $this->getShipping()->address->save();
     }
 
     /**
@@ -249,9 +256,11 @@ abstract class Driver
     public function empty(): void
     {
         $this->getModel()->items()->delete();
-        $this->getModel()->shipping->update(['tax' => 0, 'cost' => 0]);
+        $this->getModel()->setRelation('items', Collection::make());
 
-        $this->sync();
+        $this->getShipping()->update(['tax' => 0, 'cost' => 0]);
+
+        $this->getModel()->calculateDiscount();
     }
 
     /**
@@ -295,6 +304,19 @@ abstract class Driver
     public function isNotEmpty(): bool
     {
         return ! $this->isEmpty();
+    }
+
+    /**
+     * Sync the cart.
+     *
+     * @return void
+     */
+    public function sync(): void
+    {
+        $this->getShipping()->calculateCost(false);
+        $this->getShipping()->calculateTax();
+
+        $this->getModel()->calculateDiscount();
     }
 
     /**

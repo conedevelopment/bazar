@@ -255,28 +255,20 @@ class Product extends Model implements Contract
      * Get the item representation of the buyable instance.
      *
      * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  float|null  $quantity
-     * @param  array  $properties
+     * @param  array  $attributes
      * @return \Bazar\Models\Item
      */
-    public function toItem(Itemable $itemable, ?float $quantity = null, array $properties = []): Item
+    public function toItem(Itemable $itemable, array $attributes = []): Item
     {
-        if ($variant = $this->toVariant($properties)) {
-            return $variant->toItem($itemable, $quantity, $properties);
+        if ($variant = $this->toVariant($attributes['properties'] ?? [])) {
+            return $variant->toItem($itemable, $attributes);
         }
 
-        return tap($itemable->findOrNewItem([
-            'properties' => $properties,
-            'buyable_id' => $this->id,
-            'buyable_type' => static::class,
-        ]), function (Item $item) use ($itemable, $quantity): void {
-            $item->name = $this->name;
-
-            $item->price = $this->getPrice('sale', $itemable->getCurrency())
-                        ?: $this->getPrice('default', $itemable->getCurrency());
-
-            $item->quantity = min($quantity + $item->quantity, $this->inventory->get('quantity', INF));
-        })->setRelation('buyable', $this);
+        return $this->items()->make(array_merge($attributes, [
+            'name' => $this->name,
+            'price' => $this->getPrice('sale', $itemable->getCurrency())
+                    ?: $this->getPrice('default', $itemable->getCurrency())
+        ]))->setRelation('buyable', $this);
     }
 
     /**

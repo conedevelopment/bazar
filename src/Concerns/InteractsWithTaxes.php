@@ -58,12 +58,12 @@ trait InteractsWithTaxes
      */
     public function calculateTax(bool $update = true): float
     {
-        $tax = Tax::calculate($this);
+        $this->tax = Tax::calculate($this);
 
-        if ($this->exists && $update) {
-            $this->update(['tax' => $tax]);
+        if ($update) {
+            $this->save();
         }
 
-        return $this->tax = $tax;
+        return $this->tax;
     }
 }

@@ -64,10 +64,6 @@ class Item extends Model implements Contract
         'price',
         'quantity',
         'properties',
-        'buyable_id',
-        'buyable_type',
-        'itemable_id',
-        'itemable_type',
     ];
 
     /**

@@ -32,14 +32,12 @@ class DownloadTest extends TestCase
             ],
         ]);
 
-        $this->order->items()->create([
-            'buyable_id' => $product->id,
-            'buyable_type' => Product::class,
-            'quantity' => 1,
-            'tax' => 0,
+        $product->items()->make([
             'price' => $product->price,
+            'tax' => 0,
+            'quantity' => 3,
             'name' => $product->name,
-        ]);
+        ])->itemable()->associate($this->order)->save();
     }
 
     /** @test */

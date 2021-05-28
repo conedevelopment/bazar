@@ -259,8 +259,8 @@ class Shipping extends Model implements Contract
         try {
             $this->cost = Manager::driver($this->driver)->calculate($this->shippable);
 
-            if ($this->exists && $update) {
-                $this->update(['cost' => $this->cost]);
+            if ($update) {
+                $this->save();
             }
         } catch (Throwable $exception) {
             //

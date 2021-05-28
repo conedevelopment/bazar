@@ -16,13 +16,6 @@ interface Cart extends Discountable, Itemable
     public function order(): BelongsTo;
 
     /**
-     * Sync the cart.
-     *
-     * @return void
-     */
-    public function sync(): void;
-
-    /**
      * Lock the cart.
      *
      * @return void
