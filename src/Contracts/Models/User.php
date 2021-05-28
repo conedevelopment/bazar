@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 interface User extends Breadcrumbable
 {
     /**
+     * Get the carts for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\v
+     */
+    public function carts(): HasMany;
+
+    /**
      * Get the cart for the user.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

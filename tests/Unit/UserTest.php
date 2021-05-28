@@ -11,7 +11,7 @@ use Bazar\Tests\TestCase;
 class UserTest extends TestCase
 {
     /** @test */
-    public function it_can_have_a_cart()
+    public function a_user_has_cart()
     {
         $this->assertNull($this->user->cart);
 
@@ -25,7 +25,19 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_orders()
+    public function a_user_has_carts()
+    {
+        $cart = $this->user->carts()->save(
+            Cart::factory()->make()
+        );
+
+        $this->user->refresh();
+
+        $this->assertTrue($this->user->carts->pluck('id')->contains($cart->id));
+    }
+
+    /** @test */
+    public function a_user_has_orders()
     {
         $orders = $this->user->orders()->saveMany(
             Order::factory()->count(3)->make()
@@ -37,7 +49,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_addresses()
+    public function a_user_has_addresses()
     {
         $addresses = $this->user->addresses()->saveMany(
             Address::factory()->count(3)->make()
@@ -55,7 +67,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_has_avatar()
+    public function a_user_has_avatar()
     {
         $this->assertEquals(
             asset('vendor/bazar/img/avatar-placeholder.svg'),
@@ -64,21 +76,21 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_admin()
+    public function a_user_can_be_admin()
     {
         $this->assertFalse($this->user->isAdmin());
         $this->assertTrue($this->admin->isAdmin());
     }
 
     /** @test */
-    public function it_is_breadcrumbable()
+    public function a_user_is_breadcrumbable()
     {
         $this->assertInstanceOf(Breadcrumbable::class, $this->user);
         $this->assertSame($this->user->name, $this->user->toBreadcrumb($this->app['request']));
     }
 
     /** @test */
-    public function it_has_query_scopes()
+    public function a_user_has_query_scopes()
     {
         $this->assertSame(
             $this->user->newQuery()->where(function ($q) {
