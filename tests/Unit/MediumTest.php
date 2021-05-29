@@ -54,18 +54,18 @@ class MediumTest extends TestCase
             array_keys($this->medium->urls)
         );
 
-        $this->assertStringContainsString('-thumb', $this->medium->url('thumb'));
+        $this->assertStringContainsString('-thumb', $this->medium->getUrl('thumb'));
     }
 
     /** @test */
     public function it_has_path()
     {
-        $this->assertStringContainsString("{$this->medium->id}/{$this->medium->name}", $this->medium->path());
-        $this->assertStringContainsString("{$this->medium->id}/{$this->medium->name}", $this->medium->fullPath());
+        $this->assertStringContainsString("{$this->medium->id}/{$this->medium->name}", $this->medium->getPath());
+        $this->assertStringContainsString("{$this->medium->id}/{$this->medium->name}", $this->medium->getFullPath());
 
         $this->medium->disk = 'fake';
 
-        $this->assertSame($this->medium->url(), $this->medium->fullPath());
+        $this->assertSame($this->medium->getUrl(), $this->medium->getFullPath());
     }
 
     /** @test */

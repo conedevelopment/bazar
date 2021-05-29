@@ -20,8 +20,8 @@ class GdDriver extends Driver
      */
     public function perform(Medium $medium): Medium
     {
-        if (! Storage::disk($medium->disk)->exists($medium->path())) {
-            throw new FileNotFoundException("The file located at [{$medium->fullPath()}] is not found.");
+        if (! Storage::disk($medium->disk)->exists($medium->getPath())) {
+            throw new FileNotFoundException("The file located at [{$medium->getFullPath()}] is not found.");
         }
 
         File::ensureDirectoryExists(Storage::disk('local')->path('bazar-tmp'));
@@ -34,7 +34,7 @@ class GdDriver extends Driver
             $image->save();
 
             Storage::disk($medium->disk)->put(
-                $medium->path($conversion), File::get($image->path())
+                $medium->getPath($conversion), File::get($image->getPath())
             );
 
             $image->destroy();
@@ -53,7 +53,7 @@ class GdDriver extends Driver
     {
         $image = new Image($medium);
 
-        return $image->quality(
+        return $image->setQuality(
             $this->config['quality'] ?? 70
         );
     }

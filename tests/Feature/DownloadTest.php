@@ -18,7 +18,7 @@ class DownloadTest extends TestCase
         parent::setUp();
 
         $medium = Medium::factory()->create();
-        Storage::disk($medium->disk)->put($medium->path(), 'fake content');
+        Storage::disk($medium->disk)->put($medium->getPath(), 'fake content');
 
         $this->order = Order::factory()->create();
 
@@ -26,8 +26,8 @@ class DownloadTest extends TestCase
             'inventory' => [
                 'downloadable' => true,
                 'files' => [
-                    ['name' => 'Valid', 'url' => $medium->fullPath(), 'expiration' => 7],
-                    ['name' => 'Expired', 'url' => $medium->fullPath(), 'expiration' => 1],
+                    ['name' => 'Valid', 'url' => $medium->getFullPath(), 'expiration' => 7],
+                    ['name' => 'Expired', 'url' => $medium->getFullPath(), 'expiration' => 1],
                 ],
             ],
         ]);

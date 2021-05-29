@@ -25,31 +25,31 @@ class ImageTest extends TestCase
         Storage::disk('public')->makeDirectory($medium->id);
 
         $i = imagecreate(800, 400);
-        imagejpeg($i, $medium->fullPath());
+        imagejpeg($i, $medium->getFullPath());
         imagedestroy($i);
 
-        ($image = new Image($medium))->quality(70)->resize(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setQuality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 200], [$w, $h]);
 
         ($image = new Image($medium))->resize(400, 100)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->resize()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->resize()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
         ($image = new Image($medium))->crop(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 400], [$w, $h]);
 
         ($image = new Image($medium))->crop(100, 400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([100, 400], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->crop()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->crop()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -63,31 +63,31 @@ class ImageTest extends TestCase
         $i = imagecreate(800, 400);
         imagecolorallocate($i, 0, 0, 0);
         imagesavealpha($i, true);
-        imagepng($i, $medium->fullPath());
+        imagepng($i, $medium->getFullPath());
         imagedestroy($i);
 
-        ($image = new Image($medium))->quality(70)->resize(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setQuality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 200], [$w, $h]);
 
         ($image = new Image($medium))->resize(400, 100)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->resize()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->resize()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
         ($image = new Image($medium))->crop(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 400], [$w, $h]);
 
         ($image = new Image($medium))->crop(100, 400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([100, 400], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->crop()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->crop()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -99,31 +99,31 @@ class ImageTest extends TestCase
         Storage::disk('public')->makeDirectory($medium->id);
 
         $i = imagecreate(800, 400);
-        imagegif($i, $medium->fullPath());
+        imagegif($i, $medium->getFullPath());
         imagedestroy($i);
 
-        ($image = new Image($medium))->quality(70)->resize(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setQuality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 200], [$w, $h]);
 
         ($image = new Image($medium))->resize(400, 100)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->resize()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->resize()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
         ($image = new Image($medium))->crop(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 400], [$w, $h]);
 
         ($image = new Image($medium))->crop(100, 400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([100, 400], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->crop()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->crop()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -135,31 +135,31 @@ class ImageTest extends TestCase
         Storage::disk('public')->makeDirectory($medium->id);
 
         $i = imagecreatetruecolor(800, 400);
-        imagewebp($i, $medium->fullPath());
+        imagewebp($i, $medium->getFullPath());
         imagedestroy($i);
 
-        ($image = new Image($medium))->quality(70)->resize(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setQuality(70)->resize(400)->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 200], [$w, $h]);
 
         ($image = new Image($medium))->resize(400, 100)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->resize()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->resize()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([200, 100], [$w, $h]);
 
         ($image = new Image($medium))->crop(400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 400], [$w, $h]);
 
         ($image = new Image($medium))->crop(100, 400)->save();
-        [$w, $h] = getimagesize($image->path());
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([100, 400], [$w, $h]);
 
-        ($image = new Image($medium))->width(400)->height(100)->crop()->save();
-        [$w, $h] = getimagesize($image->path());
+        ($image = new Image($medium))->setWidth(400)->setHeight(100)->crop()->save();
+        [$w, $h] = getimagesize($image->getPath());
         $this->assertSame([400, 100], [$w, $h]);
     }
 
@@ -171,10 +171,10 @@ class ImageTest extends TestCase
         Storage::disk('public')->makeDirectory($medium->id);
 
         $i = imagecreatetruecolor(800, 400);
-        imagexbm($i, $medium->fullPath());
+        imagexbm($i, $medium->getFullPath());
         imagedestroy($i);
 
         $this->expectExceptionMessage('The file type is not supported');
-        ($image = new Image($medium))->quality(70)->resize(400)->save();
+        ($image = new Image($medium))->setQuality(70)->resize(400)->save();
     }
 }

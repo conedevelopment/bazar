@@ -70,7 +70,7 @@ class MoveFile implements ShouldQueue
     public function handle(): void
     {
         Storage::disk($this->medium->disk)->put(
-            $this->medium->path(), File::get($this->path)
+            $this->medium->getPath(), File::get($this->path)
         );
 
         if (! $this->preserve && ! filter_var($this->path, FILTER_VALIDATE_URL)) {

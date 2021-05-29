@@ -34,18 +34,18 @@ class JobTest extends TestCase
     {
         $medium = Medium::factory()->create();
         Storage::disk('public')->put(
-            $medium->path(),  UploadedFile::fake()->image('test.png')->get()
+            $medium->getPath(),  UploadedFile::fake()->image('test.png')->get()
         );
 
         $job = new PerformConversions($medium);
 
-        $this->assertFalse(is_file($medium->fullPath('thumb')));
+        $this->assertFalse(is_file($medium->getFullPath('thumb')));
         $job->handle();
-        $this->assertTrue(is_file($medium->fullPath('thumb')));
+        $this->assertTrue(is_file($medium->getFullPath('thumb')));
 
         $this->assertTrue($medium->exists());
         $job->failed(new Exception);
         $this->assertFalse($medium->exists());
-        $this->assertFalse(is_file($medium->fullPath('thumb')));
+        $this->assertFalse(is_file($medium->getFullPath('thumb')));
     }
 }

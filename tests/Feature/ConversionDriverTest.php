@@ -64,9 +64,9 @@ class ConversionDriverTest extends TestCase
 
         Conversion::perform($medium);
 
-        Storage::disk($medium->disk)->assertExists($medium->path());
-        Storage::disk($medium->disk)->assertExists($medium->path('medium'));
-        Storage::disk($medium->disk)->assertExists($medium->path('thumb'));
+        Storage::disk($medium->disk)->assertExists($medium->getPath());
+        Storage::disk($medium->disk)->assertExists($medium->getPath('medium'));
+        Storage::disk($medium->disk)->assertExists($medium->getPath('thumb'));
 
         $medium->delete();
 

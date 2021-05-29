@@ -28,7 +28,7 @@ class MediaTest extends TestCase
 
         $this->medium = Medium::factory()->create();
 
-        Storage::disk($this->medium->disk)->put($this->medium->path(), 'fake content');
+        Storage::disk($this->medium->disk)->put($this->medium->getPath(), 'fake content');
     }
 
     /** @test */
@@ -109,7 +109,7 @@ class MediaTest extends TestCase
     /** @test */
     public function an_admin_can_destroy_medium()
     {
-        Storage::disk($this->medium->disk)->assertExists($this->medium->path());
+        Storage::disk($this->medium->disk)->assertExists($this->medium->getPath());
 
         $this->actingAs($this->user)
             ->delete(URL::route('bazar.media.destroy', $this->medium))
@@ -120,7 +120,7 @@ class MediaTest extends TestCase
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 
-        Storage::disk($this->medium->disk)->assertMissing($this->medium->path());
+        Storage::disk($this->medium->disk)->assertMissing($this->medium->getPath());
 
         $this->assertDatabaseMissing('bazar_media', ['id' => $this->medium->id]);
     }
@@ -128,7 +128,7 @@ class MediaTest extends TestCase
     /** @test */
     public function an_admin_can_batch_destroy_media()
     {
-        Storage::disk($this->medium->disk)->assertExists($this->medium->path());
+        Storage::disk($this->medium->disk)->assertExists($this->medium->getPath());
 
         $this->actingAs($this->user)
             ->delete(URL::route('bazar.media.batch-destroy'))
@@ -139,7 +139,7 @@ class MediaTest extends TestCase
             ->assertOk()
             ->assertExactJson(['deleted' => true]);
 
-        Storage::disk($this->medium->disk)->assertMissing($this->medium->path());
+        Storage::disk($this->medium->disk)->assertMissing($this->medium->getPath());
 
         $this->assertDatabaseMissing('bazar_media', ['id' => $this->medium->id]);
     }

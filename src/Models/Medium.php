@@ -150,9 +150,9 @@ class Medium extends Model implements Contract
 
         return array_reduce($conversions, function (array $urls, string $name): array {
             return $this->convertable()
-                ? array_merge($urls, [$name => $this->url($name)])
+                ? array_merge($urls, [$name => $this->getUrl($name)])
                 : $urls;
-        }, ['original' => $this->url()]);
+        }, ['original' => $this->getUrl()]);
     }
 
     /**
@@ -181,7 +181,7 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function path(?string $conversion = null): string
+    public function getPath(?string $conversion = null): string
     {
         $path = "{$this->id}/{$this->file_name}";
 
@@ -198,13 +198,13 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function fullPath(?string $conversion = null): string
+    public function getFullPath(?string $conversion = null): string
     {
         if (! in_array($this->disk, ['local', 'public'])) {
-            return $this->url($conversion);
+            return $this->getUrl($conversion);
         }
 
-        return Storage::disk($this->disk)->path($this->path($conversion));
+        return Storage::disk($this->disk)->path($this->getPath($conversion));
     }
 
     /**
@@ -213,9 +213,9 @@ class Medium extends Model implements Contract
      * @param  string|null  $conversion
      * @return string
      */
-    public function url(?string $conversion = null): string
+    public function getUrl(?string $conversion = null): string
     {
-        return URL::to(Storage::disk($this->disk)->url($this->path($conversion)));
+        return URL::to(Storage::disk($this->disk)->url($this->getPath($conversion)));
     }
 
     /**

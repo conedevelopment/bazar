@@ -60,7 +60,7 @@ class Image
 
         $this->path = Storage::disk('local')->path('bazar-tmp/'.Str::random(40));
 
-        $this->type = exif_imagetype($medium->fullPath());
+        $this->type = exif_imagetype($medium->getFullPath());
 
         $this->create();
     }
@@ -70,7 +70,7 @@ class Image
      *
      * @return string
      */
-    public function path(): string
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -81,7 +81,7 @@ class Image
      * @param  int  $width
      * @return $this
      */
-    public function width(int $width): Image
+    public function setWidth(int $width): Image
     {
         $this->attributes['width'] = $width;
 
@@ -94,7 +94,7 @@ class Image
      * @param  int  $height
      * @return $this
      */
-    public function height(int $height): Image
+    public function setHeight(int $height): Image
     {
         $this->attributes['height'] = $height;
 
@@ -107,7 +107,7 @@ class Image
      * @param  int  $quality
      * @return $this
      */
-    public function quality(int $quality): Image
+    public function setQuality(int $quality): Image
     {
         $this->attributes['quality'] = $quality;
 
@@ -139,7 +139,7 @@ class Image
     public function resize(?int $width = null, ?int $height = null, bool $crop = false): Image
     {
         $x = $y = 0;
-        [$originalWidth, $originalHeight] = getimagesize($this->medium->fullPath());
+        [$originalWidth, $originalHeight] = getimagesize($this->medium->getFullPath());
 
         $width = $width ?: $this->attributes['width'];
         $width = $width ? min($width, $originalWidth) : $originalWidth;
@@ -214,16 +214,16 @@ class Image
     {
         switch ($this->type) {
             case IMAGETYPE_GIF:
-                $this->resource = imagecreatefromgif($this->medium->fullPath());
+                $this->resource = imagecreatefromgif($this->medium->getFullPath());
                 break;
             case IMAGETYPE_JPEG:
-                $this->resource = imagecreatefromjpeg($this->medium->fullPath());
+                $this->resource = imagecreatefromjpeg($this->medium->getFullPath());
                 break;
             case IMAGETYPE_PNG:
-                $this->resource = imagecreatefrompng($this->medium->fullPath());
+                $this->resource = imagecreatefrompng($this->medium->getFullPath());
                 break;
             case IMAGETYPE_WEBP:
-                $this->resource = imagecreatefromwebp($this->medium->fullPath());
+                $this->resource = imagecreatefromwebp($this->medium->getFullPath());
                 break;
             default:
                 throw new Exception('The file type is not supported.');
