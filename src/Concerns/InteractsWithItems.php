@@ -208,30 +208,6 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the itemable model's subtotal.
-     *
-     * @return float
-     */
-    public function getSubtotal(): float
-    {
-        $value = $this->lineItems->sum(static function (LineItem $item): float {
-            return $item->getTotal();
-        });
-
-        return round($value < 0 ? 0 : $value, 2);
-    }
-
-    /**
-     * Get the formatted subtotal.
-     *
-     * @return string
-     */
-    public function getFormattedSubtotal(): string
-    {
-        return Str::currency($this->getSubtotal(), $this->getCurrency());
-    }
-
-    /**
      * Get the itemable model's total.
      *
      * @return float
