@@ -33,11 +33,7 @@ class VariantStoreRequest extends FormRequest
             'prices.*' => ['array'],
             'prices.*.*' => ['nullable', 'numeric', 'min:0'],
             'inventory' => ['array'],
-            'inventory.sku' => [
-                'nullable',
-                'string',
-                Rule::unique('bazar_variants', 'inventory->sku'),
-            ],
+            'inventory.sku' => ['nullable', 'unique:bazar_variants,inventory->sku'],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],
             'inventory.length' => ['nullable', 'numeric', 'min:0'],

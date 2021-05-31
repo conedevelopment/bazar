@@ -35,7 +35,6 @@ class VariantUpdateRequest extends FormRequest
             'inventory' => ['array'],
             'inventory.sku' => [
                 'nullable',
-                'string',
                 Rule::unique('bazar_variants', 'inventory->sku')->ignoreModel($this->route('variant')),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],

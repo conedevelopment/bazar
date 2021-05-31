@@ -63,7 +63,7 @@
                         <data-form-input
                             type="number"
                             min="0"
-                            step="0.1"
+                            step="0.01"
                             :name="`form.data.prices.${currency}.default`"
                             :label="__('Price (:symbol)', { symbol })"
                             v-model="form.data.prices[currency].default"
@@ -73,7 +73,7 @@
                         <data-form-input
                             type="number"
                             min="0"
-                            step="0.1"
+                            step="0.01"
                             :name="`form.data.prices.${currency}.sale`"
                             :label="__('Sale Price (:symbol)', { symbol })"
                             v-model="form.data.prices[currency].sale"

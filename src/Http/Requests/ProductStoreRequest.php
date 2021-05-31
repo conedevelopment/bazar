@@ -2,8 +2,6 @@
 
 namespace Bazar\Http\Requests;
 
-use Illuminate\Validation\Rule;
-
 class ProductStoreRequest extends FormRequest
 {
     /**
@@ -15,11 +13,7 @@ class ProductStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string'],
-            'slug' => [
-                'nullable',
-                'string',
-                Rule::unique('bazar_products'),
-            ],
+            'slug' => ['nullable', 'string', 'unique:bazar_products'],
             'description' => ['nullable', 'string'],
             'properties' => ['nullable', 'array'],
             'properties.*' => ['required', 'array'],
@@ -27,11 +21,7 @@ class ProductStoreRequest extends FormRequest
             'prices.*' => ['array'],
             'prices.*.*' => ['nullable', 'numeric', 'min:0'],
             'inventory' => ['array'],
-            'inventory.sku' => [
-                'nullable',
-                'string',
-                Rule::unique('bazar_products', 'inventory->sku'),
-            ],
+            'inventory.sku' => ['nullable', 'unique:bazar_products,inventory->sku'],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
             'inventory.weight' => ['nullable', 'numeric', 'min:0'],
             'inventory.length' => ['nullable', 'numeric', 'min:0'],

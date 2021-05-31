@@ -29,7 +29,6 @@ class ProductUpdateRequest extends FormRequest
             'inventory' => ['array'],
             'inventory.sku' => [
                 'nullable',
-                'string',
                 Rule::unique('bazar_products', 'inventory->sku')->ignoreModel($this->route('product')),
             ],
             'inventory.quantity' => ['nullable', 'numeric', 'min:0'],
