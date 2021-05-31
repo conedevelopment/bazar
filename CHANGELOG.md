@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.1 (2021-05-31)
+
+- Renamed methods in getter/setter style
+- Fixed SKU validation ([#166](https://github.com/conedevelopment/bazar/issues/166))
+- Fixed price input decimal issue ([#165](https://github.com/conedevelopment/bazar/issues/165))
+
 ## v0.9.0 (2021-05-28)
 
 - Added the `Bazar\Contracts\Buyable` interface
