@@ -25,20 +25,18 @@
         <div class="col-12 col-md-6 d-md-flex align-items-center justify-content-end">
             <nav class="d-flex justify-content-center">
                 <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item" :class="{ 'disabled': ! hasPrev }">
-                        <button type="button" class="page-link" :disabled="! hasPrev" @click="prev">
-                            {{ __('Previous') }}
-                        </button>
-                    </li>
-                    <li v-for="page in pages" class="page-item" :key="page" :class="{ 'active': isCurrent(page) }">
-                        <button type="button" class="page-link" :disabled="isCurrent(page)" @click="to(page)">
-                            {{ page }}
-                            <span v-if="isCurrent(page)" class="sr-only">(current)</span>
-                        </button>
-                    </li>
-                    <li class="page-item" :class="{ 'disabled': ! hasNext }">
-                        <button type="button" class="page-link" :disabled="! hasNext" @click="next">
-                            {{ __('Next') }}
+                    <li
+                        v-for="(link, index) in links"
+                        class="page-item"
+                        :key="index"
+                        :class="{ 'active': link.active, 'disabled': ! link.url }"
+                    >
+                        <inertia-link v-if="link.url" class="page-link" :href="link.url" :disabled="link.active">
+                            <span v-html="link.label"></span>
+                            <span v-if="link.active" class="sr-only">(current)</span>
+                        </inertia-link>
+                        <button v-else type="button" class="page-link" disabled>
+                            <span v-html="link.label"></span>
                         </button>
                     </li>
                 </ul>
@@ -48,9 +46,14 @@
 </template>
 
 <script>
-    import Pagable from './../../Mixins/Pagable';
-
     export default {
-        mixins: [Pagable],
+        computed: {
+            total() {
+                return this.$parent.response.total || 0;
+            },
+            links() {
+                return this.$parent.response.links;
+            },
+        },
     }
 </script>

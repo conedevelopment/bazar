@@ -83,6 +83,7 @@
                 this.chunks.shift();
 
                 if (this.chunks.length === 0) {
+                    this.$parent.response.total++;
                     this.$parent.response.data.unshift(response);
                     this.$parent.queue.splice(this.$parent.queue.indexOf(this.file), 1);
                 }

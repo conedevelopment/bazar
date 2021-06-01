@@ -22,26 +22,20 @@
         </div>
         <nav :aria-label="__('Pagination')">
             <ul class="pagination pagination-sm">
-                <li class="page-item" :class="{ 'disabled': ! hasPrev || $parent.busy }">
-                    <button type="button" class="page-link" :disabled="! hasPrev || $parent.busy" @click="prev">
-                        {{ __('Previous') }}
-                    </button>
-                </li>
                 <li
-                    v-for="page in pages"
+                    v-for="(link, index) in links"
                     class="page-item"
-                    aria-current="page"
-                    :key="page"
-                    :class="{ 'active': isCurrent(page) }"
+                    :key="index"
+                    :class="{ 'active': link.active, 'disabled': ! link.url || $parent.processing }"
                 >
-                    <button type="button" class="page-link" :disabled="isCurrent(page) || $parent.busy" @click="to(page)">
-                        {{ page }}
-                        <span v-if="isCurrent(page)" class="sr-only">(current)</span>
-                    </button>
-                </li>
-                <li class="page-item" :class="{ 'disabled': ! hasNext || $parent.busy }">
-                    <button type="button" class="page-link" :disabled="! hasNext || $parent.busy" @click="next">
-                        {{ __('Next') }}
+                    <button
+                        type="button"
+                        class="page-link"
+                        :disabled="link.active || $parent.processing"
+                        @click="to(link.url)"
+                    >
+                        <span v-html="link.label"></span>
+                        <span v-if="link.active" class="sr-only">(current)</span>
                     </button>
                 </li>
             </ul>
@@ -50,9 +44,27 @@
 </template>
 
 <script>
-    import Pagable from './../../Mixins/Pagable';
-
     export default {
-        mixins: [Pagable],
+        computed: {
+            total() {
+                return this.$parent.response.total || 0;
+            },
+            links() {
+                return this.$parent.response.links;
+            },
+        },
+
+        methods: {
+            to(url) {
+                let query = {};
+                const params = new URL(url);
+
+                for (const [key, value] of params.searchParams) {
+                    query[key] = value;
+                }
+
+                Object.assign(this.$parent.query, query);
+            },
+        },
     }
 </script>
