@@ -40,7 +40,8 @@ class AddressesController extends Controller
         $addresses = $user->addresses()
                         ->filter($request)
                         ->latest()
-                        ->paginate($request->input('per_page'));
+                        ->paginate($request->input('per_page'))
+                        ->withQueryString();
 
         return Inertia::render('Addresses/Index', [
             'user' => $user,

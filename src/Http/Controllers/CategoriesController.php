@@ -41,7 +41,8 @@ class CategoriesController extends Controller
                         ->with('media')
                         ->filter($request)
                         ->latest()
-                        ->paginate($request->input('per_page'));
+                        ->paginate($request->input('per_page'))
+                        ->withQueryString();
 
         return Inertia::render('Categories/Index', [
             'response' => $categories,

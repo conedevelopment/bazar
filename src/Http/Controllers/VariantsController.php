@@ -43,7 +43,8 @@ class VariantsController extends Controller
                         ->with('media')
                         ->filter($request)
                         ->latest()
-                        ->paginate($request->input('per_page'));
+                        ->paginate($request->input('per_page'))
+                        ->withQueryString();
 
         $variants->getCollection()->each(static function (Variant $variant) use ($product): void {
             $variant->setRelation('product', $product->withoutRelations()->makeHidden('variants'));

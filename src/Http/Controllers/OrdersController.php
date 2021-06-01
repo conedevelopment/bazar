@@ -49,7 +49,8 @@ class OrdersController extends Controller
                     ->with(['address', 'items', 'transactions', 'shipping'])
                     ->filter($request)
                     ->latest()
-                    ->paginate($request->input('per_page'));
+                    ->paginate($request->input('per_page'))
+                    ->withQueryString();
 
         return Inertia::render('Orders/Index', [
             'response' => $orders,

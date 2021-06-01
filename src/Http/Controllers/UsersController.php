@@ -41,7 +41,8 @@ class UsersController extends Controller
                     ->with('addresses')
                     ->filter($request)
                     ->latest()
-                    ->paginate($request->input('per_page'));
+                    ->paginate($request->input('per_page'))
+                    ->withQueryString();
 
         return $request->expectsJson()
             ? ResponseFactory::json($users)

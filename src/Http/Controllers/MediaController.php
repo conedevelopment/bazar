@@ -11,7 +11,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
@@ -42,9 +41,10 @@ class MediaController extends Controller
                     ->newQuery()
                     ->filter($request)
                     ->latest()
-                    ->paginate($request->input('per_page'));
+                    ->paginate($request->input('per_page'))
+                    ->withQueryString();
 
-        return Response::json($media);
+        return new JsonResponse($media);
     }
 
     /**
@@ -62,7 +62,7 @@ class MediaController extends Controller
         File::append($path, $file->get());
 
         if ($request->has('is_last') && ! $request->boolean('is_last')) {
-            return Response::json(['uploaded' => true]);
+            return new JsonResponse(['uploaded' => true]);
         }
 
         $medium = Medium::proxy()::createFrom($path);
@@ -70,7 +70,7 @@ class MediaController extends Controller
         MoveFile::withChain($medium->convertable() ? [new PerformConversions($medium)] : [])
                 ->dispatch($medium, $path);
 
-        return Response::json($medium, JsonResponse::HTTP_CREATED);
+        return new JsonResponse($medium, JsonResponse::HTTP_CREATED);
     }
 
     /**
@@ -81,7 +81,7 @@ class MediaController extends Controller
      */
     public function show(Medium $medium): JsonResponse
     {
-        return Response::json($medium);
+        return new JsonResponse($medium);
     }
 
     /**
@@ -95,7 +95,7 @@ class MediaController extends Controller
     {
         $medium->update($request->validated());
 
-        return Response::json(['updated' => true]);
+        return new JsonResponse(['updated' => true]);
     }
 
     /**
@@ -108,6 +108,6 @@ class MediaController extends Controller
     {
         $medium->delete();
 
-        return Response::json(['deleted' => true]);
+        return new JsonResponse(['deleted' => true]);
     }
 }
