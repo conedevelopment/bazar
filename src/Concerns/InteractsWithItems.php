@@ -308,9 +308,20 @@ trait InteractsWithItems
         ]);
 
         return $this->items->first(static function (Item $item) use ($attributes): bool {
+            $attributesFlattened = Arr::dot($attributes);
+            $itemFlattened = Arr::dot($item->withoutRelations()->toArray());
+
+            if(empty($attributesFlattened['properties'])) {
+                $attributesFlattened['properties'] = '';
+            }
+    
+            if(empty($itemFlattened['properties'])) {
+                $itemFlattened['properties'] = '';
+            }
+         
             return empty(array_diff(
-                Arr::dot($attributes),
-                Arr::dot($item->withoutRelations()->toArray())
+                $attributesFlattened,
+                $itemFlattened,
             ));
         });
     }
