@@ -91,6 +91,19 @@ class CartManagerTest extends TestCase
     }
 
     /** @test */
+    public function a_manager_can_add_products_without_attributs()
+    {
+        $this->manager->addItem($this->product);
+
+        $product = $this->manager->getModel()->findItem([
+            'properties' => [],
+        ]);
+
+        $this->assertEquals(100, $product->price);
+        $this->assertEquals(3, $product->quantity);
+    }
+
+    /** @test */
     public function a_manager_can_remove_items()
     {
         $item = $this->manager->getModel()->findItem([
