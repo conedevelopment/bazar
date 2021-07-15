@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Console\Commands;
+namespace Cone\Bazar\Console\Commands;
 
-use Bazar\BazarServiceProvider;
+use Cone\Bazar\BazarServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 

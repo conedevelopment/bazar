@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Models\Address;
+use Cone\Bazar\Models\Address;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

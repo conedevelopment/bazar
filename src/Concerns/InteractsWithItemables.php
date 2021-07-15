@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Models\Cart;
-use Bazar\Models\Item;
-use Bazar\Models\Order;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Order;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 

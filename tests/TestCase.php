@@ -1,15 +1,15 @@
 <?php
 
-namespace Bazar\Tests;
+namespace Cone\Bazar\Tests;
 
-use Bazar\Models\Address;
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
-use Bazar\Models\User;
-use Bazar\Models\Variant;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Models\User;
+use Cone\Bazar\Models\Variant;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Gate;

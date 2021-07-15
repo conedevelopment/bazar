@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Rules\MatchingPassword;
+use Cone\Bazar\Rules\MatchingPassword;
 
 class PasswordUpdateRequest extends FormRequest
 {

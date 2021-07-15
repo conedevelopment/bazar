@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts\Conversion;
+namespace Cone\Bazar\Contracts\Conversion;
 
-use Bazar\Conversion\GdDriver;
+use Cone\Bazar\Conversion\GdDriver;
 use Closure;
 
 interface Manager
@@ -34,7 +34,7 @@ interface Manager
     /**
      * Create the GD driver.
      *
-     * @return \Bazar\Conversion\GdDriver
+     * @return \Cone\Bazar\Conversion\GdDriver
      */
     public function createGdDriver(): GdDriver;
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Repositories;
+namespace Cone\Bazar\Repositories;
 
-use Bazar\Contracts\Discount;
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Repositories\DiscountRepository as Contract;
+use Cone\Bazar\Contracts\Discount;
+use Cone\Bazar\Contracts\Discountable;
+use Cone\Bazar\Contracts\Repositories\DiscountRepository as Contract;
 use Closure;
 
 class DiscountRepository extends Repository implements Contract
@@ -51,7 +51,7 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Calculate the total of the processed discounts.
      *
-     * @param  \Bazar\Contracts\Discountable  $model
+     * @param  \Cone\Bazar\Contracts\Discountable  $model
      * @return float
      */
     public function calculate(Discountable $model): float
@@ -66,8 +66,8 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Process the calculation.
      *
-     * @param  \Bazar\Contracts\Discountable  $model
-     * @param  string|float|\Closure|\Bazar\Contracts\Discount  $discount
+     * @param  \Cone\Bazar\Contracts\Discountable  $model
+     * @param  string|float|\Closure|\Cone\Bazar\Contracts\Discount  $discount
      * @return float
      */
     protected function process(Discountable $model, $discount): float

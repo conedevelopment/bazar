@@ -1,17 +1,17 @@
 <?php
 
-namespace Bazar\Contracts;
+namespace Cone\Bazar\Contracts;
 
-use Bazar\Models\Item;
+use Cone\Bazar\Models\Item;
 
 interface Buyable
 {
     /**
      * Get the item representation of the buyable instance.
      *
-     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  \Cone\Bazar\Contracts\Itemable  $itemable
      * @param  array  $attributes
-     * @return \Bazar\Models\Item
+     * @return \Cone\Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item;
 }

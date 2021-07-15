@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
 use ArrayIterator;
-use Bazar\Bazar;
-use Bazar\Casts\Inventory;
-use Bazar\Support\Countries;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Casts\Inventory;
+use Cone\Bazar\Support\Countries;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
 class SupportTest extends TestCase

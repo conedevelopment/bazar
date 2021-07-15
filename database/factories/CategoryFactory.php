@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Database\Factories;
+namespace Cone\Bazar\Database\Factories;
 
-use Bazar\Models\Category;
+use Cone\Bazar\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 

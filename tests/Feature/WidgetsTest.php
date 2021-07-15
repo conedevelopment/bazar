@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Models\Order;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\URL;
 

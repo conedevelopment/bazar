@@ -1,15 +1,15 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Conversion\Manager;
+use Cone\Bazar\Contracts\Conversion\Manager;
 use Closure;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Bazar\Models\Medium perform(\Bazar\Models\Medium $medium)
+ * @method static \Cone\Bazar\Models\Medium perform(\Cone\Bazar\Models\Medium $medium)
  *
- * @see \Bazar\Contracts\Conversion\Manager
+ * @see \Cone\Bazar\Contracts\Conversion\Manager
  */
 class Conversion extends Facade
 {

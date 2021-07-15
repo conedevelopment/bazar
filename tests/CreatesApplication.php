@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Tests;
+namespace Cone\Bazar\Tests;
 
-use Bazar\BazarServiceProvider;
+use Cone\Bazar\BazarServiceProvider;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 

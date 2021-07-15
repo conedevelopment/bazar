@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Rules\Option;
+use Cone\Bazar\Rules\Option;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 

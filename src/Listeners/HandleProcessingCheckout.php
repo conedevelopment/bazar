@@ -1,15 +1,15 @@
 <?php
 
-namespace Bazar\Listeners;
+namespace Cone\Bazar\Listeners;
 
-use Bazar\Events\CheckoutProcessing;
+use Cone\Bazar\Events\CheckoutProcessing;
 
 class HandleProcessingCheckout
 {
     /**
      * Handle the event.
      *
-     * @param  \Bazar\Events\CheckoutProcessing  $event
+     * @param  \Cone\Bazar\Events\CheckoutProcessing  $event
      * @return void
      */
     public function handle(CheckoutProcessing $event): void

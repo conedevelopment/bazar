@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Cart;
+namespace Cone\Bazar\Cart;
 
-use Bazar\Contracts\Cart\Manager as Contract;
+use Cone\Bazar\Contracts\Cart\Manager as Contract;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract
@@ -20,7 +20,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the cookie driver.
      *
-     * @return \Bazar\Cart\CookieDriver
+     * @return \Cone\Bazar\Cart\CookieDriver
      */
     public function createCookieDriver(): CookieDriver
     {
@@ -32,7 +32,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the session driver.
      *
-     * @return \Bazar\Cart\SessionDriver
+     * @return \Cone\Bazar\Cart\SessionDriver
      */
     public function createSessionDriver(): SessionDriver
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Controllers\Batch;
+namespace Cone\Bazar\Http\Controllers\Batch;
 
-use Bazar\Http\Controllers\Controller;
-use Bazar\Models\Address;
-use Bazar\Models\User;
+use Cone\Bazar\Http\Controllers\Controller;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -31,7 +31,7 @@ class AddressesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, User $user): RedirectResponse
@@ -52,7 +52,7 @@ class AddressesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, User $user): RedirectResponse

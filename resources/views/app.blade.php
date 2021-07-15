@@ -15,7 +15,7 @@
     {{-- Styles --}}
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600&display=swap" rel="stylesheet">
     <link href="{{ URL::asset('vendor/bazar/app.css') }}" rel="stylesheet">
-    @foreach(Bazar\Support\Facades\Asset::styles() as $style)
+    @foreach(Cone\Bazar\Support\Facades\Asset::styles() as $style)
         <link href="{{ $style['url'] }}" rel="stylesheet">
     @endforeach
 
@@ -30,7 +30,7 @@
         };
     </script>
     <script src="{{ URL::asset('vendor/bazar/app.js') }}" defer></script>
-    @foreach(Bazar\Support\Facades\Asset::scripts() as $script)
+    @foreach(Cone\Bazar\Support\Facades\Asset::scripts() as $script)
         <script src="{{ $script['url'] }}" defer></script>
     @endforeach
     <script>

@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Jobs;
+namespace Cone\Bazar\Jobs;
 
-use Bazar\Models\Order;
-use Bazar\Models\User;
-use Bazar\Notifications\AdminNewOrder;
-use Bazar\Notifications\CustomerNewOrder;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\User;
+use Cone\Bazar\Notifications\AdminNewOrder;
+use Cone\Bazar\Notifications\CustomerNewOrder;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
@@ -19,7 +19,7 @@ class SendNewOrderNotifications
     /**
      * The order instance.
      *
-     * @var \Bazar\Models\Order
+     * @var \Cone\Bazar\Models\Order
      */
     public Order $order;
 
@@ -33,7 +33,7 @@ class SendNewOrderNotifications
     /**
      * Create a new job instance.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)

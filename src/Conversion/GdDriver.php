@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Conversion;
+namespace Cone\Bazar\Conversion;
 
-use Bazar\Models\Medium;
-use Bazar\Support\Facades\Conversion;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Support\Facades\Conversion;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -13,8 +13,8 @@ class GdDriver extends Driver
     /**
      * Perform the registered conversions on the medium.
      *
-     * @param  \Bazar\Models\Medium  $medium
-     * @return \Bazar\Models\Medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
+     * @return \Cone\Bazar\Models\Medium
      *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
@@ -46,8 +46,8 @@ class GdDriver extends Driver
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
-     * @return \Bazar\Conversion\Image
+     * @param  \Cone\Bazar\Models\Medium  $medium
+     * @return \Cone\Bazar\Conversion\Image
      */
     protected function createImage(Medium $medium): Image
     {

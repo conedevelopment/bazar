@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Repositories;
+namespace Cone\Bazar\Repositories;
 
-use Bazar\Contracts\Repositories\MenuRepository as Contract;
+use Cone\Bazar\Contracts\Repositories\MenuRepository as Contract;
 use Illuminate\Support\Str;
 
 class MenuRepository extends Repository implements Contract

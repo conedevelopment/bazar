@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

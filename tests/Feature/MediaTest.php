@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Jobs\MoveFile;
-use Bazar\Jobs\PerformConversions;
-use Bazar\Models\Medium;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Jobs\MoveFile;
+use Cone\Bazar\Jobs\PerformConversions;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;

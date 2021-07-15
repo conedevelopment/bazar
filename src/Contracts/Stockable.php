@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Contracts;
+namespace Cone\Bazar\Contracts;
 
 interface Stockable extends Priceable, Inventoryable
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace Bazar\Database\Seeders;
+namespace Cone\Bazar\Database\Seeders;
 
-use Bazar\Jobs\MoveFile;
-use Bazar\Jobs\PerformConversions;
-use Bazar\Models\Address;
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
-use Bazar\Models\User;
+use Cone\Bazar\Jobs\MoveFile;
+use Cone\Bazar\Jobs\PerformConversions;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Repositories;
+namespace Cone\Bazar\Repositories;
 
-use Bazar\BazarServiceProvider;
-use Bazar\Contracts\Repositories\AssetRepository as Contract;
+use Cone\Bazar\BazarServiceProvider;
+use Cone\Bazar\Contracts\Repositories\AssetRepository as Contract;
 use Illuminate\Support\Facades\URL;
 
 class AssetRepository extends Repository implements Contract

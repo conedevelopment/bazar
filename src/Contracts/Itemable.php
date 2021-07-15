@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts;
+namespace Cone\Bazar\Contracts;
 
-use Bazar\Models\Item;
+use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
@@ -91,15 +91,15 @@ interface Itemable extends Shippable
      * Find an item by its attributes or make a new instance.
      *
      * @param  array  $attributes
-     * @return \Bazar\Models\Item|null
+     * @return \Cone\Bazar\Models\Item|null
      */
     public function findItem(array $attributes): ?Item;
 
     /**
      * Merge the given item into the collection.
      *
-     * @param  \Bazar\Models\Item  $items
-     * @return \Bazar\Models\Item
+     * @param  \Cone\Bazar\Models\Item  $items
+     * @return \Cone\Bazar\Models\Item
      */
     public function mergeItem(Item $item): Item;
 

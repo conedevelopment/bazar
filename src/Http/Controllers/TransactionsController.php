@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\TransactionStoreRequest as StoreRequest;
-use Bazar\Http\Requests\TransactionUpdateRequest as UpdateRequest;
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Http\Requests\TransactionStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\TransactionUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
@@ -31,8 +31,8 @@ class TransactionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\TransactionStoreRequest  $request
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Http\Requests\TransactionStoreRequest  $request
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -58,9 +58,9 @@ class TransactionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\TransactionUpdateRequest  $request
-     * @param  \Bazar\Models\Order  $order
-     * @param  \Bazar\Models\Transaction  $transaction
+     * @param  \Cone\Bazar\Http\Requests\TransactionUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Transaction  $transaction
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateRequest $request, Order $order, Transaction $transaction): JsonResponse
@@ -77,8 +77,8 @@ class TransactionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Order  $order
-     * @param  \Bazar\Models\Transaction  $transaction
+     * @param  \Cone\Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Transaction  $transaction
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Order $order, Transaction $transaction): JsonResponse

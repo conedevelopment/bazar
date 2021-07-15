@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Support\Facades\Asset;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Support\Facades\Asset;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
 
 class AssetRepositoryTest extends TestCase

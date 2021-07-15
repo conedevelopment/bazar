@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Conversion;
+namespace Cone\Bazar\Conversion;
 
-use Bazar\Contracts\Conversion\Manager as Contract;
+use Cone\Bazar\Contracts\Conversion\Manager as Contract;
 use Closure;
 use Illuminate\Support\Manager as BaseManager;
 
@@ -61,7 +61,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the GD driver.
      *
-     * @return \Bazar\Conversion\GdDriver
+     * @return \Cone\Bazar\Conversion\GdDriver
      */
     public function createGdDriver(): GdDriver
     {

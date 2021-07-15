@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Jobs;
+namespace Cone\Bazar\Jobs;
 
-use Bazar\Models\Medium;
+use Cone\Bazar\Models\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -20,7 +20,7 @@ class PerformConversions implements ShouldQueue
     /**
      * The medium instance.
      *
-     * @var \Bazar\Models\Medium
+     * @var \Cone\Bazar\Models\Medium
      */
     public Medium $medium;
 
@@ -34,7 +34,7 @@ class PerformConversions implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)

@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Bazar;
-use Bazar\Contracts\LineItem;
-use Bazar\Contracts\Stockable;
-use Bazar\Models\Item;
-use Bazar\Models\Shipping;
-use Bazar\Models\User;
-use Bazar\Support\Facades\Shipping as ShippingManager;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Contracts\LineItem;
+use Cone\Bazar\Contracts\Stockable;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\User;
+use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -82,7 +82,7 @@ trait InteractsWithItems
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Models\Shipping
+     * @return \Cone\Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping
     {
@@ -298,7 +298,7 @@ trait InteractsWithItems
      * Find an item by its attributes or make a new instance.
      *
      * @param  array  $attributes
-     * @return \Bazar\Models\Item|null
+     * @return \Cone\Bazar\Models\Item|null
      */
     public function findItem(array $attributes): ?Item
     {
@@ -318,8 +318,8 @@ trait InteractsWithItems
     /**
      * Merge the given item into the collection.
      *
-     * @param  \Bazar\Models\Item  $items
-     * @return \Bazar\Models\Item
+     * @param  \Cone\Bazar\Models\Item  $items
+     * @return \Cone\Bazar\Models\Item
      */
     public function mergeItem(Item $item): Item
     {

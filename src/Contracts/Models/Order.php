@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Contracts\Discountable;
+use Cone\Bazar\Contracts\Itemable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -30,7 +30,7 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      * @param  float|null  $amount
      * @param  string|null  $driver
      * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
+     * @return \Cone\Bazar\Models\Transaction
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
@@ -40,7 +40,7 @@ interface Order extends Breadcrumbable, Discountable, Itemable
      * @param  float|null  $amount
      * @param  string|null  $driver
      * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
+     * @return \Cone\Bazar\Models\Transaction
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 

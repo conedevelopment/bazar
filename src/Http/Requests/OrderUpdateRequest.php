@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Models\Order;
+use Cone\Bazar\Models\Order;
 use Illuminate\Validation\Rule;
 
 class OrderUpdateRequest extends FormRequest

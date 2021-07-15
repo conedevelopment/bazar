@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Conversion;
+namespace Cone\Bazar\Conversion;
 
-use Bazar\Models\Medium;
+use Cone\Bazar\Models\Medium;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -12,7 +12,7 @@ class Image
     /**
      * The medium instance.
      *
-     * @var \Bazar\Models\Medium
+     * @var \Cone\Bazar\Models\Medium
      */
     protected Medium $medium;
 
@@ -51,7 +51,7 @@ class Image
     /**
      * Create a new image instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @return void
      */
     public function __construct(Medium $medium)

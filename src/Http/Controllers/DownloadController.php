@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Controllers\Controller;
+use Cone\Bazar\Http\Controllers\Controller;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;

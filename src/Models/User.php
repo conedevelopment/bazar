@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\User as Contract;
-use Bazar\Database\Factories\UserFactory;
+use Cone\Bazar\Concerns\BazarRoutable;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\User as Contract;
+use Cone\Bazar\Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -106,7 +106,7 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\UserFactory|null
+     * @return \Cone\Bazar\Database\Factories\UserFactory|null
      */
     protected static function newFactory(): ?UserFactory
     {
@@ -156,7 +156,7 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     /**
      * Get the address attribute.
      *
-     * @return \Bazar\Models\Address|null
+     * @return \Cone\Bazar\Models\Address|null
      */
     public function getAddressAttribute(): ?Address
     {

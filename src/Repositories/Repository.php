@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Repositories;
+namespace Cone\Bazar\Repositories;
 
 use Illuminate\Support\Collection;
 

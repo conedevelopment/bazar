@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Console\Commands;
+namespace Cone\Bazar\Console\Commands;
 
-use Bazar\Database\Seeders\BazarSeeder;
+use Cone\Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
 
 class Install extends Command

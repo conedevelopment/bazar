@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Tests\TestCase;
 
 class VariantTest extends TestCase
 {

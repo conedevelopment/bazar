@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Contracts\Cart;
+namespace Cone\Bazar\Contracts\Cart;
 
 interface Manager
 {

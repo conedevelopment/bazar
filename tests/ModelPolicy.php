@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Tests;
+namespace Cone\Bazar\Tests;
 
-use Bazar\Models\User;
+use Cone\Bazar\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ModelPolicy
@@ -12,7 +12,7 @@ class ModelPolicy
     /**
      * Determine whether the user can perform any actions.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  string  $ability
      * @return mixed
      */
@@ -26,7 +26,7 @@ class ModelPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return mixed
      */
     public function viewAny(User $user)
@@ -37,7 +37,7 @@ class ModelPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  mixed  $model
      * @return mixed
      */
@@ -49,7 +49,7 @@ class ModelPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return mixed
      */
     public function create(User $user)
@@ -60,7 +60,7 @@ class ModelPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  mixed  $model
      * @return mixed
      */
@@ -72,7 +72,7 @@ class ModelPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  mixed  $model
      * @return mixed
      */
@@ -84,7 +84,7 @@ class ModelPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  mixed  $model
      * @return mixed
      */
@@ -96,7 +96,7 @@ class ModelPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  mixed  $model
      * @return mixed
      */
@@ -108,7 +108,7 @@ class ModelPolicy
     /**
      * Determine whether the user can batch update the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return mixed
      */
     public function batchUpdate(User $user)
@@ -119,7 +119,7 @@ class ModelPolicy
     /**
      * Determine whether the user can batch delete the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return mixed
      */
     public function batchDelete(User $user)
@@ -130,7 +130,7 @@ class ModelPolicy
     /**
      * Determine whether the user can batch restore the model.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return mixed
      */
     public function batchRestore(User $user)

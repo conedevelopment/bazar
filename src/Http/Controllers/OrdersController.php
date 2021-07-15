@@ -1,19 +1,19 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Bazar;
-use Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
-use Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
-use Bazar\Models\Address;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\User;
-use Bazar\Support\Countries;
-use Bazar\Support\Facades\Discount;
-use Bazar\Support\Facades\Gateway;
-use Bazar\Support\Facades\Shipping;
-use Bazar\Support\Facades\Tax;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Http\Requests\OrderStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\OrderUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\User;
+use Cone\Bazar\Support\Countries;
+use Cone\Bazar\Support\Facades\Discount;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Support\Facades\Shipping;
+use Cone\Bazar\Support\Facades\Tax;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -84,7 +84,7 @@ class OrdersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\OrderStoreRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\OrderStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
@@ -108,7 +108,7 @@ class OrdersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return \Inertia\Response
      */
     public function show(Order $order): Response
@@ -125,8 +125,8 @@ class OrdersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\OrderUpdateRequest  $request
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Http\Requests\OrderUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Order $order): RedirectResponse
@@ -140,7 +140,7 @@ class OrdersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Order $order): RedirectResponse
@@ -154,7 +154,7 @@ class OrdersController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Order $order): RedirectResponse

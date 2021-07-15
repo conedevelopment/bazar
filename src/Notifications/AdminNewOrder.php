@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Notifications;
+namespace Cone\Bazar\Notifications;
 
-use Bazar\Models\Order;
+use Cone\Bazar\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -16,14 +16,14 @@ class AdminNewOrder extends Notification implements ShouldQueue
     /**
      * The order instance.
      *
-     * @var \Bazar\Models\Order
+     * @var \Cone\Bazar\Models\Order
      */
     protected Order $order;
 
     /**
      * Create a new notification instance.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)

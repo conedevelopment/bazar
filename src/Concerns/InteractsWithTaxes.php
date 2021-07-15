@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Bazar;
-use Bazar\Models\Item;
-use Bazar\Models\Shipping;
-use Bazar\Support\Facades\Tax;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Facades\Tax;
 use Illuminate\Support\Str;
 
 trait InteractsWithTaxes

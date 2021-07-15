@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Date;
 
 class CartTest extends TestCase

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Models\Medium;
+use Cone\Bazar\Models\Medium;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait HasMedia

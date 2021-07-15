@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Repositories\MenuRepository;
+use Cone\Bazar\Contracts\Repositories\MenuRepository;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static void remove(string $route)
  * @method static array items()
  *
- * @see \Bazar\Contracts\Repositories\MenuRepository
+ * @see \Cone\Bazar\Contracts\Repositories\MenuRepository
  */
 class Menu extends Facade
 {

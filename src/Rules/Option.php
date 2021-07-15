@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Rules;
+namespace Cone\Bazar\Rules;
 
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
 use Illuminate\Contracts\Validation\Rule;
 
 class Option implements Rule
@@ -11,22 +11,22 @@ class Option implements Rule
     /**
      * The product instance.
      *
-     * @var \Bazar\Models\Product
+     * @var \Cone\Bazar\Models\Product
      */
     protected Product $product;
 
     /**
      * The variant instance.
      *
-     * @var \Bazar\Models\Variant|null
+     * @var \Cone\Bazar\Models\Variant|null
      */
     protected ?Variant $variant = null;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variant|null  $variant
+     * @param  \Cone\Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Variant|null  $variant
      * @return void
      */
     public function __construct(Product $product, ?Variant $variant = null)

@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Taxable;
-use Bazar\Models\Cart;
-use Bazar\Models\Item;
-use Bazar\Models\Product;
-use Bazar\Support\Facades\Tax;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Taxable;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Support\Facades\Tax;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
 class ItemTest extends TestCase

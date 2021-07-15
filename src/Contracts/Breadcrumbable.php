@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Contracts;
+namespace Cone\Bazar\Contracts;
 
 use Illuminate\Http\Request;
 

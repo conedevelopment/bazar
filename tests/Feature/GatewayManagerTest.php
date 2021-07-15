@@ -1,20 +1,20 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Events\CheckoutProcessing;
-use Bazar\Gateway\CashDriver;
-use Bazar\Gateway\Driver;
-use Bazar\Gateway\Manager;
-use Bazar\Gateway\TransferDriver;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
-use Bazar\Notifications\AdminNewOrder;
-use Bazar\Notifications\CustomerNewOrder;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Events\CheckoutProcessing;
+use Cone\Bazar\Gateway\CashDriver;
+use Cone\Bazar\Gateway\Driver;
+use Cone\Bazar\Gateway\Manager;
+use Cone\Bazar\Gateway\TransferDriver;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Notifications\AdminNewOrder;
+use Cone\Bazar\Notifications\CustomerNewOrder;
+use Cone\Bazar\Tests\TestCase;
 use Exception;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Event;

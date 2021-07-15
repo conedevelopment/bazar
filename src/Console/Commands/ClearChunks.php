@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Console\Commands;
+namespace Cone\Bazar\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Support;
+namespace Cone\Bazar\Support;
 
 abstract class Countries
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Exceptions\ValidationException;
+use Cone\Bazar\Exceptions\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest as BaseFormRequest;
 use Illuminate\Support\Facades\Event;
@@ -38,7 +38,7 @@ abstract class FormRequest extends BaseFormRequest
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      *
-     * @throws \Bazar\Exceptions\ValidationException
+     * @throws \Cone\Bazar\Exceptions\ValidationException
      */
     protected function failedValidation(Validator $validator): void
     {

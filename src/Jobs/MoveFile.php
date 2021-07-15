@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Jobs;
+namespace Cone\Bazar\Jobs;
 
-use Bazar\Models\Medium;
+use Cone\Bazar\Models\Medium;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -22,7 +22,7 @@ class MoveFile implements ShouldQueue
     /**
      * The medium instance.
      *
-     * @var \Bazar\Models\Medium
+     * @var \Cone\Bazar\Models\Medium
      */
     public Medium $medium;
 
@@ -50,7 +50,7 @@ class MoveFile implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @param  string  $path
      * @param  bool  $preserve
      * @return void

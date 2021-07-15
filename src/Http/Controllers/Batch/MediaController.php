@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Http\Controllers\Batch;
+namespace Cone\Bazar\Http\Controllers\Batch;
 
-use Bazar\Http\Controllers\Controller;
-use Bazar\Models\Medium;
+use Cone\Bazar\Http\Controllers\Controller;
+use Cone\Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;

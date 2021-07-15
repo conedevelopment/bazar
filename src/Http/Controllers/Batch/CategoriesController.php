@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Http\Controllers\Batch;
+namespace Cone\Bazar\Http\Controllers\Batch;
 
-use Bazar\Http\Controllers\Controller;
-use Bazar\Models\Category;
+use Cone\Bazar\Http\Controllers\Controller;
+use Cone\Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;

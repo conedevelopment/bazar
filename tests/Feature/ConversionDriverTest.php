@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Contracts\Conversion\Manager;
-use Bazar\Conversion\GdDriver;
-use Bazar\Models\Medium;
-use Bazar\Support\Facades\Conversion;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Conversion\Manager;
+use Cone\Bazar\Conversion\GdDriver;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Support\Facades\Conversion;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;

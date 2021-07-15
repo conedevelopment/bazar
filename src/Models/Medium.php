@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Medium as Contract;
-use Bazar\Database\Factories\MediumFactory;
-use Bazar\Support\Facades\Conversion;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\Medium as Contract;
+use Cone\Bazar\Database\Factories\MediumFactory;
+use Cone\Bazar\Support\Facades\Conversion;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -97,7 +97,7 @@ class Medium extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\MediumFactory
+     * @return \Cone\Bazar\Database\Factories\MediumFactory
      */
     protected static function newFactory(): MediumFactory
     {

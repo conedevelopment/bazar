@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Bazar;
+use Cone\Bazar\Bazar;
 use Inertia\Inertia;
 use Inertia\Response;
 

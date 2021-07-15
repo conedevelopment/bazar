@@ -1,19 +1,19 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\HasMedia;
-use Bazar\Concerns\InteractsWithItemables;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithStock;
-use Bazar\Contracts\Itemable;
-use Bazar\Contracts\Models\Variant as Contract;
-use Bazar\Database\Factories\VariantFactory;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Casts\Inventory;
+use Cone\Bazar\Casts\Prices;
+use Cone\Bazar\Concerns\BazarRoutable;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\HasMedia;
+use Cone\Bazar\Concerns\InteractsWithItemables;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Concerns\InteractsWithStock;
+use Cone\Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Models\Variant as Contract;
+use Cone\Bazar\Database\Factories\VariantFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -96,7 +96,7 @@ class Variant extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\VariantFactory
+     * @return \Cone\Bazar\Database\Factories\VariantFactory
      */
     protected static function newFactory(): VariantFactory
     {
@@ -185,9 +185,9 @@ class Variant extends Model implements Contract
     /**
      * Get the item representation of the buyable instance.
      *
-     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  \Cone\Bazar\Contracts\Itemable  $itemable
      * @param  array  $attributes
-     * @return \Bazar\Models\Item
+     * @return \Cone\Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {

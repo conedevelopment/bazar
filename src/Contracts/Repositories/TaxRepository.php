@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts\Repositories;
+namespace Cone\Bazar\Contracts\Repositories;
 
-use Bazar\Contracts\Taxable;
+use Cone\Bazar\Contracts\Taxable;
 
 interface TaxRepository
 {
@@ -32,7 +32,7 @@ interface TaxRepository
     /**
      * Calculate tax for the given model.
      *
-     * @param  \Bazar\Contracts\Taxable  $model
+     * @param  \Cone\Bazar\Contracts\Taxable  $model
      * @return float
      */
     public function calculate(Taxable $model): float;

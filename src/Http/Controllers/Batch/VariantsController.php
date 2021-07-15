@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Controllers\Batch;
+namespace Cone\Bazar\Http\Controllers\Batch;
 
-use Bazar\Http\Controllers\Controller;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
+use Cone\Bazar\Http\Controllers\Controller;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -32,7 +32,7 @@ class VariantsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Product $product): RedirectResponse
@@ -53,7 +53,7 @@ class VariantsController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, Product $product): RedirectResponse
@@ -70,7 +70,7 @@ class VariantsController extends Controller
      * Restore the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Request $request, Product $product): RedirectResponse

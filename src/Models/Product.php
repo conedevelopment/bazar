@@ -1,19 +1,19 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\HasMedia;
-use Bazar\Concerns\InteractsWithItemables;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithStock;
-use Bazar\Concerns\Sluggable;
-use Bazar\Contracts\Itemable;
-use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Database\Factories\ProductFactory;
+use Cone\Bazar\Casts\Inventory;
+use Cone\Bazar\Casts\Prices;
+use Cone\Bazar\Concerns\BazarRoutable;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\HasMedia;
+use Cone\Bazar\Concerns\InteractsWithItemables;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Concerns\InteractsWithStock;
+use Cone\Bazar\Concerns\Sluggable;
+use Cone\Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Models\Product as Contract;
+use Cone\Bazar\Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -104,7 +104,7 @@ class Product extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\ProductFactory
+     * @return \Cone\Bazar\Database\Factories\ProductFactory
      */
     protected static function newFactory(): ProductFactory
     {
@@ -232,7 +232,7 @@ class Product extends Model implements Contract
      * Get the variant of the given option.
      *
      * @param  array  $variation
-     * @return \Bazar\Models\Variant|null
+     * @return \Cone\Bazar\Models\Variant|null
      */
     public function toVariant(array $variation): ?Variant
     {
@@ -254,9 +254,9 @@ class Product extends Model implements Contract
     /**
      * Get the item representation of the buyable instance.
      *
-     * @param  \Bazar\Contracts\Itemable  $itemable
+     * @param  \Cone\Bazar\Contracts\Itemable  $itemable
      * @param  array  $attributes
-     * @return \Bazar\Models\Item
+     * @return \Cone\Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {

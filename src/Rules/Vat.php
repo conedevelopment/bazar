@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Rules;
+namespace Cone\Bazar\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\UserStoreRequest as StoreRequest;
-use Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
-use Bazar\Models\User;
+use Cone\Bazar\Http\Requests\UserStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\UserUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -55,7 +55,7 @@ class UsersController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function create(User $user): Response
@@ -70,7 +70,7 @@ class UsersController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\UserStoreRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\UserStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
@@ -84,7 +84,7 @@ class UsersController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Inertia\Response
      */
     public function show(User $user): Response
@@ -97,8 +97,8 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\UserUpdateRequest  $request
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Http\Requests\UserUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, User $user): RedirectResponse
@@ -112,7 +112,7 @@ class UsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -131,7 +131,7 @@ class UsersController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(User $user): RedirectResponse

@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Models\Address;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
 
 class AddressesTest extends TestCase

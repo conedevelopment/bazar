@@ -1,18 +1,18 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithDiscounts;
-use Bazar\Concerns\InteractsWithItems;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Order as Contract;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Exceptions\TransactionFailedException;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Concerns\Addressable;
+use Cone\Bazar\Concerns\BazarRoutable;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\InteractsWithDiscounts;
+use Cone\Bazar\Concerns\InteractsWithItems;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\Order as Contract;
+use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Exceptions\TransactionFailedException;
+use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -102,7 +102,7 @@ class Order extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\OrderFactory
+     * @return \Cone\Bazar\Database\Factories\OrderFactory
      */
     protected static function newFactory(): OrderFactory
     {
@@ -197,9 +197,9 @@ class Order extends Model implements Contract
      * @param  float|null  $amount
      * @param  string|null  $driver
      * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
+     * @return \Cone\Bazar\Models\Transaction
      *
-     * @throws \Bazar\Exceptions\TransactionFailedException
+     * @throws \Cone\Bazar\Exceptions\TransactionFailedException
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
@@ -224,9 +224,9 @@ class Order extends Model implements Contract
      * @param  float|null  $amount
      * @param  string|null  $driver
      * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
+     * @return \Cone\Bazar\Models\Transaction
      *
-     * @throws \Bazar\Exceptions\TransactionFailedException
+     * @throws \Cone\Bazar\Exceptions\TransactionFailedException
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\PasswordUpdateRequest as UpdateRequest;
+use Cone\Bazar\Http\Requests\PasswordUpdateRequest as UpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -24,7 +24,7 @@ class PasswordController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\PasswordUpdateRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\PasswordUpdateRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request): RedirectResponse

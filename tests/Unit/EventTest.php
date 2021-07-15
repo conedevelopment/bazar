@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Event;

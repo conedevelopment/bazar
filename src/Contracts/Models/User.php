@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Contracts\Breadcrumbable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

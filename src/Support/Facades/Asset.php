@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Repositories\AssetRepository;
+use Cone\Bazar\Contracts\Repositories\AssetRepository;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array styles()
  * @method static array icons()
  *
- * @see \Bazar\Contracts\Repositories\AssetRepository
+ * @see \Cone\Bazar\Contracts\Repositories\AssetRepository
  */
 class Asset extends Facade
 {

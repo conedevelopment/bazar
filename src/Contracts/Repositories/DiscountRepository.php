@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts\Repositories;
+namespace Cone\Bazar\Contracts\Repositories;
 
-use Bazar\Contracts\Discountable;
+use Cone\Bazar\Contracts\Discountable;
 
 interface DiscountRepository
 {
@@ -32,7 +32,7 @@ interface DiscountRepository
     /**
      * Calculate the total of the processed discounts.
      *
-     * @param  \Bazar\Contracts\Discountable  $model
+     * @param  \Cone\Bazar\Contracts\Discountable  $model
      * @return float
      */
     public function calculate(Discountable $model): float;

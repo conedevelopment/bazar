@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Support\Facades\Menu;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Support\Facades\Menu;
+use Cone\Bazar\Tests\TestCase;
 
 class MenuRepositoryTest extends TestCase
 {

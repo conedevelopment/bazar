@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Buyable;
-use Bazar\Contracts\Stockable;
-use Bazar\Models\Variant;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Contracts\Buyable;
+use Cone\Bazar\Contracts\Stockable;
+use Cone\Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -52,7 +52,7 @@ interface Product extends Buyable, Breadcrumbable, Stockable
      * Get the variant of the given option.
      *
      * @param  array  $option
-     * @return \Bazar\Models\Variant|null
+     * @return \Cone\Bazar\Models\Variant|null
      */
     public function toVariant(array $option): ?Variant;
 }

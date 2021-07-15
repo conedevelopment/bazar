@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Middleware;
+namespace Cone\Bazar\Http\Middleware;
 
-use Bazar\Support\Breadcrumbs;
+use Cone\Bazar\Support\Breadcrumbs;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 

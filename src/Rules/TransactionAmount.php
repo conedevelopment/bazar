@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Rules;
+namespace Cone\Bazar\Rules;
 
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
 use Illuminate\Contracts\Validation\Rule;
 
 class TransactionAmount implements Rule
@@ -25,7 +25,7 @@ class TransactionAmount implements Rule
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Models\Order  $order
+     * @param  \Cone\Bazar\Models\Order  $order
      * @param  string|null  $type
      * @return void
      */

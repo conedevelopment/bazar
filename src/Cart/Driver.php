@@ -1,15 +1,15 @@
 <?php
 
-namespace Bazar\Cart;
+namespace Cone\Bazar\Cart;
 
-use Bazar\Bazar;
-use Bazar\Contracts\Buyable;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Item;
-use Bazar\Models\Order;
-use Bazar\Models\Shipping;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Contracts\Buyable;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -26,7 +26,7 @@ abstract class Driver
     /**
      * The cart instance.
      *
-     * @var \Bazar\Models\Cart|null
+     * @var \Cone\Bazar\Models\Cart|null
      */
     protected ?Cart $cart = null;
 
@@ -45,7 +45,7 @@ abstract class Driver
      * Resolve the cart instance.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Models\Cart
+     * @return \Cone\Bazar\Models\Cart
      */
     abstract protected function resolve(Request $request): Cart;
 
@@ -53,7 +53,7 @@ abstract class Driver
      * The callback after the cart instance is resolved.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Cart  $cart
+     * @param  \Cone\Bazar\Models\Cart  $cart
      * @return void
      */
     protected function resolved(Request $request, Cart $cart): void
@@ -68,7 +68,7 @@ abstract class Driver
     /**
      * Get the cart model.
      *
-     * @return \Bazar\Models\Cart
+     * @return \Cone\Bazar\Models\Cart
      */
     public function getModel(): Cart
     {
@@ -95,7 +95,7 @@ abstract class Driver
      * Get the item with the given id.
      *
      * @param  string  $id
-     * @return \Bazar\Models\Item|null
+     * @return \Cone\Bazar\Models\Item|null
      */
     public function getItem(string $id): ?Item
     {
@@ -105,10 +105,10 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Bazar\Contracts\Buyable  $buyable
+     * @param  \Cone\Bazar\Contracts\Buyable  $buyable
      * @param  float  $quantity
      * @param  array  $properties
-     * @return \Bazar\Models\Item
+     * @return \Cone\Bazar\Models\Item
      */
     public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
@@ -214,7 +214,7 @@ abstract class Driver
     /**
      * Get the billing address that belongs to the cart.
      *
-     * @return \Bazar\Models\Address
+     * @return \Cone\Bazar\Models\Address
      */
     public function getBilling(): Address
     {
@@ -237,7 +237,7 @@ abstract class Driver
     /**
      * Get the shipping that belongs to the cart.
      *
-     * @return \Bazar\Models\Shipping
+     * @return \Cone\Bazar\Models\Shipping
      */
     public function getShipping(): Shipping
     {
@@ -305,7 +305,7 @@ abstract class Driver
      * Perform the checkout using the given driver.
      *
      * @param  string  $driver
-     * @return \Bazar\Models\Order
+     * @return \Cone\Bazar\Models\Order
      */
     public function checkout(string $driver): Order
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
 
 class VariantsTest extends TestCase

@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Gateway;
+namespace Cone\Bazar\Gateway;
 
-use Bazar\Contracts\Gateway\Manager as Contract;
-use Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Gateway\Manager as Contract;
+use Cone\Bazar\Contracts\Itemable;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
@@ -36,7 +36,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable|null  $model
+     * @param  \Cone\Bazar\Contracts\Itemable|null  $model
      * @return array
      */
     public function getAvailableDrivers(?Itemable $model = null): array
@@ -55,7 +55,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the transfer driver.
      *
-     * @return \Bazar\Gateway\TransferDriver
+     * @return \Cone\Bazar\Gateway\TransferDriver
      */
     public function createTransferDriver(): TransferDriver
     {
@@ -67,7 +67,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the cash driver.
      *
-     * @return \Bazar\Gateway\CashDriver
+     * @return \Cone\Bazar\Gateway\CashDriver
      */
     public function createCashDriver(): CashDriver
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\ProfileUpdateRequest as UpdateRequest;
+use Cone\Bazar\Http\Requests\ProfileUpdateRequest as UpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -23,7 +23,7 @@ class ProfileController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\ProfileUpdateRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\ProfileUpdateRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request): RedirectResponse

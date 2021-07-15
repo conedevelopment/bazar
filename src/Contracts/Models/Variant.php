@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Contracts\Buyable;
-use Bazar\Contracts\Stockable;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Contracts\Buyable;
+use Cone\Bazar\Contracts\Stockable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

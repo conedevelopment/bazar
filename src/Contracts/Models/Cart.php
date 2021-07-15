@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\Discountable;
-use Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Discountable;
+use Cone\Bazar\Contracts\Itemable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 interface Cart extends Discountable, Itemable

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
-use Bazar\Contracts\LineItem;
+use Cone\Bazar\Contracts\LineItem;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 interface Item extends LineItem

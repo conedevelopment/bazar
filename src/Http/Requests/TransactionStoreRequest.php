@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Models\Transaction;
-use Bazar\Rules\TransactionAmount;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Rules\TransactionAmount;
+use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Validation\Rule;
 
 class TransactionStoreRequest extends FormRequest

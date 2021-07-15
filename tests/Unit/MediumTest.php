@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Models\Medium;
-use Bazar\Support\Facades\Conversion;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Support\Facades\Conversion;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 
 class MediumTest extends TestCase

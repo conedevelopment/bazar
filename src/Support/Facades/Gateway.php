@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Gateway\Manager;
+use Cone\Bazar\Contracts\Gateway\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Contracts\Itemable $model)
  *
- * @see \Bazar\Contracts\Gateway\Manager
+ * @see \Cone\Bazar\Contracts\Gateway\Manager
  */
 class Gateway extends Facade
 {

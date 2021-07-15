@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Contracts;
+namespace Cone\Bazar\Contracts;
 
-use Bazar\Models\Shipping;
+use Cone\Bazar\Models\Shipping;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 interface Shippable
@@ -17,7 +17,7 @@ interface Shippable
     /**
      * Get the shipping attribute.
      *
-     * @return \Bazar\Models\Shipping
+     * @return \Cone\Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping;
 }

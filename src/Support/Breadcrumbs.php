@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Support;
+namespace Cone\Bazar\Support;
 
-use Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Contracts\Breadcrumbable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

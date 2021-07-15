@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Rules;
+namespace Cone\Bazar\Rules;
 
-use Bazar\Models\User;
+use Cone\Bazar\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,14 +11,14 @@ class MatchingPassword implements Rule
     /**
      * The user instance.
      *
-     * @var \Bazar\Models\User
+     * @var \Cone\Bazar\Models\User
      */
     protected $user;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Bazar\Models\User  $user
+     * @param  \Cone\Bazar\Models\User  $user
      * @return void
      */
     public function __construct(User $user)

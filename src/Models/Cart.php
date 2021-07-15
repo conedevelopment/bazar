@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\InteractsWithDiscounts;
-use Bazar\Concerns\InteractsWithItems;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Cart as Contract;
-use Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Concerns\Addressable;
+use Cone\Bazar\Concerns\InteractsWithDiscounts;
+use Cone\Bazar\Concerns\InteractsWithItems;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\Cart as Contract;
+use Cone\Bazar\Database\Factories\CartFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -87,7 +87,7 @@ class Cart extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\CartFactory
+     * @return \Cone\Bazar\Database\Factories\CartFactory
      */
     protected static function newFactory(): CartFactory
     {
@@ -167,7 +167,7 @@ class Cart extends Model implements Contract
     /**
      * Convert the cart to a new order.
      *
-     * @return \Bazar\Models\Order
+     * @return \Cone\Bazar\Models\Order
      */
     public function toOrder(): Order
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
-use Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
-use Bazar\Models\Category;
+use Cone\Bazar\Http\Requests\CategoryStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\CategoryUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -67,7 +67,7 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\CategoryStoreRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\CategoryStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
@@ -85,7 +85,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Category  $category
+     * @param  \Cone\Bazar\Models\Category  $category
      * @return \Inertia\Response
      */
     public function show(Category $category): Response
@@ -100,8 +100,8 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\CategoryUpdateRequest  $request
-     * @param  \Bazar\Models\Category  $category
+     * @param  \Cone\Bazar\Http\Requests\CategoryUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Category $category): RedirectResponse
@@ -119,7 +119,7 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Category  $category
+     * @param  \Cone\Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Category $category): RedirectResponse
@@ -133,7 +133,7 @@ class CategoriesController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Category  $category
+     * @param  \Cone\Bazar\Models\Category  $category
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Category $category): RedirectResponse

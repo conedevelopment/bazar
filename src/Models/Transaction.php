@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Transaction as Contract;
-use Bazar\Database\Factories\TransactionFactory;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\Transaction as Contract;
+use Cone\Bazar\Database\Factories\TransactionFactory;
+use Cone\Bazar\Support\Facades\Gateway;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -85,7 +85,7 @@ class Transaction extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\TransactionFactory
+     * @return \Cone\Bazar\Database\Factories\TransactionFactory
      */
     protected static function newFactory(): TransactionFactory
     {

@@ -1,18 +1,18 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Cart;
-use Bazar\Models\Category;
-use Bazar\Models\Item;
-use Bazar\Models\Medium;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Casts\Inventory;
+use Cone\Bazar\Casts\Prices;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
 class ProductTest extends TestCase

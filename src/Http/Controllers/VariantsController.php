@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Bazar;
-use Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
-use Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Http\Requests\VariantStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\VariantUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -34,7 +34,7 @@ class VariantsController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function index(Request $request, Product $product): Response
@@ -59,7 +59,7 @@ class VariantsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function create(Product $product): Response
@@ -79,8 +79,8 @@ class VariantsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\VariantStoreRequest  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Http\Requests\VariantStoreRequest  $request
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request, Product $product): RedirectResponse
@@ -98,8 +98,8 @@ class VariantsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variant  $variant
+     * @param  \Cone\Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Variant  $variant
      * @return \Inertia\Response
      */
     public function show(Product $product, Variant $variant): Response
@@ -117,9 +117,9 @@ class VariantsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\VariantUpdateRequest  $request
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variant  $variant
+     * @param  \Cone\Bazar\Http\Requests\VariantUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product, Variant $variant): RedirectResponse
@@ -137,8 +137,8 @@ class VariantsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variant  $variant
+     * @param  \Cone\Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product, Variant $variant): RedirectResponse
@@ -152,8 +152,8 @@ class VariantsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Product  $product
-     * @param  \Bazar\Models\Variant  $variant
+     * @param  \Cone\Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Variant  $variant
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product, Variant $variant): RedirectResponse

@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Bazar;
-use Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
-use Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
-use Bazar\Models\Category;
-use Bazar\Models\Product;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Http\Requests\ProductStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\ProductUpdateRequest as UpdateRequest;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -76,7 +76,7 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\ProductStoreRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\ProductStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRequest $request): RedirectResponse
@@ -99,7 +99,7 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Inertia\Response
      */
     public function show(Product $product): Response
@@ -117,8 +117,8 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\ProductUpdateRequest  $request
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Http\Requests\ProductUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdateRequest $request, Product $product): RedirectResponse
@@ -141,7 +141,7 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Product $product): RedirectResponse
@@ -156,7 +156,7 @@ class ProductsController extends Controller
     /**
      * Restore the specified resource in storage.
      *
-     * @param  \Bazar\Models\Product  $product
+     * @param  \Cone\Bazar\Models\Product  $product
      * @return \Illuminate\Http\RedirectResponse
      */
     public function restore(Product $product): RedirectResponse

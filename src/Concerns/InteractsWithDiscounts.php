@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Support\Facades\Discount;
+use Cone\Bazar\Support\Facades\Discount;
 use Illuminate\Support\Str;
 
 trait InteractsWithDiscounts

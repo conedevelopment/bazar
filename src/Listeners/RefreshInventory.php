@@ -1,17 +1,17 @@
 <?php
 
-namespace Bazar\Listeners;
+namespace Cone\Bazar\Listeners;
 
-use Bazar\Contracts\Stockable;
-use Bazar\Events\CheckoutProcessed;
-use Bazar\Models\Item;
+use Cone\Bazar\Contracts\Stockable;
+use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Models\Item;
 
 class RefreshInventory
 {
     /**
      * Handle the event.
      *
-     * @param  \Bazar\Events\CheckoutProcessed  $event
+     * @param  \Cone\Bazar\Events\CheckoutProcessed  $event
      * @return void
      */
     public function handle(CheckoutProcessed $event): void

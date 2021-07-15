@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Casts\Inventory;
+use Cone\Bazar\Casts\Prices;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
 class AttributeBagTest extends TestCase

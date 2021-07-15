@@ -1,17 +1,17 @@
 <?php
 
-namespace Bazar\Listeners;
+namespace Cone\Bazar\Listeners;
 
-use Bazar\Events\CheckoutProcessed;
-use Bazar\Jobs\SendNewOrderNotifications;
-use Bazar\Support\Facades\Cart;
+use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Jobs\SendNewOrderNotifications;
+use Cone\Bazar\Support\Facades\Cart;
 
 class PlaceOrder
 {
     /**
      * Handle the event.
      *
-     * @param  \Bazar\Events\CheckoutProcessed  $event
+     * @param  \Cone\Bazar\Events\CheckoutProcessed  $event
      * @return void
      */
     public function handle(CheckoutProcessed $event): void

@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Conversion\Image;
-use Bazar\Models\Medium;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Conversion\Image;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Support;
+namespace Cone\Bazar\Support;
 
-use Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Itemable;
 
 abstract class Driver
 {
@@ -34,7 +34,7 @@ abstract class Driver
     /**
      * Determine if the driver is available for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable  $model
+     * @param  \Cone\Bazar\Contracts\Itemable  $model
      * @return bool
      */
     public function available(Itemable $model): bool

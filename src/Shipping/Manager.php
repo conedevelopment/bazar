@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Shipping;
+namespace Cone\Bazar\Shipping;
 
-use Bazar\Contracts\Itemable;
-use Bazar\Contracts\Shipping\Manager as Contract;
+use Cone\Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Shipping\Manager as Contract;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
@@ -35,7 +35,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable|null  $model
+     * @param  \Cone\Bazar\Contracts\Itemable|null  $model
      * @return array
      */
     public function getAvailableDrivers(?Itemable $model = null): array
@@ -54,7 +54,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Create the local pickup driver.
      *
-     * @return \Bazar\Shipping\LocalPickupDriver
+     * @return \Cone\Bazar\Shipping\LocalPickupDriver
      */
     public function createLocalPickupDriver(): LocalPickupDriver
     {

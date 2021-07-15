@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Contracts\Models;
+namespace Cone\Bazar\Contracts\Models;
 
 interface Medium
 {

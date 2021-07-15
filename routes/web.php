@@ -1,24 +1,24 @@
 <?php
 
-use Bazar\Http\Controllers\AddressesController;
-use Bazar\Http\Controllers\Batch\AddressesController as BatchAddressesController;
-use Bazar\Http\Controllers\Batch\CategoriesController as BatchCategoriesController;
-use Bazar\Http\Controllers\Batch\MediaController as BatchMediaController;
-use Bazar\Http\Controllers\Batch\OrdersController as BatchOrdersController;
-use Bazar\Http\Controllers\Batch\ProductsController as BatchProductsController;
-use Bazar\Http\Controllers\Batch\UsersController as BatchUsersController;
-use Bazar\Http\Controllers\Batch\VariantsController as BatchVariantsController;
-use Bazar\Http\Controllers\CategoriesController;
-use Bazar\Http\Controllers\MediaController;
-use Bazar\Http\Controllers\OrdersController;
-use Bazar\Http\Controllers\PagesController;
-use Bazar\Http\Controllers\PasswordController;
-use Bazar\Http\Controllers\ProductsController;
-use Bazar\Http\Controllers\ProfileController;
-use Bazar\Http\Controllers\TransactionsController;
-use Bazar\Http\Controllers\UsersController;
-use Bazar\Http\Controllers\VariantsController;
-use Bazar\Http\Controllers\WidgetsController;
+use Cone\Bazar\Http\Controllers\AddressesController;
+use Cone\Bazar\Http\Controllers\Batch\AddressesController as BatchAddressesController;
+use Cone\Bazar\Http\Controllers\Batch\CategoriesController as BatchCategoriesController;
+use Cone\Bazar\Http\Controllers\Batch\MediaController as BatchMediaController;
+use Cone\Bazar\Http\Controllers\Batch\OrdersController as BatchOrdersController;
+use Cone\Bazar\Http\Controllers\Batch\ProductsController as BatchProductsController;
+use Cone\Bazar\Http\Controllers\Batch\UsersController as BatchUsersController;
+use Cone\Bazar\Http\Controllers\Batch\VariantsController as BatchVariantsController;
+use Cone\Bazar\Http\Controllers\CategoriesController;
+use Cone\Bazar\Http\Controllers\MediaController;
+use Cone\Bazar\Http\Controllers\OrdersController;
+use Cone\Bazar\Http\Controllers\PagesController;
+use Cone\Bazar\Http\Controllers\PasswordController;
+use Cone\Bazar\Http\Controllers\ProductsController;
+use Cone\Bazar\Http\Controllers\ProfileController;
+use Cone\Bazar\Http\Controllers\TransactionsController;
+use Cone\Bazar\Http\Controllers\UsersController;
+use Cone\Bazar\Http\Controllers\VariantsController;
+use Cone\Bazar\Http\Controllers\WidgetsController;
 use Illuminate\Support\Facades\Route;
 
 // Pages

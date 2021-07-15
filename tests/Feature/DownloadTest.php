@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Models\Medium;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 

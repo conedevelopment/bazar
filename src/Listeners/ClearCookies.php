@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Listeners;
+namespace Cone\Bazar\Listeners;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\Facades\Cookie;

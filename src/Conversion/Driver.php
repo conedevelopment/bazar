@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Conversion;
+namespace Cone\Bazar\Conversion;
 
-use Bazar\Models\Medium;
+use Cone\Bazar\Models\Medium;
 
 abstract class Driver
 {
@@ -27,8 +27,8 @@ abstract class Driver
     /**
      * Perform the registered conversions on the medium.
      *
-     * @param  \Bazar\Models\Medium  $medium
-     * @return \Bazar\Models\Medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
+     * @return \Cone\Bazar\Models\Medium
      */
     abstract public function perform(Medium $medium): Medium;
 }

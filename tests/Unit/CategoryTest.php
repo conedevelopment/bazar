@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Product;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Medium;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Tests\TestCase;
 
 class CategoryTest extends TestCase
 {

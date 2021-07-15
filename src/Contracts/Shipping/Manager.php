@@ -1,15 +1,15 @@
 <?php
 
-namespace Bazar\Contracts\Shipping;
+namespace Cone\Bazar\Contracts\Shipping;
 
-use Bazar\Contracts\Itemable;
+use Cone\Bazar\Contracts\Itemable;
 
 interface Manager
 {
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Bazar\Contracts\Itemable|null  $model
+     * @param  \Cone\Bazar\Contracts\Itemable|null  $model
      * @return array
      */
     public function getAvailableDrivers(?Itemable $model = null): array;

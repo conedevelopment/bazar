@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Shipping as Contract;
-use Bazar\Database\Factories\ShippingFactory;
-use Bazar\Support\Facades\Shipping as Manager;
+use Cone\Bazar\Concerns\Addressable;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Concerns\InteractsWithTaxes;
+use Cone\Bazar\Contracts\Models\Shipping as Contract;
+use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -94,7 +94,7 @@ class Shipping extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\ShippingFactory
+     * @return \Cone\Bazar\Database\Factories\ShippingFactory
      */
     protected static function newFactory(): ShippingFactory
     {

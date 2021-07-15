@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Exceptions\TransactionFailedException;
-use Bazar\Gateway\Driver;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
-use Bazar\Support\Facades\Gateway;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Exceptions\TransactionFailedException;
+use Cone\Bazar\Gateway\Driver;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\URL;
 
 class TransactionsTest extends TestCase

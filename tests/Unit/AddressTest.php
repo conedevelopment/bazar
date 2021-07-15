@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Shipping;
-use Bazar\Support\Countries;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Countries;
+use Cone\Bazar\Tests\TestCase;
 
 class AddressTest extends TestCase
 {

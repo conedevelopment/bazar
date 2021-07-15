@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar;
+namespace Cone\Bazar;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\View\View;

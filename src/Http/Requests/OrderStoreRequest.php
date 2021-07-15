@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Http\Requests;
+namespace Cone\Bazar\Http\Requests;
 
-use Bazar\Bazar;
-use Bazar\Models\Order;
-use Bazar\Support\Facades\Shipping;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Support\Facades\Shipping;
 use Illuminate\Validation\Rule;
 
 class OrderStoreRequest extends FormRequest

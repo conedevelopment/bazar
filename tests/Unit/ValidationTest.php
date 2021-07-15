@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
-use Bazar\Rules\Option;
-use Bazar\Rules\TransactionAmount;
-use Bazar\Rules\Vat;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Rules\Option;
+use Cone\Bazar\Rules\TransactionAmount;
+use Cone\Bazar\Rules\Vat;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Validation\Validator;
 
 class ValidationTest extends TestCase

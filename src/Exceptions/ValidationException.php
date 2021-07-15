@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Exceptions;
+namespace Cone\Bazar\Exceptions;
 
 use Illuminate\Validation\ValidationException as Exception;
 

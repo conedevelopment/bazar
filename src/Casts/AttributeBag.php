@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Casts;
+namespace Cone\Bazar\Casts;
 
 use ArrayObject;
 use Illuminate\Contracts\Database\Eloquent\Castable;

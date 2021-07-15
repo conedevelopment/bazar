@@ -1,14 +1,14 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Shipping\Manager;
+use Cone\Bazar\Contracts\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Contracts\Itemable $model)
  *
- * @see \Bazar\Contracts\Shipping\Manager
+ * @see \Cone\Bazar\Contracts\Shipping\Manager
  */
 class Shipping extends Facade
 {

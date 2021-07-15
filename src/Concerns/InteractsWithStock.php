@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Concerns;
+namespace Cone\Bazar\Concerns;
 
-use Bazar\Bazar;
+use Cone\Bazar\Bazar;
 
 trait InteractsWithStock
 {

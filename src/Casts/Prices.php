@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Casts;
+namespace Cone\Bazar\Casts;
 
-use Bazar\Bazar;
+use Cone\Bazar\Bazar;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Contracts\Repositories;
+namespace Cone\Bazar\Contracts\Repositories;
 
 interface AssetRepository
 {

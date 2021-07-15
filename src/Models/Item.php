@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\HasUuid;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Item as Contract;
-use Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Concerns\HasUuid;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Concerns\InteractsWithTaxes;
+use Cone\Bazar\Contracts\Models\Item as Contract;
+use Cone\Bazar\Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -109,7 +109,7 @@ class Item extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\ItemFactory
+     * @return \Cone\Bazar\Database\Factories\ItemFactory
      */
     protected static function newFactory(): ItemFactory
     {

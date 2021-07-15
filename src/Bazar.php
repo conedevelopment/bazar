@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar;
+namespace Cone\Bazar;
 
-use Bazar\Exceptions\InvalidCurrencyException;
-use Bazar\Http\Middleware\HandleInertiaRequests;
 use Closure;
+use Cone\Bazar\Exceptions\InvalidCurrencyException;
+use Cone\Bazar\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
@@ -60,7 +60,7 @@ abstract class Bazar
      * @param  string  $currency
      * @return void
      *
-     * @throws \Bazar\Exceptions\InvalidCurrencyException
+     * @throws \Cone\Bazar\Exceptions\InvalidCurrencyException
      */
     public static function setCurrency(string $currency): void
     {

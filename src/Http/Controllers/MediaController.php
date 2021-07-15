@@ -1,12 +1,12 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\MediumStoreRequest as StoreRequest;
-use Bazar\Http\Requests\MediumUpdateRequest as UpdateRequest;
-use Bazar\Jobs\MoveFile;
-use Bazar\Jobs\PerformConversions;
-use Bazar\Models\Medium;
+use Cone\Bazar\Http\Requests\MediumStoreRequest as StoreRequest;
+use Cone\Bazar\Http\Requests\MediumUpdateRequest as UpdateRequest;
+use Cone\Bazar\Jobs\MoveFile;
+use Cone\Bazar\Jobs\PerformConversions;
+use Cone\Bazar\Models\Medium;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -50,7 +50,7 @@ class MediaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Bazar\Http\Requests\MediumStoreRequest  $request
+     * @param  \Cone\Bazar\Http\Requests\MediumStoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreRequest $request): JsonResponse
@@ -76,7 +76,7 @@ class MediaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Medium $medium): JsonResponse
@@ -87,8 +87,8 @@ class MediaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Bazar\Http\Requests\MediumUpdateRequest  $request
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Http\Requests\MediumUpdateRequest  $request
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateRequest $request, Medium $medium): JsonResponse
@@ -101,7 +101,7 @@ class MediaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Bazar\Models\Medium  $medium
+     * @param  \Cone\Bazar\Models\Medium  $medium
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Medium $medium): JsonResponse

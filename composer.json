@@ -11,22 +11,21 @@
     ],
     "autoload": {
         "psr-4": {
-            "Bazar\\": "src/",
-            "Bazar\\Database\\Seeders\\": "database/seeders/",
-            "Bazar\\Database\\Factories\\": "database/factories/"
+            "Cone\\Bazar\\": "src/",
+            "Cone\\Bazar\\Database\\Seeders\\": "database/seeders/",
+            "Cone\\Bazar\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bazar\\Tests\\": "tests/"
+            "Cone\\Bazar\\Tests\\": "tests/"
         }
     },
     "require": {
         "ext-gd": "*",
         "ext-exif": "*",
-        "php": "^7.4 || ^8.0",
-        "laravel/framework": "^8.43",
-        "inertiajs/inertia-laravel": "^0.3.6"
+        "php": "^8.0",
+        "conedevelopment/press": "dev-master"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -37,7 +36,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Bazar\\BazarServiceProvider"
+                "Cone\\Bazar\\BazarServiceProvider"
             ]
         },
         "branch-alias": {

@@ -1,20 +1,20 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Bazar;
-use Bazar\Cart\CookieDriver;
-use Bazar\Cart\Manager;
-use Bazar\Cart\SessionDriver;
-use Bazar\Events\CheckoutProcessed;
-use Bazar\Events\CheckoutProcessing;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
-use Bazar\Models\Variant;
-use Bazar\Support\Facades\Cart as CartFacade;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Cart\CookieDriver;
+use Cone\Bazar\Cart\Manager;
+use Cone\Bazar\Cart\SessionDriver;
+use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Events\CheckoutProcessing;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Support\Facades\Cart as CartFacade;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 
 class CartManagerTest extends TestCase

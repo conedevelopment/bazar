@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Discount as Contract;
-use Bazar\Contracts\Discountable;
-use Bazar\Models\Cart;
-use Bazar\Models\Product;
-use Bazar\Support\Facades\Discount;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Contracts\Discount as Contract;
+use Cone\Bazar\Contracts\Discountable;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Support\Facades\Discount;
+use Cone\Bazar\Tests\TestCase;
 
 class DiscountRepositoryTest extends TestCase
 {

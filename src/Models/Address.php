@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Address as Contract;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Support\Countries;
+use Cone\Bazar\Concerns\BazarRoutable;
+use Cone\Bazar\Concerns\Filterable;
+use Cone\Bazar\Concerns\InteractsWithProxy;
+use Cone\Bazar\Contracts\Models\Address as Contract;
+use Cone\Bazar\Database\Factories\AddressFactory;
+use Cone\Bazar\Support\Countries;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +105,7 @@ class Address extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Bazar\Database\Factories\AddressFactory
+     * @return \Cone\Bazar\Database\Factories\AddressFactory
      */
     protected static function newFactory(): AddressFactory
     {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Bazar;
-use Bazar\Exceptions\InvalidCurrencyException;
-use Bazar\Models\Product;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Exceptions\InvalidCurrencyException;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Route;
 
 class BazarTest extends TestCase
