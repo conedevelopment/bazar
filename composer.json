@@ -25,7 +25,8 @@
         "ext-gd": "*",
         "ext-exif": "*",
         "php": "^8.0",
-        "conedevelopment/press": "dev-master"
+        "laravel/framework": "^8.43",
+        "inertiajs/inertia-laravel": "^0.4.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
