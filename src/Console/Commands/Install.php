@@ -4,6 +4,7 @@ namespace Cone\Bazar\Console\Commands;
 
 use Cone\Bazar\Database\Seeders\BazarSeeder;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 class Install extends Command
 {
@@ -32,6 +33,12 @@ class Install extends Command
 
         if ($this->option('seed') && $this->laravel->environment(['local', 'testing'])) {
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
+        }
+
+        if (! File::exists($path = $this->laravel->basePath('app/Providers/BazarServiceProvider.php'))) {
+            File::copy(
+                __DIR__.'/../../../resources/stubs/BazarServiceProvider.php', $path
+            );
         }
 
         return $status;
