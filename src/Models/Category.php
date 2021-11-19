@@ -2,27 +2,28 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\BazarRoutable;
-use Cone\Bazar\Concerns\Filterable;
-use Cone\Bazar\Concerns\HasMedia;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Concerns\Sluggable;
 use Cone\Bazar\Contracts\Models\Category as Contract;
 use Cone\Bazar\Database\Factories\CategoryFactory;
+use Cone\Bazar\Resources\CategoryResource;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Resources\Resource;
+use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 
-class Category extends Model implements Contract
+class Category extends Model implements Contract, Resourceable
 {
-    use BazarRoutable;
-    use Filterable;
     use HasFactory;
     use HasMedia;
     use InteractsWithProxy;
+    use InteractsWithResource;
     use Sluggable;
     use SoftDeletes;
 
@@ -32,9 +33,9 @@ class Category extends Model implements Contract
      * @var array
      */
     protected $fillable = [
+        'description',
         'name',
         'slug',
-        'description',
     ];
 
     /**
@@ -54,11 +55,11 @@ class Category extends Model implements Contract
     protected $table = 'bazar_categories';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -66,9 +67,9 @@ class Category extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\CategoryFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): CategoryFactory
+    protected static function newFactory(): Factory
     {
         return CategoryFactory::new();
     }
@@ -84,17 +85,6 @@ class Category extends Model implements Contract
     }
 
     /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->name;
-    }
-
-    /**
      * Scope the query only to the given search term.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -104,5 +94,15 @@ class Category extends Model implements Contract
     public function scopeSearch(Builder $query, string $value): Builder
     {
         return $query->where($query->qualifyColumn('name'), 'like', "{$value}%");
+    }
+
+    /**
+     * Get the resource representation of the model.
+     *
+     * @return \Cone\Root\Resources\Resource
+     */
+    public static function toResource(): Resource
+    {
+        return new CategoryResource(static::class);
     }
 }

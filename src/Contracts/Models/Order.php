@@ -2,13 +2,12 @@
 
 namespace Cone\Bazar\Contracts\Models;
 
-use Cone\Bazar\Contracts\Breadcrumbable;
 use Cone\Bazar\Contracts\Discountable;
 use Cone\Bazar\Contracts\Itemable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-interface Order extends Breadcrumbable, Discountable, Itemable
+interface Order extends Discountable, Itemable
 {
     /**
      * Get the cart for the order.

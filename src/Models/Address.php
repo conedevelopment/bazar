@@ -2,22 +2,18 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\BazarRoutable;
-use Cone\Bazar\Concerns\Filterable;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Contracts\Models\Address as Contract;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Bazar\Support\Countries;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Http\Request;
 
 class Address extends Model implements Contract
 {
-    use BazarRoutable;
-    use Filterable;
     use HasFactory;
     use InteractsWithProxy;
 
@@ -27,8 +23,8 @@ class Address extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'name',
         'country_name',
+        'name',
     ];
 
     /**
@@ -37,20 +33,20 @@ class Address extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'city' => null,
-        'state' => null,
-        'phone' => null,
-        'email' => null,
-        'alias' => null,
-        'custom' => '[]',
-        'country' => null,
-        'default' => false,
-        'company' => null,
-        'address' => null,
-        'postcode' => null,
-        'last_name' => null,
-        'first_name' => null,
         'address_secondary' => null,
+        'address' => null,
+        'alias' => null,
+        'city' => null,
+        'company' => null,
+        'country' => null,
+        'custom' => '[]',
+        'default' => false,
+        'email' => null,
+        'first_name' => null,
+        'last_name' => null,
+        'phone' => null,
+        'postcode' => null,
+        'state' => null,
     ];
 
     /**
@@ -69,20 +65,20 @@ class Address extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'city',
-        'state',
-        'phone',
-        'email',
-        'alias',
-        'custom',
-        'country',
-        'default',
-        'company',
-        'address',
-        'postcode',
-        'last_name',
-        'first_name',
         'address_secondary',
+        'address',
+        'alias',
+        'city',
+        'company',
+        'country',
+        'custom',
+        'default',
+        'email',
+        'first_name',
+        'last_name',
+        'phone',
+        'postcode',
+        'state',
     ];
 
     /**
@@ -93,11 +89,11 @@ class Address extends Model implements Contract
     protected $table = 'bazar_addresses';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -105,9 +101,9 @@ class Address extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\AddressFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): AddressFactory
+    protected static function newFactory(): Factory
     {
         return AddressFactory::new();
     }
@@ -163,17 +159,6 @@ class Address extends Model implements Contract
     public function custom(string $key, $default = null)
     {
         return $this->custom[$key] ?? $default;
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->alias;
     }
 
     /**

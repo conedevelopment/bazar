@@ -3,11 +3,12 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Concerns\Addressable;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Concerns\InteractsWithTaxes;
 use Cone\Bazar\Contracts\Models\Shipping as Contract;
 use Cone\Bazar\Database\Factories\ShippingFactory;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -37,8 +38,8 @@ class Shipping extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'tax' => 0,
         'cost' => 0,
+        'tax' => 0,
     ];
 
     /**
@@ -47,8 +48,8 @@ class Shipping extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'tax' => 'float',
         'cost' => 'float',
+        'tax' => 'float',
     ];
 
     /**
@@ -57,9 +58,9 @@ class Shipping extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'tax',
         'cost',
         'driver',
+        'tax',
     ];
 
     /**
@@ -82,11 +83,11 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -94,9 +95,9 @@ class Shipping extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\ShippingFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): ShippingFactory
+    protected static function newFactory(): Factory
     {
         return ShippingFactory::new();
     }

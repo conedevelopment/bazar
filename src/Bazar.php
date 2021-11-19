@@ -2,11 +2,8 @@
 
 namespace Cone\Bazar;
 
-use Closure;
 use Cone\Bazar\Exceptions\InvalidCurrencyException;
-use Cone\Bazar\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Route;
 
 abstract class Bazar
 {
@@ -71,25 +68,5 @@ abstract class Bazar
         }
 
         static::$currency = $currency;
-    }
-
-    /**
-     * Register Bazar routes.
-     *
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public static function routes(Closure $callback): void
-    {
-        Route::as('bazar.')
-            ->prefix('bazar')
-            ->middleware([
-                'web',
-                'auth',
-                'verified',
-                'can:manage-bazar',
-                HandleInertiaRequests::class,
-            ])
-            ->group($callback);
     }
 }

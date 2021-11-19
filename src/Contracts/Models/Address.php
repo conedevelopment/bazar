@@ -5,7 +5,7 @@ namespace Cone\Bazar\Contracts\Models;
 use Cone\Bazar\Contracts\Breadcrumbable;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-interface Address extends Breadcrumbable
+interface Address
 {
     /**
      * Get the addressable model for the address.

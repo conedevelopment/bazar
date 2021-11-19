@@ -3,10 +3,11 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Concerns\HasUuid;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Concerns\InteractsWithTaxes;
 use Cone\Bazar\Contracts\Models\Item as Contract;
 use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -25,8 +26,8 @@ class Item extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'total',
         'net_total',
+        'total',
     ];
 
     /**
@@ -35,10 +36,10 @@ class Item extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'tax' => 0,
         'price' => 0,
-        'quantity' => 0,
         'properties' => '[]',
+        'quantity' => 0,
+        'tax' => 0,
     ];
 
     /**
@@ -47,10 +48,10 @@ class Item extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'tax' => 'float',
         'price' => 'float',
-        'quantity' => 'float',
         'properties' => 'json',
+        'quantity' => 'float',
+        'tax' => 'float',
     ];
 
     /**
@@ -59,11 +60,11 @@ class Item extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'tax',
         'name',
         'price',
-        'quantity',
         'properties',
+        'quantity',
+        'tax',
     ];
 
     /**
@@ -97,11 +98,11 @@ class Item extends Model implements Contract
     protected $table = 'bazar_items';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -109,9 +110,9 @@ class Item extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\ItemFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): ItemFactory
+    protected static function newFactory(): Factory
     {
         return ItemFactory::new();
     }

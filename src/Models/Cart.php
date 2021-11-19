@@ -6,10 +6,11 @@ use Cone\Bazar\Bazar;
 use Cone\Bazar\Concerns\Addressable;
 use Cone\Bazar\Concerns\InteractsWithDiscounts;
 use Cone\Bazar\Concerns\InteractsWithItems;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Contracts\Models\Cart as Contract;
 use Cone\Bazar\Database\Factories\CartFactory;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,9 +30,9 @@ class Cart extends Model implements Contract
      * @var array
      */
     protected $attributes = [
+        'currency' => null,
         'discount' => 0,
         'locked' => false,
-        'currency' => null,
     ];
 
     /**
@@ -40,8 +41,8 @@ class Cart extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'locked' => 'bool',
         'discount' => 'float',
+        'locked' => 'bool',
     ];
 
     /**
@@ -50,9 +51,9 @@ class Cart extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'locked',
-        'discount',
         'currency',
+        'discount',
+        'locked',
     ];
 
     /**
@@ -75,11 +76,11 @@ class Cart extends Model implements Contract
     }
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -87,9 +88,9 @@ class Cart extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\CartFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): CartFactory
+    protected static function newFactory(): Factory
     {
         return CartFactory::new();
     }

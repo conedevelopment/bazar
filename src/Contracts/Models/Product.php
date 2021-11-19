@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Contracts\Models;
 
-use Cone\Bazar\Contracts\Breadcrumbable;
 use Cone\Bazar\Contracts\Buyable;
 use Cone\Bazar\Contracts\Stockable;
 use Cone\Bazar\Models\Variant;
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Product extends Buyable, Breadcrumbable, Stockable
+interface Product extends Buyable, Stockable
 {
         /**
      * Get the items for the product.

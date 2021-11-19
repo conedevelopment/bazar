@@ -2,11 +2,8 @@
 
 namespace Cone\Bazar\Database\Seeders;
 
-use Cone\Bazar\Jobs\MoveFile;
-use Cone\Bazar\Jobs\PerformConversions;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Category;
-use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Shipping;
@@ -26,7 +23,6 @@ class BazarSeeder extends Seeder
     {
         $this->seedUsers();
         $this->seedCategories();
-        $this->seedMedia();
         $this->seedProducts();
         $this->seedOrders();
     }
@@ -76,7 +72,6 @@ class BazarSeeder extends Seeder
     {
         Product::factory()->count(4)->create()->each(function ($product) {
             $product->categories()->attach(Category::inRandomOrder()->take(2)->get());
-            $product->media()->attach(Medium::inRandomOrder()->first());
         });
     }
 
@@ -115,23 +110,5 @@ class BazarSeeder extends Seeder
                 'amount' => $order->getTotal(),
             ]);
         });
-    }
-
-    /**
-     * Seed the media table.
-     *
-     * @return void
-     */
-    protected function seedMedia(): void
-    {
-        foreach (range(1, 4) as $key) {
-            $path = __DIR__."/../../resources/stubs/photo-0{$key}.jpg";
-
-            $medium = Medium::createFrom($path);
-
-            MoveFile::withChain([
-                new PerformConversions($medium),
-            ])->dispatch($medium, $path, true);
-        }
     }
 }

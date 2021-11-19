@@ -35,12 +35,6 @@ class Install extends Command
             $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
         }
 
-        if (! File::exists($path = $this->laravel->basePath('app/Providers/BazarServiceProvider.php'))) {
-            File::copy(
-                __DIR__.'/../../../resources/stubs/BazarServiceProvider.php', $path
-            );
-        }
-
         return $status;
     }
 }

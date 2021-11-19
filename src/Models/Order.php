@@ -2,38 +2,31 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Bazar;
 use Cone\Bazar\Concerns\Addressable;
-use Cone\Bazar\Concerns\BazarRoutable;
-use Cone\Bazar\Concerns\Filterable;
 use Cone\Bazar\Concerns\InteractsWithDiscounts;
 use Cone\Bazar\Concerns\InteractsWithItems;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Contracts\Models\Order as Contract;
 use Cone\Bazar\Database\Factories\OrderFactory;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class Order extends Model implements Contract
 {
     use Addressable;
-    use BazarRoutable;
     use HasFactory;
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
     use SoftDeletes;
-    use Filterable {
-        Filterable::filters as defaultFilters;
-    }
 
     /**
      * The accessors to append to the model's array form.
@@ -41,14 +34,14 @@ class Order extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'tax',
-        'total',
-        'net_total',
-        'status_name',
-        'formatted_tax',
-        'formatted_total',
         'formatted_discount',
         'formatted_net_total',
+        'formatted_tax',
+        'formatted_total',
+        'net_total',
+        'status_name',
+        'tax',
+        'total',
     ];
 
     /**
@@ -57,8 +50,8 @@ class Order extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'discount' => 0,
         'currency' => null,
+        'discount' => 0,
         'status' => 'pending',
     ];
 
@@ -77,9 +70,9 @@ class Order extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'status',
         'currency',
         'discount',
+        'status',
     ];
 
     /**
@@ -90,11 +83,11 @@ class Order extends Model implements Contract
     protected $table = 'bazar_orders';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -102,9 +95,9 @@ class Order extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\OrderFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): OrderFactory
+    protected static function newFactory(): Factory
     {
         return OrderFactory::new();
     }
@@ -125,20 +118,6 @@ class Order extends Model implements Contract
             __('Failed') => 'failed',
             __('Refunded') => 'refunded',
         ];
-    }
-
-    /**
-     * Get the filter options for the model.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public static function filters(Request $request): array
-    {
-        return array_merge(static::defaultFilters($request), [
-            'status' => static::statuses(),
-            'user' => User::proxy()->newQuery()->pluck('id', 'name')->toArray(),
-        ]);
     }
 
     /**
@@ -357,16 +336,5 @@ class Order extends Model implements Contract
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
             return $query->where($query->getModel()->qualifyColumn('id'), $value);
         });
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return sprintf('#%d', $this->id);
     }
 }

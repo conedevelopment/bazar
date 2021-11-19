@@ -4,39 +4,37 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Concerns\BazarRoutable;
-use Cone\Bazar\Concerns\Filterable;
-use Cone\Bazar\Concerns\HasMedia;
 use Cone\Bazar\Concerns\InteractsWithItemables;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Concerns\InteractsWithStock;
 use Cone\Bazar\Concerns\Sluggable;
 use Cone\Bazar\Contracts\Itemable;
 use Cone\Bazar\Contracts\Models\Product as Contract;
 use Cone\Bazar\Database\Factories\ProductFactory;
+use Cone\Bazar\Resources\ProductResource;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Resources\Resource;
+use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
 
-class Product extends Model implements Contract
+class Product extends Model implements Contract, Resourceable
 {
-    use BazarRoutable;
     use HasFactory;
     use HasMedia;
     use InteractsWithItemables;
     use InteractsWithProxy;
+    use InteractsWithResource;
     use InteractsWithStock;
     use Sluggable;
     use SoftDeletes;
-    use Filterable {
-        Filterable::filters as defaultFilters;
-    }
 
     /**
      * The accessors to append to the model's array form.
@@ -44,8 +42,8 @@ class Product extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'price',
         'formatted_price',
+        'price',
     ];
 
     /**
@@ -54,8 +52,8 @@ class Product extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'prices' => '[]',
         'inventory' => '[]',
+        'prices' => '[]',
         'properties' => '[]',
     ];
 
@@ -65,9 +63,9 @@ class Product extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'properties' => 'json',
-        'prices' => Prices::class,
         'inventory' => Inventory::class,
+        'prices' => Prices::class,
+        'properties' => 'json',
     ];
 
     /**
@@ -76,12 +74,12 @@ class Product extends Model implements Contract
      * @var array
      */
     protected $fillable = [
-        'name',
-        'slug',
-        'prices',
-        'inventory',
-        'properties',
         'description',
+        'inventory',
+        'name',
+        'prices',
+        'properties',
+        'slug',
     ];
 
     /**
@@ -92,11 +90,11 @@ class Product extends Model implements Contract
     protected $table = 'bazar_products';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -104,24 +102,11 @@ class Product extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\ProductFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): ProductFactory
+    protected static function newFactory(): Factory
     {
         return ProductFactory::new();
-    }
-
-    /**
-     * Get the filter options for the model.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public static function filters(Request $request): array
-    {
-        return array_merge(static::defaultFilters($request), [
-            'category' => array_map('__', Category::proxy()->newQuery()->pluck('id', 'name')->toArray()),
-        ]);
     }
 
     /**
@@ -155,26 +140,6 @@ class Product extends Model implements Contract
             $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
                     ->makeHidden('product');
         });
-    }
-
-    /**
-     * Retrieve the child model for a bound value.
-     *
-     * @param  string  $childType
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveChildRouteBinding($childType, $value, $field): ?Model
-    {
-        if ($childType === 'variant' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->variants()
-                        ->where($field ?: $this->variants()->getRelated()->getRouteKeyName(), $value)
-                        ->withTrashed()
-                        ->first();
-        }
-
-        return parent::resolveChildRouteBinding($childType, $value, $field);
     }
 
     /**
@@ -272,13 +237,12 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the breadcrumb representation of the object.
+     * Get the resource representation of the model.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
+     * @return \Cone\Root\Resources\Resource
      */
-    public function toBreadcrumb(Request $request): string
+    public static function toResource(): Resource
     {
-        return $this->name;
+        return new ProductResource(static::class);
     }
 }

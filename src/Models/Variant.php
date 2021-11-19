@@ -5,16 +5,15 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Concerns\BazarRoutable;
-use Cone\Bazar\Concerns\Filterable;
-use Cone\Bazar\Concerns\HasMedia;
 use Cone\Bazar\Concerns\InteractsWithItemables;
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Concerns\InteractsWithStock;
 use Cone\Bazar\Contracts\Itemable;
 use Cone\Bazar\Contracts\Models\Variant as Contract;
 use Cone\Bazar\Database\Factories\VariantFactory;
+use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,8 +22,6 @@ use Illuminate\Http\Request;
 
 class Variant extends Model implements Contract
 {
-    use BazarRoutable;
-    use Filterable;
     use HasFactory;
     use HasMedia;
     use InteractsWithItemables;
@@ -38,8 +35,8 @@ class Variant extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'price',
         'formatted_price',
+        'price',
     ];
 
     /**
@@ -48,8 +45,8 @@ class Variant extends Model implements Contract
      * @var array
      */
     protected $attributes = [
-        'prices' => '[]',
         'inventory' => '[]',
+        'prices' => '[]',
         'variation' => '[]',
     ];
 
@@ -59,9 +56,9 @@ class Variant extends Model implements Contract
      * @var array
      */
     protected $casts = [
-        'variation' => 'json',
-        'prices' => Prices::class,
         'inventory' => Inventory::class,
+        'prices' => Prices::class,
+        'variation' => 'json',
     ];
 
     /**
@@ -71,8 +68,8 @@ class Variant extends Model implements Contract
      */
     protected $fillable = [
         'alias',
-        'prices',
         'inventory',
+        'prices',
         'variation',
     ];
 
@@ -84,11 +81,11 @@ class Variant extends Model implements Contract
     protected $table = 'bazar_variants';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -96,9 +93,9 @@ class Variant extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\VariantFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): VariantFactory
+    protected static function newFactory(): Factory
     {
         return VariantFactory::new();
     }
@@ -196,16 +193,5 @@ class Variant extends Model implements Contract
             'price' => $this->getPrice('sale', $itemable->getCurrency())
                     ?: $this->getPrice('default', $itemable->getCurrency())
         ]))->setRelation('buyable', $this);
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->alias;
     }
 }

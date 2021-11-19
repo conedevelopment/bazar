@@ -2,12 +2,13 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\InteractsWithProxy;
 use Cone\Bazar\Contracts\Models\Transaction as Contract;
 use Cone\Bazar\Database\Factories\TransactionFactory;
 use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Root\Traits\InteractsWithProxy;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -39,8 +40,8 @@ class Transaction extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'url',
         'driver_name',
+        'url',
     ];
 
     /**
@@ -58,11 +59,11 @@ class Transaction extends Model implements Contract
      * @var array
      */
     protected $fillable = [
+        'amount',
+        'completed_at',
+        'driver',
         'key',
         'type',
-        'amount',
-        'driver',
-        'completed_at',
     ];
 
     /**
@@ -73,11 +74,11 @@ class Transaction extends Model implements Contract
     protected $table = 'bazar_transactions';
 
     /**
-     * Get the proxied contract.
+     * Get the proxied interface.
      *
      * @return string
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
@@ -85,9 +86,9 @@ class Transaction extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      *
-     * @return \Cone\Bazar\Database\Factories\TransactionFactory
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
-    protected static function newFactory(): TransactionFactory
+    protected static function newFactory(): Factory
     {
         return TransactionFactory::new();
     }
