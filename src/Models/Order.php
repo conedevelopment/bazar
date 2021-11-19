@@ -8,8 +8,12 @@ use Cone\Bazar\Concerns\InteractsWithItems;
 use Cone\Bazar\Contracts\Models\Order as Contract;
 use Cone\Bazar\Database\Factories\OrderFactory;
 use Cone\Bazar\Exceptions\TransactionFailedException;
+use Cone\Bazar\Resources\OrderResource;
 use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,13 +23,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Contract
+class Order extends Model implements Contract, Resourceable
 {
     use Addressable;
     use HasFactory;
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
+    use InteractsWithResource;
     use SoftDeletes;
 
     /**
@@ -334,7 +339,17 @@ class Order extends Model implements Contract
     public function scopeUser(Builder $query, int $value): Builder
     {
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('id'), $value);
+            return $query->where($query->qualifyColumn('id'), $value);
         });
+    }
+
+    /**
+     * Get the resource representation of the model.
+     *
+     * @return \Cone\Root\Resources\Resource
+     */
+    public static function toResource(): Resource
+    {
+        return new OrderResource(static::class);
     }
 }

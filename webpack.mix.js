@@ -5,9 +5,6 @@ mix.webpackConfig({
         publicPath: '/vendor/bazar/',
         chunkFilename: '[name].js',
     },
-    externals: {
-        moment: 'moment',
-    },
 });
 
 mix.setPublicPath('./public')
