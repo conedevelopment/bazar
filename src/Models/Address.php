@@ -4,7 +4,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Contracts\Models\Address as Contract;
 use Cone\Bazar\Database\Factories\AddressFactory;
-use Cone\Bazar\Support\Countries;
+use Cone\Root\Support\Countries;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;

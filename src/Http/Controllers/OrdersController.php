@@ -9,7 +9,7 @@ use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\User;
-use Cone\Bazar\Support\Countries;
+use Cone\Root\Support\Countries;
 use Cone\Bazar\Support\Facades\Discount;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Support\Facades\Shipping;

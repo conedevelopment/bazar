@@ -7,7 +7,7 @@ use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Support\Countries;
+use Cone\Root\Support\Countries;
 use Cone\Bazar\Tests\TestCase;
 
 class AddressTest extends TestCase

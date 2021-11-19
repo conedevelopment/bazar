@@ -5,7 +5,7 @@ namespace Cone\Bazar\Tests\Unit;
 use ArrayIterator;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Casts\Inventory;
-use Cone\Bazar\Support\Countries;
+use Cone\Root\Support\Countries;
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 

@@ -6,7 +6,7 @@ use Cone\Bazar\Http\Requests\AddressStoreRequest as StoreRequest;
 use Cone\Bazar\Http\Requests\AddressUpdateRequest as UpdateRequest;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\User;
-use Cone\Bazar\Support\Countries;
+use Cone\Root\Support\Countries;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
