@@ -3,6 +3,7 @@
 namespace Cone\Bazar;
 
 use Cone\Root\Root;
+use Cone\Root\Support\Facades\Asset;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -68,6 +69,9 @@ class BazarServiceProvider extends ServiceProvider
         Root::running(static function () {
             (Models\Product::proxy())::registerResource();
             (Models\Category::proxy())::registerResource();
+            (Models\Order::proxy())::registerResource();
+
+            // Asset::script('bazar', __DIR__.'/../resources/js/app.js');
         });
     }
 
