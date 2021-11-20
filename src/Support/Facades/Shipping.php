@@ -2,13 +2,13 @@
 
 namespace Cone\Bazar\Support\Facades;
 
-use Cone\Bazar\Contracts\Shipping\Manager;
+use Cone\Bazar\Interfaces\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Cone\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Itemable $model)
  *
- * @see \Cone\Bazar\Contracts\Shipping\Manager
+ * @see \Cone\Bazar\Interfaces\Shipping\Manager
  */
 class Shipping extends Facade
 {

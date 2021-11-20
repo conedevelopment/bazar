@@ -3,7 +3,7 @@
 namespace Cone\Bazar\Cart;
 
 use Cone\Bazar\Bazar;
-use Cone\Bazar\Contracts\Buyable;
+use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Item;
@@ -105,7 +105,7 @@ abstract class Driver
     /**
      * Add the product with the given properties to the cart.
      *
-     * @param  \Cone\Bazar\Contracts\Buyable  $buyable
+     * @param  \Cone\Bazar\Interfaces\Buyable  $buyable
      * @param  float  $quantity
      * @param  array  $properties
      * @return \Cone\Bazar\Models\Item

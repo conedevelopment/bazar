@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Shipping;
 
-use Cone\Bazar\Contracts\Itemable;
-use Cone\Bazar\Contracts\Shipping\Manager as Contract;
+use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Shipping\Manager as Contract;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
@@ -35,7 +35,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      *
-     * @param  \Cone\Bazar\Contracts\Itemable|null  $model
+     * @param  \Cone\Bazar\Interfaces\Itemable|null  $model
      * @return array
      */
     public function getAvailableDrivers(?Itemable $model = null): array

@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Contracts\Tax as Contract;
-use Cone\Bazar\Contracts\Taxable;
+use Cone\Bazar\Interfaces\Tax as Contract;
+use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Shipping;

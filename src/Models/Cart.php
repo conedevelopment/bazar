@@ -3,10 +3,10 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Bazar;
-use Cone\Bazar\Concerns\Addressable;
-use Cone\Bazar\Concerns\InteractsWithDiscounts;
-use Cone\Bazar\Concerns\InteractsWithItems;
-use Cone\Bazar\Contracts\Models\Cart as Contract;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
+use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Database\Factories\CartFactory;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;

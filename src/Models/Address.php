@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Contracts\Models\Address as Contract;
+use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Root\Support\Countries;
 use Cone\Root\Traits\InteractsWithProxy;

@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Tests\Feature;
 
-use Cone\Bazar\Contracts\Conversion\Manager;
+use Cone\Bazar\Interfaces\Conversion\Manager;
 use Cone\Bazar\Conversion\GdDriver;
 use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Support\Facades\Conversion;

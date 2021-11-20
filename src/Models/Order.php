@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\Addressable;
-use Cone\Bazar\Concerns\InteractsWithDiscounts;
-use Cone\Bazar\Concerns\InteractsWithItems;
-use Cone\Bazar\Contracts\Models\Order as Contract;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
+use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Database\Factories\OrderFactory;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Resources\OrderResource;

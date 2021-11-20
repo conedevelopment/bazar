@@ -4,11 +4,11 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Concerns\InteractsWithItemables;
-use Cone\Bazar\Concerns\InteractsWithStock;
-use Cone\Bazar\Concerns\Sluggable;
-use Cone\Bazar\Contracts\Itemable;
-use Cone\Bazar\Contracts\Models\Product as Contract;
+use Cone\Bazar\Traits\InteractsWithItemables;
+use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Bazar\Traits\Sluggable;
+use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Models\Product as Contract;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Resources\ProductResource;
 use Cone\Root\Interfaces\Resourceable;
@@ -219,7 +219,7 @@ class Product extends Model implements Contract, Resourceable
     /**
      * Get the item representation of the buyable instance.
      *
-     * @param  \Cone\Bazar\Contracts\Itemable  $itemable
+     * @param  \Cone\Bazar\Interfaces\Itemable  $itemable
      * @param  array  $attributes
      * @return \Cone\Bazar\Models\Item
      */

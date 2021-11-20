@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Cart;
 
-use Cone\Bazar\Contracts\Cart\Manager as Contract;
+use Cone\Bazar\Interfaces\Cart\Manager as Contract;
 use Illuminate\Support\Manager as BaseManager;
 
 class Manager extends BaseManager implements Contract

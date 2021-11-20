@@ -6,6 +6,7 @@ use Cone\Bazar\Fields\Inventory;
 use Cone\Bazar\Fields\Prices;
 use Cone\Bazar\Fields\Properties;
 use Cone\Root\Fields\BelongsToMany;
+use Cone\Root\Fields\Country;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Text;

@@ -2,13 +2,13 @@
 
 namespace Cone\Bazar\Support\Facades;
 
-use Cone\Bazar\Contracts\Cart\Manager;
+use Cone\Bazar\Interfaces\Cart\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static \Cone\Bazar\Models\Cart getModel()
  * @method static \Cone\Bazar\Models\Item|null getItem(string $id)
- * @method static \Cone\Bazar\Models\Item addItem(\Cone\Bazar\Contracts\Buyable $buyable, float $quantity, array $properties)
+ * @method static \Cone\Bazar\Models\Item addItem(\Cone\Bazar\Interfaces\Buyable $buyable, float $quantity, array $properties)
  * @method static void removeItem(string $id)
  * @method static void removeItems(array $ids)
  * @method static void updateItem(string $id, array $properties)

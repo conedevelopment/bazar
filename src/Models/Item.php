@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\HasUuid;
-use Cone\Bazar\Concerns\InteractsWithTaxes;
-use Cone\Bazar\Contracts\Models\Item as Contract;
+use Cone\Bazar\Traits\HasUuid;
+use Cone\Bazar\Traits\InteractsWithTaxes;
+use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Factories\Factory;

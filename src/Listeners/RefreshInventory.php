@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Listeners;
 
-use Cone\Bazar\Contracts\Stockable;
+use Cone\Bazar\Interfaces\Stockable;
 use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Models\Item;
 

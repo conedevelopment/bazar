@@ -2,14 +2,14 @@
 
 namespace Cone\Bazar\Shipping;
 
-use Cone\Bazar\Contracts\Shippable;
+use Cone\Bazar\Interfaces\Shippable;
 
 class LocalPickupDriver extends Driver
 {
     /**
      * Calculate the shipping cost.
      *
-     * @param  \Cone\Bazar\Contracts\Shippable  $model
+     * @param  \Cone\Bazar\Interfaces\Shippable  $model
      * @return float
      */
     public function calculate(Shippable $model): float

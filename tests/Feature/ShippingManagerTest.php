@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Tests\Feature;
 
-use Cone\Bazar\Contracts\Shippable;
-use Cone\Bazar\Contracts\Shipping\Manager;
+use Cone\Bazar\Interfaces\Shippable;
+use Cone\Bazar\Interfaces\Shipping\Manager;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Shipping\Driver;
 use Cone\Bazar\Shipping\LocalPickupDriver;

@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Repositories;
 
-use Cone\Bazar\Contracts\Discount;
-use Cone\Bazar\Contracts\Discountable;
-use Cone\Bazar\Contracts\Repositories\DiscountRepository as Contract;
+use Cone\Bazar\Interfaces\Discount;
+use Cone\Bazar\Interfaces\Discountable;
+use Cone\Bazar\Interfaces\Repositories\DiscountRepository as Contract;
 use Closure;
 
 class DiscountRepository extends Repository implements Contract
@@ -51,7 +51,7 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Calculate the total of the processed discounts.
      *
-     * @param  \Cone\Bazar\Contracts\Discountable  $model
+     * @param  \Cone\Bazar\Interfaces\Discountable  $model
      * @return float
      */
     public function calculate(Discountable $model): float
@@ -66,8 +66,8 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Process the calculation.
      *
-     * @param  \Cone\Bazar\Contracts\Discountable  $model
-     * @param  string|float|\Closure|\Cone\Bazar\Contracts\Discount  $discount
+     * @param  \Cone\Bazar\Interfaces\Discountable  $model
+     * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Discount  $discount
      * @return float
      */
     protected function process(Discountable $model, $discount): float

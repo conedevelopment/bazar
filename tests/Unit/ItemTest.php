@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Contracts\Taxable;
+use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Product;

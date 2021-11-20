@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\Sluggable;
-use Cone\Bazar\Contracts\Models\Category as Contract;
+use Cone\Bazar\Traits\Sluggable;
+use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Bazar\Database\Factories\CategoryFactory;
 use Cone\Bazar\Resources\CategoryResource;
 use Cone\Root\Interfaces\Resourceable;

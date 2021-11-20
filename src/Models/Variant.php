@@ -5,10 +5,10 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Concerns\InteractsWithItemables;
-use Cone\Bazar\Concerns\InteractsWithStock;
-use Cone\Bazar\Contracts\Itemable;
-use Cone\Bazar\Contracts\Models\Variant as Contract;
+use Cone\Bazar\Traits\InteractsWithItemables;
+use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Models\Variant as Contract;
 use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -182,7 +182,7 @@ class Variant extends Model implements Contract
     /**
      * Get the item representation of the buyable instance.
      *
-     * @param  \Cone\Bazar\Contracts\Itemable  $itemable
+     * @param  \Cone\Bazar\Interfaces\Itemable  $itemable
      * @param  array  $attributes
      * @return \Cone\Bazar\Models\Item
      */

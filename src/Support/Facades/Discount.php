@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Support\Facades;
 
-use Cone\Bazar\Contracts\Repositories\DiscountRepository;
+use Cone\Bazar\Interfaces\Repositories\DiscountRepository;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static void remove(string $name)
  * @method static void disable()
  * @method static void enable()
- * @method static float calculate(\Cone\Bazar\Contracts\Discountable $model)
+ * @method static float calculate(\Cone\Bazar\Interfaces\Discountable $model)
  *
- * @see \Cone\Bazar\Contracts\Repositories\DiscountRepository
+ * @see \Cone\Bazar\Interfaces\Repositories\DiscountRepository
  */
 class Discount extends Facade
 {

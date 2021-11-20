@@ -2,13 +2,13 @@
 
 namespace Cone\Bazar\Support\Facades;
 
-use Cone\Bazar\Contracts\Gateway\Manager;
+use Cone\Bazar\Interfaces\Gateway\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Cone\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Itemable $model)
  *
- * @see \Cone\Bazar\Contracts\Gateway\Manager
+ * @see \Cone\Bazar\Interfaces\Gateway\Manager
  */
 class Gateway extends Facade
 {

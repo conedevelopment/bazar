@@ -4,7 +4,7 @@ namespace Cone\Bazar\Tests\Unit;
 
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Category;
 use Cone\Bazar\Models\Item;

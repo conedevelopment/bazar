@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Repositories;
 
-use Cone\Bazar\Contracts\Repositories\TaxRepository as Contract;
-use Cone\Bazar\Contracts\Tax;
-use Cone\Bazar\Contracts\Taxable;
+use Cone\Bazar\Interfaces\Repositories\TaxRepository as Contract;
+use Cone\Bazar\Interfaces\Tax;
+use Cone\Bazar\Interfaces\Taxable;
 use Closure;
 
 class TaxRepository extends Repository implements Contract
@@ -51,7 +51,7 @@ class TaxRepository extends Repository implements Contract
     /**
      * Calculate tax for the given item.
      *
-     * @param  \Cone\Bazar\Contracts\Taxable  $model
+     * @param  \Cone\Bazar\Interfaces\Taxable  $model
      * @return float
      */
     public function calculate(Taxable $model): float
@@ -66,8 +66,8 @@ class TaxRepository extends Repository implements Contract
     /**
      * Process the calculation.
      *
-     * @param  \Cone\Bazar\Contracts\Taxable  $model
-     * @param  string|float|\Closure|\Cone\Bazar\Contracts\Tax  $tax
+     * @param  \Cone\Bazar\Interfaces\Taxable  $model
+     * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Tax  $tax
      * @return float
      */
     protected function process(Taxable $model, $tax): float

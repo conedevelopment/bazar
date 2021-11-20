@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Contracts\Discount as Contract;
-use Cone\Bazar\Contracts\Discountable;
+use Cone\Bazar\Interfaces\Discount as Contract;
+use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Support\Facades\Discount;

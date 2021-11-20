@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Contracts\Breadcrumbable;
+use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Category;
 use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Models\Product;

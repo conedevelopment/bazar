@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Concerns\Addressable;
-use Cone\Bazar\Concerns\InteractsWithTaxes;
-use Cone\Bazar\Contracts\Models\Shipping as Contract;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithTaxes;
+use Cone\Bazar\Interfaces\Models\Shipping as Contract;
 use Cone\Bazar\Database\Factories\ShippingFactory;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Root\Traits\InteractsWithProxy;
