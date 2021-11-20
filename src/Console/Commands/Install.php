@@ -2,9 +2,8 @@
 
 namespace Cone\Bazar\Console\Commands;
 
-use Cone\Bazar\Database\Seeders\BazarSeeder;
+use Cone\Bazar\Database\Seeders\BazarTestDataSeeder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
 
 class Install extends Command
 {
@@ -31,8 +30,8 @@ class Install extends Command
     {
         $status = $this->call('migrate');
 
-        if ($this->option('seed') && $this->laravel->environment(['local', 'testing'])) {
-            $status = $this->call('db:seed', ['--class' => BazarSeeder::class]);
+        if ($this->option('seed')) {
+            $status = $this->call('db:seed', ['--class' => BazarTestDataSeeder::class]);
         }
 
         return $status;

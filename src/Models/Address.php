@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Bazar\Database\Factories\AddressFactory;
+use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Root\Support\Countries;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;

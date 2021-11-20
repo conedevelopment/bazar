@@ -26,10 +26,10 @@ class ProductResource extends Resource
         return [
             ID::make(),
             Text::make(__('Name'), 'name'),
-            Editor::make(__('Description'), 'description')->hiddenOnIndex(),
-            Prices::make(__('Prices'), 'prices'),
-            Properties::make(__('Properties'), 'properties'),
-            Inventory::make(__('Inventory'), 'inventory'),
+            // Editor::make(__('Description'), 'description')->hiddenOnIndex(),
+            Prices::make(__('Price'), 'prices'),
+            Properties::make(__('Properties'), 'properties')->hiddenOnIndex(),
+            Inventory::make(__('Inventory'), 'inventory')->hiddenOnIndex(),
             BelongsToMany::make(__('Categories'), 'categories')->display('name'),
         ];
     }

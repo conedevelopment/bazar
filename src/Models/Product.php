@@ -4,13 +4,13 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
+use Cone\Bazar\Database\Factories\ProductFactory;
+use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Models\Product as Contract;
+use Cone\Bazar\Resources\ProductResource;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Bazar\Traits\Sluggable;
-use Cone\Bazar\Interfaces\Itemable;
-use Cone\Bazar\Interfaces\Models\Product as Contract;
-use Cone\Bazar\Database\Factories\ProductFactory;
-use Cone\Bazar\Resources\ProductResource;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;
@@ -167,7 +167,7 @@ class Product extends Model implements Contract, Resourceable
     public function scopeCategory(Builder $query, int $value): Builder
     {
         return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('id'), $value);
+            return $query->where($query->qualifyColumn('id'), $value);
         });
     }
 

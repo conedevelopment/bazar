@@ -7,12 +7,10 @@ use Cone\Bazar\Models\Category;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Hash;
 
-class BazarSeeder extends Seeder
+class BazarTestDataSeeder extends Seeder
 {
     /**
      * Seed the application's database.
@@ -21,32 +19,9 @@ class BazarSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->seedUsers();
         $this->seedCategories();
         $this->seedProducts();
         $this->seedOrders();
-    }
-
-    /**
-     * Seed the users table.
-     *
-     * @return void
-     */
-    protected function seedUsers(): void
-    {
-        User::create([
-            'name' => 'Bazar Admin',
-            'email' => 'admin@bazar.test',
-            'email_verified_at' => Date::now(),
-            'password' => Hash::make('secret'),
-        ]);
-
-        User::create([
-            'name' => 'Bazar User',
-            'email' => 'user@bazar.test',
-            'email_verified_at' => Date::now(),
-            'password' => Hash::make('secret'),
-        ]);
     }
 
     /**

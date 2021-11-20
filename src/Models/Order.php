@@ -2,14 +2,14 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Exceptions\TransactionFailedException;
+use Cone\Bazar\Interfaces\Models\Order as Contract;
+use Cone\Bazar\Resources\OrderResource;
+use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithItems;
-use Cone\Bazar\Interfaces\Models\Order as Contract;
-use Cone\Bazar\Database\Factories\OrderFactory;
-use Cone\Bazar\Exceptions\TransactionFailedException;
-use Cone\Bazar\Resources\OrderResource;
-use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -115,13 +115,13 @@ class Order extends Model implements Contract, Resourceable
     public static function statuses(): array
     {
         return [
-            __('Pending') => 'pending',
-            __('On Hold') => 'on_hold',
-            __('In Progress') => 'in_progress',
-            __('Completed') => 'completed',
-            __('Cancelled') => 'cancelled',
-            __('Failed') => 'failed',
-            __('Refunded') => 'refunded',
+            'pending' => __('Pending'),
+            'on_hold' => __('On Hold'),
+            'in_progress' => __('In Progress'),
+            'completed' => __('Completed'),
+            'cancelled' => __('Cancelled'),
+            'failed' => __('Failed'),
+            'refunded' => __('Refunded'),
         ];
     }
 
@@ -172,7 +172,7 @@ class Order extends Model implements Contract, Resourceable
      */
     public function getStatusNameAttribute(): string
     {
-        return array_search($this->status, static::statuses()) ?: $this->status;
+        return static::statuses()[$this->status] ?? $this->status;
     }
 
     /**
