@@ -16,15 +16,15 @@ class BazarServiceProvider extends ServiceProvider
      * @var array
      */
     public $bindings = [
-        Contracts\Models\Address::class => Models\Address::class,
-        Contracts\Models\Cart::class => Models\Cart::class,
-        Contracts\Models\Category::class => Models\Category::class,
-        Contracts\Models\Item::class => Models\Item::class,
-        Contracts\Models\Order::class => Models\Order::class,
-        Contracts\Models\Product::class => Models\Product::class,
-        Contracts\Models\Shipping::class => Models\Shipping::class,
-        Contracts\Models\Transaction::class => Models\Transaction::class,
-        Contracts\Models\Variant::class => Models\Variant::class,
+        Interfaces\Models\Address::class => Models\Address::class,
+        Interfaces\Models\Cart::class => Models\Cart::class,
+        Interfaces\Models\Category::class => Models\Category::class,
+        Interfaces\Models\Item::class => Models\Item::class,
+        Interfaces\Models\Order::class => Models\Order::class,
+        Interfaces\Models\Product::class => Models\Product::class,
+        Interfaces\Models\Shipping::class => Models\Shipping::class,
+        Interfaces\Models\Transaction::class => Models\Transaction::class,
+        Interfaces\Models\Variant::class => Models\Variant::class,
     ];
 
     /**
@@ -33,11 +33,11 @@ class BazarServiceProvider extends ServiceProvider
      * @var array
      */
     public $singletons = [
-        Contracts\Cart\Manager::class => Cart\Manager::class,
-        Contracts\Gateway\Manager::class => Gateway\Manager::class,
-        Contracts\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
-        Contracts\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
-        Contracts\Shipping\Manager::class => Shipping\Manager::class,
+        Interfaces\Cart\Manager::class => Cart\Manager::class,
+        Interfaces\Gateway\Manager::class => Gateway\Manager::class,
+        Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
+        Interfaces\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
+        Interfaces\Shipping\Manager::class => Shipping\Manager::class,
     ];
 
     /**
@@ -71,7 +71,7 @@ class BazarServiceProvider extends ServiceProvider
             (Models\Category::proxy())::registerResource();
             (Models\Order::proxy())::registerResource();
 
-            // Asset::script('bazar', __DIR__.'/../resources/js/app.js');
+            Asset::script('bazar', __DIR__.'/../resources/js/app.js');
         });
     }
 
@@ -140,7 +140,6 @@ class BazarServiceProvider extends ServiceProvider
                 Console\Commands\Install::class,
                 Console\Commands\Publish::class,
                 Console\Commands\ClearCarts::class,
-                Console\Commands\ClearChunks::class,
             ]);
         }
     }
