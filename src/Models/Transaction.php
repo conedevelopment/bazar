@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Interfaces\Models\Transaction as Contract;
 use Cone\Bazar\Database\Factories\TransactionFactory;
+use Cone\Bazar\Interfaces\Models\Transaction as Contract;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Traits\InteractsWithProxy;
 use DateTimeInterface;

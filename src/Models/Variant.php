@@ -5,11 +5,11 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Traits\InteractsWithItemables;
-use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
-use Cone\Bazar\Database\Factories\VariantFactory;
+use Cone\Bazar\Traits\InteractsWithItemables;
+use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 
 class Variant extends Model implements Contract
 {
