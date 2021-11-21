@@ -5,7 +5,6 @@ namespace Cone\Bazar\Tests\Unit;
 use ArrayIterator;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Casts\Inventory;
-use Cone\Root\Support\Countries;
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -21,20 +20,6 @@ class SupportTest extends TestCase
         $this->assertEquals('150,300,400.00 USD', Str::currency(150300400));
 
         $this->assertEquals('150,300,400.00 HUF', Str::currency(150300400, 'huf'));
-    }
-
-    /** @test */
-    public function support_has_country_lookup()
-    {
-        $this->assertCount(58, Countries::africa());
-        $this->assertCount(5, Countries::antarctica());
-        $this->assertCount(54, Countries::asia());
-        $this->assertCount(51, Countries::europe());
-        $this->assertCount(41, Countries::northAmerica());
-        $this->assertCount(14, Countries::southAmerica());
-        $this->assertCount(26, Countries::oceania());
-        $this->assertCount(249, Countries::all());
-        $this->assertSame('Hungary', Countries::name('HU'));
     }
 
     /** @test */

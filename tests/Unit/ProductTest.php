@@ -4,11 +4,9 @@ namespace Cone\Bazar\Tests\Unit;
 
 use Cone\Bazar\Casts\Inventory;
 use Cone\Bazar\Casts\Prices;
-use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Category;
 use Cone\Bazar\Models\Item;
-use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Variant;
@@ -82,16 +80,6 @@ class ProductTest extends TestCase
     }
 
     /** @test */
-    public function it_has_media()
-    {
-        $medium = Medium::factory()->create();
-
-        $this->product->media()->attach($medium);
-
-        $this->assertTrue($this->product->media->pluck('id')->contains($medium->id));
-    }
-
-    /** @test */
     public function it_has_variants()
     {
         $variant = $this->product->variants()->save(
@@ -131,13 +119,6 @@ class ProductTest extends TestCase
         $this->product->prices['usd']['sale'] = 10;
         $this->product->save();
         $this->assertDatabaseHas('bazar_products', ['prices->usd->sale' => 10]);
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->product);
-        $this->assertSame($this->product->name, $this->product->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

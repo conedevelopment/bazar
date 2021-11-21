@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Category;
 use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Models\Product;
@@ -29,23 +28,6 @@ class CategoryTest extends TestCase
         $this->assertTrue(
             $this->category->products->pluck('id')->contains($product->id)
         );
-    }
-
-    /** @test */
-    public function it_has_media()
-    {
-        $media = Medium::factory()->create();
-
-        $this->category->media()->attach($media);
-
-        $this->assertTrue($this->category->media->pluck('id')->contains($media->id));
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->category);
-        $this->assertSame($this->category->name, $this->category->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

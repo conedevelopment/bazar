@@ -2,13 +2,12 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
-use Cone\Root\Support\Countries;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Root\Support\Countries;
 
 class AddressTest extends TestCase
 {
@@ -119,15 +118,6 @@ class AddressTest extends TestCase
         $this->assertSame('value', $address->custom('key'));
         $this->assertNull($address->custom('null'));
         $this->assertSame('default', $address->custom('null', 'default'));
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $address = $this->user->addresses()->save(Address::factory()->make());
-
-        $this->assertInstanceOf(Breadcrumbable::class, $address);
-        $this->assertSame($address->alias, $address->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

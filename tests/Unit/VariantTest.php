@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Variant;
 use Cone\Bazar\Tests\TestCase;
@@ -40,13 +39,6 @@ class VariantTest extends TestCase
         $variant->save();
 
         $this->assertSame("#{$variant->id}", $variant->alias);
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->variant);
-        $this->assertSame($this->variant->alias, $this->variant->toBreadcrumb($this->app['request']));
     }
 
     /** @test */

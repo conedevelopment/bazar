@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Tests\Unit;
 
-use Cone\Bazar\Interfaces\Breadcrumbable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
@@ -98,13 +97,6 @@ class OrderTest extends TestCase
         $total -= $this->order->discount;
 
         $this->assertEquals($total, $this->order->netTotal);
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->order);
-        $this->assertSame("#{$this->order->id}", $this->order->toBreadcrumb($this->app['request']));
     }
 
     /** @test */
