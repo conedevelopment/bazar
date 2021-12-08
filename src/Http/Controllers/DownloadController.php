@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Http\Controllers;
 
-use Cone\Bazar\Http\Controllers\Controller;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Response as ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;

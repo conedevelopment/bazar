@@ -28,7 +28,7 @@ return [
     | In this section, you can specify all the available cart drivers and
     | their configuration.
     |
-    | Supported drivers: "cookie"
+    | Supported drivers: "cookie", "session"
     |
     */
 
