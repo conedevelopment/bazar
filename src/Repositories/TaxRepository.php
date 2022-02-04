@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Repositories;
 
+use Closure;
 use Cone\Bazar\Interfaces\Repositories\TaxRepository as Contract;
 use Cone\Bazar\Interfaces\Tax;
 use Cone\Bazar\Interfaces\Taxable;
-use Closure;
 
 class TaxRepository extends Repository implements Contract
 {

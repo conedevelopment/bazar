@@ -2,11 +2,11 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Interfaces\Models\Shipping as Contract;
+use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithTaxes;
-use Cone\Bazar\Interfaces\Models\Shipping as Contract;
-use Cone\Bazar\Database\Factories\ShippingFactory;
-use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

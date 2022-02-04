@@ -4,7 +4,6 @@ namespace Cone\Bazar\Listeners;
 
 use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Jobs\SendNewOrderNotifications;
-use Cone\Bazar\Support\Facades\Cart;
 
 class PlaceOrder
 {

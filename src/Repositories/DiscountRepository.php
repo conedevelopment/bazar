@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Repositories;
 
+use Closure;
 use Cone\Bazar\Interfaces\Discount;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Repositories\DiscountRepository as Contract;
-use Closure;
 
 class DiscountRepository extends Repository implements Contract
 {

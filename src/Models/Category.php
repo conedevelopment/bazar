@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Traits\Sluggable;
-use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Bazar\Database\Factories\CategoryFactory;
+use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Bazar\Resources\CategoryResource;
+use Cone\Bazar\Traits\Sluggable;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;

@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Listeners;
 
-use Cone\Bazar\Interfaces\Stockable;
 use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Interfaces\Stockable;
 use Cone\Bazar\Models\Item;
 
 class RefreshInventory
