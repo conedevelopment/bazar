@@ -50,7 +50,7 @@ class Variant extends Model implements Contract
     protected $attributes = [
         'prices' => '[]',
         'inventory' => '[]',
-        'variation' => '[]',
+        'variation' => '[]'
     ];
 
     /**
@@ -150,7 +150,7 @@ class Variant extends Model implements Contract
     public function getPrice(string $type = 'default', ?string $currency = null): ?float
     {
         $currency = $currency ?: Bazar::getCurrency();
-
+        if(is_null($this->product)) return 0;
         return $this->prices->get("{$currency}.{$type}")
             ?: $this->product->getPrice($type, $currency);
     }
@@ -165,7 +165,7 @@ class Variant extends Model implements Contract
     public function getFormattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
         $currency = $currency ?: Bazar::getCurrency();
-
+        if(is_null($this->product)) return 0;
         return $this->prices->format("{$currency}.{$type}")
             ?: $this->product->prices->format("{$currency}.{$type}");
     }
