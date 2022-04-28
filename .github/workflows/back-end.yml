@@ -12,9 +12,10 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: ["ubuntu-18.04", "windows-latest"]
-        php: ["8.0"]
+        os: ["ubuntu-20.04"]
+        php: ["8.0", "8.1"]
         stability: ["prefer-stable"]
+        laravel: ["9.0"]
 
     name: "Unit - ${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
 
@@ -40,11 +41,3 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit --verbose
-
-      - name: Send coverage to Coveralls
-        if: "matrix.os == 'ubuntu-18.04' && matrix.php == '7.4'"
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.4.2/php-coveralls.phar"
-          php ./php-coveralls.phar -v
