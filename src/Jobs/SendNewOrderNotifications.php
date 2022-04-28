@@ -3,9 +3,9 @@
 namespace Cone\Bazar\Jobs;
 
 use Cone\Bazar\Models\Order;
-use Cone\Bazar\Models\User;
 use Cone\Bazar\Notifications\AdminNewOrder;
 use Cone\Bazar\Notifications\CustomerNewOrder;
+use Cone\Root\Models\User;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
