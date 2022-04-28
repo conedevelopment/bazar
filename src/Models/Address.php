@@ -23,7 +23,6 @@ class Address extends Model implements Contract
      * @var array
      */
     protected $appends = [
-        'country_name',
         'name',
     ];
 
@@ -137,39 +136,5 @@ class Address extends Model implements Contract
     public function getNameAttribute(): string
     {
         return trim(sprintf('%s %s', $this->first_name, $this->last_name));
-    }
-
-    /**
-     * Get the country name attribute.
-     *
-     * @return string|null
-     */
-    public function getCountryNameAttribute(): ?string
-    {
-        return $this->country ? Countries::name($this->country) : null;
-    }
-
-    /**
-     * Get a custom property.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function custom(string $key, $default = null)
-    {
-        return $this->custom[$key] ?? $default;
-    }
-
-    /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
     }
 }

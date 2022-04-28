@@ -4,9 +4,7 @@ namespace Cone\Bazar\Tests\Feature;
 
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Str;
 
 class CommandsTest extends TestCase
 {
@@ -39,14 +37,5 @@ class CommandsTest extends TestCase
     {
         $this->artisan('bazar:publish')
             ->assertExitCode(Command::SUCCESS);
-
-        $this->artisan('bazar:publish', ['--mix' => true])
-            ->assertExitCode(Command::SUCCESS);
-
-        $script = file_get_contents(__DIR__.'/../../resources/stubs/webpack.mix.js');
-
-        $this->assertTrue(
-            Str::contains(file_get_contents(App::basePath('webpack.mix.js')), $script)
-        );
     }
 }

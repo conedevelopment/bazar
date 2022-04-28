@@ -85,18 +85,6 @@ class Category extends Model implements Contract, Resourceable
     }
 
     /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where($query->qualifyColumn('name'), 'like', "{$value}%");
-    }
-
-    /**
      * Get the resource representation of the model.
      *
      * @return \Cone\Root\Resources\Resource

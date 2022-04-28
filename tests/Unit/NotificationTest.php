@@ -7,7 +7,6 @@ use Cone\Bazar\Notifications\AdminNewOrder;
 use Cone\Bazar\Notifications\CustomerNewOrder;
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\URL;
 
 class NotificationTest extends TestCase
 {
@@ -20,7 +19,6 @@ class NotificationTest extends TestCase
         $this->assertInstanceOf(MailMessage::class, $notification->toMail($this->admin));
         $this->assertSame([
             'message' => __('A new order has been placed.'),
-            'url' => URL::route('bazar.orders.show', $order),
         ], $notification->toArray($this->admin));
     }
 

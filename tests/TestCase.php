@@ -15,6 +15,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->withoutMix();
+        $this->user = User::factory()->create();
+        $this->admin = User::factory()->create();
     }
 }

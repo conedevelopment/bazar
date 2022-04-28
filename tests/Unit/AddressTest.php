@@ -7,7 +7,6 @@ use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Tests\TestCase;
-use Cone\Root\Support\Countries;
 
 class AddressTest extends TestCase
 {
@@ -85,16 +84,6 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_has_country_name_attribute()
-    {
-        $address = Address::factory()->make();
-
-        $this->assertSame(
-            Countries::name($address->country), $address->countryName
-        );
-    }
-
-    /** @test */
     public function it_has_alias_attribute()
     {
         $address = Address::factory()->make(['alias' => 'Fake']);
@@ -106,30 +95,5 @@ class AddressTest extends TestCase
         $address->save();
 
         $this->assertSame("#{$address->id}", $address->alias);
-    }
-
-    /** @test */
-    public function it_has_custom_attribute()
-    {
-        $address = Address::factory()->make(['custom' => [
-            'key' => 'value',
-        ]]);
-
-        $this->assertSame('value', $address->custom('key'));
-        $this->assertNull($address->custom('null'));
-        $this->assertSame('default', $address->custom('null', 'default'));
-    }
-
-    /** @test */
-    public function it_has_query_scopes()
-    {
-        $address = Address::factory()->make();
-
-        $address->addressable()->associate($this->user)->save();
-
-        $this->assertSame(
-            $address->newQuery()->where('bazar_addresses.alias', 'like', 'test%')->toSql(),
-            $address->newQuery()->search('test')->toSql()
-        );
     }
 }

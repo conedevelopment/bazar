@@ -3,12 +3,9 @@
 namespace Cone\Bazar\Jobs;
 
 use Cone\Bazar\Models\Order;
-use Cone\Bazar\Notifications\AdminNewOrder;
 use Cone\Bazar\Notifications\CustomerNewOrder;
-use Cone\Root\Models\User;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Notification;
 
 class SendNewOrderNotifications
@@ -48,12 +45,6 @@ class SendNewOrderNotifications
      */
     public function handle(): void
     {
-        $users = User::proxy()->newQuery()->whereIn('email', Config::get('bazar.admins', []))->get();
-
-        if ($users->isNotEmpty()) {
-            Notification::send($users, new AdminNewOrder($this->order));
-        }
-
         if ($email = $this->order->address->email) {
             Notification::route('mail', $email)->notify(new CustomerNewOrder($this->order));
         }

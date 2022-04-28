@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Tests\Feature;
 
-use Cone\Bazar\Models\Medium;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Root\Models\Medium;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
@@ -26,8 +26,8 @@ class DownloadTest extends TestCase
             'inventory' => [
                 'downloadable' => true,
                 'files' => [
-                    ['name' => 'Valid', 'url' => $medium->getFullPath(), 'expiration' => 7],
-                    ['name' => 'Expired', 'url' => $medium->getFullPath(), 'expiration' => 1],
+                    ['name' => 'Valid', 'url' => $medium->getAbsolutePath(), 'expiration' => 7],
+                    ['name' => 'Expired', 'url' => $medium->getAbsolutePath(), 'expiration' => 1],
                 ],
             ],
         ]);
