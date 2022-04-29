@@ -25,7 +25,7 @@ class Prices extends Field
     public function resolveFormat(Request $request, Model $model): mixed
     {
         if (is_null($this->formatResolver)) {
-            $this->formatResolver = static function () use ($model) {
+            $this->formatResolver = static function (Request $request, Model $model): ?string {
                 return $model->formattedPrice;
             };
         }

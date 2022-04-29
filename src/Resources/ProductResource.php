@@ -8,6 +8,7 @@ use Cone\Bazar\Fields\Properties;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\ID;
+use Cone\Root\Fields\Json;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
 use Illuminate\Http\Request;
@@ -29,14 +30,15 @@ class ProductResource extends Resource
 
             Editor::make(__('Description'), 'description')->hiddenOnIndex(),
 
-            Prices::make(__('Price'), 'prices'),
-
-            Properties::make(__('Properties'), 'properties')->hiddenOnIndex(),
-
-            Inventory::make(__('Inventory'), 'inventory')
-                ->hiddenOnIndex(),
-
             BelongsToMany::make(__('Categories'), 'categories')->display('name'),
+
+            Json::make(__('Inventory'), 'inventory')
+                ->hiddenOnDisplay()
+                ->withFields(static function (): array {
+                    return [
+                        Text::make(__('SKU'), 'sku'),
+                    ];
+                }),
         ];
     }
 }
