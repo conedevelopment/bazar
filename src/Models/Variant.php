@@ -167,18 +167,6 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
-    }
-
-    /**
      * Get the item representation of the buyable instance.
      *
      * @param  \Cone\Bazar\Interfaces\Itemable  $itemable

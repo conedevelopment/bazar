@@ -40,13 +40,4 @@ class VariantTest extends TestCase
 
         $this->assertSame("#{$variant->id}", $variant->alias);
     }
-
-    /** @test */
-    public function it_has_query_scopes()
-    {
-        $this->assertSame(
-            $this->variant->newQuery()->where('bazar_variants.alias', 'like', 'test%')->toSql(),
-            $this->variant->newQuery()->search('test')->toSql()
-        );
-    }
 }

@@ -303,21 +303,6 @@ class Order extends Model implements Contract, Resourceable
     }
 
     /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->whereHas('address', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('first_name'), 'like', "{$value}%")
-                         ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
-        });
-    }
-
-    /**
      * Scope a query to only include orders with the given status.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query

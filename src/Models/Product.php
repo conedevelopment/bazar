@@ -143,35 +143,6 @@ class Product extends Model implements Contract, Resourceable
     }
 
     /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where(static function (Builder $query) use ($value): Builder {
-            return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
-                         ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
-        });
-    }
-
-    /**
-     * Scope the query only to the given category.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeCategory(Builder $query, int $value): Builder
-    {
-        return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->qualifyColumn('id'), $value);
-        });
-    }
-
-    /**
      * Scope the query only to the models that are out of stock.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
