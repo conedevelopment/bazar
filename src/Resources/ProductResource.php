@@ -10,6 +10,7 @@ use Cone\Root\Fields\Json;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ProductResource extends Resource
@@ -30,6 +31,16 @@ class ProductResource extends Resource
             Editor::make(__('Description'), 'description')->hiddenOnIndex(),
 
             BelongsToMany::make(__('Categories'), 'categories')->display('name'),
+
+            Json::make(__('Price'), 'prices')
+                ->format(static function (Request $request, Model $model): ?string {
+                    return $model->formattedPrice;
+                })
+                ->withFields(static function (): array {
+                    return [
+                        //
+                    ];
+                }),
 
             Json::make(__('Inventory'), 'inventory')
                 ->hiddenOnDisplay()
