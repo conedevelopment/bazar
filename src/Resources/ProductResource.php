@@ -2,6 +2,8 @@
 
 namespace Cone\Bazar\Resources;
 
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Fields\Prices;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\Editor;
@@ -36,26 +38,22 @@ class ProductResource extends Resource
                 ->format(static function (Request $request, Model $model): ?string {
                     return $model->formattedPrice;
                 })
-                ->withFields(static function (): array {
-                    return [
-                        //
-                    ];
-                }),
+                ->withFields(array_values(array_map(static function (string $label, string $currency) {
+                    return Prices::make(__('Price :currency', ['currency' => $label]), $currency);
+                }, Bazar::getCurrencies(), array_keys(Bazar::getCurrencies())))),
 
             Json::make(__('Inventory'), 'inventory')
                 ->hiddenOnDisplay()
-                ->withFields(static function (): array {
-                    return [
-                        Text::make(__('SKU'), 'sku'),
-                        Number::make(__('Quantity'), 'quantity'),
-                        Number::make(__('Width'), 'width'),
-                        Number::make(__('Height'), 'height'),
-                        Number::make(__('Length'), 'length'),
-                        Number::make(__('Weight'), 'weight'),
-                        Boolean::make(__('Virtual'), 'virtual'),
-                        Boolean::make(__('Downloadable'), 'downloadable'),
-                    ];
-                }),
+                ->withFields([
+                    Text::make(__('SKU'), 'sku'),
+                    Number::make(__('Quantity'), 'quantity'),
+                    Number::make(__('Width'), 'width'),
+                    Number::make(__('Height'), 'height'),
+                    Number::make(__('Length'), 'length'),
+                    Number::make(__('Weight'), 'weight'),
+                    Boolean::make(__('Virtual'), 'virtual'),
+                    Boolean::make(__('Downloadable'), 'downloadable'),
+                ]),
         ];
     }
 }

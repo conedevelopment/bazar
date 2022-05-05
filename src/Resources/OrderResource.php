@@ -39,7 +39,7 @@ class OrderResource extends Resource
             MorphToMany::make(__('Products'), 'items', 'items')
                     ->hiddenOnIndex()
                     ->display('name')
-                    ->withPivotFields([
+                    ->withFields([
                         Number::make(__('Price'), 'price'),
                         Number::make(__('Tax'), 'tax'),
                         Number::make(__('Quantity'), 'quantity'),
