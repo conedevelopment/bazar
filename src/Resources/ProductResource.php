@@ -25,14 +25,16 @@ class ProductResource extends Resource
      */
     public function fields(Request $request): array
     {
-        return [
+        return array_merge(parent::fields($request), [
             ID::make(),
 
             Text::make(__('Name'), 'name'),
 
-            Editor::make(__('Description'), 'description')->hiddenOnIndex(),
+            Editor::make(__('Description'), 'description')
+                ->hiddenOnIndex(),
 
-            BelongsToMany::make(__('Categories'), 'categories')->display('name'),
+            BelongsToMany::make(__('Categories'), 'categories')
+                ->display('name'),
 
             Json::make(__('Price'), 'prices')
                 ->format(static function (Request $request, Model $model): ?string {
@@ -54,6 +56,6 @@ class ProductResource extends Resource
                     Boolean::make(__('Virtual'), 'virtual'),
                     Boolean::make(__('Downloadable'), 'downloadable'),
                 ]),
-        ];
+        ]);
     }
 }
