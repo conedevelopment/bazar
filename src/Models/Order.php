@@ -13,7 +13,6 @@ use Cone\Bazar\Traits\InteractsWithItems;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\InteractsWithProxy;
-use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,7 +29,6 @@ class Order extends Model implements Contract, Resourceable
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
-    use InteractsWithResource;
     use SoftDeletes;
 
     /**

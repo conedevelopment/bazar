@@ -5,7 +5,7 @@ namespace Cone\Bazar\Resources;
 use Cone\Root\Fields\BelongsTo;
 use Cone\Root\Fields\Date;
 use Cone\Root\Fields\ID;
-use Cone\Root\Fields\MorphToMany;
+use Cone\Root\Fields\MorphMany;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Cone\Root\Http\Requests\RootRequest;
@@ -45,7 +45,8 @@ class OrderResource extends Resource
                 ->async()
                 ->display('name'),
 
-            MorphToMany::make(__('Products'), 'items', 'items')
+            MorphMany::make(__('Products'), 'items', 'items')
+                    ->asSubResource()
                     ->hiddenOnIndex()
                     ->display('name')
                     ->withFields([

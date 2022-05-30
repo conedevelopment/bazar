@@ -15,7 +15,6 @@ use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
-use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +30,6 @@ class Product extends Model implements Contract, Resourceable
     use HasMedia;
     use InteractsWithItemables;
     use InteractsWithProxy;
-    use InteractsWithResource;
     use InteractsWithStock;
     use Sluggable;
     use SoftDeletes;
@@ -116,7 +114,8 @@ class Product extends Model implements Contract, Resourceable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product')
+                    ->withPivot(['id']);
     }
 
     /**

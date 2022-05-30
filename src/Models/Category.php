@@ -10,7 +10,6 @@ use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
-use Cone\Root\Traits\InteractsWithResource;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +21,6 @@ class Category extends Model implements Contract, Resourceable
     use HasFactory;
     use HasMedia;
     use InteractsWithProxy;
-    use InteractsWithResource;
     use Sluggable;
     use SoftDeletes;
 
@@ -35,15 +33,6 @@ class Category extends Model implements Contract, Resourceable
         'description',
         'name',
         'slug',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'pivot',
     ];
 
     /**

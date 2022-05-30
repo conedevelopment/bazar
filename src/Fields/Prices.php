@@ -4,7 +4,7 @@ namespace Cone\Bazar\Fields;
 
 use Cone\Root\Fields\Json;
 use Cone\Root\Fields\Number;
-use Illuminate\Http\Request;
+use Cone\Root\Http\Requests\RootRequest;
 
 class Prices extends Json
 {
@@ -18,7 +18,7 @@ class Prices extends Json
     /**
      * {@inheritdoc}
      */
-    public function fields(Request $request): array
+    public function fields(RootRequest $request): array
     {
         return array_merge(parent::fields($request), [
             Number::make($this->label, 'default')
