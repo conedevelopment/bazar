@@ -2,11 +2,11 @@
 
 namespace Cone\Bazar\Resources;
 
+use Cone\Bazar\Fields\Products;
 use Cone\Root\Fields\BelongsTo;
 use Cone\Root\Fields\Date;
+use Cone\Root\Fields\HasOne;
 use Cone\Root\Fields\ID;
-use Cone\Root\Fields\MorphMany;
-use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Cone\Root\Http\Requests\RootRequest;
 use Cone\Root\Resources\Resource;
@@ -40,20 +40,19 @@ class OrderResource extends Resource
             Date::make(__('Created at'), 'created_at')
                 ->visibleOnDisplay(),
 
-            BelongsTo::make(__('Customer'), 'user', 'user')
+            BelongsTo::make(__('Customer'), 'user')
                 ->nullable()
                 ->async()
                 ->display('name'),
 
-            MorphMany::make(__('Products'), 'items', 'items')
-                    ->asSubResource()
-                    ->hiddenOnIndex()
-                    ->display('name')
-                    ->withFields([
-                        Number::make(__('Price'), 'price'),
-                        Number::make(__('Tax'), 'tax'),
-                        Number::make(__('Quantity'), 'quantity'),
-                    ]),
+            HasOne::make(__('Shipping'), 'shipping')
+                ->asSubResource()
+                ->display('driver_name'),
+
+            Products::make(__('Products'), 'items')
+                ->asSubResource()
+                ->hiddenOnIndex()
+                ->display('name'),
         ]);
     }
 }
