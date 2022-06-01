@@ -89,8 +89,10 @@ abstract class Driver
      */
     public function getName(): string
     {
-        return preg_replace(
+        $name = preg_replace(
             '/([a-z0-9])([A-Z])/', '$1 $2', str_replace('Driver', '', class_basename(static::class))
         );
+
+        return __($name);
     }
 }

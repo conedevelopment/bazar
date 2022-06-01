@@ -7,7 +7,6 @@ use Cone\Root\Fields\MorphMany;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Cone\Root\Http\Requests\RootRequest;
-use Illuminate\Support\Str;
 
 class Products extends MorphMany
 {
@@ -19,16 +18,16 @@ class Products extends MorphMany
         return [
             Text::make(__('Name'), 'name'),
 
-            Number::make(__('Price'), 'price')
+            Currency::make(__('Price'), 'price')
                 ->step(0.1)
-                ->format(static function (RootRequest $request, Item $item, mixed $value): string {
-                    return Str::currency($value, $item->parent->currency);
+                ->currency(static function (RootRequest $request, Item $item): string {
+                    return $item->parent->currency;
                 }),
 
-            Number::make(__('Tax'), 'tax')
+            Currency::make(__('Tax'), 'tax')
                 ->step(0.1)
-                ->format(static function (RootRequest $request, Item $item, mixed $value): string {
-                    return Str::currency($value, $item->parent->currency);
+                ->currency(static function (RootRequest $request, Item $item): string {
+                    return $item->parent->currency;
                 }),
 
             Number::make(__('Quantity'), 'quantity'),
