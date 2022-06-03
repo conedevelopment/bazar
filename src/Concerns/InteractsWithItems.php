@@ -318,7 +318,7 @@ trait InteractsWithItems
     /**
      * Merge the given item into the collection.
      *
-     * @param  \Bazar\Models\Item  $items
+     * @param  \Bazar\Models\Item  $item
      * @return \Bazar\Models\Item
      */
     public function mergeItem(Item $item): Item
