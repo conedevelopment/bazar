@@ -12,7 +12,7 @@ interface User extends Breadcrumbable
     /**
      * Get the carts for the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\v
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function carts(): HasMany;
 

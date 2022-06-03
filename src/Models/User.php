@@ -116,7 +116,7 @@ class User extends Authenticatable implements Contract, MustVerifyEmail
     /**
      * Get the carts for the user.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\v
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function carts(): HasMany
     {
