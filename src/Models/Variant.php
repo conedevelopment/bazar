@@ -105,7 +105,8 @@ class Variant extends Model implements Contract
      */
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::getProxiedClass());
+        return $this->belongsTo(Product::getProxiedClass())
+                    ->withDefault();
     }
 
     /**
