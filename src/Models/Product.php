@@ -114,8 +114,7 @@ class Product extends Model implements Contract, Resourceable
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product')
-                    ->withPivot(['id']);
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
     }
 
     /**

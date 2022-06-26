@@ -10,6 +10,7 @@ use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Json;
+use Cone\Root\Fields\Media;
 use Cone\Root\Fields\Text;
 use Cone\Root\Http\Requests\RootRequest;
 use Cone\Root\Resources\Resource;
@@ -37,6 +38,11 @@ class ProductResource extends Resource
             BelongsToMany::make(__('Categories'), 'categories')
                 ->asSubResource()
                 ->display('name'),
+
+            Media::make(__('Media'), 'media')
+                ->withFields([
+                    Text::make(__('Alt'), 'alt')->rules(['required']),
+                ]),
 
             Json::make(__('Price'), 'prices')
                 ->format(static function (RootRequest $request, Model $model): ?string {

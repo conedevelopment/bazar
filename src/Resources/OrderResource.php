@@ -3,9 +3,9 @@
 namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Fields\Products;
-use Cone\Bazar\Fields\Transactions;
 use Cone\Root\Fields\BelongsTo;
 use Cone\Root\Fields\Date;
+use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\HasOne;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Text;
@@ -56,7 +56,7 @@ class OrderResource extends Resource
                 ->hiddenOnIndex()
                 ->display('name'),
 
-            Transactions::make(__('Transactions'), 'transactions')
+            HasMany::make(__('Transactions'), 'transactions')
                 ->asSubResource()
                 ->hiddenOnIndex()
                 ->display('driver_name'),
