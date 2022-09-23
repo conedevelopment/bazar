@@ -2,8 +2,6 @@
 
 namespace Cone\Bazar;
 
-use Cone\Root\Root;
-use Cone\Root\Support\Facades\Asset;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -65,10 +63,6 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerLoadings();
         $this->registerCommands();
         $this->registerPublishes();
-
-        Root::running(static function () {
-            Asset::script('bazar', __DIR__.'/../resources/js/app.js');
-        });
     }
 
     /**

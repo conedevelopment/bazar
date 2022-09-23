@@ -9,6 +9,7 @@ use Cone\Root\Fields\Computed;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\ID;
+use Cone\Root\Fields\Json;
 use Cone\Root\Fields\Media;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
@@ -49,17 +50,14 @@ class ProductResource extends Resource
 
             Media::make(__('Media'), 'media')
                 ->display('name')
-                ->hiddenOnIndex()
-                ->withFields([
-                    Text::make(__('Alt'), 'alt')->required()->rules(['required']),
-                ]),
+                ->hiddenOnIndex(),
 
-            // Fieldset::make(__('Prices'), 'prices')
-            //     ->withFields([
-            //         Number::make(__('Price'), 'metas.price')
-            //             ->rules(['required']),
-            //         Number::make(__('Sale Price'), 'metas.sale_price'),
-            //     ]),
+            Json::make(__('Prices'), 'prices')
+                ->withFields([
+                    Number::make(__('Price'), 'metas.price')
+                        ->rules(['required']),
+                    Number::make(__('Sale Price'), 'metas.sale_price'),
+                ]),
 
             // Text::make(__('SKU'), 'metas.sku'),
             // Number::make(__('Quantity'), 'metas.quantity'),
