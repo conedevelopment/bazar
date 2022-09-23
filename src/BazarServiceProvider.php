@@ -113,17 +113,8 @@ class BazarServiceProvider extends ServiceProvider
             ], 'bazar-config');
 
             $this->publishes([
-                __DIR__.'/../resources/js' => $this->app->resourcePath('js/vendor/bazar'),
-                __DIR__.'/../resources/sass' => $this->app->resourcePath('sass/vendor/bazar'),
-            ], 'bazar-assets');
-
-            $this->publishes([
                 __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/bazar'),
             ], 'bazar-views');
-
-            $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/bazar'),
-            ], 'bazar-compiled');
         }
     }
 
@@ -137,7 +128,6 @@ class BazarServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\Commands\Install::class,
-                Console\Commands\Publish::class,
                 Console\Commands\ClearCarts::class,
             ]);
         }

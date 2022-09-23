@@ -9,13 +9,6 @@ use Cone\Root\Http\Requests\RootRequest;
 class Prices extends Json
 {
     /**
-     * Indicates of the fieldset legend is visible.
-     *
-     * @var bool
-     */
-    protected bool $withLegend = false;
-
-    /**
      * {@inheritdoc}
      */
     public function fields(RootRequest $request): array

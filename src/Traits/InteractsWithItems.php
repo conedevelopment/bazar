@@ -279,9 +279,9 @@ trait InteractsWithItems
 
         return $this->items->filter(static function (Item $item): bool {
             return $item->buyable instanceof Stockable
-                && $item->buyable->inventory->downloadable();
+                && $item->buyable->isDownloadable();
         })->flatMap(static function (Item $item): array {
-            return $item->buyable->inventory->get('files', []);
+            return $item->buyable->get('files', []);
         })->filter()->map(function (array $file): array {
             $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
 

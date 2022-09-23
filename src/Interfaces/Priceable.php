@@ -27,7 +27,7 @@ interface Priceable
      *
      * @return bool
      */
-    public function free(): bool;
+    public function isFree(): bool;
 
     /**
      * Determine if the stockable model is on sale.

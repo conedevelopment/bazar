@@ -2,8 +2,6 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Casts\Inventory;
-use Cone\Bazar\Casts\Prices;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
@@ -14,6 +12,7 @@ use Cone\Bazar\Traits\Sluggable;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\HasMeta;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -28,6 +27,7 @@ class Product extends Model implements Contract, Resourceable
 {
     use HasFactory;
     use HasMedia;
+    use HasMeta;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
@@ -35,23 +35,11 @@ class Product extends Model implements Contract, Resourceable
     use SoftDeletes;
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'formatted_price',
-        'price',
-    ];
-
-    /**
      * The attributes that should have default values.
      *
      * @var array
      */
     protected $attributes = [
-        'inventory' => '[]',
-        'prices' => '[]',
         'properties' => '[]',
     ];
 
@@ -61,8 +49,6 @@ class Product extends Model implements Contract, Resourceable
      * @var array
      */
     protected $casts = [
-        'inventory' => Inventory::class,
-        'prices' => Prices::class,
         'properties' => 'json',
     ];
 
@@ -73,9 +59,7 @@ class Product extends Model implements Contract, Resourceable
      */
     protected $fillable = [
         'description',
-        'inventory',
         'name',
-        'prices',
         'properties',
         'slug',
     ];
@@ -148,7 +132,10 @@ class Product extends Model implements Contract, Resourceable
      */
     public function scopeOutOfStock(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('inventory->quantity'), '=', 0);
+        return $query->whereHas('metas', static function (Builder $query): Builder {
+            return $query->where($query->qualifyColumn('key'), 'quantity')
+                        ->where($query->qualifyColumn('value'), 0);
+        });
     }
 
     /**
@@ -159,7 +146,10 @@ class Product extends Model implements Contract, Resourceable
      */
     public function scopeInStock(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('inventory->quantity'), '>', 0);
+        return $query->whereHas('metas', static function (Builder $query): Builder {
+            return $query->where($query->qualifyColumn('key'), 'quantity')
+                        ->where($query->qualifyColumn('value'), '>', 0);
+        });
     }
 
     /**
