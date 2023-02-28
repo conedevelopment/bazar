@@ -23,31 +23,21 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company,
-            'slug' => Str::random(),
+            'name' => $name = $this->faker->unique()->company(),
+            'slug' => Str::slug($name),
             'description' => $this->faker->sentences(3, true),
-            'properties' => ['Size' => ['XS', 'S', 'M', 'L']],
-            'prices' => [
-                'usd' => [
-                    'default' => $price = mt_rand(10, 1000) / 10,
-                    'sale' => round($price * 0.8, 1),
-                ],
-                'eur' => [
-                    'default' => $price = mt_rand(10, 1000) / 10,
-                    'sale' => round($price * 0.8, 1),
-                ]
-            ],
-            'inventory' => [
-                'files' => [],
-                'sku' => Str::random(5),
-                'quantity' => 20,
-                'weight' => 200,
-                'virtual' => false,
-                'downloadable' => false,
-                'length' => 200,
-                'width' => 300,
-                'height' => 400,
-            ],
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(static function (Product $user): void {
+            //
+        });
     }
 }

@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
+use Cone\Bazar\Relations\Prices;
 use Cone\Bazar\Resources\ProductResource;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
@@ -35,24 +37,6 @@ class Product extends Model implements Contract, Resourceable
     use SoftDeletes;
 
     /**
-     * The attributes that should have default values.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        'properties' => '[]',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'properties' => 'json',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -60,7 +44,6 @@ class Product extends Model implements Contract, Resourceable
     protected $fillable = [
         'description',
         'name',
-        'properties',
         'slug',
     ];
 
@@ -112,9 +95,33 @@ class Product extends Model implements Contract, Resourceable
     }
 
     /**
+     * Get the variables for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function variables(): MorphToMany
+    {
+        return $this->morphToMany(Variable::getProxiedClass(), 'buyable', 'bazar_buyable_variable');
+    }
+
+    /**
+     * Get the prices for the model.
+     *
+     * @return \Cone\Bazar\Relations\Prices
+     */
+    public function prices(): Prices
+    {
+        $query = $this->newRelatedInstance(Price::class)->newQuery();
+
+        [$type, $id] = $this->getMorphs('metable', null, null);
+
+        return new Prices($query, $this, $query->qualifyColumn($type), $query->qualifyColumn($id), $this->getKeyName());
+    }
+
+    /**
      * Get the variants attribute.
      *
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getVariantsAttribute(): Collection
     {

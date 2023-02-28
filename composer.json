@@ -22,15 +22,16 @@
         }
     },
     "require": {
-        "php": "^8.0",
-        "conedevelopment/root": "~1.0-dev"
+        "php": "^8.0 || ^8.1 || ^8.2",
+        "conedevelopment/root": "^1.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel/laravel": "^9.0",
+        "laravel/laravel": "^10.0",
         "mockery/mockery": "^1.4.4",
-        "phpunit/phpunit": "^9.5.10",
-        "nunomaduro/larastan": "^1.0"
+        "phpunit/phpunit": "^10.0",
+        "nunomaduro/larastan": "^2.1.6",
+        "laravel/pint": "^1.6"
     },
     "extra": {
         "laravel": {

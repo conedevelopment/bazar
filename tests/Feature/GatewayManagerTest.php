@@ -45,7 +45,6 @@ class GatewayManagerTest extends TestCase
                 'name' => $product->name,
             ]);
             $this->order->items()->create([
-
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),

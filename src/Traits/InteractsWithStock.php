@@ -39,9 +39,11 @@ trait InteractsWithStock
     {
         $currency = $currency ?: Bazar::getCurrency();
 
-        $key = sprintf('metas.price%s_%s', is_null($type) ? '' : "_{$type}", $currency);
+        $key = sprintf('price%s_%s', is_null($type) ? '' : "_{$type}", $currency);
 
-        return $this->getAttribute($key);
+        $meta = $this->metas->firstWhere('key', $key);
+
+        return is_null($meta) ? null : $meta->value;
     }
 
     /**

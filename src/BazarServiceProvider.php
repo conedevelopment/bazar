@@ -22,6 +22,7 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Models\Product::class => Models\Product::class,
         Interfaces\Models\Shipping::class => Models\Shipping::class,
         Interfaces\Models\Transaction::class => Models\Transaction::class,
+        Interfaces\Models\Variable::class => Models\Variable::class,
         Interfaces\Models\Variant::class => Models\Variant::class,
     ];
 

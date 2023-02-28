@@ -3,8 +3,6 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Bazar;
-use Cone\Bazar\Casts\Inventory;
-use Cone\Bazar\Casts\Prices;
 use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
@@ -16,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model implements Contract
@@ -38,37 +37,12 @@ class Variant extends Model implements Contract
     ];
 
     /**
-     * The attributes that should have default values.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        'inventory' => '[]',
-        'prices' => '[]',
-        'variation' => '[]',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'inventory' => Inventory::class,
-        'prices' => Prices::class,
-        'variation' => 'json',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
         'alias',
-        'inventory',
-        'prices',
-        'variation',
     ];
 
     /**
@@ -110,6 +84,16 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the variables for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function variables(): MorphToMany
+    {
+        return $this->morphToMany(Variable::getProxiedClass(), 'buyable', 'bazar_buyable_variable');
+    }
+
+    /**
      * Get the alias attribute.
      *
      * @param  string|null  $value
@@ -118,22 +102,6 @@ class Variant extends Model implements Contract
     public function getAliasAttribute(?string $value = null): ?string
     {
         return $this->exists ? ($value ?: "#{$this->id}") : $value;
-    }
-
-    /**
-     * Get the variation attribute.
-     *
-     * @param  string  $value
-     * @return array
-     */
-    public function getVariationAttribute(string $value): array
-    {
-        return $this->relationLoaded('product')
-            ? array_replace(
-                array_fill_keys(array_keys($this->product->properties), '*'),
-                $this->castAttribute('variation', $value)
-            )
-            : $this->castAttribute('variation', $value);
     }
 
     /**
