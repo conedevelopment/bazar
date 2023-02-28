@@ -8,8 +8,6 @@ class Inventory extends AttributeBag
 {
     /**
      * The default values.
-     *
-     * @var array
      */
     protected array $defaults = [
         'files' => [],
@@ -25,9 +23,6 @@ class Inventory extends AttributeBag
 
     /**
      * Get the formatted dimensions.
-     *
-     * @param  string  $glue
-     * @return string|null
      */
     public function getFormattedDimensions(string $glue = 'x'): ?string
     {
@@ -42,8 +37,6 @@ class Inventory extends AttributeBag
 
     /**
      * Get the formatted weight.
-     *
-     * @return string|null
      */
     public function getFormattedWeight(): ?string
     {
@@ -56,8 +49,6 @@ class Inventory extends AttributeBag
 
     /**
      * Determine if the stockable model is virtual.
-     *
-     * @return bool
      */
     public function virtual(): bool
     {
@@ -66,8 +57,6 @@ class Inventory extends AttributeBag
 
     /**
      * Determine if the stockable model is downloadable.
-     *
-     * @return bool
      */
     public function downloadable(): bool
     {
@@ -76,8 +65,6 @@ class Inventory extends AttributeBag
 
     /**
      * Determine if the stockable model tracks quantity.
-     *
-     * @return bool
      */
     public function tracksQuantity(): bool
     {
@@ -86,9 +73,6 @@ class Inventory extends AttributeBag
 
     /**
      * Determine if the stockable model is available.
-     *
-     * @param  float  $quantity
-     * @return bool
      */
     public function available(float $quantity = 1): bool
     {
@@ -99,9 +83,6 @@ class Inventory extends AttributeBag
 
     /**
      * Increment the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
      */
     public function incrementQuantity(float $quantity = 1): void
     {
@@ -112,9 +93,6 @@ class Inventory extends AttributeBag
 
     /**
      * Decrement the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
      */
     public function decrementQuantity(float $quantity = 1): void
     {

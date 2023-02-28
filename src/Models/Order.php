@@ -87,8 +87,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -97,8 +95,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -107,8 +103,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the available order statuses.
-     *
-     * @return array
      */
     public static function statuses(): array
     {
@@ -125,8 +119,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the cart for the order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function cart(): HasOne
     {
@@ -135,8 +127,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the transactions for the order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function transactions(): HasMany
     {
@@ -145,8 +135,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the payments attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getPaymentsAttribute(): Collection
     {
@@ -155,8 +143,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the refunds attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getRefundsAttribute(): Collection
     {
@@ -165,8 +151,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the status name attribute.
-     *
-     * @return string
      */
     public function getStatusNameAttribute(): string
     {
@@ -175,13 +159,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Create a payment transaction for the order.
-     *
-     * @param  float|null  $amount
-     * @param  string|null  $driver
-     * @param  array  $attributes
-     * @return \Cone\Bazar\Models\Transaction
-     *
-     * @throws \Cone\Bazar\Exceptions\TransactionFailedException
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
@@ -202,13 +179,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Create a refund transaction for the order.
-     *
-     * @param  float|null  $amount
-     * @param  string|null  $driver
-     * @param  array  $attributes
-     * @return \Cone\Bazar\Models\Transaction
-     *
-     * @throws \Cone\Bazar\Exceptions\TransactionFailedException
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
@@ -229,8 +199,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the total paid amount.
-     *
-     * @return float
      */
     public function getTotalPaid(): float
     {
@@ -239,8 +207,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the total refunded amount.
-     *
-     * @return float
      */
     public function getTotalRefunded(): float
     {
@@ -249,8 +215,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the total payable amount.
-     *
-     * @return float
      */
     public function getTotalPayable(): float
     {
@@ -259,8 +223,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the total refundabke amount.
-     *
-     * @return float
      */
     public function getTotalRefundable(): float
     {
@@ -269,8 +231,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Determine if the order is fully paid.
-     *
-     * @return bool
      */
     public function paid(): bool
     {
@@ -279,8 +239,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Determine if the order is fully refunded.
-     *
-     * @return bool
      */
     public function refunded(): bool
     {
@@ -289,9 +247,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Set the status by the given value.
-     *
-     * @param  string  $status
-     * @return void
      */
     public function markAs(string $status): void
     {
@@ -302,10 +257,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Scope a query to only include orders with the given status.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $status
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, string $status): Builder
     {
@@ -314,10 +265,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Scope the query to the given user.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $value
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUser(Builder $query, int $value): Builder
     {
@@ -328,8 +275,6 @@ class Order extends Model implements Contract, Resourceable
 
     /**
      * Get the resource representation of the model.
-     *
-     * @return \Cone\Root\Resources\Resource
      */
     public static function toResource(): Resource
     {

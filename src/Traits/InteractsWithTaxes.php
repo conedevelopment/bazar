@@ -12,8 +12,6 @@ trait InteractsWithTaxes
 {
     /**
      * Get the formatted tax attribute.
-     *
-     * @return string
      */
     public function getFormattedTaxAttribute(): string
     {
@@ -22,8 +20,6 @@ trait InteractsWithTaxes
 
     /**
      * Get the tax.
-     *
-     * @return float
      */
     public function getTax(): float
     {
@@ -32,8 +28,6 @@ trait InteractsWithTaxes
 
     /**
      * Get the formatted tax.
-     *
-     * @return string
      */
     public function getFormattedTax(): string
     {
@@ -52,9 +46,6 @@ trait InteractsWithTaxes
 
     /**
      * Calculate the tax.
-     *
-     * @param  bool  $update
-     * @return float
      */
     public function calculateTax(bool $update = true): float
     {

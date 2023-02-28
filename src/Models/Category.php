@@ -44,8 +44,6 @@ class Category extends Model implements Contract, Resourceable
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -54,8 +52,6 @@ class Category extends Model implements Contract, Resourceable
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -64,8 +60,6 @@ class Category extends Model implements Contract, Resourceable
 
     /**
      * Get the products for the category.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function products(): BelongsToMany
     {
@@ -74,8 +68,6 @@ class Category extends Model implements Contract, Resourceable
 
     /**
      * Get the resource representation of the model.
-     *
-     * @return \Cone\Root\Resources\Resource
      */
     public static function toResource(): Resource
     {

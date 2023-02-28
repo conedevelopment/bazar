@@ -8,8 +8,6 @@ trait Sluggable
 {
     /**
      * Boot the trait.
-     *
-     * @return void
      */
     protected static function bootSluggable(): void
     {

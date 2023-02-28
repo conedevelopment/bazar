@@ -8,9 +8,6 @@ class LocalPickupDriver extends Driver
 {
     /**
      * Calculate the shipping cost.
-     *
-     * @param  \Cone\Bazar\Interfaces\Shippable  $model
-     * @return float
      */
     public function calculate(Shippable $model): float
     {

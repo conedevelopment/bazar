@@ -8,9 +8,6 @@ class HandleFailedCheckout
 {
     /**
      * Handle the event.
-     *
-     * @param  \Cone\Bazar\Events\CheckoutFailed  $event
-     * @return void
      */
     public function handle(CheckoutFailed $event): void
     {

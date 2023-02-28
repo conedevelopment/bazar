@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -87,8 +88,6 @@ class Address extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -97,8 +96,6 @@ class Address extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -107,8 +104,6 @@ class Address extends Model implements Contract
 
     /**
      * Get the addressable model for the address.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function addressable(): MorphTo
     {
@@ -117,22 +112,25 @@ class Address extends Model implements Contract
 
     /**
      * Get the alias attribute.
-     *
-     * @param  string|null  $value
-     * @return string|null
      */
-    public function getAliasAttribute(?string $value = null): ?string
+    protected function alias(): Attribute
     {
-        return $this->exists ? ($value ?: "#{$this->id}") : $value;
+        return new Attribute(
+            get: function (?string $value): ?string {
+                return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
+            }
+        );
     }
 
     /**
      * Get the name attribute.
-     *
-     * @return string
      */
-    public function getNameAttribute(): string
+    protected function name(): Attribute
     {
-        return trim(sprintf('%s %s', $this->first_name, $this->last_name));
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return trim(sprintf('%s %s', $attributes['first_name'], $attributes['last_name']));
+            }
+        );
     }
 }

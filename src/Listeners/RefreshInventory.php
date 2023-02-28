@@ -10,9 +10,6 @@ class RefreshInventory
 {
     /**
      * Handle the event.
-     *
-     * @param  \Cone\Bazar\Events\CheckoutProcessed  $event
-     * @return void
      */
     public function handle(CheckoutProcessed $event): void
     {

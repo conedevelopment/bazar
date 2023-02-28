@@ -9,9 +9,6 @@ class SessionDriver extends Driver
 {
     /**
      * Resolve the cart instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Cone\Bazar\Models\Cart
      */
     protected function resolve(Request $request): Cart
     {
@@ -22,10 +19,6 @@ class SessionDriver extends Driver
 
     /**
      * The callback after the cart instance is resolved.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Cone\Bazar\Models\Cart  $cart
-     * @return void
      */
     protected function resolved(Request $request, Cart $cart): void
     {

@@ -22,18 +22,13 @@ class ProductResource extends Resource
 {
     /**
      * The relations to eager load on every query.
-     *
-     * @var array
-    */
+     */
     protected array $with = [
         'metas',
     ];
 
     /**
      * Define the filters for the resource.
-     *
-     * @param  \Cone\Root\Http\Requests\RootRequest  $request
-     * @return array
      */
     public function filters(RootRequest $request): array
     {
@@ -46,7 +41,6 @@ class ProductResource extends Resource
      * Define the fields for the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
     public function fields(RootRequest $request): array
     {

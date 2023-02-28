@@ -14,9 +14,6 @@ class Transactions extends HasMany
 {
     /**
      * Define the fields for the object.
-     *
-     * @param  \Cone\Root\Http\Requests\RootRequest  $request
-     * @return array
      */
     public function fields(RootRequest $request): array
     {

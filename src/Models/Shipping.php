@@ -72,8 +72,6 @@ class Shipping extends Model implements Contract
 
     /**
      * The "booted" method of the model.
-     *
-     * @return void
      */
     protected static function booted(): void
     {
@@ -84,8 +82,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -94,8 +90,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -104,8 +98,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shippable model for the shipping.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function shippable(): MorphTo
     {
@@ -116,9 +108,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the driver attribute.
-     *
-     * @param  string|null  $value
-     * @return string
      */
     public function getDriverAttribute(?string $value = null): string
     {
@@ -127,8 +116,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the total attribute.
-     *
-     * @return float
      */
     public function getTotalAttribute(): float
     {
@@ -137,8 +124,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted total attribute.
-     *
-     * @return string
      */
     public function getFormattedTotalAttribute(): string
     {
@@ -147,8 +132,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the net total attribute.
-     *
-     * @return float
      */
     public function getNetTotalAttribute(): float
     {
@@ -157,8 +140,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted net total attribute.
-     *
-     * @return string
      */
     public function getFormattedNetTotalAttribute(): string
     {
@@ -167,8 +148,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the name of the shipping method.
-     *
-     * @return string
      */
     public function getDriverNameAttribute(): string
     {
@@ -181,8 +160,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the price.
-     *
-     * @return float
      */
     public function getPrice(): float
     {
@@ -191,8 +168,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted price.
-     *
-     * @return string
      */
     public function getFormattedPrice(): string
     {
@@ -201,8 +176,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's total.
-     *
-     * @return float
      */
     public function getTotal(): float
     {
@@ -211,8 +184,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's formatted total.
-     *
-     * @return string
      */
     public function getFormattedTotal(): string
     {
@@ -221,8 +192,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's net total.
-     *
-     * @return float
      */
     public function getNetTotal(): float
     {
@@ -231,8 +200,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's formatted net total.
-     *
-     * @return string
      */
     public function getFormattedNetTotal(): string
     {
@@ -241,8 +208,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the quantity.
-     *
-     * @return float
      */
     public function getQuantity(): float
     {
@@ -251,9 +216,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Calculate the cost.
-     *
-     * @param  bool  $update
-     * @return float
      */
     public function calculateCost(bool $update = true): float
     {

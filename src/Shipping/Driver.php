@@ -9,9 +9,6 @@ abstract class Driver extends BaseDriver
 {
     /**
      * Calculate the shipping cost.
-     *
-     * @param  \Cone\Bazar\Interfaces\Shippable  $model
-     * @return float
      */
     abstract public function calculate(Shippable $model): float;
 }

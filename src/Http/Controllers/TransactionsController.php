@@ -9,7 +9,6 @@ use Cone\Root\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
@@ -18,9 +17,6 @@ class TransactionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Cone\Bazar\Models\Order  $order
-     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -44,11 +40,6 @@ class TransactionsController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Cone\Bazar\Models\Order  $order
-     * @param  \Cone\Bazar\Models\Transaction  $transaction
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Order $order, Transaction $transaction): JsonResponse
     {
@@ -63,10 +54,6 @@ class TransactionsController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \Cone\Bazar\Models\Order  $order
-     * @param  \Cone\Bazar\Models\Transaction  $transaction
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Order $order, Transaction $transaction): JsonResponse
     {

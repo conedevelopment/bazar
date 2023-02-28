@@ -75,8 +75,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -85,8 +83,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -95,8 +91,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the order for the transaction.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo
     {
@@ -105,8 +99,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the name of the gateway driver.
-     *
-     * @return string
      */
     public function getDriverNameAttribute(): string
     {
@@ -119,8 +111,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the URL of the transaction.
-     *
-     * @return string|null
      */
     public function getUrlAttribute(): ?string
     {
@@ -133,8 +123,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Determine if the payment is completed.
-     *
-     * @return bool
      */
     public function completed(): bool
     {
@@ -143,8 +131,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Determine if the payment is pending.
-     *
-     * @return bool
      */
     public function pending(): bool
     {
@@ -153,9 +139,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Mark the transaction as completed.
-     *
-     * @param \DateTimeInterface|null  $date
-     * @return void
      */
     public function markAsCompleted(?DateTimeInterface $date = null): void
     {
@@ -168,8 +151,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Mark the transaction as pending.
-     *
-     * @return void
      */
     public function markAsPending(): void
     {
@@ -180,9 +161,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope the query to only include payments.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePayment(Builder $query): Builder
     {
@@ -191,9 +169,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope the query to only include refunds.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRefund(Builder $query): Builder
     {
@@ -202,9 +177,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope a query to only include completed transactions.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCompleted(Builder $query): Builder
     {
@@ -213,9 +185,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope a query to only include pending transactions.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePending(Builder $query): Builder
     {

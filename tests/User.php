@@ -13,7 +13,8 @@ class User extends BaseUser
 
     protected static function newFactory(): ?Factory
     {
-        return new class extends UserFactory {
+        return new class extends UserFactory
+        {
             protected $model = User::class;
         };
     }

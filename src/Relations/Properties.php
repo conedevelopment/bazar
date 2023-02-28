@@ -4,7 +4,7 @@ namespace Cone\Bazar\Relations;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Prices extends MorphMany
+class Properties extends MorphMany
 {
     /**
      * Set the base constraints on the relation query.
@@ -13,6 +13,6 @@ class Prices extends MorphMany
     {
         parent::addConstraints();
 
-        $this->query->where($this->query->qualifyColumn('key'), 'like', 'price_%');
+        $this->query->where($this->query->qualifyColumn('key'), 'like', 'property_%');
     }
 }

@@ -14,7 +14,9 @@ use Illuminate\Support\Str;
 
 class ShippingTest extends TestCase
 {
-    protected $cart, $shipping;
+    protected $cart;
+
+    protected $shipping;
 
     public function setUp(): void
     {

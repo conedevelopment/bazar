@@ -19,9 +19,7 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Register a new discount.
      *
-     * @param  string  $name
      * @param  int|callable  $discount
-     * @return void
      */
     public function register(string $name, $discount): void
     {
@@ -30,8 +28,6 @@ class DiscountRepository extends Repository implements Contract
 
     /**
      * Disable the discount calculation.
-     *
-     * @return void
      */
     public function disable(): void
     {
@@ -40,8 +36,6 @@ class DiscountRepository extends Repository implements Contract
 
     /**
      * Enable the discount calculation.
-     *
-     * @return void
      */
     public function enable(): void
     {
@@ -50,9 +44,6 @@ class DiscountRepository extends Repository implements Contract
 
     /**
      * Calculate the total of the processed discounts.
-     *
-     * @param  \Cone\Bazar\Interfaces\Discountable  $model
-     * @return float
      */
     public function calculate(Discountable $model): float
     {
@@ -66,9 +57,7 @@ class DiscountRepository extends Repository implements Contract
     /**
      * Process the calculation.
      *
-     * @param  \Cone\Bazar\Interfaces\Discountable  $model
      * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Discount  $discount
-     * @return float
      */
     protected function process(Discountable $model, $discount): float
     {

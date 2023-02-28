@@ -18,22 +18,17 @@ abstract class Driver
 {
     /**
      * The driver config.
-     *
-     * @var array
      */
     protected array $config = [];
 
     /**
      * The cart instance.
-     *
-     * @var \Cone\Bazar\Models\Cart|null
      */
     protected ?Cart $cart = null;
 
     /**
      * Create a new driver instance.
      *
-     * @param  array  $config
      * @return void
      */
     public function __construct(array $config = [])
@@ -43,18 +38,11 @@ abstract class Driver
 
     /**
      * Resolve the cart instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Cone\Bazar\Models\Cart
      */
     abstract protected function resolve(Request $request): Cart;
 
     /**
      * The callback after the cart instance is resolved.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Cone\Bazar\Models\Cart  $cart
-     * @return void
      */
     protected function resolved(Request $request, Cart $cart): void
     {
@@ -67,8 +55,6 @@ abstract class Driver
 
     /**
      * Get the cart model.
-     *
-     * @return \Cone\Bazar\Models\Cart
      */
     public function getModel(): Cart
     {
@@ -93,9 +79,6 @@ abstract class Driver
 
     /**
      * Get the item with the given id.
-     *
-     * @param  string  $id
-     * @return \Cone\Bazar\Models\Item|null
      */
     public function getItem(string $id): ?Item
     {
@@ -104,11 +87,6 @@ abstract class Driver
 
     /**
      * Add the product with the given properties to the cart.
-     *
-     * @param  \Cone\Bazar\Interfaces\Buyable  $buyable
-     * @param  float  $quantity
-     * @param  array  $properties
-     * @return \Cone\Bazar\Models\Item
      */
     public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
@@ -126,9 +104,6 @@ abstract class Driver
 
     /**
      * Remove the given cart item.
-     *
-     * @param  string  $id
-     * @return void
      */
     public function removeItem(string $id): void
     {
@@ -147,9 +122,6 @@ abstract class Driver
 
     /**
      * Remove the given cart items.
-     *
-     * @param  array  $ids
-     * @return void
      */
     public function removeItems(array $ids): void
     {
@@ -168,10 +140,6 @@ abstract class Driver
 
     /**
      * Update the given cart item.
-     *
-     * @param  string  $id
-     * @param  array  $properties
-     * @return void
      */
     public function updateItem(string $id, array $properties = []): void
     {
@@ -184,9 +152,6 @@ abstract class Driver
 
     /**
      * Update the given cart items.
-     *
-     * @param  array  $data
-     * @return void
      */
     public function updateItems(array $data): void
     {
@@ -203,8 +168,6 @@ abstract class Driver
 
     /**
      * Get the cart items.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getItems(): Collection
     {
@@ -213,8 +176,6 @@ abstract class Driver
 
     /**
      * Get the billing address that belongs to the cart.
-     *
-     * @return \Cone\Bazar\Models\Address
      */
     public function getBilling(): Address
     {
@@ -223,9 +184,6 @@ abstract class Driver
 
     /**
      * Update the billing address.
-     *
-     * @param  array  $attributes
-     * @return void
      */
     public function updateBilling(array $attributes): void
     {
@@ -236,8 +194,6 @@ abstract class Driver
 
     /**
      * Get the shipping that belongs to the cart.
-     *
-     * @return \Cone\Bazar\Models\Shipping
      */
     public function getShipping(): Shipping
     {
@@ -246,10 +202,6 @@ abstract class Driver
 
     /**
      * Update the shipping address and driver.
-     *
-     * @param  array  $attributes
-     * @param  string|null  $driver
-     * @return void
      */
     public function updateShipping(array $attributes = [], ?string $driver = null): void
     {
@@ -268,8 +220,6 @@ abstract class Driver
 
     /**
      * Empty the cart.
-     *
-     * @return void
      */
     public function empty(): void
     {
@@ -283,8 +233,6 @@ abstract class Driver
 
     /**
      * Get the number of the cart items.
-     *
-     * @return float
      */
     public function count(): float
     {
@@ -293,8 +241,6 @@ abstract class Driver
 
     /**
      * Determine if the cart is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -303,9 +249,6 @@ abstract class Driver
 
     /**
      * Perform the checkout using the given driver.
-     *
-     * @param  string  $driver
-     * @return \Cone\Bazar\Models\Order
      */
     public function checkout(string $driver): Order
     {
@@ -316,8 +259,6 @@ abstract class Driver
 
     /**
      * Determine if the cart is not empty.
-     *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {
@@ -326,8 +267,6 @@ abstract class Driver
 
     /**
      * Sync the cart.
-     *
-     * @return void
      */
     public function sync(): void
     {
@@ -340,8 +279,6 @@ abstract class Driver
     /**
      * Handle dynamic method calls into the driver.
      *
-     * @param  string  $method
-     * @param  array  $parameters
      * @return mixed
      */
     public function __call(string $method, array $parameters)

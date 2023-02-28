@@ -10,23 +10,17 @@ class Option implements Rule
 {
     /**
      * The product instance.
-     *
-     * @var \Cone\Bazar\Models\Product
      */
     protected Product $product;
 
     /**
      * The variant instance.
-     *
-     * @var \Cone\Bazar\Models\Variant|null
      */
     protected ?Variant $variant = null;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Cone\Bazar\Models\Product  $product
-     * @param  \Cone\Bazar\Models\Variant|null  $variant
      * @return void
      */
     public function __construct(Product $product, ?Variant $variant = null)
@@ -40,7 +34,6 @@ class Option implements Rule
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
      */
     public function passes($attribute, $value): bool
     {
@@ -55,8 +48,6 @@ class Option implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

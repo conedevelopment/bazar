@@ -1,0 +1,94 @@
+<?php
+
+namespace Cone\Bazar\Traits;
+
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Price;
+use Cone\Bazar\Relations\Prices;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Str;
+
+trait HasPrices
+{
+    /**
+     * Get the prices for the model.
+     */
+    public function prices(): Prices
+    {
+        $query = $this->newRelatedInstance(Price::class)->newQuery();
+
+        [$type, $id] = $this->getMorphs('metable', null, null);
+
+        return new Prices($query, $this, $query->qualifyColumn($type), $query->qualifyColumn($id), $this->getKeyName());
+    }
+
+    /**
+     * Get the price attribute.
+     */
+    protected function price(): Attribute
+    {
+        return new Attribute(
+            get: function (): ?float {
+                return $this->getPrice();
+            }
+        );
+    }
+
+    /**
+     * Get the formatted price attribute.
+     */
+    protected function formattedPrice(): Attribute
+    {
+        return new Attribute(
+            get: function (): ?string {
+                return $this->getFormattedPrice();
+            }
+        );
+    }
+
+    /**
+     * Get the price by the given type and currency.
+     */
+    public function getPrice(?string $type = null, ?string $currency = null): ?float
+    {
+        $currency = $currency ?: Bazar::getCurrency();
+
+        $key = sprintf('price%s_%s', is_null($type) ? '' : "_{$type}", $currency);
+
+        $meta = $this->prices->firstWhere('key', $key);
+
+        return is_null($meta) ? null : $meta->value;
+    }
+
+    /**
+     * Get the formatted price by the given type and currency.
+     */
+    public function getFormattedPrice(string $type = null, ?string $currency = null): ?string
+    {
+        $currency = $currency ?: Bazar::getCurrency();
+
+        $price = $this->getPrice($type, $currency);
+
+        return $price ? Str::currency($price, $currency) : null;
+    }
+
+    /**
+     * Determine if the stockable model is free.
+     */
+    public function isFree(): bool
+    {
+        $price = $this->getPrice();
+
+        return is_null($price) || $price === 0;
+    }
+
+    /**
+     * Determine if the stockable model is on sale.
+     */
+    public function onSale(): bool
+    {
+        $price = $this->getPrice('sale');
+
+        return ! is_null($price) && $price < $this->getPrice();
+    }
+}

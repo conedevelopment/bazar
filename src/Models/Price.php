@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Closure;
 use Cone\Bazar\Bazar;
 use Cone\Root\Models\Meta;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
 class Price extends Meta
@@ -12,7 +13,7 @@ class Price extends Meta
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'value' => 'float',
@@ -20,17 +21,11 @@ class Price extends Meta
 
     /**
      * The value formatters.
-     *
-     * @var array
      */
     protected static array $formatters = [];
 
     /**
      * Register a formatter to the given currency.
-     *
-     * @param  string  $currency
-     * @param  \Closure  $callback
-     * @return void
      */
     public static function formatCurrency(string $currency, Closure $callback): void
     {
@@ -39,30 +34,30 @@ class Price extends Meta
 
     /**
      * Get the currency attribute.
-     *
-     * @return string
      */
-    public function getCurrencyAttribute(): string
+    protected function currency(): Attribute
     {
-        return Str::before(str_replace('price_', '', $this->key), '_');
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return Str::before(str_replace('price_', '', $attributes['key']), '_');
+            }
+        );
     }
 
     /**
      * Get the currency symbol attribute.
-     *
-     * @return string
      */
-    public function getSymbolAttribute(): string
+    protected function symbol(): Attribute
     {
-        $currency = $this->currency;
-
-        return Bazar::getCurrencies()[$currency] ?? $currency;
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return Bazar::getCurrencies()[$attributes['currency']] ?? $attributes['currency'];
+            }
+        );
     }
 
     /**
      * Format the price.
-     *
-     * @return string
      */
     public function format(): string
     {

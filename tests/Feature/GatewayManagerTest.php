@@ -22,7 +22,11 @@ use Illuminate\Support\Facades\Notification;
 
 class GatewayManagerTest extends TestCase
 {
-    protected $manager, $cart, $order;
+    protected $manager;
+
+    protected $cart;
+
+    protected $order;
 
     public function setUp(): void
     {
@@ -177,7 +181,7 @@ class GatewayManagerTest extends TestCase
     }
 }
 
-class CustomGatewayDriver Extends Driver
+class CustomGatewayDriver extends Driver
 {
     public function getTransactionUrl(Transaction $transaction): ?string
     {
@@ -195,7 +199,7 @@ class CustomGatewayDriver Extends Driver
     }
 }
 
-class FailingDriver Extends Driver
+class FailingDriver extends Driver
 {
     public function pay(Order $order, float $amount = null): Transaction
     {

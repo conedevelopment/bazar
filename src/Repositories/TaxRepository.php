@@ -19,9 +19,7 @@ class TaxRepository extends Repository implements Contract
     /**
      * Register a new tax.
      *
-     * @param  string  $name
      * @param  int|callable  $tax
-     * @return void
      */
     public function register(string $name, $tax): void
     {
@@ -30,8 +28,6 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Disable the tax calculation.
-     *
-     * @return void
      */
     public function disable(): void
     {
@@ -40,8 +36,6 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Enable the tax calculation.
-     *
-     * @return void
      */
     public function enable(): void
     {
@@ -50,9 +44,6 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Calculate tax for the given item.
-     *
-     * @param  \Cone\Bazar\Interfaces\Taxable  $model
-     * @return float
      */
     public function calculate(Taxable $model): float
     {
@@ -66,9 +57,7 @@ class TaxRepository extends Repository implements Contract
     /**
      * Process the calculation.
      *
-     * @param  \Cone\Bazar\Interfaces\Taxable  $model
      * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Tax  $tax
-     * @return float
      */
     protected function process(Taxable $model, $tax): float
     {

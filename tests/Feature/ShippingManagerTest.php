@@ -11,7 +11,9 @@ use Cone\Bazar\Tests\TestCase;
 
 class ShippingManagerTest extends TestCase
 {
-    protected $manager, $order;
+    protected $manager;
+
+    protected $order;
 
     public function setUp(): void
     {

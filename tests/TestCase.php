@@ -9,7 +9,9 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication, RefreshDatabase;
 
-    protected $admin, $user;
+    protected $admin;
+
+    protected $user;
 
     public function setUp(): void
     {

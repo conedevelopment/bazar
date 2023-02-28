@@ -15,8 +15,6 @@ class SendNewOrderNotifications
 
     /**
      * The order instance.
-     *
-     * @var \Cone\Bazar\Models\Order
      */
     public Order $order;
 
@@ -30,7 +28,6 @@ class SendNewOrderNotifications
     /**
      * Create a new job instance.
      *
-     * @param  \Cone\Bazar\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)
@@ -40,8 +37,6 @@ class SendNewOrderNotifications
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(): void
     {

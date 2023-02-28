@@ -39,8 +39,12 @@ class TaxRepositoryTest extends TestCase
     {
         Tax::register('custom-object', new CustomTax);
         Tax::register('custom-class', CustomTax::class);
-        Tax::register('not-a-tax', new class {
-            public function calculate(Taxable $model) { return 100; }
+        Tax::register('not-a-tax', new class
+        {
+            public function calculate(Taxable $model)
+            {
+                return 100;
+            }
         });
         Tax::register('custom-closure', function (Taxable $model) {
             return $model instanceof Shipping ? 20 : 30;

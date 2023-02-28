@@ -14,8 +14,6 @@ class BazarTestDataSeeder extends Seeder
 {
     /**
      * Seed the application's database.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -26,8 +24,6 @@ class BazarTestDataSeeder extends Seeder
 
     /**
      * Seed the categories table.
-     *
-     * @return void
      */
     protected function seedCategories(): void
     {
@@ -40,8 +36,6 @@ class BazarTestDataSeeder extends Seeder
 
     /**
      * Seed the products table.
-     *
-     * @return void
      */
     protected function seedProducts(): void
     {
@@ -52,8 +46,6 @@ class BazarTestDataSeeder extends Seeder
 
     /**
      * Seed the orders table.
-     *
-     * @return void
      */
     protected function seedOrders(): void
     {

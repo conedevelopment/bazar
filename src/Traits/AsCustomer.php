@@ -13,8 +13,6 @@ trait AsCustomer
 {
     /**
      * Get the carts for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function carts(): HasMany
     {
@@ -23,8 +21,6 @@ trait AsCustomer
 
     /**
      * Get the active cart for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function cart(): HasOne
     {
@@ -33,8 +29,6 @@ trait AsCustomer
 
     /**
      * Get the orders for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function orders(): HasMany
     {
@@ -43,8 +37,6 @@ trait AsCustomer
 
     /**
      * Get the addresses for the user.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function addresses(): MorphMany
     {
@@ -53,8 +45,6 @@ trait AsCustomer
 
     /**
      * Get the address attribute.
-     *
-     * @return \Cone\Bazar\Models\Address|null
      */
     public function getAddressAttribute(): ?Address
     {

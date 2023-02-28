@@ -2,95 +2,12 @@
 
 namespace Cone\Bazar\Traits;
 
-use Cone\Bazar\Bazar;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 
 trait InteractsWithStock
 {
     /**
-     * Get the price attribute.
-     *
-     * @return float|null
-     */
-    public function getPriceAttribute(): ?float
-    {
-        return $this->getPrice();
-    }
-
-    /**
-     * Get the formatted price attribute.
-     *
-     * @return string|null
-     */
-    public function getFormattedPriceAttribute(): ?string
-    {
-        return $this->getFormattedPrice();
-    }
-
-    /**
-     * Get the price by the given type and currency.
-     *
-     * @param  string|null  $type
-     * @param  string|null  $currency
-     * @return float|null
-     */
-    public function getPrice(?string $type = null, ?string $currency = null): ?float
-    {
-        $currency = $currency ?: Bazar::getCurrency();
-
-        $key = sprintf('price%s_%s', is_null($type) ? '' : "_{$type}", $currency);
-
-        $meta = $this->metas->firstWhere('key', $key);
-
-        return is_null($meta) ? null : $meta->value;
-    }
-
-    /**
-     * Get the formatted price by the given type and currency.
-     *
-     * @param  string|null  $type
-     * @param  string|null  $currency
-     * @return string|null
-     */
-    public function getFormattedPrice(string $type = null, ?string $currency = null): ?string
-    {
-        $currency = $currency ?: Bazar::getCurrency();
-
-        $price = $this->getPrice($type, $currency);
-
-        return $price ? Str::currency($price, $currency) : null;
-    }
-
-    /**
-     * Determine if the stockable model is free.
-     *
-     * @return bool
-     */
-    public function isFree(): bool
-    {
-        $price = $this->getPrice();
-
-        return is_null($price) || $price === 0;
-    }
-
-    /**
-     * Determine if the stockable model is on sale.
-     *
-     * @return bool
-     */
-    public function onSale(): bool
-    {
-        $price = $this->getPrice('sale');
-
-        return ! is_null($price) && $price < $this->getPrice();
-    }
-
-    /**
      * Get the formatted dimensions.
-     *
-     * @param  string  $glue
-     * @return string|null
      */
     public function getFormattedDimensions(string $glue = 'x'): ?string
     {
@@ -105,8 +22,6 @@ trait InteractsWithStock
 
     /**
      * Get the formatted weight.
-     *
-     * @return string|null
      */
     public function getFormattedWeight(): ?string
     {
@@ -121,8 +36,6 @@ trait InteractsWithStock
 
     /**
      * Determine if the stockable model is virtual.
-     *
-     * @return bool
      */
     public function isVirtual(): bool
     {
@@ -131,8 +44,6 @@ trait InteractsWithStock
 
     /**
      * Determine if the stockable model is downloadable.
-     *
-     * @return bool
      */
     public function isDownloadable(): bool
     {
@@ -141,8 +52,6 @@ trait InteractsWithStock
 
     /**
      * Determine if the stockable model tracks quantity.
-     *
-     * @return bool
      */
     public function tracksQuantity(): bool
     {
@@ -151,9 +60,6 @@ trait InteractsWithStock
 
     /**
      * Determine if the stockable model is available.
-     *
-     * @param  float  $quantity
-     * @return bool
      */
     public function isAvailable(float $quantity = 1): bool
     {
@@ -164,9 +70,6 @@ trait InteractsWithStock
 
     /**
      * Increment the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
      */
     public function incrementQuantity(float $quantity = 1): void
     {
@@ -179,9 +82,6 @@ trait InteractsWithStock
 
     /**
      * Decrement the quantity by the given value.
-     *
-     * @param  float  $quantity
-     * @return void
      */
     public function decrementQuantity(float $quantity = 1): void
     {

@@ -9,9 +9,6 @@ class ClearCookies
 {
     /**
      * Handle the event.
-     *
-     * @param  \Illuminate\Auth\Events\Logout  $event
-     * @return void
      */
     public function handle(Logout $event): void
     {

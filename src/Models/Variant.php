@@ -54,8 +54,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -64,8 +62,6 @@ class Variant extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -74,8 +70,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the product for the transaction.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product(): BelongsTo
     {
@@ -85,8 +79,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the variables for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function variables(): MorphToMany
     {
@@ -95,9 +87,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the alias attribute.
-     *
-     * @param  string|null  $value
-     * @return string|null
      */
     public function getAliasAttribute(?string $value = null): ?string
     {
@@ -106,10 +95,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the price by the given type and currency.
-     *
-     * @param  string  $type
-     * @param  string|null  $currency
-     * @return float|null
      */
     public function getPrice(string $type = 'default', ?string $currency = null): ?float
     {
@@ -121,10 +106,6 @@ class Variant extends Model implements Contract
 
     /**
      * Get the formatted price by the given type and currency.
-     *
-     * @param  string  $type
-     * @param  string|null  $currency
-     * @return string|null
      */
     public function getFormattedPrice(string $type = 'default', ?string $currency = null): ?string
     {
@@ -136,17 +117,13 @@ class Variant extends Model implements Contract
 
     /**
      * Get the item representation of the buyable instance.
-     *
-     * @param  \Cone\Bazar\Interfaces\Itemable  $itemable
-     * @param  array  $attributes
-     * @return \Cone\Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge($attributes, [
             'name' => sprintf('%s - %s', $this->name, $this->alias),
             'price' => $this->getPrice('sale', $itemable->getCurrency())
-                    ?: $this->getPrice('default', $itemable->getCurrency())
+                    ?: $this->getPrice('default', $itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
     }
 }

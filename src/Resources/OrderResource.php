@@ -16,8 +16,6 @@ class OrderResource extends Resource
 {
     /**
      * The relations to eager load on every query.
-     *
-     * @var array
      */
     protected array $with = [
         'items',
@@ -27,9 +25,6 @@ class OrderResource extends Resource
 
     /**
      * Define the fields for the resource.
-     *
-     * @param  \Cone\Root\Http\Requests\RootRequest  $request
-     * @return array
      */
     public function fields(RootRequest $request): array
     {

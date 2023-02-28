@@ -19,7 +19,11 @@ use Illuminate\Support\Facades\Event;
 
 class CartManagerTest extends TestCase
 {
-    protected $manager, $product, $variant;
+    protected $manager;
+
+    protected $product;
+
+    protected $variant;
 
     public function setUp(): void
     {

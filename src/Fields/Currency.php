@@ -13,16 +13,12 @@ class Currency extends Number
 {
     /**
      * The currency resolver.
-     *
-     * @var \Closure|null
      */
     protected ?Closure $currencyResolver = null;
 
     /**
      * Create a new field instance.
      *
-     * @param  string  $label
-     * @param  string|null  $name
      * @return void
      */
     public function __construct(string $label, ?string $name = null)
@@ -37,7 +33,6 @@ class Currency extends Number
     /**
      * Set the currency resolver property.
      *
-     * @param  \Closure|string  $value
      * @return $this
      */
     public function currency(Closure|string $value): static
@@ -55,10 +50,6 @@ class Currency extends Number
 
     /**
      * Resolve the currency.
-     *
-     * @param  \Cone\Root\Http\Requests\RootRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return string
      */
     public function resolveCurrency(RootRequest $request, Model $model): string
     {

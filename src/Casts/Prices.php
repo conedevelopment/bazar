@@ -11,7 +11,6 @@ class Prices extends AttributeBag
     /**
      * Create a new attribute bag instance.
      *
-     * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
@@ -25,9 +24,6 @@ class Prices extends AttributeBag
 
     /**
      * Get the formatted price of the given type.
-     *
-     * @param  string|null  $key
-     * @return string|null
      */
     public function format(?string $key = null): ?string
     {

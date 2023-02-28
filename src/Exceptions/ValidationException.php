@@ -8,8 +8,6 @@ class ValidationException extends Exception
 {
     /**
      * Get all of the validation error messages.
-     *
-     * @return array
      */
     public function errors(): array
     {

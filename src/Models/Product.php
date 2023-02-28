@@ -5,13 +5,12 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
-use Cone\Bazar\Relations\Prices;
 use Cone\Bazar\Resources\ProductResource;
+use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Bazar\Traits\Sluggable;
 use Cone\Root\Interfaces\Resourceable;
-use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMeta;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -30,6 +29,7 @@ class Product extends Model implements Contract, Resourceable
     use HasFactory;
     use HasMedia;
     use HasMeta;
+    use HasPrices;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
@@ -39,7 +39,7 @@ class Product extends Model implements Contract, Resourceable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'description',
@@ -56,8 +56,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -66,8 +64,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -76,8 +72,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the categories for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories(): BelongsToMany
     {
@@ -86,8 +80,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the variants for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function variants(): HasMany
     {
@@ -96,8 +88,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the variables for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function variables(): MorphToMany
     {
@@ -105,23 +95,7 @@ class Product extends Model implements Contract, Resourceable
     }
 
     /**
-     * Get the prices for the model.
-     *
-     * @return \Cone\Bazar\Relations\Prices
-     */
-    public function prices(): Prices
-    {
-        $query = $this->newRelatedInstance(Price::class)->newQuery();
-
-        [$type, $id] = $this->getMorphs('metable', null, null);
-
-        return new Prices($query, $this, $query->qualifyColumn($type), $query->qualifyColumn($id), $this->getKeyName());
-    }
-
-    /**
      * Get the variants attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getVariantsAttribute(): Collection
     {
@@ -133,9 +107,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Scope the query only to the models that are out of stock.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOutOfStock(Builder $query): Builder
     {
@@ -147,9 +118,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Scope the query only to the models that are in stock.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeInStock(Builder $query): Builder
     {
@@ -161,9 +129,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the variant of the given option.
-     *
-     * @param  array  $variation
-     * @return \Cone\Bazar\Models\Variant|null
      */
     public function toVariant(array $variation): ?Variant
     {
@@ -184,10 +149,6 @@ class Product extends Model implements Contract, Resourceable
 
     /**
      * Get the item representation of the buyable instance.
-     *
-     * @param  \Cone\Bazar\Interfaces\Itemable  $itemable
-     * @param  array  $attributes
-     * @return \Cone\Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
@@ -198,16 +159,14 @@ class Product extends Model implements Contract, Resourceable
         return $this->items()->make(array_merge($attributes, [
             'name' => $this->name,
             'price' => $this->getPrice('sale', $itemable->getCurrency())
-                    ?: $this->getPrice('default', $itemable->getCurrency())
+                    ?: $this->getPrice('default', $itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
     }
 
     /**
      * Get the resource representation of the model.
-     *
-     * @return \Cone\Root\Resources\Resource
      */
-    public static function toResource(): Resource
+    public static function toResource(): ProductResource
     {
         return new ProductResource(static::class);
     }

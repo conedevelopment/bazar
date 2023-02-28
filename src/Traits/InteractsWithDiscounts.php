@@ -9,8 +9,6 @@ trait InteractsWithDiscounts
 {
     /**
      * Get the formatted discount attribute.
-     *
-     * @return string
      */
     public function getFormattedDiscountAttribute(): string
     {
@@ -19,8 +17,6 @@ trait InteractsWithDiscounts
 
     /**
      * Get the discount.
-     *
-     * @return float
      */
     public function getDiscount(): float
     {
@@ -29,8 +25,6 @@ trait InteractsWithDiscounts
 
     /**
      * Get the formatted discount.
-     *
-     * @return string
      */
     public function getFormattedDiscount(): string
     {
@@ -39,9 +33,6 @@ trait InteractsWithDiscounts
 
     /**
      * Calculate the discount.
-     *
-     * @param  bool  $update
-     * @return float
      */
     public function calculateDiscount(bool $update = true): float
     {

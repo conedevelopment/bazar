@@ -23,8 +23,6 @@ trait InteractsWithItems
 {
     /**
      * Boot the trait.
-     *
-     * @return void
      */
     public static function bootInteractsWithItems(): void
     {
@@ -38,8 +36,6 @@ trait InteractsWithItems
 
     /**
      * Get the user for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(): BelongsTo
     {
@@ -48,8 +44,6 @@ trait InteractsWithItems
 
     /**
      * Get the items for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function items(): MorphMany
     {
@@ -58,8 +52,6 @@ trait InteractsWithItems
 
     /**
      * Get the shipping for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function shipping(): MorphOne
     {
@@ -70,9 +62,6 @@ trait InteractsWithItems
 
     /**
      * Get the currency attribute.
-     *
-     * @param  string|null  $value
-     * @return string
      */
     public function getCurrencyAttribute(?string $value = null): string
     {
@@ -81,8 +70,6 @@ trait InteractsWithItems
 
     /**
      * Get the shipping attribute.
-     *
-     * @return \Cone\Bazar\Models\Shipping
      */
     public function getShippingAttribute(): Shipping
     {
@@ -93,8 +80,6 @@ trait InteractsWithItems
 
     /**
      * Get the items attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getItemsAttribute(): Collection
     {
@@ -105,8 +90,6 @@ trait InteractsWithItems
 
     /**
      * Get the line items attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getLineItemsAttribute(): Collection
     {
@@ -115,8 +98,6 @@ trait InteractsWithItems
 
     /**
      * Get the total attibute.
-     *
-     * @return float
      */
     public function getTotalAttribute(): float
     {
@@ -125,8 +106,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted total attribute.
-     *
-     * @return string
      */
     public function getFormattedTotalAttribute(): string
     {
@@ -135,8 +114,6 @@ trait InteractsWithItems
 
     /**
      * Get the net total attribute.
-     *
-     * @return float
      */
     public function getNetTotalAttribute(): float
     {
@@ -145,8 +122,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted net total attribute.
-     *
-     * @return string
      */
     public function getFormattedNetTotalAttribute(): string
     {
@@ -155,8 +130,6 @@ trait InteractsWithItems
 
     /**
      * Get the tax attribute.
-     *
-     * @return float
      */
     public function getTaxAttribute(): float
     {
@@ -165,8 +138,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted tax attribute.
-     *
-     * @return string
      */
     public function getFormattedTaxAttribute(): string
     {
@@ -175,8 +146,6 @@ trait InteractsWithItems
 
     /**
      * Get the currency.
-     *
-     * @return string
      */
     public function getCurrency(): string
     {
@@ -185,8 +154,6 @@ trait InteractsWithItems
 
     /**
      * Get the itemable model's total.
-     *
-     * @return float
      */
     public function getTotal(): float
     {
@@ -199,8 +166,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted total.
-     *
-     * @return string
      */
     public function getFormattedTotal(): string
     {
@@ -209,8 +174,6 @@ trait InteractsWithItems
 
     /**
      * Get the itemable model's total.
-     *
-     * @return float
      */
     public function getNetTotal(): float
     {
@@ -223,8 +186,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted net total.
-     *
-     * @return string
      */
     public function getFormattedNetTotal(): string
     {
@@ -233,8 +194,6 @@ trait InteractsWithItems
 
     /**
      * Get the tax.
-     *
-     * @return float
      */
     public function getTax(): float
     {
@@ -247,8 +206,6 @@ trait InteractsWithItems
 
     /**
      * Get the formatted tax.
-     *
-     * @return string
      */
     public function getFormattedTax(): string
     {
@@ -257,9 +214,6 @@ trait InteractsWithItems
 
     /**
      * Calculate the tax.
-     *
-     * @param  bool  $update
-     * @return float
      */
     public function calculateTax(bool $update = true): float
     {
@@ -270,8 +224,6 @@ trait InteractsWithItems
 
     /**
      * Get the downloadable files with their signed URL.
-     *
-     * @return \Illuminate\Support\Collection
      */
     public function getDownloads(): Collection
     {
@@ -296,9 +248,6 @@ trait InteractsWithItems
 
     /**
      * Find an item by its attributes or make a new instance.
-     *
-     * @param  array  $attributes
-     * @return \Cone\Bazar\Models\Item|null
      */
     public function findItem(array $attributes): ?Item
     {
@@ -319,7 +268,6 @@ trait InteractsWithItems
      * Merge the given item into the collection.
      *
      * @param  \Cone\Bazar\Models\Item  $items
-     * @return \Cone\Bazar\Models\Item
      */
     public function mergeItem(Item $item): Item
     {
@@ -344,8 +292,6 @@ trait InteractsWithItems
 
     /**
      * Sync the items.
-     *
-     * @return void
      */
     public function syncItems(): void
     {

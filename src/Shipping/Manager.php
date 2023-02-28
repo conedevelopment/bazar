@@ -12,7 +12,6 @@ class Manager extends BaseManager implements Contract
     /**
      * Create a new manager instance.
      *
-     * @param  \Illuminate\Contracts\Container\Container  $container
      * @return void
      */
     public function __construct(Container $container)
@@ -24,8 +23,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Get the default driver name.
-     *
-     * @return string
      */
     public function getDefaultDriver(): string
     {
@@ -34,9 +31,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Get the available drivers for the given model.
-     *
-     * @param  \Cone\Bazar\Interfaces\Itemable|null  $model
-     * @return array
      */
     public function getAvailableDrivers(?Itemable $model = null): array
     {

@@ -16,15 +16,11 @@ abstract class Bazar
 
     /**
      * The currency in use.
-     *
-     * @var string|null
      */
     protected static ?string $currency = null;
 
     /**
      * Get the package version.
-     *
-     * @return string
      */
     public static function getVersion(): string
     {
@@ -33,8 +29,6 @@ abstract class Bazar
 
     /**
      * Get all the available currencies.
-     *
-     * @return array
      */
     public static function getCurrencies(): array
     {
@@ -43,8 +37,6 @@ abstract class Bazar
 
     /**
      * Get the currency in use.
-     *
-     * @return string
      */
     public static function getCurrency(): string
     {
@@ -54,8 +46,6 @@ abstract class Bazar
     /**
      * Set the currency in use.
      *
-     * @param  string  $currency
-     * @return void
      *
      * @throws \Cone\Bazar\Exceptions\InvalidCurrencyException
      */

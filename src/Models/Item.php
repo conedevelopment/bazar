@@ -5,8 +5,8 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithTaxes;
-use Cone\Root\Traits\HasUuid;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
 class Item extends Model implements Contract
 {
     use HasFactory;
-    use HasUuid;
+    use HasUuids;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
@@ -99,8 +99,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -109,8 +107,6 @@ class Item extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -119,8 +115,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the buyable model for the item.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function buyable(): MorphTo
     {
@@ -129,8 +123,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the itemable model for the item.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function itemable(): MorphTo
     {
@@ -139,8 +131,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted price attribute.
-     *
-     * @return string
      */
     public function getFormattedPriceAttribute(): string
     {
@@ -149,8 +139,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the total attribute.
-     *
-     * @return float
      */
     public function getTotalAttribute(): float
     {
@@ -159,8 +147,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted total attribute.
-     *
-     * @return string
      */
     public function getFormattedTotalAttribute(): string
     {
@@ -169,8 +155,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the net total attribute.
-     *
-     * @return float
      */
     public function getNetTotalAttribute(): float
     {
@@ -179,8 +163,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted net total attribute.
-     *
-     * @return string
      */
     public function getFormattedNetTotalAttribute(): string
     {
@@ -189,8 +171,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the price.
-     *
-     * @return float
      */
     public function getPrice(): float
     {
@@ -199,8 +179,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted price.
-     *
-     * @return string
      */
     public function getFormattedPrice(): string
     {
@@ -209,8 +187,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the total.
-     *
-     * @return float
      */
     public function getTotal(): float
     {
@@ -219,8 +195,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted total.
-     *
-     * @return string
      */
     public function getFormattedTotal(): string
     {
@@ -229,8 +203,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the net total.
-     *
-     * @return float
      */
     public function getNetTotal(): float
     {
@@ -239,8 +211,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted net total.
-     *
-     * @return string
      */
     public function getFormattedNetTotal(): string
     {
@@ -249,8 +219,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the quantity.
-     *
-     * @return float
      */
     public function getQuantity(): float
     {

@@ -10,23 +10,17 @@ class TransactionAmount implements Rule
 {
     /**
      * The amount to be checked.
-     *
-     * @var float
      */
     protected float $amount;
 
     /**
      * The transaction type.
-     *
-     * @var string
      */
     protected string $type = Transaction::PAYMENT;
 
     /**
      * Create a new rule instance.
      *
-     * @param  \Cone\Bazar\Models\Order  $order
-     * @param  string|null  $type
      * @return void
      */
     public function __construct(Order $order, ?string $type = null)
@@ -43,7 +37,6 @@ class TransactionAmount implements Rule
      *
      * @param  string  $attribute
      * @param  mixed  $value
-     * @return bool
      */
     public function passes($attribute, $value): bool
     {
@@ -52,8 +45,6 @@ class TransactionAmount implements Rule
 
     /**
      * Get the validation error message.
-     *
-     * @return string
      */
     public function message(): string
     {

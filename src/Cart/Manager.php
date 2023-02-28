@@ -9,8 +9,6 @@ class Manager extends BaseManager implements Contract
 {
     /**
      * Get the default driver name.
-     *
-     * @return string
      */
     public function getDefaultDriver(): string
     {

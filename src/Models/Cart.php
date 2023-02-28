@@ -65,8 +65,6 @@ class Cart extends Model implements Contract
 
     /**
      * The "booted" method of the model.
-     *
-     * @return void
      */
     protected static function booted(): void
     {
@@ -77,8 +75,6 @@ class Cart extends Model implements Contract
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {
@@ -87,8 +83,6 @@ class Cart extends Model implements Contract
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
      */
     protected static function newFactory(): Factory
     {
@@ -97,8 +91,6 @@ class Cart extends Model implements Contract
 
     /**
      * Get the order for the cart.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo
     {
@@ -109,8 +101,6 @@ class Cart extends Model implements Contract
 
     /**
      * Lock the cart.
-     *
-     * @return void
      */
     public function lock(): void
     {
@@ -121,8 +111,6 @@ class Cart extends Model implements Contract
 
     /**
      * Unlock the cart.
-     *
-     * @return void
      */
     public function unlock(): void
     {
@@ -133,9 +121,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the locked carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeLocked(Builder $query): Builder
     {
@@ -144,9 +129,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the unlocked carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUnlocked(Builder $query): Builder
     {
@@ -155,9 +137,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the expired carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeExpired(Builder $query): Builder
     {

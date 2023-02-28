@@ -41,8 +41,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -53,8 +51,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -68,8 +64,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register routes.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -83,8 +77,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register loadings.
-     *
-     * @return void
      */
     protected function registerLoadings(): void
     {
@@ -97,8 +89,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register publishes.
-     *
-     * @return void
      */
     protected function registerPublishes(): void
     {
@@ -115,8 +105,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register commands.
-     *
-     * @return void
      */
     protected function registerCommands(): void
     {
@@ -130,8 +118,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register macros.
-     *
-     * @return void
      */
     protected function registerMacros(): void
     {
@@ -144,8 +130,6 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * Register events.
-     *
-     * @return void
      */
     protected function registerEvents(): void
     {

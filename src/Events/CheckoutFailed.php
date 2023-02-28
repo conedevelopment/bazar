@@ -13,15 +13,12 @@ class CheckoutFailed
 
     /**
      * The order instace.
-     *
-     * @var \Cone\Bazar\Models\Order
      */
     public Order $order;
 
     /**
      * Create a new event instance.
      *
-     * @param  \Cone\Bazar\Models\Order  $order
      * @return void
      */
     public function __construct(Order $order)

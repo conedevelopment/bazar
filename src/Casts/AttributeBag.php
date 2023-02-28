@@ -15,15 +15,12 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
 {
     /**
      * The default values.
-     *
-     * @var array
      */
     protected array $defaults = [];
 
     /**
      * Create a new attribute bag instance.
      *
-     * @param  array  $items
      * @return void
      */
     public function __construct(array $items = [])
@@ -34,7 +31,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
     /**
      * Set the value of the given key.
      *
-     * @param  string  $key
      * @param  mixed  $value
      * @return $this
      */
@@ -52,7 +48,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
     /**
      * Get the value of the given key.
      *
-     * @param  string  $key
      * @param  mixed  $default
      * @return mixed
      */
@@ -63,8 +58,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
 
     /**
      * Get the instance as an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {
@@ -75,7 +68,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
      * Convert the object to its JSON representation.
      *
      * @param  int  $options
-     * @return string
      */
     public function toJson($options = 0): string
     {
@@ -84,8 +76,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
 
     /**
      * Prepare the object for JSON serialization.
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -94,8 +84,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
 
     /**
      * Convert the object to its JSON representation.
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -104,9 +92,6 @@ abstract class AttributeBag extends ArrayObject implements Arrayable, Castable, 
 
     /**
      * Get the caster class to use when casting from / to this cast target.
-     *
-     * @param  array  $arguments
-     * @return \Illuminate\Contracts\Database\Eloquent\CastsAttributes
      */
     public static function castUsing(array $arguments): CastsAttributes
     {

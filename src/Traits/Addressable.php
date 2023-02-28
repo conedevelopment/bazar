@@ -10,8 +10,6 @@ trait Addressable
 {
     /**
      * Boot the trait.
-     *
-     * @return void
      */
     public static function bootAddressable(): void
     {
@@ -24,8 +22,6 @@ trait Addressable
 
     /**
      * Get the address for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function address(): MorphOne
     {
