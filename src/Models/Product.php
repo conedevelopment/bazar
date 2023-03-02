@@ -7,13 +7,15 @@ use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
 use Cone\Bazar\Resources\ProductResource;
 use Cone\Bazar\Traits\HasPrices;
+use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
-use Cone\Bazar\Traits\Sluggable;
 use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMeta;
 use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,6 +32,7 @@ class Product extends Model implements Contract, Resourceable
     use HasMedia;
     use HasMeta;
     use HasPrices;
+    use HasProperties;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
@@ -161,6 +164,14 @@ class Product extends Model implements Contract, Resourceable
             'price' => $this->getPrice('sale', $itemable->getCurrency())
                     ?: $this->getPrice('default', $itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
+    }
+
+    /**
+     * Get the slug representation of the model.
+     */
+    public function toSlug(): Slug
+    {
+        return (new Slug($this))->from('name')->unique();
     }
 
     /**

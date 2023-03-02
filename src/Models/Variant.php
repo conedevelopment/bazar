@@ -10,6 +10,7 @@ use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -88,9 +89,14 @@ class Variant extends Model implements Contract
     /**
      * Get the alias attribute.
      */
-    public function getAliasAttribute(?string $value = null): ?string
+    protected function alias(): Attribute
     {
-        return $this->exists ? ($value ?: "#{$this->id}") : $value;
+        return new Attribute(
+            get: function (?string $value): ?string {
+                return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
+            }
+        );
+
     }
 
     /**

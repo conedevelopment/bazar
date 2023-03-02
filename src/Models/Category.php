@@ -5,11 +5,12 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\CategoryFactory;
 use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Bazar\Resources\CategoryResource;
-use Cone\Bazar\Traits\Sluggable;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
+use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -64,6 +65,14 @@ class Category extends Model implements Contract, Resourceable
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::getProxiedClass(), 'bazar_category_product');
+    }
+
+    /**
+     * Get the slug representation of the model.
+     */
+    public function toSlug(): Slug
+    {
+        return (new Slug($this))->from('name')->unique();
     }
 
     /**

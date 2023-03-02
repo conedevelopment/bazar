@@ -22,8 +22,8 @@
         }
     },
     "require": {
-        "php": "^8.0 || ^8.1 || ^8.2",
-        "conedevelopment/root": "^1.1"
+        "php": "^8.1 || ^8.2",
+        "conedevelopment/root": "dev-master"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -40,7 +40,7 @@
             ]
         },
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.x-dev"
         }
     },
     "minimum-stability": "dev",
