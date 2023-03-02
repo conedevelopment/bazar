@@ -6,6 +6,7 @@ use Cone\Bazar\Bazar;
 use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
+use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
@@ -22,6 +23,7 @@ class Variant extends Model implements Contract
 {
     use HasFactory;
     use HasMedia;
+    use HasPrices;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;

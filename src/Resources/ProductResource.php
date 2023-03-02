@@ -16,6 +16,7 @@ use Cone\Root\Fields\Text;
 use Cone\Root\Filters\TrashStatus;
 use Cone\Root\Http\Requests\RootRequest;
 use Cone\Root\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 
 class ProductResource extends Resource
@@ -94,6 +95,13 @@ class ProductResource extends Resource
 
                     Media::make(__('Media')),
                 ]),
+
+            BelongsToMany::make(__('Properties'), 'propertyValues')
+                ->withQuery(static function (RootRequest $request, Builder $query): Builder {
+                    return $query->with('property');
+                })
+                ->groupOptions('property.name')
+                ->display('name'),
         ]);
     }
 }
