@@ -2,12 +2,17 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Interfaces\Models\Property as Contract;
+use Cone\Bazar\Resources\PropertyResource;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Traits\InteractsWithProxy;
 use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Property extends Model
+class Property extends Model implements Contract, Resourceable
 {
+    use InteractsWithProxy;
     use Sluggable;
 
     /**
@@ -29,10 +34,28 @@ class Property extends Model
     protected $table = 'bazar_properties';
 
     /**
+     * Get the proxied interface.
+     *
+     * @return string
+     */
+    public static function getProxiedInterface(): string
+    {
+        return Contract::class;
+    }
+
+    /**
      * Get the values for the property.
      */
     public function values(): HasMany
     {
         return $this->hasMany(PropertyValue::class);
+    }
+
+    /**
+     * Get the resource representation of the model.
+     */
+    public static function toResource(): PropertyResource
+    {
+        return new PropertyResource(static::class);
     }
 }

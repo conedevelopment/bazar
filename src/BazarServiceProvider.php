@@ -10,16 +10,15 @@ class BazarServiceProvider extends ServiceProvider
 {
     /**
      * All of the container bindings that should be registered.
-     *
-     * @var array
      */
-    public $bindings = [
+    public array $bindings = [
         Interfaces\Models\Address::class => Models\Address::class,
         Interfaces\Models\Cart::class => Models\Cart::class,
         Interfaces\Models\Category::class => Models\Category::class,
         Interfaces\Models\Item::class => Models\Item::class,
         Interfaces\Models\Order::class => Models\Order::class,
         Interfaces\Models\Product::class => Models\Product::class,
+        Interfaces\Models\Property::class => Models\Property::class,
         Interfaces\Models\Shipping::class => Models\Shipping::class,
         Interfaces\Models\Transaction::class => Models\Transaction::class,
         Interfaces\Models\Variable::class => Models\Variable::class,
@@ -28,10 +27,8 @@ class BazarServiceProvider extends ServiceProvider
 
     /**
      * All of the container singletons that should be registered.
-     *
-     * @var array
      */
-    public $singletons = [
+    public array $singletons = [
         Interfaces\Cart\Manager::class => Cart\Manager::class,
         Interfaces\Gateway\Manager::class => Gateway\Manager::class,
         Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
