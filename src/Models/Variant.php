@@ -2,11 +2,11 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Bazar;
 use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
 use Cone\Bazar\Traits\HasPrices;
+use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model implements Contract
@@ -24,6 +23,7 @@ class Variant extends Model implements Contract
     use HasFactory;
     use HasMedia;
     use HasPrices;
+    use HasProperties;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
@@ -34,10 +34,7 @@ class Variant extends Model implements Contract
      *
      * @var array
      */
-    protected $appends = [
-        'formatted_price',
-        'price',
-    ];
+    protected $appends = [];
 
     /**
      * The attributes that are mass assignable.
@@ -81,14 +78,6 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the variables for the product.
-     */
-    public function variables(): MorphToMany
-    {
-        return $this->morphToMany(Variable::getProxiedClass(), 'buyable', 'bazar_buyable_variable');
-    }
-
-    /**
      * Get the alias attribute.
      */
     protected function alias(): Attribute
@@ -98,29 +87,6 @@ class Variant extends Model implements Contract
                 return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
             }
         );
-
-    }
-
-    /**
-     * Get the price by the given type and currency.
-     */
-    public function getPrice(string $type = 'default', ?string $currency = null): ?float
-    {
-        $currency = $currency ?: Bazar::getCurrency();
-
-        return $this->prices->get("{$currency}.{$type}")
-            ?: $this->product->getPrice($type, $currency);
-    }
-
-    /**
-     * Get the formatted price by the given type and currency.
-     */
-    public function getFormattedPrice(string $type = 'default', ?string $currency = null): ?string
-    {
-        $currency = $currency ?: Bazar::getCurrency();
-
-        return $this->prices->format("{$currency}.{$type}")
-            ?: $this->product->prices->format("{$currency}.{$type}");
     }
 
     /**

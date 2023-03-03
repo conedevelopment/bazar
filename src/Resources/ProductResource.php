@@ -4,6 +4,7 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Fields\Inventory;
+use Cone\Bazar\Models\Variant;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\Editor;
@@ -90,6 +91,16 @@ class ProductResource extends Resource
                 ->withFields([
                     Text::make(__('Alias'), 'alias')->rules(['required']),
 
+                    BelongsToMany::make(__('Properties'), 'propertyValues')
+                        ->withQuery(static function (RootRequest $request, Builder $query, Variant $model): Builder {
+                            return $query->whereIn(
+                                $query->getModel()->getQualifiedKeyName(),
+                                $model->parent->propertyValues()->select('bazar_property_values.id')
+                            )->with('property');
+                        })
+                        ->groupOptionsBy('property.name')
+                        ->display('name'),
+
                     Inventory::make(__('Inventory'), 'inventory')
                         ->hiddenOnDisplay(),
 
@@ -100,7 +111,7 @@ class ProductResource extends Resource
                 ->withQuery(static function (RootRequest $request, Builder $query): Builder {
                     return $query->with('property');
                 })
-                ->groupOptions('property.name')
+                ->groupOptionsBy('property.name')
                 ->display('name'),
         ]);
     }
