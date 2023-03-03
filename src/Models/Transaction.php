@@ -8,6 +8,7 @@ use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Traits\InteractsWithProxy;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +38,7 @@ class Transaction extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
         'driver_name',
@@ -47,7 +48,7 @@ class Transaction extends Model implements Contract
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'completed_at' => 'datetime',
@@ -56,7 +57,7 @@ class Transaction extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'amount',
@@ -100,25 +101,33 @@ class Transaction extends Model implements Contract
     /**
      * Get the name of the gateway driver.
      */
-    public function getDriverNameAttribute(): string
+    protected function driverName(): Attribute
     {
-        try {
-            return Gateway::driver($this->driver)->getName();
-        } catch (Throwable $exception) {
-            return $this->driver;
-        }
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): ?string {
+                try {
+                    return Gateway::driver($attributes['driver'])->getName();
+                } catch (Throwable $exception) {
+                    return $attributes['driver'];
+                }
+            }
+        );
     }
 
     /**
      * Get the URL of the transaction.
      */
-    public function getUrlAttribute(): ?string
+    protected function url(): Attribute
     {
-        try {
-            return Gateway::driver($this->driver)->getTransactionUrl($this);
-        } catch (Throwable $exception) {
-            return null;
-        }
+        return new Attribute(
+            get: function (mixed $value, array $attributes): ?string {
+                try {
+                    return Gateway::driver($attributes['driver'])->getTransactionUrl($this);
+                } catch (Throwable $exception) {
+                    return null;
+                }
+            }
+        );
     }
 
     /**

@@ -28,7 +28,7 @@ class Category extends Model implements Contract, Resourceable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'description',

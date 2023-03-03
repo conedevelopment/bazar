@@ -2,16 +2,16 @@
 
 namespace Cone\Bazar\Interfaces\Repositories;
 
+use Closure;
+use Cone\Bazar\Interfaces\Discount;
 use Cone\Bazar\Interfaces\Discountable;
 
 interface DiscountRepository
 {
     /**
      * Register a new discount.
-     *
-     * @param  int|callable  $discount
      */
-    public function register(string $name, $discount): void;
+    public function register(string $name, int|float|Closure|Discount $discount): void;
 
     /**
      * Disable the discount calculation.

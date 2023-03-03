@@ -28,7 +28,7 @@ class Address extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'address_secondary' => null,
@@ -50,7 +50,7 @@ class Address extends Model implements Contract
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'custom' => 'json',
@@ -60,7 +60,7 @@ class Address extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'address_secondary',

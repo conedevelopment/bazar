@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Tests\Feature;
 
-use Cone\Bazar\Bazar;
 use Cone\Bazar\Cart\CookieDriver;
 use Cone\Bazar\Cart\Manager;
 use Cone\Bazar\Cart\SessionDriver;

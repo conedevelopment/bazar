@@ -125,13 +125,13 @@ class Product extends Model implements Contract, Resourceable
                                             return $query->whereIn($query->qualifyColumn('slug'), array_keys($variation));
                                         });
                         },
-                        // '=',
-                        // function (QueryBuilder $query): QueryBuilder {
-                        //     return $query->selectRaw('count(*)')
-                        //                 ->from('bazar_buyable_property_value')
-                        //                 ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
-                        //                 ->where('bazar_buyable_property_value.buyable_type', Variant::class);
-                        // }
+                        '=',
+                        function (QueryBuilder $query): QueryBuilder {
+                            return $query->selectRaw('count(*)')
+                                        ->from('bazar_buyable_property_value')
+                                        ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
+                                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
+                        }
                     )
                     ->first();
     }

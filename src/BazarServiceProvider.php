@@ -51,25 +51,11 @@ class BazarServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerRoutes();
         $this->registerEvents();
         $this->registerMacros();
         $this->registerLoadings();
         $this->registerCommands();
         $this->registerPublishes();
-    }
-
-    /**
-     * Register routes.
-     */
-    protected function registerRoutes(): void
-    {
-        if (! $this->app->routesAreCached()) {
-            $this->app['router']
-                 ->get('bazar/download', Http\Controllers\DownloadController::class)
-                 ->name('bazar.download')
-                 ->middleware('signed');
-        }
     }
 
     /**

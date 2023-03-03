@@ -20,8 +20,6 @@ class TransactionAmount implements Rule
 
     /**
      * Create a new rule instance.
-     *
-     * @return void
      */
     public function __construct(Order $order, ?string $type = null)
     {

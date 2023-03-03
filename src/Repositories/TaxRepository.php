@@ -11,17 +11,13 @@ class TaxRepository extends Repository implements Contract
 {
     /**
      * Determine if the taxes are disabled.
-     *
-     * @var bool
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * Register a new tax.
-     *
-     * @param  int|callable  $tax
      */
-    public function register(string $name, $tax): void
+    public function register(string $name, int|float|Closure|Tax $tax): void
     {
         $this->items->put($name, $tax);
     }
@@ -56,10 +52,8 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Process the calculation.
-     *
-     * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Tax  $tax
      */
-    protected function process(Taxable $model, $tax): float
+    protected function process(Taxable $model, int|float|Closure|Tax $tax): float
     {
         if (is_numeric($tax)) {
             return $tax;
@@ -69,10 +63,8 @@ class TaxRepository extends Repository implements Contract
             return call_user_func_array($tax, [$model]);
         }
 
-        if (is_callable([$tax, 'calculate'], true) && in_array(Tax::class, class_implements($tax))) {
-            return call_user_func_array(
-                [is_string($tax) ? new $tax : $tax, 'calculate'], [$model]
-            );
+        if ($tax instanceof Tax) {
+            return call_user_func_array([$tax, '__invoke'], [$model]);
         }
 
         return 0;

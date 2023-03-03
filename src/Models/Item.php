@@ -23,7 +23,7 @@ class Item extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
         'net_total',
@@ -33,7 +33,7 @@ class Item extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'price' => 0,
@@ -45,7 +45,7 @@ class Item extends Model implements Contract
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'price' => 'float',
@@ -57,7 +57,7 @@ class Item extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'name',

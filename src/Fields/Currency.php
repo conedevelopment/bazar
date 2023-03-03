@@ -18,8 +18,6 @@ class Currency extends Number
 
     /**
      * Create a new field instance.
-     *
-     * @return void
      */
     public function __construct(string $label, ?string $name = null)
     {
@@ -32,8 +30,6 @@ class Currency extends Number
 
     /**
      * Set the currency resolver property.
-     *
-     * @return $this
      */
     public function currency(Closure|string $value): static
     {

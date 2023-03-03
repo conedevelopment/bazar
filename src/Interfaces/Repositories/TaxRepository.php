@@ -2,16 +2,16 @@
 
 namespace Cone\Bazar\Interfaces\Repositories;
 
+use Closure;
+use Cone\Bazar\Interfaces\Tax;
 use Cone\Bazar\Interfaces\Taxable;
 
 interface TaxRepository
 {
     /**
      * Register a new tax.
-     *
-     * @param  int|callable  $tax
      */
-    public function register(string $name, $tax): void;
+    public function register(string $name, int|float|Closure|Tax $tax): void;
 
     /**
      * Disable the tax calculation.

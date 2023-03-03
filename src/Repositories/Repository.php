@@ -13,8 +13,6 @@ abstract class Repository
 
     /**
      * Create a new repository instance.
-     *
-     * @return void
      */
     public function __construct(array $items = [])
     {
@@ -31,10 +29,8 @@ abstract class Repository
 
     /**
      * Dynamically call methods.
-     *
-     * @return mixed
      */
-    public function __call(string $method, array $arguments)
+    public function __call(string $method, array $arguments): mixed
     {
         return call_user_func_array([$this->items, $method], $arguments);
     }

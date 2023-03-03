@@ -14,6 +14,7 @@ use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +35,7 @@ class Order extends Model implements Contract, Resourceable
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
         'formatted_discount',
@@ -50,7 +51,7 @@ class Order extends Model implements Contract, Resourceable
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'currency' => null,
@@ -61,7 +62,7 @@ class Order extends Model implements Contract, Resourceable
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'discount' => 'float',
@@ -70,7 +71,7 @@ class Order extends Model implements Contract, Resourceable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'currency',
@@ -136,25 +137,37 @@ class Order extends Model implements Contract, Resourceable
     /**
      * Get the payments attribute.
      */
-    public function getPaymentsAttribute(): Collection
+    protected function payments(): Attribute
     {
-        return $this->transactions->where('type', Transaction::PAYMENT);
+        return new Attribute(
+            get: function (): Collection {
+                return $this->transactions->where('type', Transaction::PAYMENT);
+            }
+        );
     }
 
     /**
      * Get the refunds attribute.
      */
-    public function getRefundsAttribute(): Collection
+    protected function refunds(): Attribute
     {
-        return $this->transactions->where('type', Transaction::REFUND);
+        return new Attribute(
+            get: function (): Collection {
+                return $this->transactions->where('type', Transaction::REFUND);
+            }
+        );
     }
 
     /**
      * Get the status name attribute.
      */
-    public function getStatusNameAttribute(): string
+    protected function statusName(): Attribute
     {
-        return static::statuses()[$this->status] ?? $this->status;
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return static::statuses()[$attributes['status']] ?? $attributes['status'];
+            }
+        );
     }
 
     /**

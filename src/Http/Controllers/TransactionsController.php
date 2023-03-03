@@ -16,9 +16,6 @@ class TransactionsController extends Controller
 {
     /**
      * Store a newly created resource in storage.
-     *
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function store(Request $request, Order $order): JsonResponse
     {

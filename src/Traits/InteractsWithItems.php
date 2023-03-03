@@ -4,7 +4,6 @@ namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Interfaces\LineItem;
-use Cone\Bazar\Interfaces\Stockable;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
@@ -15,8 +14,6 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 trait InteractsWithItems
@@ -219,30 +216,6 @@ trait InteractsWithItems
     {
         return $this->lineItems->sum(static function (LineItem $item) use ($update): float {
             return $item->calculateTax($update) * $item->getQuantity();
-        });
-    }
-
-    /**
-     * Get the downloadable files with their signed URL.
-     */
-    public function getDownloads(): Collection
-    {
-        $this->loadMissing(['items', 'items.buyable']);
-
-        return $this->items->filter(static function (Item $item): bool {
-            return $item->buyable instanceof Stockable
-                && $item->buyable->isDownloadable();
-        })->flatMap(static function (Item $item): array {
-            return $item->buyable->get('files', []);
-        })->filter()->map(function (array $file): array {
-            $expiration = ($file['expiration'] ?? null) ? $this->created_at->addDays($file['expiration']) : null;
-
-            return array_replace($file, [
-                'expiration' => $expiration,
-                'url' => URL::signedRoute(
-                    'bazar.download', ['url' => Crypt::encryptString($file['url'])], $expiration
-                ),
-            ]);
         });
     }
 

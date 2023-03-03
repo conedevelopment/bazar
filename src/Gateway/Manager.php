@@ -11,8 +11,6 @@ class Manager extends BaseManager implements Contract
 {
     /**
      * Create a new manager instance.
-     *
-     * @return void
      */
     public function __construct(Container $container)
     {
@@ -48,8 +46,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Create the transfer driver.
-     *
-     * @return \Cone\Bazar\Gateway\TransferDriver
      */
     public function createTransferDriver(): TransferDriver
     {
@@ -60,8 +56,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Create the cash driver.
-     *
-     * @return \Cone\Bazar\Gateway\CashDriver
      */
     public function createCashDriver(): CashDriver
     {

@@ -11,8 +11,6 @@ class Manager extends BaseManager implements Contract
 {
     /**
      * Create a new manager instance.
-     *
-     * @return void
      */
     public function __construct(Container $container)
     {
@@ -47,8 +45,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Create the local pickup driver.
-     *
-     * @return \Cone\Bazar\Shipping\LocalPickupDriver
      */
     public function createLocalPickupDriver(): LocalPickupDriver
     {

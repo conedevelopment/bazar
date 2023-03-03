@@ -8,6 +8,7 @@ use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +26,7 @@ class Shipping extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
         'driver_name',
@@ -35,7 +36,7 @@ class Shipping extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'cost' => 0,
@@ -45,7 +46,7 @@ class Shipping extends Model implements Contract
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'cost' => 'float',
@@ -55,7 +56,7 @@ class Shipping extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'cost',
@@ -109,53 +110,77 @@ class Shipping extends Model implements Contract
     /**
      * Get the driver attribute.
      */
-    public function getDriverAttribute(?string $value = null): string
+    protected function driver(): Attribute
     {
-        return $value ?: Manager::getDefaultDriver();
+        return new Attribute(
+            get: static function (string $value = null): string {
+                return $value ?: Manager::getDefaultDriver();
+            }
+        );
     }
 
     /**
      * Get the total attribute.
      */
-    public function getTotalAttribute(): float
+    protected function total(): Attribute
     {
-        return $this->getTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted total attribute.
      */
-    public function getFormattedTotalAttribute(): string
+    protected function formattedTotal(): Attribute
     {
-        return $this->getFormattedTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedTotal();
+            }
+        );
     }
 
     /**
      * Get the net total attribute.
      */
-    public function getNetTotalAttribute(): float
+    protected function netTotal(): Attribute
     {
-        return $this->getNetTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getNetTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted net total attribute.
      */
-    public function getFormattedNetTotalAttribute(): string
+    protected function formattedNetTotal(): Attribute
     {
-        return $this->getFormattedNetTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedNetTotal();
+            }
+        );
     }
 
     /**
      * Get the name of the shipping method.
      */
-    public function getDriverNameAttribute(): string
+    protected function driverName(): Attribute
     {
-        try {
-            return Manager::driver($this->driver)->getName();
-        } catch (Throwable $exception) {
-            return $this->driver;
-        }
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                try {
+                    return Manager::driver($attributes['driver'])->getName();
+                } catch (Throwable $exception) {
+                    return $attributes['driver'];
+                }
+            }
+        );
     }
 
     /**
@@ -227,8 +252,8 @@ class Shipping extends Model implements Contract
             }
         } catch (Throwable $exception) {
             //
+        } finally {
+            return $this->cost;
         }
-
-        return $this->cost;
     }
 }

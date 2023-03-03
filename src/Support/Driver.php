@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Support;
 
 use Cone\Bazar\Interfaces\Itemable;
+use Illuminate\Support\Str;
 
 abstract class Driver
 {
@@ -18,8 +19,6 @@ abstract class Driver
 
     /**
      * Create a new driver instance.
-     *
-     * @return void
      */
     public function __construct(array $config = [])
     {
@@ -71,9 +70,7 @@ abstract class Driver
      */
     public function getName(): string
     {
-        $name = preg_replace(
-            '/([a-z0-9])([A-Z])/', '$1 $2', str_replace('Driver', '', class_basename(static::class))
-        );
+        $name = Str::of(static::class)->classBasename()->replace('Driver', '')->headline()->value();
 
         return __($name);
     }

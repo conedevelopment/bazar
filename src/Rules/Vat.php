@@ -11,7 +11,7 @@ class Vat implements Rule
      *
      * @var array
      */
-    protected $patterns = [
+    protected array $patterns = [
         '(AT)?U[0-9]{8}',
         '(BE)?0[0-9]{9}',
         '(BG)?[0-9]{9,10}',

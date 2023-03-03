@@ -5,7 +5,6 @@ namespace Cone\Bazar\Interfaces;
 use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Collection;
 
 interface Itemable extends Shippable
 {
@@ -58,11 +57,6 @@ interface Itemable extends Shippable
      * Calculate the tax.
      */
     public function calculateTax(bool $update = true): float;
-
-    /**
-     * Get the downloadable files with their signed URL.
-     */
-    public function getDownloads(): Collection;
 
     /**
      * Find an item by its attributes or make a new instance.

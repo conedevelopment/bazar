@@ -27,7 +27,7 @@ class Cart extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
         'currency' => null,
@@ -38,7 +38,7 @@ class Cart extends Model implements Contract
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'discount' => 'float',
@@ -48,7 +48,7 @@ class Cart extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'currency',
@@ -146,8 +146,6 @@ class Cart extends Model implements Contract
 
     /**
      * Convert the cart to a new order.
-     *
-     * @return \Cone\Bazar\Models\Order
      */
     public function toOrder(): Order
     {

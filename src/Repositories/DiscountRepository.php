@@ -11,17 +11,13 @@ class DiscountRepository extends Repository implements Contract
 {
     /**
      * Determine if the discounts are disabled.
-     *
-     * @var bool
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * Register a new discount.
-     *
-     * @param  int|callable  $discount
      */
-    public function register(string $name, $discount): void
+    public function register(string $name, int|float|Closure|Discount $discount): void
     {
         $this->items->put($name, $discount);
     }
@@ -56,10 +52,8 @@ class DiscountRepository extends Repository implements Contract
 
     /**
      * Process the calculation.
-     *
-     * @param  string|float|\Closure|\Cone\Bazar\Interfaces\Discount  $discount
      */
-    protected function process(Discountable $model, $discount): float
+    protected function process(Discountable $model, int|float|Closure|Discount $discount): float
     {
         if (is_numeric($discount)) {
             return $discount;
@@ -69,10 +63,8 @@ class DiscountRepository extends Repository implements Contract
             return call_user_func_array($discount, [$model]);
         }
 
-        if (is_callable([$discount, 'calculate'], true) && in_array(Discount::class, class_implements($discount))) {
-            return call_user_func_array(
-                [is_string($discount) ? new $discount : $discount, 'calculate'], [$model]
-            );
+        if ($discount instanceof Discount) {
+            return call_user_func_array([$discount, '__invoke'], [$model]);
         }
 
         return 0;
