@@ -9,12 +9,6 @@ use Cone\Bazar\Tests\TestCase;
 class BazarTest extends TestCase
 {
     /** @test */
-    public function bazar_has_version()
-    {
-        $this->assertSame(Bazar::VERSION, Bazar::getVersion());
-    }
-
-    /** @test */
     public function bazar_has_currencies()
     {
         $this->assertSame(

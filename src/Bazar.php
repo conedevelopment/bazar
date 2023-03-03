@@ -20,14 +20,6 @@ abstract class Bazar
     protected static ?string $currency = null;
 
     /**
-     * Get the package version.
-     */
-    public static function getVersion(): string
-    {
-        return static::VERSION;
-    }
-
-    /**
      * Get all the available currencies.
      */
     public static function getCurrencies(): array

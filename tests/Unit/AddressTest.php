@@ -11,7 +11,7 @@ use Cone\Bazar\Tests\TestCase;
 class AddressTest extends TestCase
 {
     /** @test */
-    public function it_belongs_to_user()
+    public function an_address_belongs_to_user()
     {
         $address = Address::factory()->make();
 
@@ -24,7 +24,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_cart()
+    public function an_address_belongs_to_cart()
     {
         $address = Address::factory()->make();
 
@@ -39,7 +39,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_order()
+    public function an_address_belongs_to_order()
     {
         $address = Address::factory()->make();
 
@@ -54,7 +54,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_shipping()
+    public function an_address_belongs_to_shipping()
     {
         $address = Address::factory()->make();
 
@@ -73,7 +73,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_has_name_attribute()
+    public function an_address_has_name_attribute()
     {
         $address = Address::factory()->make();
 
@@ -84,7 +84,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_has_alias_attribute()
+    public function an_address_has_alias_attribute()
     {
         $address = Address::factory()->make(['alias' => 'Fake']);
 
