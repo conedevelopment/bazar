@@ -8,6 +8,7 @@ use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Models\User;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -60,85 +61,97 @@ trait InteractsWithItems
     /**
      * Get the currency attribute.
      */
-    public function getCurrencyAttribute(?string $value = null): string
+    protected function currency(): Attribute
     {
-        return $value ?: Bazar::getCurrency();
-    }
-
-    /**
-     * Get the shipping attribute.
-     */
-    public function getShippingAttribute(): Shipping
-    {
-        return $this->getRelationValue('shipping')
-                    ->setRelation('shippable', $this->withoutRelations()->makeHidden('shipping'))
-                    ->makeHidden('shippable');
-    }
-
-    /**
-     * Get the items attribute.
-     */
-    public function getItemsAttribute(): Collection
-    {
-        return $this->getRelationValue('items')->each(function (Item $item): void {
-            $item->setRelation('itemable', $this->withoutRelations());
-        });
+        return new Attribute(
+            get: static function (?string $value = null): string {
+                return $value ?: Bazar::getCurrency();
+            }
+        );
     }
 
     /**
      * Get the line items attribute.
      */
-    public function getLineItemsAttribute(): Collection
+    protected function lineItems(): Attribute
     {
-        return $this->items->merge([$this->shipping]);
+        return new Attribute(
+            get: function (): Collection {
+                return $this->items->merge([$this->shipping]);
+            }
+        );
     }
 
     /**
      * Get the total attibute.
      */
-    public function getTotalAttribute(): float
+    protected function total(): Attribute
     {
-        return $this->getTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted total attribute.
      */
-    public function getFormattedTotalAttribute(): string
+    protected function formattedTotal(): Attribute
     {
-        return $this->getFormattedTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedTotal();
+            }
+        );
     }
 
     /**
      * Get the net total attribute.
      */
-    public function getNetTotalAttribute(): float
+    protected function netTotal(): Attribute
     {
-        return $this->getNetTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getNetTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted net total attribute.
      */
-    public function getFormattedNetTotalAttribute(): string
+    protected function formattedNetTotal(): Attribute
     {
-        return $this->getFormattedNetTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedNetTotal();
+            }
+        );
     }
 
     /**
      * Get the tax attribute.
      */
-    public function getTaxAttribute(): float
+    protected function tax(): Attribute
     {
-        return $this->getTax();
+        return new Attribute(
+            get: function (): float {
+                return $this->getTax();
+            }
+        );
     }
 
     /**
      * Get the formatted tax attribute.
      */
-    public function getFormattedTaxAttribute(): string
+    protected function formattedTax(): Attribute
     {
-        return $this->getFormattedTax();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedTax();
+            }
+        );
     }
 
     /**

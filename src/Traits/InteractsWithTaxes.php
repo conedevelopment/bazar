@@ -6,6 +6,7 @@ use Cone\Bazar\Bazar;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Tax;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
 trait InteractsWithTaxes
@@ -13,9 +14,13 @@ trait InteractsWithTaxes
     /**
      * Get the formatted tax attribute.
      */
-    public function getFormattedTaxAttribute(): string
+    protected function formattedTax(): Attribute
     {
-        return $this->getFormattedTax();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedTax();
+            }
+        );
     }
 
     /**

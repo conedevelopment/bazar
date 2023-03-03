@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Support\Facades\Discount;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
 trait InteractsWithDiscounts
@@ -10,9 +11,13 @@ trait InteractsWithDiscounts
     /**
      * Get the formatted discount attribute.
      */
-    public function getFormattedDiscountAttribute(): string
+    protected function formattedDiscount(): Attribute
     {
-        return $this->getFormattedDiscount();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedDiscount();
+            }
+        );
     }
 
     /**
