@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class Product extends Model implements Contract, Resourceable
 {
@@ -89,17 +89,6 @@ class Product extends Model implements Contract, Resourceable
     }
 
     /**
-     * Get the variants attribute.
-     */
-    public function getVariantsAttribute(): Collection
-    {
-        return $this->getRelationValue('variants')->each(function (Variant $variant): void {
-            $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
-                    ->makeHidden('product');
-        });
-    }
-
-    /**
      * Scope the query only to the models that are out of stock.
      */
     public function scopeOutOfStock(Builder $query): Builder
@@ -126,19 +115,25 @@ class Product extends Model implements Contract, Resourceable
      */
     public function toVariant(array $variation): ?Variant
     {
-        return $this->variants->sortBy(static function (Variant $variant): int {
-            return array_count_values($variant->variation)['*'] ?? 0;
-        })->first(function (Variant $variant) use ($variation): bool {
-            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
-
-            foreach ($variant->variation as $key => $value) {
-                if ($value === '*') {
-                    $variation[$key] = $value;
-                }
-            }
-
-            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
-        });
+        return $this->variants()
+                    ->getQuery()
+                    ->whereHas(
+                        'propertyValues',
+                        static function (Builder $query) use ($variation): Builder {
+                            return $query->whereIn($query->qualifyColumn('value'), $variation)
+                                        ->whereHas('property', static function (Builder $query) use ($variation): Builder {
+                                            return $query->whereIn($query->qualifyColumn('slug'), array_keys($variation));
+                                        });
+                        },
+                        '=',
+                        function (QueryBuilder $query): QueryBuilder {
+                            return $query->selectRaw('count(*)')
+                                        ->from('bazar_buyable_property_value')
+                                        ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
+                                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
+                        }
+                    )
+                    ->first();
     }
 
     /**

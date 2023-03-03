@@ -2,10 +2,11 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Interfaces\Models\PropertyValue as Contract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropertyValue extends Model
+class PropertyValue extends Model implements Contract
 {
     /**
      * The attributes that are mass assignable.

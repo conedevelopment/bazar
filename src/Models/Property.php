@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Interfaces\Models\Property as Contract;
 use Cone\Bazar\Resources\PropertyResource;
 use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Support\Slug;
 use Cone\Root\Traits\InteractsWithProxy;
 use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -49,6 +50,14 @@ class Property extends Model implements Contract, Resourceable
     public function values(): HasMany
     {
         return $this->hasMany(PropertyValue::class);
+    }
+
+    /**
+     * Get the slug representation of the model.
+     */
+    public function toSlug(): Slug
+    {
+        return (new Slug($this))->from('name')->unique();
     }
 
     /**
