@@ -21,7 +21,7 @@ class PropertyValueFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
-            'value' => $this->faker->slug(),
+            'value' => $this->faker->word(),
         ];
     }
 }

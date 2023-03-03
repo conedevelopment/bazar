@@ -11,13 +11,13 @@ trait InteractsWithStock
      */
     public function getFormattedDimensions(string $glue = 'x'): ?string
     {
-        $dimensions = array_filter($this->getAttributes(['metas.length', 'metas.width', 'metas.height']));
+        $dimensions = $this->metas->whereIn('key', ['length', 'width', 'height'])->filter()->values();
 
-        if (empty($dimensions)) {
+        if ($dimensions->isEmpty()) {
             return null;
         }
 
-        return sprintf('%s %s', implode($glue, $dimensions), Config::get('bazar.dimension_unit'));
+        return sprintf('%s %s', $dimensions->implode('value', $glue), Config::get('bazar.dimension_unit'));
     }
 
     /**
@@ -25,13 +25,13 @@ trait InteractsWithStock
      */
     public function getFormattedWeight(): ?string
     {
-        $weight = $this->getAttribute('metas.weight');
+        $weight = $this->metas->firstWhere('key', 'weight');
 
-        if (is_null($weight)) {
+        if (is_null($weight) || empty($weight->value)) {
             return null;
         }
 
-        return sprintf('%s %s', $weight, Config::get('bazar.weight_unit'));
+        return sprintf('%s %s', $weight->value, Config::get('bazar.weight_unit'));
     }
 
     /**
@@ -39,7 +39,9 @@ trait InteractsWithStock
      */
     public function isVirtual(): bool
     {
-        return (bool) $this->getAttribute('metas.virtual');
+        $meta = $this->metas->firstWhere('key', 'virtual');
+
+        return ! is_null($meta) && (bool) $meta->value;
     }
 
     /**
@@ -47,7 +49,9 @@ trait InteractsWithStock
      */
     public function isDownloadable(): bool
     {
-        return (bool) $this->getAttribute('metas.downloadable');
+        $meta = $this->metas->firstWhere('key', 'downloadable');
+
+        return ! is_null($meta) && (bool) $meta->value;
     }
 
     /**
@@ -55,7 +59,9 @@ trait InteractsWithStock
      */
     public function tracksQuantity(): bool
     {
-        return ! is_null($this->getAttribute('metas.quantity'));
+        $meta = $this->metas->firstWhere('key', 'quantity');
+
+        return ! is_null($meta) && ! empty($meta->value);
     }
 
     /**
@@ -63,9 +69,13 @@ trait InteractsWithStock
      */
     public function isAvailable(float $quantity = 1): bool
     {
-        $stock = $this->getAttribute('metas.quantity') ?: 0;
+        if (! $this->tracksQuantity()) {
+            return true;
+        }
 
-        return ! $this->tracksQuantity() || (min($stock, $quantity) > 0 && $stock >= $quantity);
+        $stock = $this->metas->firstWhere('key', 'quantity')?->value ?: 0;
+
+        return min($stock, $quantity) > 0 && $stock >= $quantity;
     }
 
     /**
@@ -74,9 +84,12 @@ trait InteractsWithStock
     public function incrementQuantity(float $quantity = 1): void
     {
         if ($this->tracksQuantity()) {
-            $value = $this->getAttribute('metas.quantity') ?: 0;
+            $meta = $this->metas->firstWhere('key', 'quantity')
+                ?: $this->metas()->make(['key' => 'quantity', 'value' => 0]);
 
-            $this->setAttribute('metas.quantity', $value + $quantity);
+            $meta->value = ((float) $meta->value) + $quantity;
+
+            $meta->save();
         }
     }
 
@@ -86,9 +99,12 @@ trait InteractsWithStock
     public function decrementQuantity(float $quantity = 1): void
     {
         if ($this->tracksQuantity()) {
-            $value = $this->getAttribute('metas.quantity') ?: 0;
+            $meta = $this->metas->firstWhere('key', 'quantity')
+                ?: $this->metas()->make(['key' => 'quantity', 'value' => 0]);
 
-            $this->setAttribute('metas.quantity', max($value - $quantity, 0));
+            $meta->value = max(((float) $meta->value) - $quantity, 0);
+
+            $meta->save();
         }
     }
 }
