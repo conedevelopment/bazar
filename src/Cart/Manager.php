@@ -17,8 +17,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Create the cookie driver.
-     *
-     * @return \Cone\Bazar\Cart\CookieDriver
      */
     public function createCookieDriver(): CookieDriver
     {
@@ -29,8 +27,6 @@ class Manager extends BaseManager implements Contract
 
     /**
      * Create the session driver.
-     *
-     * @return \Cone\Bazar\Cart\SessionDriver
      */
     public function createSessionDriver(): SessionDriver
     {

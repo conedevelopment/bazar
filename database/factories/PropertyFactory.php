@@ -4,6 +4,7 @@ namespace Cone\Bazar\Database\Factories;
 
 use Cone\Bazar\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class PropertyFactory extends Factory
 {
@@ -20,8 +21,8 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'slug' => $this->faker->slug(),
+            'name' => $name = $this->faker->word(),
+            'slug' => Str::slug($name),
         ];
     }
 }

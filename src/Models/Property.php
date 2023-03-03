@@ -40,8 +40,6 @@ class Property extends Model implements Contract, Resourceable
 
     /**
      * Get the proxied interface.
-     *
-     * @return string
      */
     public static function getProxiedInterface(): string
     {

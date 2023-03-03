@@ -11,6 +11,8 @@ use Cone\Bazar\Events\CheckoutProcessing;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Property;
+use Cone\Bazar\Models\PropertyValue;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Models\Variant;
 use Cone\Bazar\Support\Facades\Cart as CartFacade;
@@ -19,27 +21,33 @@ use Illuminate\Support\Facades\Event;
 
 class CartManagerTest extends TestCase
 {
-    protected $manager;
+    protected Manager $manager;
 
-    protected $product;
+    protected Product $product;
 
-    protected $variant;
+    protected Variant $variant;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->manager = $this->app->make(Manager::class);
-        $this->product = Product::factory()->create([
-            'prices' => ['usd' => ['default' => 100], 'eur' => ['default' => 2000]],
-        ]);
-        $this->variant = $this->product->variants()->save(Variant::factory()->make([
-            'variation' => ['Size' => 'S'],
-            'prices' => ['usd' => ['default' => 150], 'eur' => ['default' => 2500]],
-        ]));
 
-        $this->manager->addItem($this->product, 2, ['Size' => 'L']);
-        $this->manager->addItem($this->product, 1, ['Size' => 'S']);
+        $this->product = Product::factory()->create();
+
+        $this->variant = Variant::factory()->for($this->product, 'product')->create();
+
+        $property = Property::factory()->create(['name' => 'Size', 'slug' => 'size']);
+        $property->values()->saveMany([
+            PropertyValue::factory()->make(['value' => 'L']),
+            PropertyValue::factory()->make(['value' => 'S']),
+        ]);
+
+        $this->product->propertyValues()->attach($property->values);
+        $this->variant->propertyValues()->attach($property->values->where('value', 'S'));
+
+        $this->manager->addItem($this->product, 2, ['size' => 'L']);
+        $this->manager->addItem($this->product, 1, ['size' => 'S']);
     }
 
     /** @test */
@@ -75,22 +83,22 @@ class CartManagerTest extends TestCase
     /** @test */
     public function a_manager_can_add_products()
     {
-        $this->manager->addItem($this->product, 2, ['Size' => 'L']);
+        $this->manager->addItem($this->product, 2, ['size' => 'L']);
 
         $this->assertEquals(5, $this->manager->count());
         $this->assertEquals(2, $this->manager->getItems()->count());
 
         $product = $this->manager->getModel()->findItem([
-            'properties' => ['Size' => 'L'],
+            'properties' => ['size' => 'L'],
         ]);
-        $this->assertEquals(100, $product->price);
+        $this->assertEquals($this->product->price, $product->price);
         $this->assertEquals(4, $product->quantity);
 
         $variant = $this->manager->getModel()->findItem([
-            'properties' => ['Size' => 'S'],
+            'properties' => ['size' => 'S'],
         ]);
 
-        $this->assertEquals(150, $variant->price);
+        $this->assertEquals($this->variant->price, $variant->price);
         $this->assertEquals(1, $variant->quantity);
     }
 
@@ -98,7 +106,7 @@ class CartManagerTest extends TestCase
     public function a_manager_can_remove_items()
     {
         $item = $this->manager->getModel()->findItem([
-            'properties' => ['Size' => 'L'],
+            'properties' => ['size' => 'L'],
         ]);
         $this->manager->removeItem($item->id);
 
@@ -114,7 +122,7 @@ class CartManagerTest extends TestCase
     public function a_manager_can_update_items()
     {
         $item = $this->manager->getModel()->findItem([
-            'properties' => ['Size' => 'L'],
+            'properties' => ['size' => 'L'],
         ]);
         $this->manager->updateItem($item->id, ['quantity' => 10]);
 
@@ -204,14 +212,6 @@ class CartManagerTest extends TestCase
     /** @test */
     public function a_manager_can_sync_items()
     {
-        $this->assertEquals(350, $this->manager->getTotal());
-
-        Bazar::setCurrency('eur');
-
-        $this->assertEquals(6500, $this->manager->getTotal());
-
-        Bazar::setCurrency('usd');
-
-        $this->assertEquals(350, $this->manager->getTotal());
+        $this->assertEquals($this->product->price * 2 + $this->variant->price, $this->manager->getTotal());
     }
 }

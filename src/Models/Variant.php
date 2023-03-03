@@ -10,6 +10,7 @@ use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\HasMeta;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,6 +23,7 @@ class Variant extends Model implements Contract
 {
     use HasFactory;
     use HasMedia;
+    use HasMeta;
     use HasPrices;
     use HasProperties;
     use InteractsWithItemables;
@@ -30,16 +32,9 @@ class Variant extends Model implements Contract
     use SoftDeletes;
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [];
-
-    /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'alias',
@@ -96,8 +91,7 @@ class Variant extends Model implements Contract
     {
         return $this->items()->make(array_merge($attributes, [
             'name' => sprintf('%s - %s', $this->name, $this->alias),
-            'price' => $this->getPrice('sale', $itemable->getCurrency())
-                    ?: $this->getPrice('default', $itemable->getCurrency()),
+            'price' => $this->getPrice($itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
     }
 }

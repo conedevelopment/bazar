@@ -28,8 +28,6 @@ abstract class Driver
 
     /**
      * Create a new driver instance.
-     *
-     * @return void
      */
     public function __construct(array $config = [])
     {
@@ -278,10 +276,8 @@ abstract class Driver
 
     /**
      * Handle dynamic method calls into the driver.
-     *
-     * @return mixed
      */
-    public function __call(string $method, array $parameters)
+    public function __call(string $method, array $parameters): mixed
     {
         return call_user_func_array([$this->getModel(), $method], $parameters);
     }

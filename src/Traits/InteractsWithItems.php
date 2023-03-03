@@ -252,7 +252,7 @@ trait InteractsWithItems
     public function findItem(array $attributes): ?Item
     {
         $attributes = array_merge($attributes, [
-            'itemable_id' => $this->id,
+            'itemable_id' => $this->getKey(),
             'itemable_type' => static::class,
         ]);
 
@@ -266,8 +266,6 @@ trait InteractsWithItems
 
     /**
      * Merge the given item into the collection.
-     *
-     * @param  \Cone\Bazar\Models\Item  $items
      */
     public function mergeItem(Item $item): Item
     {

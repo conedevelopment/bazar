@@ -49,11 +49,11 @@ trait HasPrices
     /**
      * Get the price by the given type and currency.
      */
-    public function getPrice(?string $type = null, ?string $currency = null): ?float
+    public function getPrice(string $currency = null): ?float
     {
-        $currency = $currency ?: Bazar::getCurrency();
+        $currency ??= Bazar::getCurrency();
 
-        $key = sprintf('price%s_%s', is_null($type) ? '' : "_{$type}", $currency);
+        $key = sprintf('price_%s', $currency);
 
         $meta = $this->prices->firstWhere('key', $key);
 
@@ -63,11 +63,11 @@ trait HasPrices
     /**
      * Get the formatted price by the given type and currency.
      */
-    public function getFormattedPrice(string $type = null, ?string $currency = null): ?string
+    public function getFormattedPrice(string $currency = null): ?string
     {
-        $currency = $currency ?: Bazar::getCurrency();
+        $currency ??= Bazar::getCurrency();
 
-        $price = $this->getPrice($type, $currency);
+        $price = $this->getPrice($currency);
 
         return $price ? Str::currency($price, $currency) : null;
     }
@@ -80,15 +80,5 @@ trait HasPrices
         $price = $this->getPrice();
 
         return is_null($price) || $price === 0;
-    }
-
-    /**
-     * Determine if the stockable model is on sale.
-     */
-    public function onSale(): bool
-    {
-        $price = $this->getPrice('sale');
-
-        return ! is_null($price) && $price < $this->getPrice();
     }
 }
