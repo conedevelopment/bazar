@@ -2,12 +2,19 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\PropertyValueFactory;
 use Cone\Bazar\Interfaces\Models\PropertyValue as Contract;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PropertyValue extends Model implements Contract
 {
+    use HasFactory;
+    use InteractsWithProxy;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,10 +33,26 @@ class PropertyValue extends Model implements Contract
     protected $table = 'bazar_property_values';
 
     /**
+     * Get the proxied interface.
+     */
+    public static function getProxiedInterface(): string
+    {
+        return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): Factory
+    {
+        return PropertyValueFactory::new();
+    }
+
+    /**
      * Get the property for the property value.
      */
     public function property(): BelongsTo
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(Property::getProxiedClass());
     }
 }
