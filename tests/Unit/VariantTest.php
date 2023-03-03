@@ -8,9 +8,9 @@ use Cone\Bazar\Tests\TestCase;
 
 class VariantTest extends TestCase
 {
-    protected $variant;
+    protected Variant $variant;
 
-    protected $product;
+    protected Product $product;
 
     public function setUp(): void
     {

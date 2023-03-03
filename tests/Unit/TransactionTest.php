@@ -9,9 +9,9 @@ use Cone\Bazar\Tests\TestCase;
 
 class TransactionTest extends TestCase
 {
-    protected $order;
+    protected Order $order;
 
-    protected $transaction;
+    protected Transaction $transaction;
 
     public function setUp(): void
     {

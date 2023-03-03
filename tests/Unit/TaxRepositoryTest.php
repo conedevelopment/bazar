@@ -12,7 +12,7 @@ use Cone\Bazar\Tests\TestCase;
 
 class TaxRepositoryTest extends TestCase
 {
-    protected $cart;
+    protected Cart $cart;
 
     public function setUp(): void
     {

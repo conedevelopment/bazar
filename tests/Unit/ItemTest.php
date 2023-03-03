@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class ItemTest extends TestCase
 {
-    protected $item;
+    protected Item $item;
 
     public function setUp(): void
     {

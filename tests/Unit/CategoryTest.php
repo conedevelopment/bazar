@@ -8,7 +8,7 @@ use Cone\Bazar\Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    protected $category;
+    protected Category $category;
 
     public function setUp(): void
     {
@@ -18,7 +18,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_products()
+    public function a_category_belongs_to_products()
     {
         $product = Product::factory()->create();
 

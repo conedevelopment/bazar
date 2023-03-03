@@ -11,7 +11,7 @@ use Cone\Bazar\Tests\TestCase;
 
 class DiscountRepositoryTest extends TestCase
 {
-    protected $cart;
+    protected Cart $cart;
 
     public function setUp(): void
     {
@@ -37,8 +37,7 @@ class DiscountRepositoryTest extends TestCase
     {
         Discount::register('custom-object', new CustomDiscount);
         Discount::register('custom-class', CustomDiscount::class);
-        Discount::register('not-a-discount', new class
-        {
+        Discount::register('not-a-discount', new class() {
             public function calculate(Discountable $model)
             {
                 return 100;

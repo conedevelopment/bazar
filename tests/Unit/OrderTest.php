@@ -11,7 +11,7 @@ use Cone\Bazar\Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-    protected $order;
+    protected Order $order;
 
     public function setUp(): void
     {
