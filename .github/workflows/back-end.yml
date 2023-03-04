@@ -14,16 +14,16 @@ jobs:
       matrix:
         os: ["ubuntu-22.04"]
         php: ["8.1", "8.2"]
-        stability: ["prefer-stable"]
-        laravel: ["10.0"]
+        laravel: ["^10.0"]
+        dependency-version: ["highest"]
 
-    name: "Unit - ${{ matrix.os }} - PHP ${{ matrix.php }} - ${{ matrix.stability }}"
+    name: "Unit - PHP ${{ matrix.php }} - L ${{ matrix.laravel }} - ${{ matrix.dependency-version }}"
 
     runs-on: "${{ matrix.os }}"
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -31,13 +31,29 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif
           tools: composer:v2
-          coverage: pcov
+          coverage: xdebug3
 
       - name: Check Composer configuration
         run: composer validate --strict
 
       - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+        if: ${{ matrix.dependency-version == 'highest' }}
+        run: composer update --no-interaction --no-progress --prefer-dist --with="laravel/framework:${{ matrix.laravel }}"
+
+      - name: Install locked dependencies
+        if: ${{ matrix.dependency-version == 'locked' }}
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Check for PSR-4 mapping errors
+        run: composer dump-autoload --optimize --strict-psr
 
       - name: Execute tests
         run: composer exec -- phpunit
+
+      - name: Send coverage to Coveralls
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.php == '8.1' && matrix.laravel == '^10.0' }}
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
+          php ./php-coveralls.phar -v
