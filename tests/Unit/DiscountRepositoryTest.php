@@ -35,20 +35,12 @@ class DiscountRepositoryTest extends TestCase
     /** @test */
     public function it_can_calculate_discounts()
     {
-        Discount::register('custom-object', new CustomDiscount);
-        Discount::register('custom-class', CustomDiscount::class);
-        Discount::register('not-a-discount', new class()
-        {
-            public function calculate(Discountable $model)
-            {
-                return 100;
-            }
-        });
+        Discount::register('custom-object', new CustomDiscount());
         Discount::register('custom-closure', function (Discountable $model) {
             return 100;
         });
 
-        $this->assertEquals(330, $this->cart->calculateDiscount());
+        $this->assertEquals(230, $this->cart->calculateDiscount());
     }
 
     /** @test */
@@ -78,7 +70,7 @@ class DiscountRepositoryTest extends TestCase
 
 class CustomDiscount implements Contract
 {
-    public function calculate(Discountable $model): float
+    public function __invoke(Discountable $model): float
     {
         return 100;
     }

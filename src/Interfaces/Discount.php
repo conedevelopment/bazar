@@ -7,5 +7,5 @@ interface Discount
     /**
      * Calculate the discount for the given model.
      */
-    public function calculate(Discountable $model): float;
+    public function __invoke(Discountable $model): float;
 }

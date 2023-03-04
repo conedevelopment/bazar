@@ -2,11 +2,12 @@
 
 namespace Cone\Bazar\Rules;
 
+use Closure;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class TransactionAmount implements Rule
+class TransactionAmount implements ValidationRule
 {
     /**
      * The amount to be checked.
@@ -28,6 +29,14 @@ class TransactionAmount implements Rule
         $this->amount = $this->type === Transaction::PAYMENT
             ? $order->getTotalPayable()
             : $order->getTotalRefundable();
+    }
+
+    /**
+     * Run the validation rule.
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        //
     }
 
     /**

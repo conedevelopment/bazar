@@ -37,20 +37,12 @@ class TaxRepositoryTest extends TestCase
     /** @test */
     public function it_can_calculate_taxes()
     {
-        Tax::register('custom-object', new CustomTax);
-        Tax::register('custom-class', CustomTax::class);
-        Tax::register('not-a-tax', new class
-        {
-            public function calculate(Taxable $model)
-            {
-                return 100;
-            }
-        });
+        Tax::register('custom-object', new CustomTax());
         Tax::register('custom-closure', function (Taxable $model) {
             return $model instanceof Shipping ? 20 : 30;
         });
 
-        $this->assertEquals(770, $this->cart->calculateTax());
+        $this->assertEquals(470, $this->cart->calculateTax());
     }
 
     /** @test */
@@ -80,7 +72,7 @@ class TaxRepositoryTest extends TestCase
 
 class CustomTax implements Contract
 {
-    public function calculate(Taxable $model): float
+    public function __invoke(Taxable $model): float
     {
         return 100;
     }

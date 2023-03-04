@@ -2,11 +2,12 @@
 
 namespace Cone\Bazar\Rules;
 
+use Closure;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Variant;
-use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class Option implements Rule
+class Option implements ValidationRule
 {
     /**
      * The product instance.
@@ -27,6 +28,14 @@ class Option implements Rule
     {
         $this->product = $product;
         $this->variant = $variant;
+    }
+
+    /**
+     * Run the validation rule.
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        //
     }
 
     /**

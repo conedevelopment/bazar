@@ -2,9 +2,10 @@
 
 namespace Cone\Bazar\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class Vat implements Rule
+class Vat implements ValidationRule
 {
     /**
      * The country specific VAT patterns.
@@ -42,21 +43,12 @@ class Vat implements Rule
     ];
 
     /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
+     * Run the validation rule.
      */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return preg_match('/^('.implode('|', $this->patterns).')$/', $value) > 0;
-    }
-
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return __('The :attribute must be a valid VAT number.');
+        if (preg_match('/^('.implode('|', $this->patterns).')$/', $value) === 0) {
+            call_user_func_array($fail, [__('The :attribute must be a valid VAT number.')]);
+        }
     }
 }
