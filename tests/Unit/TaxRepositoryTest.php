@@ -1,18 +1,18 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Tax as Contract;
-use Bazar\Contracts\Taxable;
-use Bazar\Models\Cart;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
-use Bazar\Support\Facades\Tax;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Interfaces\Tax as Contract;
+use Cone\Bazar\Interfaces\Taxable;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Facades\Tax;
+use Cone\Bazar\Tests\TestCase;
 
 class TaxRepositoryTest extends TestCase
 {
-    protected $cart;
+    protected Cart $cart;
 
     public function setUp(): void
     {
@@ -37,16 +37,12 @@ class TaxRepositoryTest extends TestCase
     /** @test */
     public function it_can_calculate_taxes()
     {
-        Tax::register('custom-object', new CustomTax);
-        Tax::register('custom-class', CustomTax::class);
-        Tax::register('not-a-tax', new class {
-            public function calculate(Taxable $model) { return 100; }
-        });
+        Tax::register('custom-object', new CustomTax());
         Tax::register('custom-closure', function (Taxable $model) {
             return $model instanceof Shipping ? 20 : 30;
         });
 
-        $this->assertEquals(770, $this->cart->calculateTax());
+        $this->assertEquals(470, $this->cart->calculateTax());
     }
 
     /** @test */
@@ -76,7 +72,7 @@ class TaxRepositoryTest extends TestCase
 
 class CustomTax implements Contract
 {
-    public function calculate(Taxable $model): float
+    public function __invoke(Taxable $model): float
     {
         return 100;
     }

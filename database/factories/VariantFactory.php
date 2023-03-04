@@ -1,10 +1,11 @@
 <?php
 
-namespace Bazar\Database\Factories;
+namespace Cone\Bazar\Database\Factories;
 
-use Bazar\Models\Variant;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Variant;
+use Cone\Root\Models\Meta;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class VariantFactory extends Factory
 {
@@ -17,23 +18,27 @@ class VariantFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
         return [
-            'variation' => ['Size' => 'XS'],
-            'prices' => ['usd' => ['default' => mt_rand(10, 1000) / 10]],
-            'inventory' => [
-                'files' => [],
-                'sku' => Str::random(5),
-                'quantity' => 20,
-                'weight' => 200,
-                'virtual' => false,
-                'downloadable' => false,
-                'dimensions' => ['length' => 200, 'width' => 300, 'height' => 400],
-            ],
+            //
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(static function (Variant $variant): void {
+            $variant->setRelation('metas', $variant->metas()->makeMany([
+                ['key' => 'price_'.Bazar::getCurrency(), 'value' => mt_rand(10, 100)],
+            ]));
+        })->afterCreating(static function (Variant $variant): void {
+            $variant->metas->each(static function (Meta $meta) use ($variant) {
+                $meta->setAttribute('metable_id', $variant->getKey())->save();
+            });
+        });
     }
 }

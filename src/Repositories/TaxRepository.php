@@ -1,37 +1,29 @@
 <?php
 
-namespace Bazar\Repositories;
+namespace Cone\Bazar\Repositories;
 
-use Bazar\Contracts\Repositories\TaxRepository as Contract;
-use Bazar\Contracts\Tax;
-use Bazar\Contracts\Taxable;
 use Closure;
+use Cone\Bazar\Interfaces\Repositories\TaxRepository as Contract;
+use Cone\Bazar\Interfaces\Tax;
+use Cone\Bazar\Interfaces\Taxable;
 
 class TaxRepository extends Repository implements Contract
 {
     /**
      * Determine if the taxes are disabled.
-     *
-     * @var bool
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * Register a new tax.
-     *
-     * @param  string  $name
-     * @param  int|callable  $tax
-     * @return void
      */
-    public function register(string $name, $tax): void
+    public function register(string $name, int|float|Closure|Tax $tax): void
     {
         $this->items->put($name, $tax);
     }
 
     /**
      * Disable the tax calculation.
-     *
-     * @return void
      */
     public function disable(): void
     {
@@ -40,8 +32,6 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Enable the tax calculation.
-     *
-     * @return void
      */
     public function enable(): void
     {
@@ -50,9 +40,6 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Calculate tax for the given item.
-     *
-     * @param  \Bazar\Contracts\Taxable  $model
-     * @return float
      */
     public function calculate(Taxable $model): float
     {
@@ -65,12 +52,8 @@ class TaxRepository extends Repository implements Contract
 
     /**
      * Process the calculation.
-     *
-     * @param  \Bazar\Contracts\Taxable  $model
-     * @param  string|float|\Closure|\Bazar\Contracts\Tax  $tax
-     * @return float
      */
-    protected function process(Taxable $model, $tax): float
+    protected function process(Taxable $model, int|float|Closure|Tax $tax): float
     {
         if (is_numeric($tax)) {
             return $tax;
@@ -80,10 +63,8 @@ class TaxRepository extends Repository implements Contract
             return call_user_func_array($tax, [$model]);
         }
 
-        if (is_callable([$tax, 'calculate'], true) && in_array(Tax::class, class_implements($tax))) {
-            return call_user_func_array(
-                [is_string($tax) ? new $tax : $tax, 'calculate'], [$model]
-            );
+        if ($tax instanceof Tax) {
+            return call_user_func_array([$tax, '__invoke'], [$model]);
         }
 
         return 0;

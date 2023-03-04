@@ -1,12 +1,13 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\HasUuid;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Item as Contract;
-use Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Interfaces\Models\Item as Contract;
+use Cone\Bazar\Traits\InteractsWithTaxes;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -15,55 +16,55 @@ use Illuminate\Support\Str;
 class Item extends Model implements Contract
 {
     use HasFactory;
-    use HasUuid;
+    use HasUuids;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
-        'total',
         'net_total',
+        'total',
     ];
 
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
-        'tax' => 0,
         'price' => 0,
-        'quantity' => 0,
         'properties' => '[]',
+        'quantity' => 0,
+        'tax' => 0,
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
-        'tax' => 'float',
         'price' => 'float',
-        'quantity' => 'float',
         'properties' => 'json',
+        'quantity' => 'float',
+        'tax' => 'float',
     ];
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
-        'tax',
         'name',
         'price',
-        'quantity',
         'properties',
+        'quantity',
+        'tax',
     ];
 
     /**
@@ -97,29 +98,23 @@ class Item extends Model implements Contract
     protected $table = 'bazar_items';
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\ItemFactory
      */
-    protected static function newFactory(): ItemFactory
+    protected static function newFactory(): Factory
     {
         return ItemFactory::new();
     }
 
     /**
      * Get the buyable model for the item.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function buyable(): MorphTo
     {
@@ -128,8 +123,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the itemable model for the item.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function itemable(): MorphTo
     {
@@ -138,8 +131,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted price attribute.
-     *
-     * @return string
      */
     public function getFormattedPriceAttribute(): string
     {
@@ -148,8 +139,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the total attribute.
-     *
-     * @return float
      */
     public function getTotalAttribute(): float
     {
@@ -158,8 +147,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted total attribute.
-     *
-     * @return string
      */
     public function getFormattedTotalAttribute(): string
     {
@@ -168,8 +155,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the net total attribute.
-     *
-     * @return float
      */
     public function getNetTotalAttribute(): float
     {
@@ -178,8 +163,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted net total attribute.
-     *
-     * @return string
      */
     public function getFormattedNetTotalAttribute(): string
     {
@@ -188,8 +171,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the price.
-     *
-     * @return float
      */
     public function getPrice(): float
     {
@@ -198,8 +179,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted price.
-     *
-     * @return string
      */
     public function getFormattedPrice(): string
     {
@@ -208,8 +187,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the total.
-     *
-     * @return float
      */
     public function getTotal(): float
     {
@@ -218,8 +195,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted total.
-     *
-     * @return string
      */
     public function getFormattedTotal(): string
     {
@@ -228,8 +203,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the net total.
-     *
-     * @return float
      */
     public function getNetTotal(): float
     {
@@ -238,8 +211,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted net total.
-     *
-     * @return string
      */
     public function getFormattedNetTotal(): string
     {
@@ -248,8 +219,6 @@ class Item extends Model implements Contract
 
     /**
      * Get the quantity.
-     *
-     * @return float
      */
     public function getQuantity(): float
     {

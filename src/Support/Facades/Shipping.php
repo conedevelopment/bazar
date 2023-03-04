@@ -1,21 +1,19 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Shipping\Manager;
+use Cone\Bazar\Interfaces\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Itemable $model)
  *
- * @see \Bazar\Contracts\Shipping\Manager
+ * @see \Cone\Bazar\Interfaces\Shipping\Manager
  */
 class Shipping extends Facade
 {
     /**
      * Get the registered name of the component.
-     *
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {

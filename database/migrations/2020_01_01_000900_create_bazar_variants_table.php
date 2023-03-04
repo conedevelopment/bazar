@@ -4,12 +4,10 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBazarVariantsTable extends Migration
+return new class() extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up(): void
     {
@@ -17,9 +15,6 @@ class CreateBazarVariantsTable extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();
             $table->string('alias')->nullable();
-            $table->json('variation');
-            $table->json('prices')->nullable();
-            $table->json('inventory')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
@@ -29,11 +24,9 @@ class CreateBazarVariantsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down(): void
     {
         Schema::dropIfExists('bazar_variants');
     }
-}
+};

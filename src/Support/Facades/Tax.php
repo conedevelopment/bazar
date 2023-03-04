@@ -1,8 +1,8 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Repositories\TaxRepository;
+use Cone\Bazar\Interfaces\Repositories\TaxRepository;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -10,16 +10,14 @@ use Illuminate\Support\Facades\Facade;
  * @method static void remove(string $name)
  * @method static void disable()
  * @method static void enable()
- * @method static float calculate(\Bazar\Contracts\Taxable $model)
+ * @method static float calculate(\Cone\Bazar\Interfaces\Taxable $model)
  *
- * @see \Bazar\Contracts\Repositories\TaxRepository
+ * @see \Cone\Bazar\Interfaces\Repositories\TaxRepository
  */
 class Tax extends Facade
 {
     /**
      * Get the registered name of the component.
-     *
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {

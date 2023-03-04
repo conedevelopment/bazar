@@ -1,17 +1,14 @@
 <?php
 
-namespace Bazar\Cart;
+namespace Cone\Bazar\Cart;
 
-use Bazar\Models\Cart;
+use Cone\Bazar\Models\Cart;
 use Illuminate\Http\Request;
 
 class SessionDriver extends Driver
 {
     /**
      * Resolve the cart instance.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Bazar\Models\Cart
      */
     protected function resolve(Request $request): Cart
     {
@@ -22,10 +19,6 @@ class SessionDriver extends Driver
 
     /**
      * The callback after the cart instance is resolved.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Cart  $cart
-     * @return void
      */
     protected function resolved(Request $request, Cart $cart): void
     {

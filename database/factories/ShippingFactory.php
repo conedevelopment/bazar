@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Database\Factories;
+namespace Cone\Bazar\Database\Factories;
 
-use Bazar\Models\Shipping;
-use Bazar\Support\Facades\Shipping as Manager;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShippingFactory extends Factory
@@ -17,8 +17,6 @@ class ShippingFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {

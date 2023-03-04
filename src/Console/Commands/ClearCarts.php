@@ -1,10 +1,10 @@
 <?php
 
-namespace Bazar\Console\Commands;
+namespace Cone\Bazar\Console\Commands;
 
-use Bazar\Models\Cart;
-use Bazar\Models\Item;
-use Bazar\Models\Shipping;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Item;
+use Cone\Bazar\Models\Shipping;
 use Illuminate\Console\Command;
 
 class ClearCarts extends Command
@@ -25,8 +25,6 @@ class ClearCarts extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle(): int
     {

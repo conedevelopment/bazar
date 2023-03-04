@@ -1,43 +1,23 @@
 <?php
 
-namespace Bazar\Http\Controllers;
+namespace Cone\Bazar\Http\Controllers;
 
-use Bazar\Http\Requests\TransactionStoreRequest as StoreRequest;
-use Bazar\Http\Requests\TransactionUpdateRequest as UpdateRequest;
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Root\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class TransactionsController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        if (Gate::getPolicyFor($class = Transaction::getProxiedClass())) {
-            $this->authorizeResource($class);
-        }
-    }
-
-    /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Bazar\Http\Requests\TransactionStoreRequest  $request
-     * @param  \Bazar\Models\Order  $order
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function store(StoreRequest $request, Order $order): JsonResponse
+    public function store(Request $request, Order $order): JsonResponse
     {
         $data = $request->validated();
 
@@ -52,18 +32,13 @@ class TransactionsController extends Controller
             throw new HttpException(JsonResponse::HTTP_BAD_REQUEST, $exception->getMessage());
         }
 
-        return Response::json($transaction, JsonResponse::HTTP_CREATED);
+        return new JsonResponse($transaction, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Bazar\Http\Requests\TransactionUpdateRequest  $request
-     * @param  \Bazar\Models\Order  $order
-     * @param  \Bazar\Models\Transaction  $transaction
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateRequest $request, Order $order, Transaction $transaction): JsonResponse
+    public function update(Request $request, Order $order, Transaction $transaction): JsonResponse
     {
         if ($transaction->completed()) {
             $transaction->markAsPending();
@@ -71,20 +46,16 @@ class TransactionsController extends Controller
             $transaction->markAsCompleted();
         }
 
-        return Response::json(['updated' => true]);
+        return new JsonResponse($transaction);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  \Bazar\Models\Transaction  $transaction
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Order $order, Transaction $transaction): JsonResponse
     {
         $transaction->delete();
 
-        return Response::json(['deleted' => true]);
+        return new JsonResponse('', JsonResponse::HTTP_NO_CONTENT);
     }
 }

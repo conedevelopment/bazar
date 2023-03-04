@@ -1,23 +1,18 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Address as Contract;
-use Bazar\Database\Factories\AddressFactory;
-use Bazar\Support\Countries;
-use Illuminate\Database\Eloquent\Builder;
+use Cone\Bazar\Database\Factories\AddressFactory;
+use Cone\Bazar\Interfaces\Models\Address as Contract;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Http\Request;
 
 class Address extends Model implements Contract
 {
-    use BazarRoutable;
-    use Filterable;
     use HasFactory;
     use InteractsWithProxy;
 
@@ -28,35 +23,34 @@ class Address extends Model implements Contract
      */
     protected $appends = [
         'name',
-        'country_name',
     ];
 
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
-        'city' => null,
-        'state' => null,
-        'phone' => null,
-        'email' => null,
-        'alias' => null,
-        'custom' => '[]',
-        'country' => null,
-        'default' => false,
-        'company' => null,
-        'address' => null,
-        'postcode' => null,
-        'last_name' => null,
-        'first_name' => null,
         'address_secondary' => null,
+        'address' => null,
+        'alias' => null,
+        'city' => null,
+        'company' => null,
+        'country' => null,
+        'custom' => '[]',
+        'default' => false,
+        'email' => null,
+        'first_name' => null,
+        'last_name' => null,
+        'phone' => null,
+        'postcode' => null,
+        'state' => null,
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'custom' => 'json',
@@ -66,23 +60,23 @@ class Address extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
-        'city',
-        'state',
-        'phone',
-        'email',
-        'alias',
-        'custom',
-        'country',
-        'default',
-        'company',
-        'address',
-        'postcode',
-        'last_name',
-        'first_name',
         'address_secondary',
+        'address',
+        'alias',
+        'city',
+        'company',
+        'country',
+        'custom',
+        'default',
+        'email',
+        'first_name',
+        'last_name',
+        'phone',
+        'postcode',
+        'state',
     ];
 
     /**
@@ -93,29 +87,23 @@ class Address extends Model implements Contract
     protected $table = 'bazar_addresses';
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\AddressFactory
      */
-    protected static function newFactory(): AddressFactory
+    protected static function newFactory(): Factory
     {
         return AddressFactory::new();
     }
 
     /**
      * Get the addressable model for the address.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function addressable(): MorphTo
     {
@@ -124,67 +112,25 @@ class Address extends Model implements Contract
 
     /**
      * Get the alias attribute.
-     *
-     * @param  string|null  $value
-     * @return string|null
      */
-    public function getAliasAttribute(?string $value = null): ?string
+    protected function alias(): Attribute
     {
-        return $this->exists ? ($value ?: "#{$this->id}") : $value;
+        return new Attribute(
+            get: function (?string $value): ?string {
+                return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
+            }
+        );
     }
 
     /**
      * Get the name attribute.
-     *
-     * @return string
      */
-    public function getNameAttribute(): string
+    protected function name(): Attribute
     {
-        return trim(sprintf('%s %s', $this->first_name, $this->last_name));
-    }
-
-    /**
-     * Get the country name attribute.
-     *
-     * @return string|null
-     */
-    public function getCountryNameAttribute(): ?string
-    {
-        return $this->country ? Countries::name($this->country) : null;
-    }
-
-    /**
-     * Get a custom property.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function custom(string $key, $default = null)
-    {
-        return $this->custom[$key] ?? $default;
-    }
-
-    /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
-     */
-    public function toBreadcrumb(Request $request): string
-    {
-        return $this->alias;
-    }
-
-    /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where($query->qualifyColumn('alias'), 'like', "{$value}%");
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return trim(sprintf('%s %s', $attributes['first_name'], $attributes['last_name']));
+            }
+        );
     }
 }

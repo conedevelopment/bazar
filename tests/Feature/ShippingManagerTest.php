@@ -1,17 +1,19 @@
 <?php
 
-namespace Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Feature;
 
-use Bazar\Contracts\Shippable;
-use Bazar\Contracts\Shipping\Manager;
-use Bazar\Models\Order;
-use Bazar\Shipping\Driver;
-use Bazar\Shipping\LocalPickupDriver;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Interfaces\Shippable;
+use Cone\Bazar\Interfaces\Shipping\Manager;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Shipping\Driver;
+use Cone\Bazar\Shipping\LocalPickupDriver;
+use Cone\Bazar\Tests\TestCase;
 
 class ShippingManagerTest extends TestCase
 {
-    protected $manager, $order;
+    protected $manager;
+
+    protected $order;
 
     public function setUp(): void
     {

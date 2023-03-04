@@ -1,87 +1,52 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Casts\Inventory;
-use Bazar\Casts\Prices;
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\HasMedia;
-use Bazar\Concerns\InteractsWithItemables;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithStock;
-use Bazar\Concerns\Sluggable;
-use Bazar\Contracts\Itemable;
-use Bazar\Contracts\Models\Product as Contract;
-use Bazar\Database\Factories\ProductFactory;
+use Cone\Bazar\Database\Factories\ProductFactory;
+use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Models\Product as Contract;
+use Cone\Bazar\Resources\ProductResource;
+use Cone\Bazar\Traits\HasPrices;
+use Cone\Bazar\Traits\HasProperties;
+use Cone\Bazar\Traits\InteractsWithItemables;
+use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Support\Slug;
+use Cone\Root\Traits\HasMedia;
+use Cone\Root\Traits\HasMeta;
+use Cone\Root\Traits\InteractsWithProxy;
+use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Product extends Model implements Contract
+class Product extends Model implements Contract, Resourceable
 {
-    use BazarRoutable;
     use HasFactory;
     use HasMedia;
+    use HasMeta;
+    use HasPrices;
+    use HasProperties;
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
     use Sluggable;
     use SoftDeletes;
-    use Filterable {
-        Filterable::filters as defaultFilters;
-    }
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'price',
-        'formatted_price',
-    ];
-
-    /**
-     * The attributes that should have default values.
-     *
-     * @var array
-     */
-    protected $attributes = [
-        'prices' => '[]',
-        'inventory' => '[]',
-        'properties' => '[]',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'properties' => 'json',
-        'prices' => Prices::class,
-        'inventory' => Inventory::class,
-    ];
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
+        'description',
         'name',
         'slug',
-        'prices',
-        'inventory',
-        'properties',
-        'description',
     ];
 
     /**
@@ -92,42 +57,23 @@ class Product extends Model implements Contract
     protected $table = 'bazar_products';
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\ProductFactory
      */
-    protected static function newFactory(): ProductFactory
+    protected static function newFactory(): Factory
     {
         return ProductFactory::new();
     }
 
     /**
-     * Get the filter options for the model.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public static function filters(Request $request): array
-    {
-        return array_merge(static::defaultFilters($request), [
-            'category' => array_map('__', Category::proxy()->newQuery()->pluck('id', 'name')->toArray()),
-        ]);
-    }
-
-    /**
      * Get the categories for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function categories(): BelongsToMany
     {
@@ -136,8 +82,6 @@ class Product extends Model implements Contract
 
     /**
      * Get the variants for the product.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function variants(): HasMany
     {
@@ -145,118 +89,55 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the variants attribute.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getVariantsAttribute(): Collection
-    {
-        return $this->getRelationValue('variants')->each(function (Variant $variant): void {
-            $variant->setRelation('product', $this->withoutRelations()->makeHidden('variants'))
-                    ->makeHidden('product');
-        });
-    }
-
-    /**
-     * Retrieve the child model for a bound value.
-     *
-     * @param  string  $childType
-     * @param  mixed  $value
-     * @param  string|null  $field
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-    public function resolveChildRouteBinding($childType, $value, $field): ?Model
-    {
-        if ($childType === 'variant' && preg_match('/bazar/', Route::getCurrentRoute()->getName())) {
-            return $this->variants()
-                        ->where($field ?: $this->variants()->getRelated()->getRouteKeyName(), $value)
-                        ->withTrashed()
-                        ->first();
-        }
-
-        return parent::resolveChildRouteBinding($childType, $value, $field);
-    }
-
-    /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->where(static function (Builder $query) use ($value): Builder {
-            return $query->where($query->qualifyColumn('name'), 'like', "{$value}%")
-                         ->orWhere($query->qualifyColumn('inventory->sku'), 'like', "{$value}%");
-        });
-    }
-
-    /**
-     * Scope the query only to the given category.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeCategory(Builder $query, int $value): Builder
-    {
-        return $query->whereHas('categories', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('id'), $value);
-        });
-    }
-
-    /**
      * Scope the query only to the models that are out of stock.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeOutOfStock(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('inventory->quantity'), '=', 0);
+        return $query->whereHas('metas', static function (Builder $query): Builder {
+            return $query->where($query->qualifyColumn('key'), 'quantity')
+                        ->where($query->qualifyColumn('value'), 0);
+        });
     }
 
     /**
      * Scope the query only to the models that are in stock.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeInStock(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('inventory->quantity'), '>', 0);
-    }
-
-    /**
-     * Get the variant of the given option.
-     *
-     * @param  array  $variation
-     * @return \Bazar\Models\Variant|null
-     */
-    public function toVariant(array $variation): ?Variant
-    {
-        return $this->variants->sortBy(static function (Variant $variant): int {
-            return array_count_values($variant->variation)['*'] ?? 0;
-        })->first(function (Variant $variant) use ($variation): bool {
-            $variation = array_replace(array_fill_keys(array_keys($this->properties), '*'), $variation);
-
-            foreach ($variant->variation as $key => $value) {
-                if ($value === '*') {
-                    $variation[$key] = $value;
-                }
-            }
-
-            return empty(array_diff_assoc(array_intersect_key($variant->variation, $variation), $variation));
+        return $query->whereHas('metas', static function (Builder $query): Builder {
+            return $query->where($query->qualifyColumn('key'), 'quantity')
+                        ->where($query->qualifyColumn('value'), '>', 0);
         });
     }
 
     /**
+     * Get the variant of the given option.
+     */
+    public function toVariant(array $variation): ?Variant
+    {
+        return $this->variants()
+                    ->getQuery()
+                    ->whereHas(
+                        'propertyValues',
+                        static function (Builder $query) use ($variation): Builder {
+                            return $query->whereIn($query->qualifyColumn('value'), $variation)
+                                        ->whereHas('property', static function (Builder $query) use ($variation): Builder {
+                                            return $query->whereIn($query->qualifyColumn('slug'), array_keys($variation));
+                                        });
+                        },
+                        '=',
+                        function (QueryBuilder $query): QueryBuilder {
+                            return $query->selectRaw('count(*)')
+                                        ->from('bazar_buyable_property_value')
+                                        ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
+                                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
+                        }
+                    )
+                    ->first();
+    }
+
+    /**
      * Get the item representation of the buyable instance.
-     *
-     * @param  \Bazar\Contracts\Itemable  $itemable
-     * @param  array  $attributes
-     * @return \Bazar\Models\Item
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
@@ -266,19 +147,23 @@ class Product extends Model implements Contract
 
         return $this->items()->make(array_merge($attributes, [
             'name' => $this->name,
-            'price' => $this->getPrice('sale', $itemable->getCurrency())
-                    ?: $this->getPrice('default', $itemable->getCurrency())
+            'price' => $this->getPrice($itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
     }
 
     /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
+     * Get the slug representation of the model.
      */
-    public function toBreadcrumb(Request $request): string
+    public function toSlug(): Slug
     {
-        return $this->name;
+        return (new Slug($this))->from('name')->unique();
+    }
+
+    /**
+     * Get the resource representation of the model.
+     */
+    public static function toResource(): ProductResource
+    {
+        return new ProductResource(static::class);
     }
 }

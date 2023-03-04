@@ -1,6 +1,6 @@
 <?php
 
-namespace Bazar\Exceptions;
+namespace Cone\Bazar\Exceptions;
 
 use Illuminate\Validation\ValidationException as Exception;
 
@@ -8,8 +8,6 @@ class ValidationException extends Exception
 {
     /**
      * Get all of the validation error messages.
-     *
-     * @return array
      */
     public function errors(): array
     {

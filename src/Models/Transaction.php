@@ -1,13 +1,15 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Transaction as Contract;
-use Bazar\Database\Factories\TransactionFactory;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Database\Factories\TransactionFactory;
+use Cone\Bazar\Interfaces\Models\Transaction as Contract;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Root\Traits\InteractsWithProxy;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,17 +38,17 @@ class Transaction extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
-        'url',
         'driver_name',
+        'url',
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'completed_at' => 'datetime',
@@ -55,14 +57,14 @@ class Transaction extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
+        'amount',
+        'completed_at',
+        'driver',
         'key',
         'type',
-        'amount',
-        'driver',
-        'completed_at',
     ];
 
     /**
@@ -73,29 +75,23 @@ class Transaction extends Model implements Contract
     protected $table = 'bazar_transactions';
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\TransactionFactory
      */
-    protected static function newFactory(): TransactionFactory
+    protected static function newFactory(): Factory
     {
         return TransactionFactory::new();
     }
 
     /**
      * Get the order for the transaction.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo
     {
@@ -104,36 +100,38 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the name of the gateway driver.
-     *
-     * @return string
      */
-    public function getDriverNameAttribute(): string
+    protected function driverName(): Attribute
     {
-        try {
-            return Gateway::driver($this->driver)->getName();
-        } catch (Throwable $exception) {
-            return $this->driver;
-        }
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): ?string {
+                try {
+                    return Gateway::driver($attributes['driver'])->getName();
+                } catch (Throwable $exception) {
+                    return $attributes['driver'];
+                }
+            }
+        );
     }
 
     /**
      * Get the URL of the transaction.
-     *
-     * @return string|null
      */
-    public function getUrlAttribute(): ?string
+    protected function url(): Attribute
     {
-        try {
-            return Gateway::driver($this->driver)->getTransactionUrl($this);
-        } catch (Throwable $exception) {
-            return null;
-        }
+        return new Attribute(
+            get: function (mixed $value, array $attributes): ?string {
+                try {
+                    return Gateway::driver($attributes['driver'])->getTransactionUrl($this);
+                } catch (Throwable $exception) {
+                    return null;
+                }
+            }
+        );
     }
 
     /**
      * Determine if the payment is completed.
-     *
-     * @return bool
      */
     public function completed(): bool
     {
@@ -142,8 +140,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Determine if the payment is pending.
-     *
-     * @return bool
      */
     public function pending(): bool
     {
@@ -152,9 +148,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Mark the transaction as completed.
-     *
-     * @param \DateTimeInterface|null  $date
-     * @return void
      */
     public function markAsCompleted(?DateTimeInterface $date = null): void
     {
@@ -167,8 +160,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Mark the transaction as pending.
-     *
-     * @return void
      */
     public function markAsPending(): void
     {
@@ -179,9 +170,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope the query to only include payments.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePayment(Builder $query): Builder
     {
@@ -190,9 +178,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope the query to only include refunds.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeRefund(Builder $query): Builder
     {
@@ -201,9 +186,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope a query to only include completed transactions.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeCompleted(Builder $query): Builder
     {
@@ -212,9 +194,6 @@ class Transaction extends Model implements Contract
 
     /**
      * Scope a query to only include pending transactions.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopePending(Builder $query): Builder
     {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Bazar\Gateway;
+namespace Cone\Bazar\Gateway;
 
-use Bazar\Events\CheckoutFailed;
-use Bazar\Events\CheckoutProcessing;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
-use Bazar\Support\Driver as BaseDriver;
+use Cone\Bazar\Events\CheckoutFailed;
+use Cone\Bazar\Events\CheckoutProcessing;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Driver as BaseDriver;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -15,27 +15,16 @@ abstract class Driver extends BaseDriver
 {
     /**
      * Process the payment.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
      */
     abstract public function pay(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Process the refund.
-     *
-     * @param  \Bazar\Models\Order  $order
-     * @param  float|null  $amount
-     * @return \Bazar\Models\Transaction
      */
     abstract public function refund(Order $order, ?float $amount = null): Transaction;
 
     /**
      * Get the URL of the transaction.
-     *
-     * @param  \Bazar\Models\Transaction  $transaction
-     * @return string|null
      */
     public function getTransactionUrl(Transaction $transaction): ?string
     {
@@ -44,10 +33,6 @@ abstract class Driver extends BaseDriver
 
     /**
      * Handle the checkout request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Bazar\Models\Cart  $cart
-     * @return \Bazar\Models\Order
      */
     public function checkout(Request $request, Cart $cart): Order
     {

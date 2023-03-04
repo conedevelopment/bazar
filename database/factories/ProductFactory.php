@@ -1,8 +1,10 @@
 <?php
 
-namespace Bazar\Database\Factories;
+namespace Cone\Bazar\Database\Factories;
 
-use Bazar\Models\Product;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Product;
+use Cone\Root\Models\Meta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,37 +19,29 @@ class ProductFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company,
-            'slug' => Str::random(),
+            'name' => $name = $this->faker->unique()->company(),
+            'slug' => Str::slug($name),
             'description' => $this->faker->sentences(3, true),
-            'properties' => ['Size' => ['XS', 'S', 'M', 'L']],
-            'prices' => [
-                'usd' => [
-                    'default' => $price = mt_rand(10, 1000) / 10,
-                    'sale' => round($price * 0.8, 1),
-                ],
-                'eur' => [
-                    'default' => $price = mt_rand(10, 1000) / 10,
-                    'sale' => round($price * 0.8, 1),
-                ]
-            ],
-            'inventory' => [
-                'files' => [],
-                'sku' => Str::random(5),
-                'quantity' => 20,
-                'weight' => 200,
-                'virtual' => false,
-                'downloadable' => false,
-                'length' => 200,
-                'width' => 300,
-                'height' => 400,
-            ],
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterMaking(static function (Product $product): void {
+            $product->setRelation('metas', $product->metas()->makeMany([
+                ['key' => 'price_'.Bazar::getCurrency(), 'value' => mt_rand(10, 100)],
+            ]));
+        })->afterCreating(static function (Product $product): void {
+            $product->metas->each(static function (Meta $meta) use ($product) {
+                $meta->setAttribute('metable_id', $product->getKey())->save();
+            });
+        });
     }
 }

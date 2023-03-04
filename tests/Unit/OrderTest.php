@@ -1,18 +1,17 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Transaction;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-    protected $order;
+    protected Order $order;
 
     public function setUp(): void
     {
@@ -101,23 +100,8 @@ class OrderTest extends TestCase
     }
 
     /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->order);
-        $this->assertSame("#{$this->order->id}", $this->order->toBreadcrumb($this->app['request']));
-    }
-
-    /** @test */
     public function it_has_query_scopes()
     {
-        $this->assertSame(
-            $this->order->newQuery()->whereHas('address', function ($q) {
-                $q->where('bazar_addresses.first_name', 'like', 'test%')
-                    ->orWhere('bazar_addresses.last_name', 'like', 'test%');
-            })->toSql(),
-            $this->order->newQuery()->search('test')->toSql()
-        );
-
         $this->assertSame(
             $this->order->newQuery()->where('bazar_orders.status', 'pending')->toSql(),
             $this->order->newQuery()->status('pending')->toSql()

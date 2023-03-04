@@ -1,15 +1,16 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\InteractsWithDiscounts;
-use Bazar\Concerns\InteractsWithItems;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Cart as Contract;
-use Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Interfaces\Models\Cart as Contract;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
+use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,33 +27,33 @@ class Cart extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
+        'currency' => null,
         'discount' => 0,
         'locked' => false,
-        'currency' => null,
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
-        'locked' => 'bool',
         'discount' => 'float',
+        'locked' => 'bool',
     ];
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
-        'locked',
-        'discount',
         'currency',
+        'discount',
+        'locked',
     ];
 
     /**
@@ -64,8 +65,6 @@ class Cart extends Model implements Contract
 
     /**
      * The "booted" method of the model.
-     *
-     * @return void
      */
     protected static function booted(): void
     {
@@ -75,29 +74,23 @@ class Cart extends Model implements Contract
     }
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\CartFactory
      */
-    protected static function newFactory(): CartFactory
+    protected static function newFactory(): Factory
     {
         return CartFactory::new();
     }
 
     /**
      * Get the order for the cart.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function order(): BelongsTo
     {
@@ -108,8 +101,6 @@ class Cart extends Model implements Contract
 
     /**
      * Lock the cart.
-     *
-     * @return void
      */
     public function lock(): void
     {
@@ -120,8 +111,6 @@ class Cart extends Model implements Contract
 
     /**
      * Unlock the cart.
-     *
-     * @return void
      */
     public function unlock(): void
     {
@@ -132,9 +121,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the locked carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeLocked(Builder $query): Builder
     {
@@ -143,9 +129,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the unlocked carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUnlocked(Builder $query): Builder
     {
@@ -154,9 +137,6 @@ class Cart extends Model implements Contract
 
     /**
      * Scope a query to only include the expired carts.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeExpired(Builder $query): Builder
     {
@@ -166,8 +146,6 @@ class Cart extends Model implements Contract
 
     /**
      * Convert the cart to a new order.
-     *
-     * @return \Bazar\Models\Order
      */
     public function toOrder(): Order
     {

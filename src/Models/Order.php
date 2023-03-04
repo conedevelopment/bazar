@@ -1,71 +1,68 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Bazar;
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\BazarRoutable;
-use Bazar\Concerns\Filterable;
-use Bazar\Concerns\InteractsWithDiscounts;
-use Bazar\Concerns\InteractsWithItems;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Contracts\Models\Order as Contract;
-use Bazar\Database\Factories\OrderFactory;
-use Bazar\Exceptions\TransactionFailedException;
-use Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Exceptions\TransactionFailedException;
+use Cone\Bazar\Interfaces\Models\Order as Contract;
+use Cone\Bazar\Resources\OrderResource;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
+use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Root\Interfaces\Resourceable;
+use Cone\Root\Resources\Resource;
+use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Contract
+class Order extends Model implements Contract, Resourceable
 {
     use Addressable;
-    use BazarRoutable;
     use HasFactory;
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
     use SoftDeletes;
-    use Filterable {
-        Filterable::filters as defaultFilters;
-    }
 
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
-        'tax',
-        'total',
-        'net_total',
-        'status_name',
-        'formatted_tax',
-        'formatted_total',
         'formatted_discount',
         'formatted_net_total',
+        'formatted_tax',
+        'formatted_total',
+        'net_total',
+        'status_name',
+        'tax',
+        'total',
     ];
 
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
-        'discount' => 0,
         'currency' => null,
+        'discount' => 0,
         'status' => 'pending',
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
         'discount' => 'float',
@@ -74,12 +71,12 @@ class Order extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
-        'status',
         'currency',
         'discount',
+        'status',
     ];
 
     /**
@@ -90,61 +87,39 @@ class Order extends Model implements Contract
     protected $table = 'bazar_orders';
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\OrderFactory
      */
-    protected static function newFactory(): OrderFactory
+    protected static function newFactory(): Factory
     {
         return OrderFactory::new();
     }
 
     /**
      * Get the available order statuses.
-     *
-     * @return array
      */
     public static function statuses(): array
     {
         return [
-            __('Pending') => 'pending',
-            __('On Hold') => 'on_hold',
-            __('In Progress') => 'in_progress',
-            __('Completed') => 'completed',
-            __('Cancelled') => 'cancelled',
-            __('Failed') => 'failed',
-            __('Refunded') => 'refunded',
+            'pending' => __('Pending'),
+            'on_hold' => __('On Hold'),
+            'in_progress' => __('In Progress'),
+            'completed' => __('Completed'),
+            'cancelled' => __('Cancelled'),
+            'failed' => __('Failed'),
+            'refunded' => __('Refunded'),
         ];
     }
 
     /**
-     * Get the filter options for the model.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public static function filters(Request $request): array
-    {
-        return array_merge(static::defaultFilters($request), [
-            'status' => static::statuses(),
-            'user' => User::proxy()->newQuery()->pluck('id', 'name')->toArray(),
-        ]);
-    }
-
-    /**
      * Get the cart for the order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function cart(): HasOne
     {
@@ -153,8 +128,6 @@ class Order extends Model implements Contract
 
     /**
      * Get the transactions for the order.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function transactions(): HasMany
     {
@@ -163,43 +136,42 @@ class Order extends Model implements Contract
 
     /**
      * Get the payments attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getPaymentsAttribute(): Collection
+    protected function payments(): Attribute
     {
-        return $this->transactions->where('type', Transaction::PAYMENT);
+        return new Attribute(
+            get: function (): Collection {
+                return $this->transactions->where('type', Transaction::PAYMENT);
+            }
+        );
     }
 
     /**
      * Get the refunds attribute.
-     *
-     * @return \Illuminate\Support\Collection
      */
-    public function getRefundsAttribute(): Collection
+    protected function refunds(): Attribute
     {
-        return $this->transactions->where('type', Transaction::REFUND);
+        return new Attribute(
+            get: function (): Collection {
+                return $this->transactions->where('type', Transaction::REFUND);
+            }
+        );
     }
 
     /**
      * Get the status name attribute.
-     *
-     * @return string
      */
-    public function getStatusNameAttribute(): string
+    protected function statusName(): Attribute
     {
-        return array_search($this->status, static::statuses()) ?: $this->status;
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                return static::statuses()[$attributes['status']] ?? $attributes['status'];
+            }
+        );
     }
 
     /**
      * Create a payment transaction for the order.
-     *
-     * @param  float|null  $amount
-     * @param  string|null  $driver
-     * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
-     *
-     * @throws \Bazar\Exceptions\TransactionFailedException
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
@@ -220,13 +192,6 @@ class Order extends Model implements Contract
 
     /**
      * Create a refund transaction for the order.
-     *
-     * @param  float|null  $amount
-     * @param  string|null  $driver
-     * @param  array  $attributes
-     * @return \Bazar\Models\Transaction
-     *
-     * @throws \Bazar\Exceptions\TransactionFailedException
      */
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
@@ -247,8 +212,6 @@ class Order extends Model implements Contract
 
     /**
      * Get the total paid amount.
-     *
-     * @return float
      */
     public function getTotalPaid(): float
     {
@@ -257,8 +220,6 @@ class Order extends Model implements Contract
 
     /**
      * Get the total refunded amount.
-     *
-     * @return float
      */
     public function getTotalRefunded(): float
     {
@@ -267,8 +228,6 @@ class Order extends Model implements Contract
 
     /**
      * Get the total payable amount.
-     *
-     * @return float
      */
     public function getTotalPayable(): float
     {
@@ -277,8 +236,6 @@ class Order extends Model implements Contract
 
     /**
      * Get the total refundabke amount.
-     *
-     * @return float
      */
     public function getTotalRefundable(): float
     {
@@ -287,8 +244,6 @@ class Order extends Model implements Contract
 
     /**
      * Determine if the order is fully paid.
-     *
-     * @return bool
      */
     public function paid(): bool
     {
@@ -297,8 +252,6 @@ class Order extends Model implements Contract
 
     /**
      * Determine if the order is fully refunded.
-     *
-     * @return bool
      */
     public function refunded(): bool
     {
@@ -307,9 +260,6 @@ class Order extends Model implements Contract
 
     /**
      * Set the status by the given value.
-     *
-     * @param  string  $status
-     * @return void
      */
     public function markAs(string $status): void
     {
@@ -319,26 +269,7 @@ class Order extends Model implements Contract
     }
 
     /**
-     * Scope the query only to the given search term.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $value
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeSearch(Builder $query, string $value): Builder
-    {
-        return $query->whereHas('address', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('first_name'), 'like', "{$value}%")
-                         ->orWhere($query->getModel()->qualifyColumn('last_name'), 'like', "{$value}%");
-        });
-    }
-
-    /**
      * Scope a query to only include orders with the given status.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  string  $status
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, string $status): Builder
     {
@@ -347,26 +278,19 @@ class Order extends Model implements Contract
 
     /**
      * Scope the query to the given user.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  int  $value
-     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUser(Builder $query, int $value): Builder
     {
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->getModel()->qualifyColumn('id'), $value);
+            return $query->where($query->qualifyColumn('id'), $value);
         });
     }
 
     /**
-     * Get the breadcrumb representation of the object.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return string
+     * Get the resource representation of the model.
      */
-    public function toBreadcrumb(Request $request): string
+    public static function toResource(): Resource
     {
-        return sprintf('#%d', $this->id);
+        return new OrderResource(static::class);
     }
 }

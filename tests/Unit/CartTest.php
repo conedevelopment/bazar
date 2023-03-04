@@ -1,18 +1,18 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Product;
-use Bazar\Models\Shipping;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Date;
 
 class CartTest extends TestCase
 {
-    protected $cart;
+    protected Cart $cart;
 
     public function setUp(): void
     {
@@ -20,20 +20,20 @@ class CartTest extends TestCase
 
         $this->cart = Cart::factory()->create();
 
-        Product::factory()->count(3)->create()->each(function ($product) {
+        Product::factory(3)->create()->each(function ($product) {
             $this->cart->items()->create([
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'tax' => 0,
-                'price' => $product->getPrice('sale') ?: $product->getPrice(),
+                'price' => $product->price,
                 'name' => $product->name,
             ]);
         });
     }
 
     /** @test */
-    public function it_can_belong_to_order()
+    public function a_cart_can_belong_to_order()
     {
         $order = Order::factory()->create();
 
@@ -47,7 +47,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_belong_to_customer()
+    public function a_cart_can_belong_to_customer()
     {
         $this->assertNull($this->cart->user);
 
@@ -59,7 +59,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_shipping()
+    public function a_cart_has_shipping()
     {
         $shipping = $this->cart->shipping()->save(Shipping::factory()->make());
 
@@ -67,7 +67,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_address()
+    public function a_cart_has_address()
     {
         $address = $this->cart->address()->save(
             Address::factory()->make()
@@ -77,7 +77,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_total_attribute()
+    public function a_cart_has_total_attribute()
     {
         $total = $this->cart->items->sum(function ($item) {
             return ($item->price + $item->tax) * $item->quantity;
@@ -89,7 +89,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_net_total_attribute()
+    public function a_cart_has_net_total_attribute()
     {
         $total = $this->cart->items->sum(function ($item) {
             return $item->price * $item->quantity;
@@ -101,7 +101,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_can_be_locked()
+    public function a_cart_can_be_locked()
     {
         $this->assertFalse($this->cart->locked);
         $this->cart->lock();
@@ -111,7 +111,7 @@ class CartTest extends TestCase
     }
 
     /** @test */
-    public function it_has_query_scopes()
+    public function a_cart_has_query_scopes()
     {
         $this->assertSame(
             $this->cart->newQuery()->where('bazar_carts.locked', true)->toSql(),

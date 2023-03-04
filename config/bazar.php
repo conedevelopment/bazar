@@ -4,20 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Bazar Administrators
-    |--------------------------------------------------------------------------
-    |
-    | Here your can define administrators by their email address. By default
-    | the given values are used by the 'manage-bazar' Gate defnition.
-    |
-    */
-
-    'admins' => [
-        'admin@bazar.test',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Currencies
     |--------------------------------------------------------------------------
     |
@@ -42,7 +28,7 @@ return [
     | In this section, you can specify all the available cart drivers and
     | their configuration.
     |
-    | Supported drivers: "cookie"
+    | Supported drivers: "cookie", "session"
     |
     */
 
@@ -106,30 +92,5 @@ return [
     'weight_unit' => env('BAZAR_WEIGHT_UNIT', 'g'),
 
     'dimension_unit' => env('BAZAR_DIMENSION_UNIT', 'mm'),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Media Settings
-    |--------------------------------------------------------------------------
-    |
-    | You can specify the media settings here. Set the default disk to store
-    | the media items. Also, you can specify the expiration of the chunks.
-    |
-    | Supported conversion drivers: "gd"
-    |
-    */
-
-    'media' => [
-        'disk' => 'public',
-        'chunk_expiration' => 1440,
-        'conversion' => [
-            'default' => 'gd',
-            'drivers' => [
-                'gd' => [
-                    'quality' => 70,
-                ],
-            ],
-        ],
-    ],
 
 ];

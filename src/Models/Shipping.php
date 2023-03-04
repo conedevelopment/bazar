@@ -1,13 +1,15 @@
 <?php
 
-namespace Bazar\Models;
+namespace Cone\Bazar\Models;
 
-use Bazar\Concerns\Addressable;
-use Bazar\Concerns\InteractsWithProxy;
-use Bazar\Concerns\InteractsWithTaxes;
-use Bazar\Contracts\Models\Shipping as Contract;
-use Bazar\Database\Factories\ShippingFactory;
-use Bazar\Support\Facades\Shipping as Manager;
+use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Interfaces\Models\Shipping as Contract;
+use Cone\Bazar\Support\Facades\Shipping as Manager;
+use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithTaxes;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -24,7 +26,7 @@ class Shipping extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var array<string>
      */
     protected $appends = [
         'driver_name',
@@ -34,32 +36,32 @@ class Shipping extends Model implements Contract
     /**
      * The attributes that should have default values.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributes = [
-        'tax' => 0,
         'cost' => 0,
+        'tax' => 0,
     ];
 
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
-        'tax' => 'float',
         'cost' => 'float',
+        'tax' => 'float',
     ];
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
-        'tax',
         'cost',
         'driver',
+        'tax',
     ];
 
     /**
@@ -71,8 +73,6 @@ class Shipping extends Model implements Contract
 
     /**
      * The "booted" method of the model.
-     *
-     * @return void
      */
     protected static function booted(): void
     {
@@ -82,29 +82,23 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the proxied contract.
-     *
-     * @return string
+     * Get the proxied interface.
      */
-    public static function getProxiedContract(): string
+    public static function getProxiedInterface(): string
     {
         return Contract::class;
     }
 
     /**
      * Create a new factory instance for the model.
-     *
-     * @return \Bazar\Database\Factories\ShippingFactory
      */
-    protected static function newFactory(): ShippingFactory
+    protected static function newFactory(): Factory
     {
         return ShippingFactory::new();
     }
 
     /**
      * Get the shippable model for the shipping.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function shippable(): MorphTo
     {
@@ -115,73 +109,82 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the driver attribute.
-     *
-     * @param  string|null  $value
-     * @return string
      */
-    public function getDriverAttribute(?string $value = null): string
+    protected function driver(): Attribute
     {
-        return $value ?: Manager::getDefaultDriver();
+        return new Attribute(
+            get: static function (string $value = null): string {
+                return $value ?: Manager::getDefaultDriver();
+            }
+        );
     }
 
     /**
      * Get the total attribute.
-     *
-     * @return float
      */
-    public function getTotalAttribute(): float
+    protected function total(): Attribute
     {
-        return $this->getTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted total attribute.
-     *
-     * @return string
      */
-    public function getFormattedTotalAttribute(): string
+    protected function formattedTotal(): Attribute
     {
-        return $this->getFormattedTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedTotal();
+            }
+        );
     }
 
     /**
      * Get the net total attribute.
-     *
-     * @return float
      */
-    public function getNetTotalAttribute(): float
+    protected function netTotal(): Attribute
     {
-        return $this->getNetTotal();
+        return new Attribute(
+            get: function (): float {
+                return $this->getNetTotal();
+            }
+        );
     }
 
     /**
      * Get the formatted net total attribute.
-     *
-     * @return string
      */
-    public function getFormattedNetTotalAttribute(): string
+    protected function formattedNetTotal(): Attribute
     {
-        return $this->getFormattedNetTotal();
+        return new Attribute(
+            get: function (): string {
+                return $this->getFormattedNetTotal();
+            }
+        );
     }
 
     /**
      * Get the name of the shipping method.
-     *
-     * @return string
      */
-    public function getDriverNameAttribute(): string
+    protected function driverName(): Attribute
     {
-        try {
-            return Manager::driver($this->driver)->getName();
-        } catch (Throwable $exception) {
-            return $this->driver;
-        }
+        return new Attribute(
+            get: static function (mixed $value, array $attributes): string {
+                try {
+                    return Manager::driver($attributes['driver'])->getName();
+                } catch (Throwable $exception) {
+                    return $attributes['driver'];
+                }
+            }
+        );
     }
 
     /**
      * Get the price.
-     *
-     * @return float
      */
     public function getPrice(): float
     {
@@ -190,8 +193,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted price.
-     *
-     * @return string
      */
     public function getFormattedPrice(): string
     {
@@ -200,8 +201,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's total.
-     *
-     * @return float
      */
     public function getTotal(): float
     {
@@ -210,8 +209,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's formatted total.
-     *
-     * @return string
      */
     public function getFormattedTotal(): string
     {
@@ -220,8 +217,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's net total.
-     *
-     * @return float
      */
     public function getNetTotal(): float
     {
@@ -230,8 +225,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the shipping's formatted net total.
-     *
-     * @return string
      */
     public function getFormattedNetTotal(): string
     {
@@ -240,8 +233,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the quantity.
-     *
-     * @return float
      */
     public function getQuantity(): float
     {
@@ -250,9 +241,6 @@ class Shipping extends Model implements Contract
 
     /**
      * Calculate the cost.
-     *
-     * @param  bool  $update
-     * @return float
      */
     public function calculateCost(bool $update = true): float
     {
@@ -264,8 +252,8 @@ class Shipping extends Model implements Contract
             }
         } catch (Throwable $exception) {
             //
+        } finally {
+            return $this->cost;
         }
-
-        return $this->cost;
     }
 }

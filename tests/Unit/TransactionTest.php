@@ -1,15 +1,17 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Models\Order;
-use Bazar\Models\Transaction;
-use Bazar\Support\Facades\Gateway;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Facades\Gateway;
+use Cone\Bazar\Tests\TestCase;
 
 class TransactionTest extends TestCase
 {
-    protected $order, $transaction;
+    protected Order $order;
+
+    protected Transaction $transaction;
 
     public function setUp(): void
     {

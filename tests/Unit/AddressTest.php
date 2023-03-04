@@ -1,19 +1,17 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Address;
-use Bazar\Models\Cart;
-use Bazar\Models\Order;
-use Bazar\Models\Shipping;
-use Bazar\Support\Countries;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Address;
+use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Tests\TestCase;
 
 class AddressTest extends TestCase
 {
     /** @test */
-    public function it_belongs_to_user()
+    public function an_address_belongs_to_user()
     {
         $address = Address::factory()->make();
 
@@ -26,7 +24,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_cart()
+    public function an_address_belongs_to_cart()
     {
         $address = Address::factory()->make();
 
@@ -41,7 +39,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_order()
+    public function an_address_belongs_to_order()
     {
         $address = Address::factory()->make();
 
@@ -56,7 +54,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_shipping()
+    public function an_address_belongs_to_shipping()
     {
         $address = Address::factory()->make();
 
@@ -75,7 +73,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_has_name_attribute()
+    public function an_address_has_name_attribute()
     {
         $address = Address::factory()->make();
 
@@ -86,17 +84,7 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function it_has_country_name_attribute()
-    {
-        $address = Address::factory()->make();
-
-        $this->assertSame(
-            Countries::name($address->country), $address->countryName
-        );
-    }
-
-    /** @test */
-    public function it_has_alias_attribute()
+    public function an_address_has_alias_attribute()
     {
         $address = Address::factory()->make(['alias' => 'Fake']);
 
@@ -107,39 +95,5 @@ class AddressTest extends TestCase
         $address->save();
 
         $this->assertSame("#{$address->id}", $address->alias);
-    }
-
-    /** @test */
-    public function it_has_custom_attribute()
-    {
-        $address = Address::factory()->make(['custom' => [
-            'key' => 'value',
-        ]]);
-
-        $this->assertSame('value', $address->custom('key'));
-        $this->assertNull($address->custom('null'));
-        $this->assertSame('default', $address->custom('null', 'default'));
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $address = $this->user->addresses()->save(Address::factory()->make());
-
-        $this->assertInstanceOf(Breadcrumbable::class, $address);
-        $this->assertSame($address->alias, $address->toBreadcrumb($this->app['request']));
-    }
-
-    /** @test */
-    public function it_has_query_scopes()
-    {
-        $address = Address::factory()->make();
-
-        $address->addressable()->associate($this->user)->save();
-
-        $this->assertSame(
-            $address->newQuery()->where('bazar_addresses.alias', 'like', 'test%')->toSql(),
-            $address->newQuery()->search('test')->toSql()
-        );
     }
 }

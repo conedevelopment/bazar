@@ -1,16 +1,14 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Category;
-use Bazar\Models\Medium;
-use Bazar\Models\Product;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Category;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
-    protected $category;
+    protected Category $category;
 
     public function setUp(): void
     {
@@ -20,7 +18,7 @@ class CategoryTest extends TestCase
     }
 
     /** @test */
-    public function it_belongs_to_products()
+    public function a_category_belongs_to_products()
     {
         $product = Product::factory()->create();
 
@@ -28,32 +26,6 @@ class CategoryTest extends TestCase
 
         $this->assertTrue(
             $this->category->products->pluck('id')->contains($product->id)
-        );
-    }
-
-    /** @test */
-    public function it_has_media()
-    {
-        $media = Medium::factory()->create();
-
-        $this->category->media()->attach($media);
-
-        $this->assertTrue($this->category->media->pluck('id')->contains($media->id));
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->category);
-        $this->assertSame($this->category->name, $this->category->toBreadcrumb($this->app['request']));
-    }
-
-    /** @test */
-    public function it_has_query_scopes()
-    {
-        $this->assertSame(
-            $this->category->newQuery()->where('bazar_categories.name', 'like', 'test%')->toSql(),
-            $this->category->newQuery()->search('test')->toSql()
         );
     }
 }

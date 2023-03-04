@@ -1,21 +1,19 @@
 <?php
 
-namespace Bazar\Support\Facades;
+namespace Cone\Bazar\Support\Facades;
 
-use Bazar\Contracts\Gateway\Manager;
+use Cone\Bazar\Interfaces\Gateway\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Bazar\Contracts\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Itemable $model)
  *
- * @see \Bazar\Contracts\Gateway\Manager
+ * @see \Cone\Bazar\Interfaces\Gateway\Manager
  */
 class Gateway extends Facade
 {
     /**
      * Get the registered name of the component.
-     *
-     * @return string
      */
     protected static function getFacadeAccessor(): string
     {

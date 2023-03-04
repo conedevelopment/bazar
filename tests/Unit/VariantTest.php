@@ -1,15 +1,16 @@
 <?php
 
-namespace Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Unit;
 
-use Bazar\Contracts\Breadcrumbable;
-use Bazar\Models\Product;
-use Bazar\Models\Variant;
-use Bazar\Tests\TestCase;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Tests\TestCase;
 
 class VariantTest extends TestCase
 {
-    protected $variant, $product;
+    protected Variant $variant;
+
+    protected Product $product;
 
     public function setUp(): void
     {
@@ -40,21 +41,5 @@ class VariantTest extends TestCase
         $variant->save();
 
         $this->assertSame("#{$variant->id}", $variant->alias);
-    }
-
-    /** @test */
-    public function it_is_breadcrumbable()
-    {
-        $this->assertInstanceOf(Breadcrumbable::class, $this->variant);
-        $this->assertSame($this->variant->alias, $this->variant->toBreadcrumb($this->app['request']));
-    }
-
-    /** @test */
-    public function it_has_query_scopes()
-    {
-        $this->assertSame(
-            $this->variant->newQuery()->where('bazar_variants.alias', 'like', 'test%')->toSql(),
-            $this->variant->newQuery()->search('test')->toSql()
-        );
     }
 }

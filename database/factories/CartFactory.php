@@ -1,9 +1,9 @@
 <?php
 
-namespace Bazar\Database\Factories;
+namespace Cone\Bazar\Database\Factories;
 
-use Bazar\Bazar;
-use Bazar\Models\Cart;
+use Cone\Bazar\Bazar;
+use Cone\Bazar\Models\Cart;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CartFactory extends Factory
@@ -17,8 +17,6 @@ class CartFactory extends Factory
 
     /**
      * Define the model's default state.
-     *
-     * @return array
      */
     public function definition(): array
     {
