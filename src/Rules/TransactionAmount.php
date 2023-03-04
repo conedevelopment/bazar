@@ -17,16 +17,16 @@ class TransactionAmount implements ValidationRule
     /**
      * The transaction type.
      */
-    protected string $type = Transaction::PAYMENT;
+    protected ?string $type = null;
 
     /**
      * Create a new rule instance.
      */
-    public function __construct(Order $order, ?string $type = null)
+    public function __construct(Order $order, string $type = Transaction::PAYMENT)
     {
-        $this->type = $type ?: $this->type;
+        $this->type = $type;
 
-        $this->amount = $this->type === Transaction::PAYMENT
+        $this->amount = $type === Transaction::PAYMENT
             ? $order->getTotalPayable()
             : $order->getTotalRefundable();
     }
@@ -36,27 +36,12 @@ class TransactionAmount implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        //
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     */
-    public function passes($attribute, $value): bool
-    {
-        return is_null($value) || (float) $value <= $this->amount;
-    }
-
-    /**
-     * Get the validation error message.
-     */
-    public function message(): string
-    {
-        return $this->amount <= 0
-            ? ($this->type === Transaction::PAYMENT ? __('The order is fully paid.') : __('The order is fully refunded.'))
-            : __('The :attribute must be less than :value.', ['value' => $this->amount]);
+        if (is_null($value) || (float) $value > $this->amount) {
+            call_user_func($fail, match (true) {
+                $this->amount <= 0 && $this->type === Transaction::PAYMENT => __('The order is fully paid.'),
+                $this->amount <= 0 && $this->type === Transaction::REFUND => __('The order is fully refunded.'),
+                default => __('The :attribute must be less than :value.', ['value' => $this->amount]),
+            });
+        }
     }
 }

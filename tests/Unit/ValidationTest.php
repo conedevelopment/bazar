@@ -4,6 +4,7 @@ namespace Cone\Bazar\Tests\Unit;
 
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Property;
 use Cone\Bazar\Models\Variant;
 use Cone\Bazar\Rules\Option;
 use Cone\Bazar\Rules\TransactionAmount;
@@ -47,28 +48,32 @@ class ValidationTest extends TestCase
     /** @test */
     public function it_validates_variant_options()
     {
+        $property = Property::factory()->create(['name' => 'Material', 'slug' => 'material']);
+        $property->values()->create(['name' => 'Gold', 'value' => 'gold']);
+
         $product = Product::factory()->create();
-        $variant = $product->variants()->save(
-            Variant::factory()->make()
-        );
+        $product->propertyValues()->attach($property->values);
+
+        $variant = $product->variants()->save(Variant::factory()->make());
+        $variant->propertyValues()->attach($property->values);
 
         $v = new Validator(
             $this->translator,
-            ['variation' => ['Material' => 'Gold']],
+            ['variation' => ['material' => 'silver']],
             ['variation' => [new Option($product)]]
         );
         $this->assertTrue($v->passes());
 
         $v = new Validator(
             $this->translator,
-            ['variation' => $variant->variation],
+            ['variation' => ['material' => 'gold']],
             ['variation' => [new Option($product)]]
         );
         $this->assertFalse($v->passes());
 
         $v = new Validator(
             $this->translator,
-            ['variation' => $variant->variation],
+            ['variation' => ['material' => 'gold']],
             ['variation' => [new Option($product, $variant)]]
         );
         $this->assertTrue($v->passes());
