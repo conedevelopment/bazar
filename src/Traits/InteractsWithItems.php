@@ -237,7 +237,7 @@ trait InteractsWithItems
      */
     public function findItem(array $attributes): ?Item
     {
-        $attributes = array_merge($attributes, [
+        $attributes = array_merge(['properties' => null], $attributes, [
             'itemable_id' => $this->getKey(),
             'itemable_type' => static::class,
         ]);
@@ -245,7 +245,7 @@ trait InteractsWithItems
         return $this->items->first(static function (Item $item) use ($attributes): bool {
             return empty(array_diff(
                 Arr::dot($attributes),
-                Arr::dot($item->withoutRelations()->toArray())
+                Arr::dot(array_merge(['properties' => null], $item->withoutRelations()->toArray()))
             ));
         });
     }
