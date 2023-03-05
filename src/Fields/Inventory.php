@@ -3,13 +3,21 @@
 namespace Cone\Bazar\Fields;
 
 use Cone\Root\Fields\Boolean;
-use Cone\Root\Fields\Json;
+use Cone\Root\Fields\Meta;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Cone\Root\Http\Requests\RootRequest;
 
-class Inventory extends Json
+class Inventory extends Meta
 {
+    /**
+     * Create a new relation field instance.
+     */
+    public function __construct(string $label = null, string $name = 'metas')
+    {
+        parent::__construct($label ?: __('Inventory'), $name);
+    }
+
     /**
      * {@inheritdoc}
      */
