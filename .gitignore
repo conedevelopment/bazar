@@ -2,6 +2,7 @@
 /.idea
 /.vscode
 /node_modules
+/.phpunit.cache
 composer.phar
 composer.lock
 yarn.lock
