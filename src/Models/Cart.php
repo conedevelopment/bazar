@@ -151,7 +151,7 @@ class Cart extends Model implements Contract
     {
         $this->order->user()->associate($this->user)->save();
 
-        if ($this->order_id !== $this->order->id) {
+        if ($this->order_id !== $this->order->getKey()) {
             $this->order()->associate($this->order)->save();
         }
 

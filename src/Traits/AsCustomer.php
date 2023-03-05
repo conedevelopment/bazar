@@ -5,6 +5,7 @@ namespace Cone\Bazar\Traits;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -46,8 +47,12 @@ trait AsCustomer
     /**
      * Get the address attribute.
      */
-    public function getAddressAttribute(): ?Address
+    protected function address(): Attribute
     {
-        return $this->addresses->firstWhere('default', true) ?: $this->addresses->first();
+        return new Attribute(
+            get: function (): ?Address {
+                return $this->addresses->firstWhere('default', true) ?: $this->addresses->first();
+            }
+        );
     }
 }

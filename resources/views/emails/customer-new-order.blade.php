@@ -5,7 +5,7 @@
 ## Thank you for your order!
 
 Your order has been received and now being processed. Your orders are shown below for your reference:
-**Order #{{ $order->id }}**
+**Order #{{ $order->getKey() }}**
 
 # Order details
 

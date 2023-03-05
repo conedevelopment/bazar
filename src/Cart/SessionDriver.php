@@ -24,6 +24,6 @@ class SessionDriver extends Driver
     {
         parent::resolved($request, $cart);
 
-        $request->session()->put('cart_id', $cart->id);
+        $request->session()->put('cart_id', $cart->getKey());
     }
 }

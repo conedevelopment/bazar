@@ -176,7 +176,7 @@ class Order extends Model implements Contract, Resourceable
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
         if ($this->getTotalPayable() === 0.0 || $this->paid()) {
-            throw new TransactionFailedException("Order #{$this->id} is fully paid.");
+            throw new TransactionFailedException("Order #{$this->getKey()} is fully paid.");
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
@@ -196,7 +196,7 @@ class Order extends Model implements Contract, Resourceable
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
     {
         if ($this->getTotalRefundable() === 0.0 || $this->refunded()) {
-            throw new TransactionFailedException("Order #{$this->id} is fully refunded.");
+            throw new TransactionFailedException("Order #{$this->getKey()} is fully refunded.");
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
@@ -259,6 +259,14 @@ class Order extends Model implements Contract, Resourceable
     }
 
     /**
+     * Determine if the orderis partially refunded.
+     */
+    public function isPartiallyRefunded(): bool
+    {
+        return $this->refunds->isNotEmpty() && $this->getTotalPaid() > $this->getTotalRefunded();
+    }
+
+    /**
      * Set the status by the given value.
      */
     public function markAs(string $status): void
@@ -282,7 +290,7 @@ class Order extends Model implements Contract, Resourceable
     public function scopeUser(Builder $query, int $value): Builder
     {
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
-            return $query->where($query->qualifyColumn('id'), $value);
+            return $query->whereKey($value);
         });
     }
 

@@ -44,7 +44,7 @@ abstract class Driver
      */
     protected function resolved(Request $request, Cart $cart): void
     {
-        if (! $cart->exists || ($request->user() && $cart->user_id !== $request->user()->id)) {
+        if (! $cart->exists || ($request->user() && $cart->user_id !== $request->user()->getKey())) {
             $cart->user()->associate($request->user())->save();
         }
 
@@ -109,7 +109,7 @@ abstract class Driver
             $item->delete();
 
             $key = $this->getItems()->search(static function (Item $item) use ($id) {
-                return $item->id === $id;
+                return $item->getKey() === $id;
             });
 
             $this->getItems()->forget($key);
@@ -127,7 +127,7 @@ abstract class Driver
 
         if ($count > 0) {
             $keys = $this->getItems()->reduce(static function (array $keys, Item $item, int $key) use ($ids): array {
-                return in_array($item->id, $ids) ? array_merge($keys, [$key]) : $keys;
+                return in_array($item->getKey(), $ids) ? array_merge($keys, [$key]) : $keys;
             }, []);
 
             $this->getItems()->forget($keys);
@@ -156,7 +156,7 @@ abstract class Driver
         $items = $this->getItems()->whereIn('id', array_keys($data));
 
         $items->each(static function (Item $item) use ($data): void {
-            $item->fill($data[$item->id])->calculateTax();
+            $item->fill($data[$item->getKey()])->calculateTax();
         });
 
         if ($items->isNotEmpty()) {

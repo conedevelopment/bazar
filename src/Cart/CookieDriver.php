@@ -25,6 +25,6 @@ class CookieDriver extends Driver
     {
         parent::resolved($request, $cart);
 
-        Cookie::queue('cart_id', $cart->id, $this->config['expiration'] ?? 4320);
+        Cookie::queue('cart_id', $cart->getKey(), $this->config['expiration'] ?? 4320);
     }
 }

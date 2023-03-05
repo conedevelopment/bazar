@@ -9,8 +9,6 @@ class Vat implements ValidationRule
 {
     /**
      * The country specific VAT patterns.
-     *
-     * @var array
      */
     protected array $patterns = [
         '(AT)?U[0-9]{8}',
