@@ -24,16 +24,6 @@ class Shipping extends Model implements Contract
     use InteractsWithTaxes;
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<string>
-     */
-    protected $appends = [
-        'driver_name',
-        'formatted_total',
-    ];
-
-    /**
      * The attributes that should have default values.
      *
      * @var array<string, mixed>

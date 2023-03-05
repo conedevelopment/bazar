@@ -2,16 +2,29 @@
 
 namespace Cone\Bazar\Fields;
 
+use Closure;
+use Cone\Bazar\Interfaces\Models\Shipping as Model;
 use Cone\Bazar\Shipping\Driver;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
-use Cone\Root\Fields\HasOne;
-use Cone\Root\Fields\Number;
+use Cone\Root\Fields\MorphOne;
 use Cone\Root\Fields\Select;
 use Cone\Root\Http\Requests\RootRequest;
-use Illuminate\Support\Str;
 
-class Shipping extends HasOne
+class Shipping extends MorphOne
 {
+    /**
+     * Create a new shipping field instance.
+     */
+    public function __construct(string $label = null, string $name = null, Closure|string $relation = null)
+    {
+        parent::__construct(
+            $label ?: __('Shipping'), $name ?: 'shipping', $relation
+        );
+
+        $this->asSubResource();
+        $this->display('driver_name');
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -23,16 +36,16 @@ class Shipping extends HasOne
                     return $driver->getName();
                 }, Manager::getAvailableDrivers())),
 
-            Number::make(__('Cost'), 'cost')
+            Currency::make(__('Cost'), 'cost')
                 ->step(0.1)
-                ->format(static function (RootRequest $request, Shipping $model, mixed $value): string {
-                    return Str::currency($value, $model->parent->currency);
+                ->currency(static function (RootRequest $request, Model $model): string {
+                    return $model->parent->currency;
                 }),
 
-            Number::make(__('Tax'), 'tax')
+            Currency::make(__('Tax'), 'tax')
                 ->step(0.1)
-                ->format(static function (RootRequest $request, Shipping $model, mixed $value): string {
-                    return Str::currency($value, $model->parent->currency);
+                ->currency(static function (RootRequest $request, Model $model): string {
+                    return $model->parent->currency;
                 }),
         ];
     }

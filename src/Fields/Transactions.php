@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Fields;
 
+use Closure;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Support\Facades\Gateway;
@@ -13,6 +14,20 @@ use Cone\Root\Http\Requests\RootRequest;
 class Transactions extends HasMany
 {
     /**
+     * Create a new transactions field instance.
+     */
+    public function __construct(string $label = null, string $name = null, Closure|string $relation = null)
+    {
+        parent::__construct(
+            $label ?: __('Transactions'), $name ?: 'transactions', $relation
+        );
+
+        $this->asSubResource();
+        $this->hiddenOnIndex();
+        $this->display('driver_name');
+    }
+
+    /**
      * Define the fields for the object.
      */
     public function fields(RootRequest $request): array
@@ -20,8 +35,8 @@ class Transactions extends HasMany
         return [
             Currency::make(__('Amount'), 'amount')
                 ->step(0.1)
-                ->currency(static function (RootRequest $request, Transaction $item): string {
-                    return $item->parent->currency;
+                ->currency(static function (RootRequest $request, Transaction $transaction): string {
+                    return $transaction->parent->currency;
                 }),
 
             Select::make(__('Driver'), 'driver')

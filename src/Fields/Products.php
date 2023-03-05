@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Fields;
 
+use Closure;
 use Cone\Bazar\Models\Item;
 use Cone\Root\Fields\MorphMany;
 use Cone\Root\Fields\Number;
@@ -10,6 +11,20 @@ use Cone\Root\Http\Requests\RootRequest;
 
 class Products extends MorphMany
 {
+    /**
+     * Create a new products field instance.
+     */
+    public function __construct(string $label = null, string $name = null, Closure|string $relation = null)
+    {
+        parent::__construct(
+            $label ?: __('Products'), $name ?: 'items', $relation
+        );
+
+        $this->asSubResource();
+        $this->hiddenOnIndex();
+        $this->display('name');
+    }
+
     /**
      * {@inheritdoc}
      */
