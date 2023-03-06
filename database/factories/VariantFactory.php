@@ -22,7 +22,7 @@ class VariantFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'alias' => null,
         ];
     }
 

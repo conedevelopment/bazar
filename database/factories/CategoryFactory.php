@@ -21,8 +21,8 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word,
-            'slug' => Str::random(),
+            'name' => $name = $this->faker->word(),
+            'slug' => Str::slug($name),
             'description' => $this->faker->sentences(2, true),
         ];
     }
