@@ -26,10 +26,10 @@ class ValidationTest extends TestCase
     /** @test */
     public function it_validatates_vat_numbers()
     {
-        $v = new Validator($this->translator, ['vat' => 'HU12345678'], ['vat' => [new Vat]]);
+        $v = new Validator($this->translator, ['vat' => 'HU12345678'], ['vat' => [new Vat()]]);
         $this->assertTrue($v->passes());
 
-        $v = new Validator($this->translator, ['vat' => 'HU123456'], ['vat' => [new Vat]]);
+        $v = new Validator($this->translator, ['vat' => 'HU123456'], ['vat' => [new Vat()]]);
         $this->assertFalse($v->passes());
     }
 

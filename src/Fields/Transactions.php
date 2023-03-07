@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Fields;
 
 use Closure;
+use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Support\Facades\Gateway;
@@ -45,10 +46,7 @@ class Transactions extends HasMany
                 }, Gateway::getAvailableDrivers())),
 
             Select::make(__('Type'), 'type')
-                ->options([
-                    Transaction::PAYMENT => __('Payment'),
-                    Transaction::REFUND => __('Refund'),
-                ]),
+                ->options(TransactionType::toArray()),
 
             Date::make(__('Completed At'), 'completed_at')
                 ->withTime(),

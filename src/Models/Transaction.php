@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\TransactionFactory;
+use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Interfaces\Models\Transaction as Contract;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -22,20 +23,6 @@ class Transaction extends Model implements Contract
     use InteractsWithProxy;
 
     /**
-     * The payment type.
-     *
-     * @var string
-     */
-    public const PAYMENT = 'payment';
-
-    /**
-     * The refund type.
-     *
-     * @var string
-     */
-    public const REFUND = 'refund';
-
-    /**
      * The accessors to append to the model's array form.
      *
      * @var array<string>
@@ -52,6 +39,7 @@ class Transaction extends Model implements Contract
      */
     protected $casts = [
         'completed_at' => 'datetime',
+        'type' => TransactionType::class,
     ];
 
     /**
@@ -173,7 +161,7 @@ class Transaction extends Model implements Contract
      */
     public function scopePayment(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), static::PAYMENT);
+        return $query->where($query->qualifyColumn('type'), TransactionType::Payment);
     }
 
     /**
@@ -181,7 +169,7 @@ class Transaction extends Model implements Contract
      */
     public function scopeRefund(Builder $query): Builder
     {
-        return $query->where($query->qualifyColumn('type'), static::REFUND);
+        return $query->where($query->qualifyColumn('type'), TransactionType::Refund);
     }
 
     /**

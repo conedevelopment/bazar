@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Resources\OrderResource;
@@ -141,7 +142,7 @@ class Order extends Model implements Contract, Resourceable
     {
         return new Attribute(
             get: function (): Collection {
-                return $this->transactions->where('type', Transaction::PAYMENT);
+                return $this->transactions->where('type', TransactionType::Payment);
             }
         );
     }
@@ -153,7 +154,7 @@ class Order extends Model implements Contract, Resourceable
     {
         return new Attribute(
             get: function (): Collection {
-                return $this->transactions->where('type', Transaction::REFUND);
+                return $this->transactions->where('type', TransactionType::Refund);
             }
         );
     }
@@ -180,7 +181,7 @@ class Order extends Model implements Contract, Resourceable
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
-            'type' => Transaction::PAYMENT,
+            'type' => TransactionType::Payment,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->getTotalPayable() : min($amount, $this->getTotalPayable()),
         ]));
@@ -200,7 +201,7 @@ class Order extends Model implements Contract, Resourceable
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
-            'type' => Transaction::REFUND,
+            'type' => TransactionType::Refund,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->getTotalRefundable() : min($amount, $this->getTotalRefundable()),
         ]));
