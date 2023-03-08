@@ -10,7 +10,7 @@ use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
-use Cone\Root\Traits\HasMeta;
+use Cone\Root\Traits\HasMetaData;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,7 +23,7 @@ class Variant extends Model implements Contract
 {
     use HasFactory;
     use HasMedia;
-    use HasMeta;
+    use HasMetaData;
     use HasPrices;
     use HasProperties;
     use InteractsWithItemables;

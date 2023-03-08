@@ -11,7 +11,7 @@ trait InteractsWithStock
      */
     public function getFormattedDimensions(string $glue = 'x'): ?string
     {
-        $dimensions = $this->metas->whereIn('key', ['length', 'width', 'height'])->filter()->values();
+        $dimensions = $this->metaData->whereIn('key', ['length', 'width', 'height'])->filter()->values();
 
         if ($dimensions->isEmpty()) {
             return null;
@@ -25,7 +25,7 @@ trait InteractsWithStock
      */
     public function getFormattedWeight(): ?string
     {
-        $weight = $this->metas->firstWhere('key', 'weight');
+        $weight = $this->metaData->firstWhere('key', 'weight');
 
         if (is_null($weight) || empty($weight->value)) {
             return null;
@@ -39,7 +39,7 @@ trait InteractsWithStock
      */
     public function isVirtual(): bool
     {
-        $meta = $this->metas->firstWhere('key', 'virtual');
+        $meta = $this->metaData->firstWhere('key', 'virtual');
 
         return ! is_null($meta) && (bool) $meta->value;
     }
@@ -49,7 +49,7 @@ trait InteractsWithStock
      */
     public function isDownloadable(): bool
     {
-        $meta = $this->metas->firstWhere('key', 'downloadable');
+        $meta = $this->metaData->firstWhere('key', 'downloadable');
 
         return ! is_null($meta) && (bool) $meta->value;
     }
@@ -59,7 +59,7 @@ trait InteractsWithStock
      */
     public function tracksQuantity(): bool
     {
-        $meta = $this->metas->firstWhere('key', 'quantity');
+        $meta = $this->metaData->firstWhere('key', 'quantity');
 
         return ! is_null($meta) && ! empty($meta->value);
     }
@@ -73,7 +73,7 @@ trait InteractsWithStock
             return true;
         }
 
-        $stock = $this->metas->firstWhere('key', 'quantity')?->value ?: 0;
+        $stock = $this->metaData->firstWhere('key', 'quantity')?->value ?: 0;
 
         return min($stock, $quantity) > 0 && $stock >= $quantity;
     }
@@ -84,8 +84,8 @@ trait InteractsWithStock
     public function incrementQuantity(float $quantity = 1): void
     {
         if ($this->tracksQuantity()) {
-            $meta = $this->metas->firstWhere('key', 'quantity')
-                ?: $this->metas()->make(['key' => 'quantity', 'value' => 0]);
+            $meta = $this->metaData->firstWhere('key', 'quantity')
+                ?: $this->metaData()->make(['key' => 'quantity', 'value' => 0]);
 
             $meta->value = ((float) $meta->value) + $quantity;
 
@@ -99,8 +99,8 @@ trait InteractsWithStock
     public function decrementQuantity(float $quantity = 1): void
     {
         if ($this->tracksQuantity()) {
-            $meta = $this->metas->firstWhere('key', 'quantity')
-                ?: $this->metas()->make(['key' => 'quantity', 'value' => 0]);
+            $meta = $this->metaData->firstWhere('key', 'quantity')
+                ?: $this->metaData()->make(['key' => 'quantity', 'value' => 0]);
 
             $meta->value = max(((float) $meta->value) - $quantity, 0);
 

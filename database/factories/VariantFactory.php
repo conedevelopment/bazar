@@ -32,11 +32,11 @@ class VariantFactory extends Factory
     public function configure(): static
     {
         return $this->afterMaking(static function (Variant $variant): void {
-            $variant->setRelation('metas', $variant->metas()->makeMany([
+            $variant->setRelation('metaData', $variant->metaData()->makeMany([
                 ['key' => 'price_'.Bazar::getCurrency(), 'value' => mt_rand(10, 100)],
             ]));
         })->afterCreating(static function (Variant $variant): void {
-            $variant->metas->each(static function (Meta $meta) use ($variant) {
+            $variant->metaData->each(static function (Meta $meta) use ($variant) {
                 $meta->setAttribute('metable_id', $variant->getKey())->save();
             });
         });

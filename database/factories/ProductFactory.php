@@ -35,11 +35,11 @@ class ProductFactory extends Factory
     public function configure(): static
     {
         return $this->afterMaking(static function (Product $product): void {
-            $product->setRelation('metas', $product->metas()->makeMany([
+            $product->setRelation('metaData', $product->metaData()->makeMany([
                 ['key' => 'price_'.Bazar::getCurrency(), 'value' => mt_rand(10, 100)],
             ]));
         })->afterCreating(static function (Product $product): void {
-            $product->metas->each(static function (Meta $meta) use ($product) {
+            $product->metaData->each(static function (Meta $meta) use ($product) {
                 $meta->setAttribute('metable_id', $product->getKey())->save();
             });
         });

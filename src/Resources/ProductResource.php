@@ -21,7 +21,7 @@ class ProductResource extends Resource
      * The relations to eager load on every query.
      */
     protected array $with = [
-        'metas',
+        'meta_data',
     ];
 
     /**

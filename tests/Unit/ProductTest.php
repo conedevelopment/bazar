@@ -121,7 +121,7 @@ class ProductTest extends TestCase
     {
         $outOfStock = $this->product->newQuery()->outOfStock();
         $this->assertSame(
-            'select * from "bazar_products" where exists (select * from "root_metas" where "bazar_products"."id" = "root_metas"."metable_id" and "root_metas"."metable_type" = ? and "root_metas"."key" = ? and "root_metas"."value" = ?) and "bazar_products"."deleted_at" is null',
+            'select * from "bazar_products" where exists (select * from "root_meta_data" where "bazar_products"."id" = "root_meta_data"."metable_id" and "root_meta_data"."metable_type" = ? and "root_meta_data"."key" = ? and "root_meta_data"."value" = ?) and "bazar_products"."deleted_at" is null',
             $outOfStock->toSql()
         );
         $this->assertSame([Product::class, 'quantity', 0], $outOfStock->getBindings());
@@ -129,7 +129,7 @@ class ProductTest extends TestCase
         $inStock = $this->product->newQuery()->inStock();
 
         $this->assertSame(
-            'select * from "bazar_products" where exists (select * from "root_metas" where "bazar_products"."id" = "root_metas"."metable_id" and "root_metas"."metable_type" = ? and "root_metas"."key" = ? and "root_metas"."value" > ?) and "bazar_products"."deleted_at" is null',
+            'select * from "bazar_products" where exists (select * from "root_meta_data" where "bazar_products"."id" = "root_meta_data"."metable_id" and "root_meta_data"."metable_type" = ? and "root_meta_data"."key" = ? and "root_meta_data"."value" > ?) and "bazar_products"."deleted_at" is null',
             $inStock->toSql()
         );
         $this->assertSame([Product::class, 'quantity', 0], $outOfStock->getBindings());

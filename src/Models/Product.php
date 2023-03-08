@@ -13,7 +13,7 @@ use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
-use Cone\Root\Traits\HasMeta;
+use Cone\Root\Traits\HasMetaData;
 use Cone\Root\Traits\InteractsWithProxy;
 use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,7 +29,7 @@ class Product extends Model implements Contract, Resourceable
 {
     use HasFactory;
     use HasMedia;
-    use HasMeta;
+    use HasMetaData;
     use HasPrices;
     use HasProperties;
     use InteractsWithItemables;
@@ -93,7 +93,7 @@ class Product extends Model implements Contract, Resourceable
      */
     public function scopeOutOfStock(Builder $query): Builder
     {
-        return $query->whereHas('metas', static function (Builder $query): Builder {
+        return $query->whereHas('metaData', static function (Builder $query): Builder {
             return $query->where($query->qualifyColumn('key'), 'quantity')
                         ->where($query->qualifyColumn('value'), 0);
         });
@@ -104,7 +104,7 @@ class Product extends Model implements Contract, Resourceable
      */
     public function scopeInStock(Builder $query): Builder
     {
-        return $query->whereHas('metas', static function (Builder $query): Builder {
+        return $query->whereHas('metaData', static function (Builder $query): Builder {
             return $query->where($query->qualifyColumn('key'), 'quantity')
                         ->where($query->qualifyColumn('value'), '>', 0);
         });

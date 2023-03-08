@@ -13,7 +13,7 @@ class Prices extends Meta
     /**
      * Create a new relation field instance.
      */
-    public function __construct(string $label = null, string $name = 'metas')
+    public function __construct(string $label = null, string $name = 'meta_data')
     {
         parent::__construct($label ?: __('Prices'), $name);
     }
