@@ -12,7 +12,6 @@ use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithItems;
 use Cone\Root\Interfaces\Resourceable;
-use Cone\Root\Resources\Resource;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -298,7 +297,7 @@ class Order extends Model implements Contract, Resourceable
     /**
      * Get the resource representation of the model.
      */
-    public static function toResource(): Resource
+    public static function toResource(): OrderResource
     {
         return new OrderResource(static::class);
     }

@@ -6,7 +6,6 @@ use Cone\Bazar\Database\Factories\CategoryFactory;
 use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Bazar\Resources\CategoryResource;
 use Cone\Root\Interfaces\Resourceable;
-use Cone\Root\Resources\Resource;
 use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -78,7 +77,7 @@ class Category extends Model implements Contract, Resourceable
     /**
      * Get the resource representation of the model.
      */
-    public static function toResource(): Resource
+    public static function toResource(): CategoryResource
     {
         return new CategoryResource(static::class);
     }
