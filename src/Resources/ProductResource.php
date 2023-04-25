@@ -2,18 +2,17 @@
 
 namespace Cone\Bazar\Resources;
 
-use Cone\Bazar\Fields\Inventory;
-use Cone\Bazar\Fields\Prices;
-use Cone\Bazar\Fields\Variants;
-use Cone\Root\Fields\BelongsToMany;
+use Cone\Root\Fields\BelongsToMany as BelongsToManyField;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Media;
 use Cone\Root\Fields\Text;
 use Cone\Root\Filters\TrashStatus;
-use Cone\Root\Http\Requests\RootRequest;
+use Cone\Root\Relations\BelongsToMany;
+use Cone\Root\Relations\HasMany;
 use Cone\Root\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class ProductResource extends Resource
 {
@@ -21,13 +20,13 @@ class ProductResource extends Resource
      * The relations to eager load on every query.
      */
     protected array $with = [
-        'meta_data',
+        'metaData',
     ];
 
     /**
      * Define the filters for the resource.
      */
-    public function filters(RootRequest $request): array
+    public function filters(Request $request): array
     {
         return array_merge(parent::filters($request), [
             TrashStatus::make(),
@@ -36,10 +35,8 @@ class ProductResource extends Resource
 
     /**
      * Define the fields for the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
      */
-    public function fields(RootRequest $request): array
+    public function fields(Request $request): array
     {
         return array_merge(parent::fields($request), [
             ID::make(),
@@ -47,30 +44,39 @@ class ProductResource extends Resource
             Text::make(__('Name'), 'name')->sortable(),
 
             Editor::make(__('Description'), 'description')
-                ->withMedia()
-                ->hiddenOnIndex(),
+                ->withMedia(),
 
-            BelongsToMany::make(__('Categories'), 'categories')
+            BelongsToManyField::make(__('Categories'), 'categories')
                 ->display('name')
                 ->searchable()
                 ->async(),
 
             Media::make(__('Media'), 'media')
-                ->display('name')
-                ->hiddenOnIndex(),
+                ->display('name'),
 
-            Prices::make(),
-
-            Inventory::make(),
-
-            Variants::make(),
-
-            BelongsToMany::make(__('Properties'), 'propertyValues')
-                ->withQuery(static function (RootRequest $request, Builder $query): Builder {
+            BelongsToManyField::make(__('Properties'), 'propertyValues')
+                ->withRelatableQuery(static function (Request $request, Builder $query): Builder {
                     return $query->with('property');
                 })
                 ->groupOptionsBy('property.name')
                 ->display('name'),
+        ]);
+    }
+
+    /**
+     * Define the relations for the resource.
+     */
+    public function relations(Request $request): array
+    {
+        return array_merge(parent::relations($request), [
+            HasMany::make(__('Variants'), 'variants')
+                ->withFields([
+                    Text::make(__('Alias'), 'alias')->rules(['required']),
+                ]),
+            BelongsToMany::make(__('Categories'), 'categories')
+                ->withFields([
+                    //
+                ]),
         ]);
     }
 }
