@@ -83,7 +83,7 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the total attibute.
+     * Get the total attribute.
      */
     protected function total(): Attribute
     {
