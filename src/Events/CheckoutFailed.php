@@ -12,7 +12,7 @@ class CheckoutFailed
     use SerializesModels;
 
     /**
-     * The order instace.
+     * The order instance.
      */
     public Order $order;
 
