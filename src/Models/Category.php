@@ -4,8 +4,6 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\CategoryFactory;
 use Cone\Bazar\Interfaces\Models\Category as Contract;
-use Cone\Bazar\Resources\CategoryResource;
-use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -16,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Category extends Model implements Contract, Resourceable
+class Category extends Model implements Contract
 {
     use HasFactory;
     use HasMedia;
@@ -72,13 +70,5 @@ class Category extends Model implements Contract, Resourceable
     public function toSlug(): Slug
     {
         return (new Slug($this))->from('name')->unique();
-    }
-
-    /**
-     * Get the resource representation of the model.
-     */
-    public static function toResource(): CategoryResource
-    {
-        return new CategoryResource(static::class);
     }
 }

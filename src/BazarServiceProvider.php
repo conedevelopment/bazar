@@ -2,10 +2,6 @@
 
 namespace Cone\Bazar;
 
-use Cone\Bazar\Models\Category;
-use Cone\Bazar\Models\Order;
-use Cone\Bazar\Models\Product;
-use Cone\Bazar\Models\Property;
 use Cone\Root\Root;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
@@ -63,10 +59,9 @@ class BazarServiceProvider extends ServiceProvider
         $this->registerPublishes();
 
         $this->app->make(Root::class)->booting(function (Root $root) {
-            $root->resources->register((Category::proxy())::toResource());
-            $root->resources->register((Product::proxy())::toResource());
-            $root->resources->register((Property::proxy())::toResource());
-            $root->resources->register((Order::proxy())::toResource());
+            $root->resources->register([
+                //
+            ]);
         });
     }
 

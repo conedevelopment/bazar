@@ -6,12 +6,10 @@ use Cone\Bazar\Database\Factories\OrderFactory;
 use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
-use Cone\Bazar\Resources\OrderResource;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithItems;
-use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -23,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
-class Order extends Model implements Contract, Resourceable
+class Order extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
@@ -292,13 +290,5 @@ class Order extends Model implements Contract, Resourceable
         return $query->whereHas('user', static function (Builder $query) use ($value): Builder {
             return $query->whereKey($value);
         });
-    }
-
-    /**
-     * Get the resource representation of the model.
-     */
-    public static function toResource(): OrderResource
-    {
-        return new OrderResource(static::class);
     }
 }

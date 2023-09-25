@@ -4,8 +4,6 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\PropertyFactory;
 use Cone\Bazar\Interfaces\Models\Property as Contract;
-use Cone\Bazar\Resources\PropertyResource;
-use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Support\Slug;
 use Cone\Root\Traits\InteractsWithProxy;
 use Cone\Root\Traits\Sluggable;
@@ -14,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Property extends Model implements Contract, Resourceable
+class Property extends Model implements Contract
 {
     use InteractsWithProxy;
     use HasFactory;
@@ -68,13 +66,5 @@ class Property extends Model implements Contract, Resourceable
     public function toSlug(): Slug
     {
         return (new Slug($this))->from('name')->unique();
-    }
-
-    /**
-     * Get the resource representation of the model.
-     */
-    public static function toResource(): PropertyResource
-    {
-        return new PropertyResource(static::class);
     }
 }

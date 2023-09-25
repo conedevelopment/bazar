@@ -5,12 +5,10 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Interfaces\Itemable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
-use Cone\Bazar\Resources\ProductResource;
 use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
-use Cone\Root\Interfaces\Resourceable;
 use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMetaData;
@@ -25,7 +23,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
-class Product extends Model implements Contract, Resourceable
+class Product extends Model implements Contract
 {
     use HasFactory;
     use HasMedia;
@@ -157,13 +155,5 @@ class Product extends Model implements Contract, Resourceable
     public function toSlug(): Slug
     {
         return (new Slug($this))->from('name')->unique();
-    }
-
-    /**
-     * Get the resource representation of the model.
-     */
-    public static function toResource(): ProductResource
-    {
-        return new ProductResource(static::class);
     }
 }
