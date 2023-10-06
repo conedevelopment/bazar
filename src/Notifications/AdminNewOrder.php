@@ -43,7 +43,7 @@ class AdminNewOrder extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage())
-                    ->line(__('A new order has been placed.'));
+            ->line(__('A new order has been placed.'));
     }
 
     /**

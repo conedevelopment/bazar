@@ -16,12 +16,12 @@ abstract class Driver extends BaseDriver
     /**
      * Process the payment.
      */
-    abstract public function pay(Order $order, ?float $amount = null): Transaction;
+    abstract public function pay(Order $order, float $amount = null): Transaction;
 
     /**
      * Process the refund.
      */
-    abstract public function refund(Order $order, ?float $amount = null): Transaction;
+    abstract public function refund(Order $order, float $amount = null): Transaction;
 
     /**
      * Get the URL of the transaction.

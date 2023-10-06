@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Interfaces;
 
-interface Stockable extends Priceable, Inventoryable
+interface Stockable extends Inventoryable, Priceable
 {
     //
 }

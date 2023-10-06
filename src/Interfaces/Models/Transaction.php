@@ -25,7 +25,7 @@ interface Transaction
     /**
      * Mark the transaction as completed.
      */
-    public function markAsCompleted(?DateTimeInterface $date = null): void;
+    public function markAsCompleted(DateTimeInterface $date = null): void;
 
     /**
      * Mark the transaction as pending.

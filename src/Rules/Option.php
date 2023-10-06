@@ -24,7 +24,7 @@ class Option implements ValidationRule
      *
      * @return void
      */
-    public function __construct(Product $product, ?Variant $variant = null)
+    public function __construct(Product $product, Variant $variant = null)
     {
         $this->product = $product;
         $this->variant = $variant;

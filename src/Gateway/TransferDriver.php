@@ -10,7 +10,7 @@ class TransferDriver extends Driver
     /**
      * Process the payment.
      */
-    public function pay(Order $order, ?float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null): Transaction
     {
         return $order->pay($amount, 'transfer');
     }
@@ -18,7 +18,7 @@ class TransferDriver extends Driver
     /**
      * Process the refund.
      */
-    public function refund(Order $order, ?float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null): Transaction
     {
         return $order->refund($amount, 'transfer');
     }

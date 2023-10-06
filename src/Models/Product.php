@@ -93,7 +93,7 @@ class Product extends Model implements Contract
     {
         return $query->whereHas('metaData', static function (Builder $query): Builder {
             return $query->where($query->qualifyColumn('key'), 'quantity')
-                        ->where($query->qualifyColumn('value'), 0);
+                ->where($query->qualifyColumn('value'), 0);
         });
     }
 
@@ -104,7 +104,7 @@ class Product extends Model implements Contract
     {
         return $query->whereHas('metaData', static function (Builder $query): Builder {
             return $query->where($query->qualifyColumn('key'), 'quantity')
-                        ->where($query->qualifyColumn('value'), '>', 0);
+                ->where($query->qualifyColumn('value'), '>', 0);
         });
     }
 
@@ -114,24 +114,24 @@ class Product extends Model implements Contract
     public function toVariant(array $variation): ?Variant
     {
         return $this->variants()
-                    ->getQuery()
-                    ->whereHas(
-                        'propertyValues',
-                        static function (Builder $query) use ($variation): Builder {
-                            return $query->whereIn($query->qualifyColumn('value'), $variation)
-                                        ->whereHas('property', static function (Builder $query) use ($variation): Builder {
-                                            return $query->whereIn($query->qualifyColumn('slug'), array_keys($variation));
-                                        });
-                        },
-                        '=',
-                        function (QueryBuilder $query): QueryBuilder {
-                            return $query->selectRaw('count(*)')
-                                        ->from('bazar_buyable_property_value')
-                                        ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
-                                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
-                        }
-                    )
-                    ->first();
+            ->getQuery()
+            ->whereHas(
+                'propertyValues',
+                static function (Builder $query) use ($variation): Builder {
+                    return $query->whereIn($query->qualifyColumn('value'), $variation)
+                        ->whereHas('property', static function (Builder $query) use ($variation): Builder {
+                            return $query->whereIn($query->qualifyColumn('slug'), array_keys($variation));
+                        });
+                },
+                '=',
+                function (QueryBuilder $query): QueryBuilder {
+                    return $query->selectRaw('count(*)')
+                        ->from('bazar_buyable_property_value')
+                        ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
+                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
+                }
+            )
+            ->first();
     }
 
     /**

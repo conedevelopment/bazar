@@ -13,8 +13,8 @@ enum TransactionType: string
     public function name(): string
     {
         return match ($this) {
-            static::Payment => __('Payment'),
-            static::Refund => __('Refund'),
+            self::Payment => __('Payment'),
+            self::Refund => __('Refund'),
         };
     }
 
@@ -23,7 +23,7 @@ enum TransactionType: string
      */
     public static function toArray(): array
     {
-        return array_reduce(static::cases(), static function (array $types, TransactionType $type): array {
+        return array_reduce(self::cases(), static function (array $types, TransactionType $type): array {
             return array_merge($types, [$type->value => $type->name()]);
         }, []);
     }

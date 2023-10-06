@@ -171,7 +171,7 @@ class Order extends Model implements Contract
     /**
      * Create a payment transaction for the order.
      */
-    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
+    public function pay(float $amount = null, string $driver = null, array $attributes = []): Transaction
     {
         if ($this->getTotalPayable() === 0.0 || $this->paid()) {
             throw new TransactionFailedException("Order #{$this->getKey()} is fully paid.");
@@ -191,7 +191,7 @@ class Order extends Model implements Contract
     /**
      * Create a refund transaction for the order.
      */
-    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
+    public function refund(float $amount = null, string $driver = null, array $attributes = []): Transaction
     {
         if ($this->getTotalRefundable() === 0.0 || $this->refunded()) {
             throw new TransactionFailedException("Order #{$this->getKey()} is fully refunded.");

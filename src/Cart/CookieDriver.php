@@ -14,8 +14,8 @@ class CookieDriver extends Driver
     protected function resolve(Request $request): Cart
     {
         return Cart::proxy()
-                    ->newQuery()
-                    ->firstOrNew(['id' => $request->cookie('cart_id')]);
+            ->newQuery()
+            ->firstOrNew(['id' => $request->cookie('cart_id')]);
     }
 
     /**

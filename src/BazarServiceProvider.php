@@ -104,7 +104,7 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerMacros(): void
     {
-        Str::macro('currency', static function ($value, string $currency = null): string {
+        Str::macro('currency', static function (int|float $value, string $currency = null): string {
             return sprintf(
                 '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::getCurrency())
             );

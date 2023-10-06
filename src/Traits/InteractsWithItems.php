@@ -64,7 +64,7 @@ trait InteractsWithItems
     protected function currency(): Attribute
     {
         return new Attribute(
-            get: static function (?string $value = null): string {
+            get: static function (string $value = null): string {
                 return $value ?: Bazar::getCurrency();
             }
         );

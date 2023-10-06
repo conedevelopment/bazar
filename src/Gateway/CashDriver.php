@@ -11,7 +11,7 @@ class CashDriver extends Driver
     /**
      * Process the payment.
      */
-    public function pay(Order $order, ?float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null): Transaction
     {
         $transaction = $order->pay($amount, 'cash', [
             'completed_at' => time(),
@@ -25,7 +25,7 @@ class CashDriver extends Driver
     /**
      * Process the refund.
      */
-    public function refund(Order $order, ?float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null): Transaction
     {
         $transaction = $order->refund($amount, 'cash', [
             'completed_at' => time(),

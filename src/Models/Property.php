@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Property extends Model implements Contract
 {
-    use InteractsWithProxy;
     use HasFactory;
+    use InteractsWithProxy;
     use Sluggable;
 
     /**

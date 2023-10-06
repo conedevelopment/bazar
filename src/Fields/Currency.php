@@ -19,7 +19,7 @@ class Currency extends Number
     /**
      * Create a new field instance.
      */
-    public function __construct(string $label, ?string $name = null)
+    public function __construct(string $label, string $name = null)
     {
         parent::__construct($label, $name);
 

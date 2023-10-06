@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Cone\Bazar\BazarApplicationServiceProvider;
+use Cone\Bazar\Resources\ProductResource;
 
 class BazarServiceProvider extends BazarApplicationServiceProvider
 {
@@ -20,5 +21,15 @@ class BazarServiceProvider extends BazarApplicationServiceProvider
     public function boot(): void
     {
         parent::boot();
+    }
+
+    /**
+     * The resources.
+     */
+    protected function resources(): array
+    {
+        return [
+            new ProductResource(),
+        ];
     }
 }

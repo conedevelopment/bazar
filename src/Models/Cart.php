@@ -141,7 +141,7 @@ class Cart extends Model implements Contract
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNull($query->qualifyColumn('user_id'))
-                     ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));
+            ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));
     }
 
     /**
