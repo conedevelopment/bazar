@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar;
 
-use Cone\Root\Root;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -52,29 +51,23 @@ class BazarServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            $this->registerCommands();
+            $this->registerPublishes();
+        }
+
         $this->registerEvents();
         $this->registerMacros();
-        $this->registerLoadings();
-        $this->registerCommands();
-        $this->registerPublishes();
-
-        $this->app->make(Root::class)->booting(function (Root $root) {
-            $root->resources->register([
-                //
-            ]);
-        });
+        $this->registerViews();
     }
 
     /**
-     * Register loadings.
+     * Register views.
      */
-    protected function registerLoadings(): void
+    protected function registerViews(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
-
-        if ($this->app->runningInConsole()) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        }
     }
 
     /**
@@ -82,15 +75,17 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerPublishes(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../config/bazar.php' => $this->app->configPath('bazar.php'),
-            ], 'bazar-config');
+        $this->publishes([
+            __DIR__.'/../config/bazar.php' => $this->app->configPath('bazar.php'),
+        ], 'bazar-config');
 
-            $this->publishes([
-                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/bazar'),
-            ], 'bazar-views');
-        }
+        $this->publishes([
+            __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/bazar'),
+        ], 'bazar-views');
+
+        $this->publishes([
+            __DIR__.'/../stubs/BazarServiceProvider.stub' => $this->app->path('Providers/BazarServiceProvider.php'),
+        ], 'bazar-provider');
     }
 
     /**
@@ -98,12 +93,10 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\Commands\Install::class,
-                Console\Commands\ClearCarts::class,
-            ]);
-        }
+        $this->commands([
+            Console\Commands\Install::class,
+            Console\Commands\ClearCarts::class,
+        ]);
     }
 
     /**

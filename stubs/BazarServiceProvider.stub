@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Providers;
+
+use Cone\Bazar\BazarApplicationServiceProvider;
+
+class BazarServiceProvider extends BazarApplicationServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        parent::register();
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        parent::boot();
+    }
+}
