@@ -9,7 +9,7 @@
   </a>
 </p>
 
-[![GitHub Actions](https://github.com/conedevelopment/bazar/workflows/tests/badge.svg)](https://github.com/conedevelopment/bazar/actions?query=workflow%3Atests)
+[![GitHub Actions](https://github.com/conedevelopment/bazar/actions/workflows/back-end.yml/badge.svg)](https://github.com/conedevelopment/bazar/actions/workflows/back-end.yml)
 [![Coverage Status](https://coveralls.io/repos/github/conedevelopment/bazar/badge.svg?branch=master)](https://coveralls.io/github/conedevelopment/bazar?branch=master)
 
 **Bazar is a powerful "[headless](https://bazar.conedevelopment.com/docs/core-concepts#headless)" e-commerce system. Built on Laravel.**
