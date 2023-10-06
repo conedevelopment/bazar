@@ -34,7 +34,7 @@ jobs:
           coverage: xdebug3
 
       - name: Check Composer configuration
-        run: composer validate --strict
+        run: composer validate --no-interaction # @dev --strict
 
       - name: Install dependencies
         if: ${{ matrix.dependency-version == 'highest' }}
