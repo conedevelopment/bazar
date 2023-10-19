@@ -7,7 +7,7 @@ use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
-use Cone\Root\Models\User;
+use Cone\Root\Interfaces\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 trait InteractsWithItems
@@ -37,7 +38,7 @@ trait InteractsWithItems
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::getProxiedClass());
+        return $this->belongsTo(get_class(App::make(User::class)));
     }
 
     /**
