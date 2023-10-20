@@ -17,9 +17,7 @@ trait InteractsWithTaxes
     protected function formattedTax(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedTax();
-            }
+            get: fn (): string => $this->getFormattedTax()
         );
     }
 

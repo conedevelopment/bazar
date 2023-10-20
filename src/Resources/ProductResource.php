@@ -20,13 +20,16 @@ class ProductResource extends Resource
     protected string $model = Product::class;
 
     /**
-     * Define the fields.
+     * Define the columns.
      */
     public function columns(Request $request): array
     {
         return array_merge(parent::columns($request), [
             ID::make(),
-            Column::make(__('Name'), 'name'),
+
+            Column::make(__('Name'), 'name')
+                ->sortable()
+                ->searchable(),
         ]);
     }
 

@@ -6,6 +6,7 @@ use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -68,13 +69,6 @@ class Item extends Model implements Contract
     ];
 
     /**
-     * The "type" of the primary key ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -82,13 +76,6 @@ class Item extends Model implements Contract
     protected $hidden = [
         'itemable',
     ];
-
-    /**
-     * Indicates if the IDs are auto-incrementing.
-     *
-     * @var bool
-     */
-    public $incrementing = false;
 
     /**
      * The table associated with the model.
@@ -132,41 +119,51 @@ class Item extends Model implements Contract
     /**
      * Get the formatted price attribute.
      */
-    public function getFormattedPriceAttribute(): string
+    protected function formattedPrice(): Attribute
     {
-        return $this->getFormattedPrice();
+        return new Attribute(
+            get: fn (): string => $this->getFormattedPrice(),
+        );
     }
 
     /**
      * Get the total attribute.
      */
-    public function getTotalAttribute(): float
+    protected function total(): Attribute
     {
-        return $this->getTotal();
+        return new Attribute(
+            get: fn (): float => $this->getTotal(),
+        );
     }
 
     /**
      * Get the formatted total attribute.
      */
-    public function getFormattedTotalAttribute(): string
+    protected function formattedTotal(): Attribute
     {
-        return $this->getFormattedTotal();
+        return new Attribute(
+            get: fn (): string => $this->getFormattedTotal(),
+        );
     }
 
     /**
      * Get the net total attribute.
      */
-    public function getNetTotalAttribute(): float
+    protected function netTotal(): Attribute
     {
-        return $this->getNetTotal();
+        return new Attribute(
+            get: fn (): float => $this->getNetTotal(),
+        );
     }
 
     /**
      * Get the formatted net total attribute.
      */
-    public function getFormattedNetTotalAttribute(): string
+    protected function formattedNetTotal(): Attribute
     {
-        return $this->getFormattedNetTotal();
+        return new Attribute(
+            get: fn (): string => $this->getFormattedNetTotal(),
+        );
     }
 
     /**
