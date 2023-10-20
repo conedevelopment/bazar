@@ -5,6 +5,7 @@ namespace Cone\Bazar\Resources;
 use Cone\Bazar\Models\Category;
 use Cone\Root\Columns\Column;
 use Cone\Root\Columns\ID;
+use Cone\Root\Fields\Slug;
 use Cone\Root\Resources\Resource;
 use Illuminate\Http\Request;
 
@@ -31,6 +32,9 @@ class CategoryResource extends Resource
      */
     public function fields(Request $request): array
     {
-        return [];
+        return [
+            Slug::make(__('Slug'), 'slug')
+                ->from(['name']),
+        ];
     }
 }

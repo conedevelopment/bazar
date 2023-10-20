@@ -8,9 +8,12 @@ use Cone\Root\Columns\ID;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\Media;
+use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductResource extends Resource
 {
@@ -41,6 +44,9 @@ class ProductResource extends Resource
         return array_merge(parent::fields($request), [
             Text::make(__('Name'), 'name')
                 ->rules(['required', 'string', 'max:256']),
+
+            Slug::make(__('Slug'), 'slug')
+                ->from(['name']),
 
             Editor::make(__('Description'), 'description'),
 

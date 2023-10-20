@@ -4,9 +4,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\PropertyFactory;
 use Cone\Bazar\Interfaces\Models\Property as Contract;
-use Cone\Root\Support\Slug;
 use Cone\Root\Traits\InteractsWithProxy;
-use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +14,6 @@ class Property extends Model implements Contract
 {
     use HasFactory;
     use InteractsWithProxy;
-    use Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -58,13 +55,5 @@ class Property extends Model implements Contract
     public function values(): HasMany
     {
         return $this->hasMany(PropertyValue::getProxiedClass());
-    }
-
-    /**
-     * Get the slug representation of the model.
-     */
-    public function toSlug(): Slug
-    {
-        return (new Slug($this))->from('name')->unique();
     }
 }

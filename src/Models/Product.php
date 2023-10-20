@@ -9,11 +9,9 @@ use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithItemables;
 use Cone\Bazar\Traits\InteractsWithStock;
-use Cone\Root\Support\Slug;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMetaData;
 use Cone\Root\Traits\InteractsWithProxy;
-use Cone\Root\Traits\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -33,7 +31,6 @@ class Product extends Model implements Contract
     use InteractsWithItemables;
     use InteractsWithProxy;
     use InteractsWithStock;
-    use Sluggable;
     use SoftDeletes;
 
     /**
@@ -147,13 +144,5 @@ class Product extends Model implements Contract
             'name' => $this->name,
             'price' => $this->getPrice($itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
-    }
-
-    /**
-     * Get the slug representation of the model.
-     */
-    public function toSlug(): Slug
-    {
-        return (new Slug($this))->from('name')->unique();
     }
 }
