@@ -11,9 +11,7 @@ use Cone\Root\Fields\Media;
 use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ProductResource extends Resource
 {
