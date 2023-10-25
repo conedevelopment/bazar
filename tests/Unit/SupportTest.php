@@ -12,11 +12,11 @@ class SupportTest extends TestCase
     public function str_has_currency_macro()
     {
         Bazar::setCurrency('eur');
-        $this->assertEquals('1,300.00 EUR', Str::currency(1300));
+        $this->assertEquals('1,300 EUR', Str::currency(1300));
 
         Bazar::setCurrency('usd');
-        $this->assertEquals('150,300,400.00 USD', Str::currency(150300400));
+        $this->assertEquals('150,300,400 USD', Str::currency(150300400));
 
-        $this->assertEquals('150,300,400.00 HUF', Str::currency(150300400, 'huf'));
+        $this->assertEquals('150,300,400 HUF', Str::currency(150300400, 'huf'));
     }
 }
