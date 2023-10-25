@@ -54,8 +54,7 @@ class ProductResource extends Resource
 
             Prices::make(),
 
-            Media::make(__('Photo'), 'media', 'media')
-                ->collection('primary'),
+            Media::make(__('Cover'), 'media', 'media'),
         ]);
     }
 }

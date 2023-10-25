@@ -106,7 +106,7 @@ class BazarServiceProvider extends ServiceProvider
     {
         Str::macro('currency', static function (int|float $value, string $currency = null): string {
             return sprintf(
-                '%s %s', number_format($value, 2), strtoupper($currency ?: Bazar::getCurrency())
+                '%s %s', number_format($value), strtoupper($currency ?: Bazar::getCurrency())
             );
         });
     }

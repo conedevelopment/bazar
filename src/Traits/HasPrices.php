@@ -28,9 +28,7 @@ trait HasPrices
     protected function price(): Attribute
     {
         return new Attribute(
-            get: function (): ?float {
-                return $this->getPrice();
-            }
+            get: fn (): ?float => $this->getPrice(),
         );
     }
 
@@ -40,9 +38,7 @@ trait HasPrices
     protected function formattedPrice(): Attribute
     {
         return new Attribute(
-            get: function (): ?string {
-                return $this->getFormattedPrice();
-            }
+            get: fn (): ?string => $this->getFormattedPrice(),
         );
     }
 
