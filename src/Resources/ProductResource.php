@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Resources;
 
+use Cone\Bazar\Fields\Prices;
 use Cone\Bazar\Models\Product;
 use Cone\Root\Columns\Column;
 use Cone\Root\Columns\ID;
@@ -51,7 +52,10 @@ class ProductResource extends Resource
             BelongsToMany::make(__('Categories'), 'categories')
                 ->display('name'),
 
-            Media::make(__('Photos'), 'media', 'media'),
+            Prices::make(),
+
+            Media::make(__('Photo'), 'media', 'media')
+                ->collection('primary'),
         ]);
     }
 }

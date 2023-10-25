@@ -2,40 +2,28 @@
 
 namespace Cone\Bazar\Fields;
 
-use Cone\Bazar\Bazar;
 use Cone\Root\Fields\Fieldset;
 use Cone\Root\Fields\Meta;
-use Cone\Root\Fields\Number;
-use Cone\Root\Http\Requests\RootRequest;
-use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 class Prices extends Fieldset
 {
     /**
      * Create a new prices field instance.
      */
-    public function __construct(string $label = null, string $name = null)
+    public function __construct(string $label = null, string $modelAttribute = null)
     {
-        parent::__construct($label ?: __('Prices'), $name);
+        parent::__construct($label ?: __('Prices'), $modelAttribute);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function fields(RootRequest $request): array
+    public function fields(Request $request): array
     {
-        return array_merge(
-            parent::fields($request),
-            Arr::flatten(array_map(static function (string $symbol, string $currency): array {
-                return [
-                    Meta::make(__('Price :currency', ['currency' => $symbol]), 'price_'.$currency)
-                        ->asNumber(function (Number $field): void {
-                            $field->rules(['required', 'numeric', 'max:1300']);
-                        }),
-                    Meta::make(__('Sale Price :currency', ['currency' => $symbol]), 'sale_price_'.$currency)
-                        ->asNumber(),
-                ];
-            }, Bazar::getCurrencies(), array_keys(Bazar::getCurrencies())))
-        );
+        return [
+            Meta::make(__('Price :currency', ['currency' => 'HUF']), 'price_huf')
+                ->asNumber(),
+        ];
     }
 }
