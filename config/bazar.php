@@ -56,8 +56,18 @@ return [
     'gateway' => [
         'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
-            'cash' => [],
-            'transfer' => [],
+            'drivers' => [
+                'cash' => [
+                    //
+                ],
+                'transfer' => [
+                    //
+                ],
+            ],
+            'redirects' => [
+                'success' => '/',
+                'failed' => '/',
+            ],
         ],
     ],
 
