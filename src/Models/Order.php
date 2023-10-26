@@ -3,7 +3,6 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\OrderFactory;
-use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Support\Facades\Gateway;
@@ -30,6 +29,14 @@ class Order extends Model implements Contract
     use InteractsWithProxy;
     use SoftDeletes;
 
+    public const PENDING = 'pending';
+    public const ON_HOLD = 'on_hold';
+    public const IN_PROGRESS = 'in_progress';
+    public const COMPLETED = 'completed';
+    public const CANCELLED = 'cancelled';
+    public const FAILED = 'failed';
+    public const REFUNDED = 'refunded';
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -54,7 +61,7 @@ class Order extends Model implements Contract
     protected $attributes = [
         'currency' => null,
         'discount' => 0,
-        'status' => 'pending',
+        'status' => self::PENDING,
     ];
 
     /**
@@ -106,13 +113,13 @@ class Order extends Model implements Contract
     public static function statuses(): array
     {
         return [
-            'pending' => __('Pending'),
-            'on_hold' => __('On Hold'),
-            'in_progress' => __('In Progress'),
-            'completed' => __('Completed'),
-            'cancelled' => __('Cancelled'),
-            'failed' => __('Failed'),
-            'refunded' => __('Refunded'),
+            static::PENDING => __('Pending'),
+            static::ON_HOLD => __('On Hold'),
+            static::IN_PROGRESS => __('In Progress'),
+            static::COMPLETED => __('Completed'),
+            static::CANCELLED => __('Cancelled'),
+            static::FAILED => __('Failed'),
+            static::REFUNDED => __('Refunded'),
         ];
     }
 
@@ -139,7 +146,7 @@ class Order extends Model implements Contract
     {
         return new Attribute(
             get: function (): Collection {
-                return $this->transactions->where('type', TransactionType::Payment);
+                return $this->transactions->where('type', Transaction::PAYMENT);
             }
         );
     }
@@ -151,7 +158,7 @@ class Order extends Model implements Contract
     {
         return new Attribute(
             get: function (): Collection {
-                return $this->transactions->where('type', TransactionType::Refund);
+                return $this->transactions->where('type', Transaction::REFUND);
             }
         );
     }
@@ -178,7 +185,7 @@ class Order extends Model implements Contract
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
-            'type' => TransactionType::Payment,
+            'type' => Transaction::PAYMENT,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->getTotalPayable() : min($amount, $this->getTotalPayable()),
         ]));
@@ -198,7 +205,7 @@ class Order extends Model implements Contract
         }
 
         $transaction = $this->transactions()->create(array_replace($attributes, [
-            'type' => TransactionType::Refund,
+            'type' => Transaction::REFUND,
             'driver' => $driver ?: Gateway::getDefaultDriver(),
             'amount' => is_null($amount) ? $this->getTotalRefundable() : min($amount, $this->getTotalRefundable()),
         ]));

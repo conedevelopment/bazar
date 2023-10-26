@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Database\Factories;
 
-use Cone\Bazar\Enums\TransactionType;
 use Cone\Bazar\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -24,7 +23,7 @@ class TransactionFactory extends Factory
         return [
             'driver' => 'cash',
             'amount' => mt_rand(10, 1000) / 10,
-            'type' => Arr::random(array_column(TransactionType::cases(), 'value')),
+            'type' => Arr::random([Transaction::PAYMENT, Transaction::REFUND]),
         ];
     }
 }
