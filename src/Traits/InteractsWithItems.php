@@ -245,8 +245,8 @@ trait InteractsWithItems
 
         return $this->items->first(static function (Item $item) use ($attributes): bool {
             return empty(array_diff(
-                Arr::dot($attributes),
-                Arr::dot(array_merge(['properties' => null], $item->withoutRelations()->toArray()))
+                array_filter(Arr::dot($attributes)),
+                array_filter(Arr::dot(array_merge(['properties' => null], $item->withoutRelations()->toArray())))
             ));
         });
     }
