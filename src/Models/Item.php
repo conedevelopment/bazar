@@ -61,6 +61,8 @@ class Item extends Model implements Contract
      * @var array<string>
      */
     protected $fillable = [
+        'buyable_id',
+        'buyable_type',
         'name',
         'price',
         'properties',

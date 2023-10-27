@@ -155,7 +155,9 @@ class Cart extends Model implements Contract
             $this->order()->associate($this->order)->save();
         }
 
+        $this->order->items()->delete();
         $this->order->items()->createMany($this->items->toArray());
+
         $this->order->address->fill($this->address->toArray())->save();
         $this->order->shipping->fill($this->shipping->toArray())->save();
         $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
