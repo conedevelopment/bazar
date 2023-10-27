@@ -9,11 +9,16 @@ use Cone\Bazar\Models\Transaction;
 class CashDriver extends Driver
 {
     /**
+     * The driver key.
+     */
+    protected string $key = 'cash';
+
+    /**
      * Process the payment.
      */
     public function pay(Order $order, float $amount = null): Transaction
     {
-        $transaction = $order->pay($amount, 'cash', [
+        $transaction = $this->createPayment($order, $amount, [
             'completed_at' => time(),
         ]);
 
@@ -27,7 +32,7 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, float $amount = null): Transaction
     {
-        $transaction = $order->refund($amount, 'cash', [
+        $transaction = $this->createRefund($order, $amount, [
             'completed_at' => time(),
         ]);
 

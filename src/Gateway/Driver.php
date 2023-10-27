@@ -32,6 +32,22 @@ abstract class Driver extends BaseDriver
     }
 
     /**
+     * Create a new payment transaction for the order.
+     */
+    public function createPayment(Order $order, float $amount = null, array $attributes = []): Transaction
+    {
+        return $order->pay($amount, $this->key, $attributes);
+    }
+
+    /**
+     * Create a new refund transaction for the order.
+     */
+    public function createRefund(Order $order, float $amount = null, array $attributes = []): Transaction
+    {
+        return $order->refund($amount, $this->key, $attributes);
+    }
+
+    /**
      * Handle the checkout request.
      */
     public function checkout(Request $request, Cart $cart): Order

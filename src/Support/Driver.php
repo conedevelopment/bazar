@@ -18,6 +18,11 @@ abstract class Driver
     protected array $config = [];
 
     /**
+     * The driver key.
+     */
+    protected string $key;
+
+    /**
      * Create a new driver instance.
      */
     public function __construct(array $config = [])
