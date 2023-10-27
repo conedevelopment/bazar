@@ -222,7 +222,7 @@ abstract class Driver
     public function empty(): void
     {
         $this->getModel()->items()->delete();
-        $this->getModel()->setRelation('items', Collection::make());
+        $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
         $this->getShipping()->update(['tax' => 0, 'cost' => 0]);
 
