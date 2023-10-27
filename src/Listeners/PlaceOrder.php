@@ -4,6 +4,7 @@ namespace Cone\Bazar\Listeners;
 
 use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Jobs\SendNewOrderNotifications;
+use Cone\Bazar\Models\Order;
 
 class PlaceOrder
 {
@@ -12,7 +13,7 @@ class PlaceOrder
      */
     public function handle(CheckoutProcessed $event): void
     {
-        $event->order->markAs('in_progress');
+        $event->order->markAs(Order::IN_PROGRESS);
 
         SendNewOrderNotifications::dispatch($event->order);
 

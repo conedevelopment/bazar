@@ -29,12 +29,13 @@ class Order extends Model implements Contract
     use InteractsWithProxy;
     use SoftDeletes;
 
-    public const PENDING = 'pending';
-    public const ON_HOLD = 'on_hold';
-    public const IN_PROGRESS = 'in_progress';
-    public const COMPLETED = 'completed';
     public const CANCELLED = 'cancelled';
+    public const COMPLETED = 'completed';
     public const FAILED = 'failed';
+    public const IN_PROGRESS = 'in_progress';
+    public const ON_HOLD = 'on_hold';
+    public const PARTIALLY_REFUNDED = 'partially_refunded';
+    public const PENDING = 'pending';
     public const REFUNDED = 'refunded';
 
     /**

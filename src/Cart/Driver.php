@@ -3,11 +3,11 @@
 namespace Cone\Bazar\Cart;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Item;
-use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
@@ -248,10 +248,10 @@ abstract class Driver
     /**
      * Perform the checkout using the given driver.
      */
-    public function checkout(string $driver): Order
+    public function checkout(string $driver): Response
     {
-        return App::call(function (Request $request) use ($driver): Order {
-            return Gateway::driver($driver)->checkout($request, $this->getModel());
+        return App::call(function (Request $request) use ($driver): Response {
+            return Gateway::driver($driver)->checkout($request, $this->getModel()->toOrder());
         });
     }
 

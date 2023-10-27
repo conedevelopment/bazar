@@ -174,6 +174,14 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the name.
+     */
+    public function getName(): string
+    {
+        return $this->driverName;
+    }
+
+    /**
      * Get the price.
      */
     public function getPrice(): float

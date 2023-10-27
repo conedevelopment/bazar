@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Tests\Feature;
 
-use Cone\Bazar\Events\CheckoutProcessing;
 use Cone\Bazar\Gateway\CashDriver;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Gateway\Manager;
@@ -152,14 +151,11 @@ class GatewayManagerTest extends TestCase
     /** @test */
     public function it_can_process_checkout()
     {
-        Event::fake(CheckoutProcessing::class);
         Notification::fake();
 
         $order = $this->manager->driver('cash')->checkout($this->app['request'], $this->cart);
 
         $this->assertInstanceOf(Order::class, $order);
-
-        Event::assertDispatched(CheckoutProcessing::class);
 
         // Notification::assertSentTo($this->admin, AdminNewOrder::class);
 

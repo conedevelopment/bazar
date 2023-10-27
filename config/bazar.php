@@ -56,17 +56,13 @@ return [
     'gateway' => [
         'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
-            'drivers' => [
-                'cash' => [
-                    //
-                ],
-                'transfer' => [
-                    //
-                ],
+            'cash' => [
+                'success_url' => '/',
+                'failed_url' => '/',
             ],
-            'redirects' => [
-                'success' => '/',
-                'failed' => '/',
+            'transfer' => [
+                'success_url' => '/',
+                'failed_url' => '/',
             ],
         ],
     ],

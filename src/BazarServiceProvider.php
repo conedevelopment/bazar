@@ -117,9 +117,7 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerEvents(): void
     {
         $this->app['events']->listen(Logout::class, Listeners\ClearCookies::class);
-        $this->app['events']->listen(Events\CheckoutFailed::class, Listeners\HandleFailedCheckout::class);
         $this->app['events']->listen(Events\CheckoutProcessed::class, Listeners\PlaceOrder::class);
         $this->app['events']->listen(Events\CheckoutProcessed::class, Listeners\RefreshInventory::class);
-        $this->app['events']->listen(Events\CheckoutProcessing::class, Listeners\HandleProcessingCheckout::class);
     }
 }

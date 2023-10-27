@@ -6,7 +6,6 @@ use Cone\Bazar\Cart\CookieDriver;
 use Cone\Bazar\Cart\Manager;
 use Cone\Bazar\Cart\SessionDriver;
 use Cone\Bazar\Events\CheckoutProcessed;
-use Cone\Bazar\Events\CheckoutProcessing;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Product;
@@ -200,11 +199,10 @@ class CartManagerTest extends TestCase
     /** @test */
     public function a_manager_can_checkout()
     {
-        Event::fake([CheckoutProcessing::class, CheckoutProcessed::class]);
+        Event::fake([CheckoutProcessed::class]);
 
         $this->manager->checkout('cash');
 
-        Event::assertDispatched(CheckoutProcessing::class);
         Event::assertDispatched(CheckoutProcessed::class);
     }
 

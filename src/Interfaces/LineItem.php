@@ -7,6 +7,11 @@ interface LineItem extends Taxable
     /**
      * Get the price.
      */
+    public function getName(): string;
+
+    /**
+     * Get the price.
+     */
     public function getPrice(): float;
 
     /**

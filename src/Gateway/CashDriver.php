@@ -5,6 +5,8 @@ namespace Cone\Bazar\Gateway;
 use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
+use Illuminate\Http\Request;
+use Throwable;
 
 class CashDriver extends Driver
 {
@@ -17,7 +19,7 @@ class CashDriver extends Driver
             'completed_at' => time(),
         ]);
 
-        CheckoutProcessed::dispatch($order);
+        $order->markAs(Order::PENDING);
 
         return $transaction;
     }
@@ -31,8 +33,28 @@ class CashDriver extends Driver
             'completed_at' => time(),
         ]);
 
-        $order->markAs('refunded');
+        $order->markAs(Order::REFUNDED);
 
         return $transaction;
+    }
+
+    /**
+     * Handle the checkout request.
+     */
+    public function checkout(Request $request, Order $order): Response
+    {
+        try {
+            $this->pay($order);
+        } catch (Throwable $exception) {
+            $order->markAs(Order::FAILED);
+        }
+
+        $url = $order->status === Order::PENDING
+            ? $this->config['success_url']
+            : $this->config['failed_url'];
+
+        CheckoutProcessed::dispatch($order);
+
+        return parent::checkout($request, $order)->url($url);
     }
 }
