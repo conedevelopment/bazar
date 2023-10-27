@@ -7,6 +7,4 @@ parameters:
         - src/
         - config/
         - database/
-        - routes/
     ignoreErrors:
-        - '#^Unsafe usage of new static#'

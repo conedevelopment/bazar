@@ -4,8 +4,7 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Fields\Prices;
 use Cone\Bazar\Models\Product;
-use Cone\Root\Columns\Column;
-use Cone\Root\Columns\ID;
+use Cone\Root\Fields\ID;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\Media;
@@ -26,13 +25,13 @@ class ProductResource extends Resource
      */
     public function columns(Request $request): array
     {
-        return array_merge(parent::columns($request), [
+        return [
             ID::make(),
 
-            Column::make(__('Name'), 'name')
+            Text::make(__('Name'), 'name')
                 ->sortable()
                 ->searchable(),
-        ]);
+        ];
     }
 
     /**

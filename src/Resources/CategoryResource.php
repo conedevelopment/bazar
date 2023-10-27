@@ -3,9 +3,8 @@
 namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Models\Category;
-use Cone\Root\Columns\Column;
-use Cone\Root\Columns\ID;
 use Cone\Root\Fields\Editor;
+use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
@@ -26,7 +25,7 @@ class CategoryResource extends Resource
         return [
             ID::make(),
 
-            Column::make(__('Name'), 'name')
+            Text::make(__('Name'), 'name')
                 ->sortable()
                 ->searchable(),
         ];
