@@ -45,7 +45,7 @@ class TaxRepository extends Repository implements Contract
     {
         return $this->disabled
             ? $model->tax
-            : $this->items->sum(function ($tax) use ($model): float {
+            : $this->items->sum(function (int|float|Closure|Tax $tax) use ($model): float {
                 return $this->process($model, $tax);
             });
     }
