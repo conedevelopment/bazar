@@ -13,6 +13,7 @@ return new class() extends Migration
     {
         Schema::create('bazar_orders', static function (Blueprint $table): void {
             $table->id();
+            $table->uuid();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('status');
             $table->string('currency');

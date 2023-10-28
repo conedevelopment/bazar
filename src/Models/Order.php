@@ -12,6 +12,7 @@ use Cone\Bazar\Traits\InteractsWithItems;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +25,7 @@ class Order extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
+    use HasUuids;
     use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
@@ -121,6 +123,7 @@ class Order extends Model implements Contract
             static::CANCELLED => __('Cancelled'),
             static::FAILED => __('Failed'),
             static::REFUNDED => __('Refunded'),
+            static::PARTIALLY_REFUNDED => __('Partially Refunded'),
         ];
     }
 
@@ -174,6 +177,14 @@ class Order extends Model implements Contract
                 return static::statuses()[$attributes['status']] ?? $attributes['status'];
             }
         );
+    }
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     */
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
     }
 
     /**

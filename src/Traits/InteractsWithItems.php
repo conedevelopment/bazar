@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
@@ -78,7 +79,9 @@ trait InteractsWithItems
     {
         return new Attribute(
             get: function (): Collection {
-                return $this->items->merge([$this->shipping]);
+                return $this->items->when($this->needsShipping(), function (Collection $items): Collection {
+                    return $items->merge([$this->shipping]);
+                });
             }
         );
     }
@@ -160,7 +163,10 @@ trait InteractsWithItems
      */
     public function needsShipping(): bool
     {
-        return true;
+        return $this->items->some(static function (Item $item): bool {
+            return $item->buyable instanceof Inventoryable
+                && $item->buyable->isVirtual();
+        });
     }
 
     /**
