@@ -20,6 +20,11 @@ interface Inventoryable
     public function isVirtual(): bool;
 
     /**
+     * Determine if the stockable model is physical.
+     */
+    public function isPhysical(): bool;
+
+    /**
      * Determine if the stockable model is downloadable.
      */
     public function isDownloadable(): bool;

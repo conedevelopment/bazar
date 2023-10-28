@@ -165,7 +165,7 @@ trait InteractsWithItems
     {
         return $this->items->some(static function (Item $item): bool {
             return $item->buyable instanceof Inventoryable
-                && $item->buyable->isVirtual();
+                && $item->buyable->isPhysical();
         });
     }
 

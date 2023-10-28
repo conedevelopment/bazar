@@ -45,6 +45,14 @@ trait InteractsWithStock
     }
 
     /**
+     * Determine if the stockable model is physical.
+     */
+    public function isPhysical(): bool
+    {
+        return ! $this->isVirtual();
+    }
+
+    /**
      * Determine if the stockable model is downloadable.
      */
     public function isDownloadable(): bool
