@@ -156,6 +156,14 @@ trait InteractsWithItems
     }
 
     /**
+     * Determine if the model needs shipping.
+     */
+    public function needsShipping(): bool
+    {
+        return true;
+    }
+
+    /**
      * Get the currency.
      */
     public function getCurrency(): string

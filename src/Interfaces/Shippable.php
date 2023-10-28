@@ -10,4 +10,9 @@ interface Shippable
      * Get the shipping for the model.
      */
     public function shipping(): MorphOne;
+
+    /**
+     * Determine if the model needs shipping.
+     */
+    public function needsShipping(): bool;
 }
