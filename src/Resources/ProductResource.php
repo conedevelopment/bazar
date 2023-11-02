@@ -2,13 +2,12 @@
 
 namespace Cone\Bazar\Resources;
 
-use Cone\Bazar\Fields\Prices;
 use Cone\Bazar\Models\Product;
-use Cone\Root\Columns\Column;
-use Cone\Root\Columns\ID;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
+use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Media;
+use Cone\Root\Fields\Meta;
 use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
@@ -22,26 +21,16 @@ class ProductResource extends Resource
     protected string $model = Product::class;
 
     /**
-     * Define the columns.
-     */
-    public function columns(Request $request): array
-    {
-        return array_merge(parent::columns($request), [
-            ID::make(),
-
-            Column::make(__('Name'), 'name')
-                ->sortable()
-                ->searchable(),
-        ]);
-    }
-
-    /**
      * Define the fields.
      */
     public function fields(Request $request): array
     {
         return array_merge(parent::fields($request), [
+            ID::make(),
+
             Text::make(__('Name'), 'name')
+                ->sortable()
+                ->searchable()
                 ->rules(['required', 'string', 'max:256']),
 
             Slug::make(__('Slug'), 'slug')
@@ -52,7 +41,8 @@ class ProductResource extends Resource
             BelongsToMany::make(__('Categories'), 'categories')
                 ->display('name'),
 
-            Prices::make(),
+            Meta::make(__('Price :currency', ['currency' => 'HUF']), 'price_huf')
+                ->asNumber(),
 
             Media::make(__('Cover'), 'media', 'media'),
         ]);

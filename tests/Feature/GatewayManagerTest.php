@@ -16,7 +16,6 @@ use Cone\Bazar\Notifications\CustomerNewOrder;
 use Cone\Bazar\Tests\TestCase;
 use Exception;
 use Illuminate\Notifications\AnonymousNotifiable;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Notification;
 
 class GatewayManagerTest extends TestCase

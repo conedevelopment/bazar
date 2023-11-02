@@ -3,9 +3,8 @@
 namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Models\Category;
-use Cone\Root\Columns\Column;
-use Cone\Root\Columns\ID;
 use Cone\Root\Fields\Editor;
+use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
@@ -21,24 +20,14 @@ class CategoryResource extends Resource
     /**
      * Define the fields.
      */
-    public function columns(Request $request): array
+    public function fields(Request $request): array
     {
         return [
             ID::make(),
 
-            Column::make(__('Name'), 'name')
-                ->sortable()
-                ->searchable(),
-        ];
-    }
-
-    /**
-     * Define the fields.
-     */
-    public function fields(Request $request): array
-    {
-        return [
             Text::make(__('Name'), 'name')
+                ->sortable()
+                ->searchable()
                 ->required()
                 ->rules(['required', 'string', 'max:256']),
 
