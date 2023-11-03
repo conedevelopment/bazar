@@ -13,11 +13,11 @@ class CashDriver extends Driver
     /**
      * Process the payment.
      */
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->pay($amount, 'cash', [
+        $transaction = $order->pay($amount, 'cash', array_merge($attributes, [
             'completed_at' => time(),
-        ]);
+        ]));
 
         $order->markAs(Order::PENDING);
 
@@ -27,11 +27,11 @@ class CashDriver extends Driver
     /**
      * Process the refund.
      */
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->refund($amount, 'cash', [
+        $transaction = $order->refund($amount, 'cash', array_merge($attributes, [
             'completed_at' => time(),
-        ]);
+        ]));
 
         $order->markAs(Order::REFUNDED);
 
