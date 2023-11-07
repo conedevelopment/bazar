@@ -65,7 +65,7 @@ trait HasPrices
 
         $price = $this->getPrice($currency);
 
-        return $price ? Str::currency($price, $currency) : null;
+        return is_null($price) ? null : Str::currency($price, $currency);
     }
 
     /**
