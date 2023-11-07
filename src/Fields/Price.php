@@ -18,11 +18,11 @@ class Price extends Meta
     /**
      * Create a new price field instance.
      */
-    public function __construct(string $label, string $modelAttribute = null, string $currency = null)
+    public function __construct(string $label, string $currency = null)
     {
-        parent::__construct($label, $modelAttribute);
-
         $this->currency = $currency ?: Bazar::getCurrency();
+
+        parent::__construct($label, sprintf('price_%s', strtolower($this->currency)));
     }
 
     /**
@@ -31,6 +31,8 @@ class Price extends Meta
     public function currency(string $value): static
     {
         $this->currency = $value;
+
+        $this->modelAttribute = sprintf('price_%s', strtolower($value));
 
         return $this;
     }
