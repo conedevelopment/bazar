@@ -5,10 +5,10 @@ namespace Cone\Bazar\Traits;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 trait AsCustomer
 {
@@ -45,14 +45,13 @@ trait AsCustomer
     }
 
     /**
-     * Get the address attribute.
+     * Get the default address for the user.
      */
-    protected function address(): Attribute
+    public function address(): MorphOne
     {
-        return new Attribute(
-            get: function (): ?Address {
-                return $this->addresses->firstWhere('default', true) ?: $this->addresses->first();
-            }
-        );
+        return $this->addresses()->one()->ofMany([
+            'default' => 'max',
+            'id' => 'min',
+        ]);
     }
 }
