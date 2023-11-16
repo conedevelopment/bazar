@@ -5,6 +5,7 @@ namespace Cone\Bazar\Resources;
 use Cone\Bazar\Models\Product;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
+use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Media;
 use Cone\Root\Fields\Meta;

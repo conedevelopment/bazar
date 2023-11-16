@@ -39,7 +39,7 @@ trait InteractsWithItems
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(get_class(App::make(User::class)));
+        return $this->belongsTo(get_class(App::make(User::class)))->withDefault();
     }
 
     /**
