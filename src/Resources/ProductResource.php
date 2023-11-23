@@ -40,7 +40,6 @@ class ProductResource extends Resource
             Editor::make(__('Description'), 'description'),
 
             BelongsToMany::make(__('Categories'), 'categories')
-                ->asSubResource()
                 ->display('name'),
 
             Meta::make(__('Price :currency', ['currency' => 'HUF']), 'price_huf')
