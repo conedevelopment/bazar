@@ -72,7 +72,8 @@ class Product extends Model implements Contract
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product')
+            ->using(CategoryPivot::class);
     }
 
     /**

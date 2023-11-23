@@ -107,7 +107,7 @@ class Item extends Model implements Contract
      */
     public function buyable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withDefault();
     }
 
     /**
@@ -115,7 +115,7 @@ class Item extends Model implements Contract
      */
     public function itemable(): MorphTo
     {
-        return $this->morphTo();
+        return $this->morphTo()->withDefault();
     }
 
     /**
