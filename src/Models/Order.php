@@ -113,7 +113,7 @@ class Order extends Model implements Contract
     /**
      * Get the available order statuses.
      */
-    public static function statuses(): array
+    public static function getStatuses(): array
     {
         return [
             static::PENDING => __('Pending'),
@@ -174,7 +174,7 @@ class Order extends Model implements Contract
     {
         return new Attribute(
             get: static function (mixed $value, array $attributes): string {
-                return static::statuses()[$attributes['status']] ?? $attributes['status'];
+                return static::getStatuses()[$attributes['status']] ?? $attributes['status'];
             }
         );
     }

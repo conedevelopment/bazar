@@ -11,6 +11,7 @@ use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
+use Cone\Root\Fields\URL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -60,6 +61,10 @@ class Transactions extends HasMany
                 }),
 
             Text::make(__('Key'), 'key'),
+
+            URL::make(__('URL'), static function (Request $request, Transaction $transaction): ?string {
+                return $transaction->url;
+            }),
 
             Date::make(__('Completed At'), 'completed_at')
                 ->withTime(),

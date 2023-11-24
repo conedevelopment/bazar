@@ -7,6 +7,7 @@ use Cone\Bazar\Fields\Items;
 use Cone\Bazar\Fields\Transactions;
 use Cone\Bazar\Models\Order;
 use Cone\Root\Fields\BelongsTo;
+use Cone\Root\Fields\Date;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
@@ -36,7 +37,8 @@ class OrderResource extends Resource
             ID::make(),
 
             BelongsTo::make(__('Customer'), 'user')
-                ->display('name'),
+                ->display('name')
+                ->sortable(column: 'name'),
 
             Text::make(__('Total'), static function (Request $request, Order $model): string {
                 return $model->formattedTotal;
@@ -46,7 +48,12 @@ class OrderResource extends Resource
                 ->options(Bazar::getCurrencies())
                 ->hiddenOn(['index']),
 
-            // Select::make(__('Status'), 'status)->options([]),
+            Select::make(__('Status'), 'status')
+                ->options(Order::getStatuses()),
+
+            Date::make(__('Created At'), 'created_at')
+                ->withTime()
+                ->sortable(),
 
             Items::make(),
 
