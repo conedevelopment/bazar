@@ -4,6 +4,7 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Fields\Items;
+use Cone\Bazar\Fields\OrderStatus;
 use Cone\Bazar\Fields\Transactions;
 use Cone\Bazar\Models\Order;
 use Cone\Root\Fields\BelongsTo;
@@ -48,8 +49,7 @@ class OrderResource extends Resource
                 ->options(Bazar::getCurrencies())
                 ->hiddenOn(['index']),
 
-            Select::make(__('Status'), 'status')
-                ->options(Order::getStatuses()),
+            OrderStatus::make(),
 
             Date::make(__('Created At'), 'created_at')
                 ->withTime()

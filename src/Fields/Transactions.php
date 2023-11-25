@@ -60,7 +60,9 @@ class Transactions extends HasMany
                     }, Gateway::getAvailableDrivers($transaction->order));
                 }),
 
-            Text::make(__('Key'), 'key'),
+            Text::make(__('Key'), 'key')
+                ->searchable()
+                ->sortable(),
 
             URL::make(__('URL'), static function (Request $request, Transaction $transaction): ?string {
                 return $transaction->url;
