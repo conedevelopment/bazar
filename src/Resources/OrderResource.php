@@ -23,6 +23,11 @@ class OrderResource extends Resource
     protected string $model = Order::class;
 
     /**
+     * The group for the resource.
+     */
+    protected string $group = 'Shop';
+
+    /**
      * The relations to eager load on every query.
      */
     protected array $with = [

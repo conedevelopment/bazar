@@ -21,6 +21,11 @@ class ProductResource extends Resource
     protected string $model = Product::class;
 
     /**
+     * The group for the resource.
+     */
+    protected string $group = 'Shop';
+
+    /**
      * Define the fields.
      */
     public function fields(Request $request): array
