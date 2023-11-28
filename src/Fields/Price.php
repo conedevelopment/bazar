@@ -23,6 +23,14 @@ class Price extends Meta
         $this->currency = $currency ?: Bazar::getCurrency();
 
         parent::__construct($label, sprintf('price_%s', strtolower($this->currency)));
+
+        $this->asNumber();
+
+        $this->field->min(0);
+
+        $this->field->format(function (Request $request, Model $model, mixed $value): ?string {
+            return is_null($value) ? null : Str::currency($value, $this->currency);
+        });
     }
 
     /**
@@ -35,19 +43,5 @@ class Price extends Meta
         $this->modelAttribute = sprintf('price_%s', strtolower($value));
 
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function resolveFormat(Request $request, Model $model): mixed
-    {
-        if (is_null($this->formatResolver)) {
-            $this->formatResolver = function (Request $request, Model $model, mixed $value): ?string {
-                return is_null($value) ? null : Str::currency($value, $this->currency);
-            };
-        }
-
-        return parent::resolveFormat($request, $model);
     }
 }
