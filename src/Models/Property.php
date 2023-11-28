@@ -4,6 +4,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\PropertyFactory;
 use Cone\Bazar\Interfaces\Models\Property as Contract;
+use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Property extends Model implements Contract
 {
     use HasFactory;
+    use HasMedia;
     use InteractsWithProxy;
 
     /**
@@ -23,7 +25,7 @@ class Property extends Model implements Contract
     protected $fillable = [
         'name',
         'slug',
-        'type',
+        'description',
     ];
 
     /**
