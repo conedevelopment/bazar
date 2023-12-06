@@ -9,7 +9,7 @@ use Cone\Bazar\Shipping\Driver;
 use Cone\Bazar\Shipping\LocalPickupDriver;
 use Cone\Bazar\Tests\TestCase;
 
-class ShippingManagerTest extends TestCase
+class ManagerTest extends TestCase
 {
     protected Manager $manager;
 
