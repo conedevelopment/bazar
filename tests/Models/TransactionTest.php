@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;

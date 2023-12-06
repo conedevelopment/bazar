@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;

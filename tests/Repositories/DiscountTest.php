@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Repositories;
 
 use Cone\Bazar\Interfaces\Discount as Contract;
 use Cone\Bazar\Interfaces\Discountable;

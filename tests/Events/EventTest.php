@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Events;
 
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Auth\Events\Logout;
