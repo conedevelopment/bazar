@@ -10,7 +10,7 @@ use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
 
-class TaxRepositoryTest extends TestCase
+class TaxTest extends TestCase
 {
     protected Cart $cart;
 
@@ -34,8 +34,7 @@ class TaxRepositoryTest extends TestCase
         Tax::register('custom-30', 30);
     }
 
-    /** @test */
-    public function it_can_calculate_taxes()
+    public function test_tax_repository_calculates_taxes(): void
     {
         Tax::register('custom-object', new CustomTax());
         Tax::register('custom-closure', function (Taxable $model) {
@@ -45,16 +44,14 @@ class TaxRepositoryTest extends TestCase
         $this->assertEquals(470, $this->cart->calculateTax());
     }
 
-    /** @test */
-    public function it_can_remove_taxes()
+    public function test_tax_repository_removes_taxes(): void
     {
         Tax::remove('custom-30');
 
         $this->assertEquals(0, $this->cart->calculateTax());
     }
 
-    /** @test */
-    public function it_can_disable_taxes()
+    public function test_tax_repository_disables_taxes(): void
     {
         $this->assertEquals(90, $this->cart->calculateTax());
 

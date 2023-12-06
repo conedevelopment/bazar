@@ -17,8 +17,7 @@ class CategoryTest extends TestCase
         $this->category = Category::factory()->create();
     }
 
-    /** @test */
-    public function a_category_belongs_to_products()
+    public function test_category_belongs_to_products(): void
     {
         $product = Product::factory()->create();
 

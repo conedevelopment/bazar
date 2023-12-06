@@ -22,6 +22,7 @@ class Transaction extends Model implements Contract
     use InteractsWithProxy;
 
     public const PAYMENT = 'payment';
+
     public const REFUND = 'refund';
 
     /**

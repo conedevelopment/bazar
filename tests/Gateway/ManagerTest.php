@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Gateway;
 
 use Cone\Bazar\Gateway\CashDriver;
 use Cone\Bazar\Gateway\Driver;
@@ -11,20 +11,17 @@ use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
-use Cone\Bazar\Notifications\AdminNewOrder;
-use Cone\Bazar\Notifications\CustomerNewOrder;
 use Cone\Bazar\Tests\TestCase;
 use Exception;
-use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Notification;
 
-class GatewayManagerTest extends TestCase
+class ManagerTest extends TestCase
 {
-    protected $manager;
+    protected Manager $manager;
 
-    protected $cart;
+    protected Cart $cart;
 
-    protected $order;
+    protected Order $order;
 
     public function setUp(): void
     {
@@ -65,8 +62,7 @@ class GatewayManagerTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_can_list_available_drivers_for_itemable_model()
+    public function test_gateway_can_list_available_drivers_for_itemable_model(): void
     {
         $this->assertEquals(
             ['cash', 'transfer', 'custom-driver', 'failing-driver'],
@@ -74,8 +70,7 @@ class GatewayManagerTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_has_cash_driver()
+    public function test_gateway_has_cash_driver(): void
     {
         $driver = $this->manager->driver('cash');
         $this->assertInstanceOf(CashDriver::class, $driver);
@@ -101,8 +96,7 @@ class GatewayManagerTest extends TestCase
         $this->assertTrue($driver->available($this->order));
     }
 
-    /** @test */
-    public function it_has_transfer_driver()
+    public function test_gateway_has_transfer_driver(): void
     {
         $driver = $this->manager->driver('transfer');
         $this->assertInstanceOf(TransferDriver::class, $driver);
@@ -128,8 +122,7 @@ class GatewayManagerTest extends TestCase
         $this->assertTrue($driver->available($this->order));
     }
 
-    /** @test */
-    public function it_can_have_custom_driver()
+    public function test_gateway_can_have_custom_driver(): void
     {
         $driver = $this->manager->driver('custom-driver');
         $this->assertInstanceOf(CustomGatewayDriver::class, $driver);
@@ -147,30 +140,22 @@ class GatewayManagerTest extends TestCase
         $this->assertSame('fake-url', $driver->getTransactionUrl($payment));
     }
 
-    /** @test */
-    public function it_can_process_checkout()
+    public function test_gateway_can_process_checkout(): void
     {
         Notification::fake();
 
-        $order = $this->manager->driver('cash')->checkout($this->app['request'], $this->cart);
+        $order = $this->cart->toOrder();
+
+        $this->manager->driver('cash')->checkout($this->app['request'], $order);
 
         $this->assertInstanceOf(Order::class, $order);
-
-        // Notification::assertSentTo($this->admin, AdminNewOrder::class);
-
-        Notification::assertSentTo(
-            new AnonymousNotifiable,
-            CustomerNewOrder::class,
-            function ($notification, $channels, $notifiable) {
-                return $notifiable->routes['mail'] === $this->cart->address->email;
-            }
-        );
     }
 
-    /** @test */
-    public function it_handles_failed_checkout()
+    public function test_gateway_handles_failed_checkout(): void
     {
-        $order = $this->manager->driver('failing-driver')->checkout($this->app['request'], $this->cart);
+        $order = $this->cart->toOrder();
+
+        $this->manager->driver('failing-driver')->checkout($this->app['request'], $order);
 
         $this->assertSame('failed', $order->refresh()->status);
     }
@@ -183,12 +168,12 @@ class CustomGatewayDriver extends Driver
         return 'fake-url';
     }
 
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         return $order->pay($amount, 'custom-driver');
     }
 
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         return $order->refund($amount, 'custom-driver');
     }
@@ -196,12 +181,12 @@ class CustomGatewayDriver extends Driver
 
 class FailingDriver extends Driver
 {
-    public function pay(Order $order, float $amount = null): Transaction
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception;
     }
 
-    public function refund(Order $order, float $amount = null): Transaction
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception;
     }

@@ -16,7 +16,7 @@ class ShippingTest extends TestCase
 {
     protected Cart $cart;
 
-    protected $shipping;
+    protected Shipping $shipping;
 
     public function setUp(): void
     {
@@ -31,8 +31,7 @@ class ShippingTest extends TestCase
         $this->shipping->shippable()->associate($this->cart)->save();
     }
 
-    /** @test */
-    public function a_shipping_belongs_to_a_cart()
+    public function test_shipping_belongs_to_a_cart(): void
     {
         $this->assertSame(
             [Cart::class, $this->cart->id],
@@ -40,16 +39,14 @@ class ShippingTest extends TestCase
         );
     }
 
-    /** @test */
-    public function a_shipping_belongs_to_a_cart_by_default()
+    public function test_shipping_belongs_to_a_cart_by_default(): void
     {
         $shipping = new Shipping();
 
         $this->assertInstanceOf(Cart::class, $shipping->shippable);
     }
 
-    /** @test */
-    public function a_shipping_belongs_to_an_order()
+    public function test_shipping_belongs_to_an_order(): void
     {
         $order = $this->admin->orders()->save(Order::factory()->make());
         $shipping = Shipping::factory()->make();
@@ -61,8 +58,7 @@ class ShippingTest extends TestCase
         );
     }
 
-    /** @test */
-    public function a_shipping_has_address()
+    public function test_shipping_has_address(): void
     {
         $order = $this->admin->orders()->save(Order::factory()->make());
         $shipping = Shipping::factory()->make();
@@ -75,15 +71,13 @@ class ShippingTest extends TestCase
         $this->assertSame($address->id, $shipping->address->id);
     }
 
-    /** @test */
-    public function it_can_calculate_calculateCost()
+    public function testt_can_calculate_calculateCost(): void
     {
         $cost = $this->shipping->calculateCost();
         $this->assertSame($cost, $this->shipping->cost);
     }
 
-    /** @test */
-    public function it_is_taxable()
+    public function testt_is_taxable(): void
     {
         $this->shipping->calculateTax();
 
@@ -95,8 +89,7 @@ class ShippingTest extends TestCase
         $this->assertSame($this->shipping->getFormattedTax(), $this->shipping->formattedTax);
     }
 
-    /** @test */
-    public function it_has_total_attribute()
+    public function testt_has_total_attribute(): void
     {
         $this->assertSame(
             $this->shipping->cost + $this->shipping->tax,
@@ -117,8 +110,7 @@ class ShippingTest extends TestCase
         $this->assertSame($this->shipping->getFormattedNetTotal(), $this->shipping->formattedNetTotal);
     }
 
-    /** @test */
-    public function it_has_driver_name()
+    public function testt_has_driver_name(): void
     {
         $this->assertSame(ShippingManager::driver($this->shipping->driver)->getName(), $this->shipping->driverName);
 

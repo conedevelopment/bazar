@@ -31,8 +31,7 @@ class OrderTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_can_belong_to_customer()
+    public function test_order_can_belong_to_customer(): void
     {
         $this->assertNull($this->order->user);
 
@@ -43,8 +42,7 @@ class OrderTest extends TestCase
         $this->assertSame($this->user->id, $this->order->user_id);
     }
 
-    /** @test */
-    public function it_has_transactions()
+    public function test_order_has_transactions(): void
     {
         $transactions = $this->order->transactions()->saveMany(
             Transaction::factory()->count(3)->make()
@@ -55,8 +53,7 @@ class OrderTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_can_have_cart()
+    public function test_order_can_have_cart(): void
     {
         $cart = $this->order->cart()->save(
             Cart::factory()->make()
@@ -65,8 +62,7 @@ class OrderTest extends TestCase
         $this->assertSame($cart->id, $this->order->cart->id);
     }
 
-    /** @test */
-    public function it_has_address()
+    public function test_order_has_address(): void
     {
         $address = $this->order->address()->save(
             Address::factory()->make()
@@ -75,8 +71,7 @@ class OrderTest extends TestCase
         $this->assertSame($address->id, $this->order->address->id);
     }
 
-    /** @test */
-    public function it_has_total_attribute()
+    public function test_order_has_total_attribute(): void
     {
         $total = $this->order->items->sum(function ($item) {
             return ($item->price + $item->tax) * $item->quantity;
@@ -87,8 +82,7 @@ class OrderTest extends TestCase
         $this->assertEquals($total, $this->order->total);
     }
 
-    /** @test */
-    public function it_has_net_total_attribute()
+    public function test_order_has_net_total_attribute(): void
     {
         $total = $this->order->items->sum(function ($item) {
             return $item->price * $item->quantity;
@@ -99,8 +93,7 @@ class OrderTest extends TestCase
         $this->assertEquals($total, $this->order->netTotal);
     }
 
-    /** @test */
-    public function it_has_query_scopes()
+    public function test_order_has_query_scopes(): void
     {
         $this->assertSame(
             $this->order->newQuery()->where('bazar_orders.status', 'pending')->toSql(),

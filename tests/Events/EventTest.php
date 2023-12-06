@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Event;
 
 class EventTest extends TestCase
 {
-    /** @test */
-    public function it_clears_cookies_after_logout()
+    public function test_cookies_are_cleared_after_logout(): void
     {
         Cookie::queue('cart_id', 'fake', 864000);
 

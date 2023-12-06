@@ -333,12 +333,12 @@ abstract class Countries
     {
         return [
             __('Africa') => static::africa(),
-            __('Anctartica') =>  static::antarctica(),
+            __('Anctartica') => static::antarctica(),
             __('Asia') => static::asia(),
             __('Europe') => static::europe(),
             __('North America') => static::northAmerica(),
             __('South America') => static::southAmerica(),
-            __('Oceania') => static::oceania()
+            __('Oceania') => static::oceania(),
         ];
     }
 

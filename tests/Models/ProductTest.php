@@ -29,8 +29,7 @@ class ProductTest extends TestCase
         $this->product->propertyValues()->attach($this->property->values->first());
     }
 
-    /** @test */
-    public function a_product_has_many_orders_through_items()
+    public function test_product_has_many_orders_through_items(): void
     {
         $order = Order::factory()->create();
 
@@ -46,8 +45,7 @@ class ProductTest extends TestCase
         $this->assertTrue($this->product->orders->contains($order));
     }
 
-    /** @test */
-    public function a_product_belongs_to_carts()
+    public function test_product_belongs_to_carts(): void
     {
         $cart = Cart::factory()->create();
 
@@ -63,8 +61,7 @@ class ProductTest extends TestCase
         $this->assertTrue($this->product->carts->contains($cart));
     }
 
-    /** @test */
-    public function a_product_belongs_to_categories()
+    public function test_product_belongs_to_categories(): void
     {
         $category = Category::factory()->create();
 
@@ -73,8 +70,7 @@ class ProductTest extends TestCase
         $this->assertTrue($this->product->categories->contains($category));
     }
 
-    /** @test */
-    public function a_product_has_properties()
+    public function test_product_has_properties(): void
     {
         $this->assertTrue(
             $this->product->properties->contains($this->property)
@@ -85,8 +81,7 @@ class ProductTest extends TestCase
         );
     }
 
-    /** @test */
-    public function a_product_has_variants()
+    public function test_product_has_variants(): void
     {
         $variant = $this->product->variants()->save(
             Variant::factory()->make()
@@ -104,20 +99,17 @@ class ProductTest extends TestCase
         $this->assertNull($this->product->toVariant(['size' => 'fake']));
     }
 
-    /** @test */
-    public function a_product_interacts_with_stock()
+    public function test_product_interacts_with_stock(): void
     {
         $this->assertTrue(true);
     }
 
-    /** @test */
-    public function a_product_has_prices()
+    public function test_product_has_prices(): void
     {
         $this->assertTrue(true);
     }
 
-    /** @test */
-    public function a_product_has_query_scopes()
+    public function test_product_has_query_scopes(): void
     {
         $outOfStock = $this->product->newQuery()->outOfStock();
         $this->assertSame(

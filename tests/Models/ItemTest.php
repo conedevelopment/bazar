@@ -32,16 +32,14 @@ class ItemTest extends TestCase
         $this->item->buyable()->associate($product)->itemable()->associate($cart)->save();
     }
 
-    /** @test */
-    public function an_item_is_taxable()
+    public function test_item_is_taxable(): void
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->getFormattedTax());
         $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
     }
 
-    /** @test */
-    public function an_item_has_price_attribute()
+    public function test_item_has_price_attribute(): void
     {
         $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
@@ -50,8 +48,7 @@ class ItemTest extends TestCase
         $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
     }
 
-    /** @test */
-    public function an_item_has_total_attribute()
+    public function test_item_has_total_attribute(): void
     {
         $this->assertSame(
             ($this->item->price + $this->item->tax) * $this->item->quantity,

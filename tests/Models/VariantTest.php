@@ -23,14 +23,12 @@ class VariantTest extends TestCase
         $this->variant->save();
     }
 
-    /** @test */
-    public function it_belongs_to_a_product()
+    public function test_variant_belongs_to_a_product(): void
     {
         $this->assertEquals($this->product->id, $this->variant->product_id);
     }
 
-    /** @test */
-    public function it_has_alias_attribute()
+    public function test_variant_has_alias_attribute(): void
     {
         $variant = Variant::factory()->make(['alias' => 'Fake']);
 

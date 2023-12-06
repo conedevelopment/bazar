@@ -9,7 +9,7 @@ use Cone\Bazar\Models\Product;
 use Cone\Bazar\Support\Facades\Discount;
 use Cone\Bazar\Tests\TestCase;
 
-class DiscountRepositoryTest extends TestCase
+class DiscountTest extends TestCase
 {
     protected Cart $cart;
 
@@ -32,8 +32,7 @@ class DiscountRepositoryTest extends TestCase
         Discount::register('custom-30', 30);
     }
 
-    /** @test */
-    public function it_can_calculate_discounts()
+    public function test_discount_repository_calculates_discounts(): void
     {
         Discount::register('custom-object', new CustomDiscount());
         Discount::register('custom-closure', function (Discountable $model) {
@@ -43,16 +42,14 @@ class DiscountRepositoryTest extends TestCase
         $this->assertEquals(230, $this->cart->calculateDiscount());
     }
 
-    /** @test */
-    public function it_can_remove_discounts()
+    public function test_discount_repository_removes_discounts(): void
     {
         Discount::remove('custom-30');
 
         $this->assertEquals(0, $this->cart->calculateDiscount());
     }
 
-    /** @test */
-    public function it_can_disable_discounts()
+    public function test_discount_repository_disables_discounts(): void
     {
         $this->assertEquals(30, $this->cart->calculateDiscount());
 

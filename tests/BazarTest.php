@@ -1,15 +1,13 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Exceptions\InvalidCurrencyException;
-use Cone\Bazar\Tests\TestCase;
 
 class BazarTest extends TestCase
 {
-    /** @test */
-    public function bazar_has_currencies()
+    public function test_bazar_has_currencies(): void
     {
         $this->assertSame(
             $this->app['config']->get('bazar.currencies.available'),
@@ -17,14 +15,12 @@ class BazarTest extends TestCase
         );
     }
 
-    /** @test */
-    public function bazar_can_get_currency()
+    public function test_bazar_can_get_currency(): void
     {
         $this->assertSame($this->app['config']->get('bazar.currencies.default'), Bazar::getCurrency());
     }
 
-    /** @test */
-    public function bazar_can_set_currency()
+    public function test_bazar_can_set_currency(): void
     {
         Bazar::setCurrency('eur');
         $this->assertSame('eur', Bazar::getCurrency());

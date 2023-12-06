@@ -22,14 +22,12 @@ class TransactionTest extends TestCase
         $this->transaction->order()->associate($this->order)->save();
     }
 
-    /** @test */
-    public function it_belongs_to_an_order()
+    public function test_transaction_belongs_to_an_order(): void
     {
         $this->assertSame($this->order->id, $this->transaction->order_id);
     }
 
-    /** @test */
-    public function it_has_driver_name()
+    public function test_transaction_has_driver_name(): void
     {
         $this->assertSame(
             Gateway::driver($this->transaction->driver)->getName(),
@@ -37,8 +35,7 @@ class TransactionTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_has_url()
+    public function test_transaction_has_url(): void
     {
         $this->assertSame(
             Gateway::driver($this->transaction->driver)->getTransactionUrl($this->transaction),
@@ -49,8 +46,7 @@ class TransactionTest extends TestCase
         $this->assertNull($this->transaction->url);
     }
 
-    /** @test */
-    public function it_can_be_completed()
+    public function test_transaction_can_be_completed(): void
     {
         $this->transaction->markAsPending();
         $this->assertNull($this->transaction->completed_at);
@@ -63,8 +59,7 @@ class TransactionTest extends TestCase
         $this->assertFalse($this->transaction->pending());
     }
 
-    /** @test */
-    public function it_has_query_scopes()
+    public function test_transaction_has_query_scopes(): void
     {
         $this->assertSame(
             $this->transaction->newQuery()->where('bazar_transactions.type', 'payment')->toSql(),

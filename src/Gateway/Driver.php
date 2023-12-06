@@ -6,6 +6,7 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Support\Driver as BaseDriver;
 use Illuminate\Http\Request;
+use Throwable;
 
 abstract class Driver extends BaseDriver
 {
@@ -32,6 +33,12 @@ abstract class Driver extends BaseDriver
      */
     public function checkout(Request $request, Order $order): Response
     {
+        try {
+            $this->pay($order);
+        } catch (Throwable $exception) {
+            $order->markAs(Order::FAILED);
+        }
+
         return new Response($order);
     }
 }

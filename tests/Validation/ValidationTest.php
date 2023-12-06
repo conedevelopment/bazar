@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Validation;
 
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
@@ -10,11 +10,12 @@ use Cone\Bazar\Rules\Option;
 use Cone\Bazar\Rules\TransactionAmount;
 use Cone\Bazar\Rules\Vat;
 use Cone\Bazar\Tests\TestCase;
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Validation\Validator;
 
 class ValidationTest extends TestCase
 {
-    protected $translator;
+    protected Translator $translator;
 
     public function setUp(): void
     {
@@ -23,8 +24,7 @@ class ValidationTest extends TestCase
         $this->translator = $this->app['translator'];
     }
 
-    /** @test */
-    public function it_validatates_vat_numbers()
+    public function test_validator_validatates_vat_numbers(): void
     {
         $v = new Validator($this->translator, ['vat' => 'HU12345678'], ['vat' => [new Vat()]]);
         $this->assertTrue($v->passes());
@@ -33,8 +33,7 @@ class ValidationTest extends TestCase
         $this->assertFalse($v->passes());
     }
 
-    /** @test */
-    public function it_validates_transaction_amounts()
+    public function test_validator_validates_transaction_amounts(): void
     {
         $order = Order::factory()->create();
 
@@ -45,8 +44,7 @@ class ValidationTest extends TestCase
         $this->assertFalse($v->passes());
     }
 
-    /** @test */
-    public function it_validates_variant_options()
+    public function test_validator_validates_variant_options(): void
     {
         $property = Property::factory()->create(['name' => 'Material', 'slug' => 'material']);
         $property->values()->create(['name' => 'Gold', 'value' => 'gold']);

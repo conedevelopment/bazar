@@ -32,8 +32,7 @@ class CartTest extends TestCase
         });
     }
 
-    /** @test */
-    public function a_cart_can_belong_to_order()
+    public function test_cart_can_belong_to_order(): void
     {
         $order = Order::factory()->create();
 
@@ -46,8 +45,7 @@ class CartTest extends TestCase
         $this->assertSame($order->id, $this->cart->order->id);
     }
 
-    /** @test */
-    public function a_cart_can_belong_to_customer()
+    public function test_cart_can_belong_to_customer(): void
     {
         $this->assertNull($this->cart->user);
 
@@ -58,16 +56,14 @@ class CartTest extends TestCase
         $this->assertSame($this->user->id, $this->cart->user->id);
     }
 
-    /** @test */
-    public function a_cart_has_shipping()
+    public function test_cart_has_shipping(): void
     {
         $shipping = $this->cart->shipping()->save(Shipping::factory()->make());
 
         $this->assertSame($shipping->id, $this->cart->shipping->id);
     }
 
-    /** @test */
-    public function a_cart_has_address()
+    public function test_cart_has_address(): void
     {
         $address = $this->cart->address()->save(
             Address::factory()->make()
@@ -76,8 +72,7 @@ class CartTest extends TestCase
         $this->assertSame($address->id, $this->cart->address->id);
     }
 
-    /** @test */
-    public function a_cart_has_total_attribute()
+    public function test_cart_has_total_attribute(): void
     {
         $total = $this->cart->items->sum(function ($item) {
             return ($item->price + $item->tax) * $item->quantity;
@@ -88,8 +83,7 @@ class CartTest extends TestCase
         $this->assertEquals($total, $this->cart->total);
     }
 
-    /** @test */
-    public function a_cart_has_net_total_attribute()
+    public function test_cart_has_net_total_attribute(): void
     {
         $total = $this->cart->items->sum(function ($item) {
             return $item->price * $item->quantity;
@@ -100,8 +94,7 @@ class CartTest extends TestCase
         $this->assertEquals($total, $this->cart->netTotal);
     }
 
-    /** @test */
-    public function a_cart_can_be_locked()
+    public function test_cart_can_be_locked(): void
     {
         $this->assertFalse($this->cart->locked);
         $this->cart->lock();
@@ -110,8 +103,7 @@ class CartTest extends TestCase
         $this->assertFalse($this->cart->locked);
     }
 
-    /** @test */
-    public function a_cart_has_query_scopes()
+    public function test_cart_has_query_scopes(): void
     {
         $this->assertSame(
             $this->cart->newQuery()->where('bazar_carts.locked', true)->toSql(),

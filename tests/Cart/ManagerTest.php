@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Cart;
 
 use Cone\Bazar\Cart\CookieDriver;
 use Cone\Bazar\Cart\Manager;
@@ -17,7 +17,7 @@ use Cone\Bazar\Support\Facades\Cart as CartFacade;
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Facades\Event;
 
-class CartManagerTest extends TestCase
+class ManagerTest extends TestCase
 {
     protected Manager $manager;
 
@@ -48,8 +48,7 @@ class CartManagerTest extends TestCase
         $this->manager->addItem($this->product, 1, ['size' => 'S']);
     }
 
-    /** @test */
-    public function a_manager_can_be_resolved_via_facade()
+    public function test_cart_can_be_resolved_via_facade(): void
     {
         $this->mock(Manager::class, function ($mock) {
             return $mock->shouldReceive('getModel')
@@ -60,15 +59,13 @@ class CartManagerTest extends TestCase
         $this->assertSame('Fake Cart', CartFacade::getModel());
     }
 
-    /** @test */
-    public function a_manager_has_cookie_driver()
+    public function test_cart_has_cookie_driver(): void
     {
         $this->assertInstanceOf(CookieDriver::class, $this->manager->driver('cookie'));
         $this->assertInstanceOf(Cart::class, $this->manager->driver('cookie')->getModel());
     }
 
-    /** @test */
-    public function a_manager_has_session_driver()
+    public function test_cart_has_session_driver(): void
     {
         $this->session([]);
 
@@ -78,8 +75,7 @@ class CartManagerTest extends TestCase
         $this->assertInstanceOf(Cart::class, $this->manager->driver('session')->getModel());
     }
 
-    /** @test */
-    public function a_manager_can_add_products()
+    public function test_cart_can_add_products(): void
     {
         $this->manager->addItem($this->product, 2, ['size' => 'L']);
 
@@ -100,8 +96,7 @@ class CartManagerTest extends TestCase
         $this->assertEquals(1, $variant->quantity);
     }
 
-    /** @test */
-    public function a_manager_can_remove_items()
+    public function test_cart_can_remove_items(): void
     {
         $item = $this->manager->getModel()->findItem([
             'properties' => ['size' => 'L'],
@@ -116,8 +111,7 @@ class CartManagerTest extends TestCase
         $this->assertEquals(0, $this->manager->getItems()->count());
     }
 
-    /** @test */
-    public function a_manager_can_update_items()
+    public function test_cart_can_update_items(): void
     {
         $item = $this->manager->getModel()->findItem([
             'properties' => ['size' => 'L'],
@@ -136,68 +130,59 @@ class CartManagerTest extends TestCase
         $this->assertEquals(2, $this->manager->getItems()->count());
     }
 
-    /** @test */
-    public function a_manager_can_be_emptied()
+    public function test_cart_can_be_emptied(): void
     {
         $this->assertTrue($this->manager->isNotEmpty());
         $this->manager->empty();
         $this->assertTrue($this->manager->isEmpty());
     }
 
-    /** @test */
-    public function a_manager_has_shipping()
+    public function test_cart_has_shipping(): void
     {
         $this->assertInstanceOf(Shipping::class, $this->manager->getShipping());
     }
 
-    /** @test */
-    public function a_manager_updates_shipping()
+    public function test_cart_updates_shipping(): void
     {
         $this->manager->updateShipping(['first_name' => 'Test'], 'local-pickup');
 
         $this->assertSame('Test', $this->manager->getShipping()->address->first_name);
     }
 
-    /** @test */
-    public function a_manager_has_billing()
+    public function test_cart_has_billing(): void
     {
         $this->assertInstanceOf(Address::class, $this->manager->getBilling());
     }
 
-    /** @test */
-    public function a_manager_updates_billing()
+    public function test_cart_updates_billing(): void
     {
         $this->manager->updateBilling(['first_name' => 'Test']);
 
         $this->assertSame('Test', $this->manager->getBilling()->first_name);
     }
 
-    /** @test */
-    public function a_manager_has_getTotal()
+    public function test_cart_has_getTotal(): void
     {
         $this->assertEquals(
             $this->manager->getModel()->total, $this->manager->getTotal()
         );
     }
 
-    /** @test */
-    public function a_manager_has_calculates_tax()
+    public function test_cart_has_calculates_tax(): void
     {
         $this->assertEquals(
             $this->manager->getModel()->tax, $this->manager->calculateTax()
         );
     }
 
-    /** @test */
-    public function a_manager_has_calculates_discount()
+    public function test_cart_has_calculates_discount(): void
     {
         $this->assertEquals(
             $this->manager->getModel()->discount, $this->manager->calculateDiscount()
         );
     }
 
-    /** @test */
-    public function a_manager_can_checkout()
+    public function test_cart_can_checkout(): void
     {
         Event::fake([CheckoutProcessed::class]);
 
@@ -206,8 +191,7 @@ class CartManagerTest extends TestCase
         Event::assertDispatched(CheckoutProcessed::class);
     }
 
-    /** @test */
-    public function a_manager_can_sync_items()
+    public function test_cart_can_sync_items(): void
     {
         $this->assertEquals($this->product->price * 2 + $this->variant->price, $this->manager->getTotal());
     }

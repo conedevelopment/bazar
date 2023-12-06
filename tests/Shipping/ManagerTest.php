@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Tests\Feature;
+namespace Cone\Bazar\Tests\Shipping;
 
 use Cone\Bazar\Interfaces\Shippable;
 use Cone\Bazar\Interfaces\Shipping\Manager;
@@ -11,9 +11,9 @@ use Cone\Bazar\Tests\TestCase;
 
 class ShippingManagerTest extends TestCase
 {
-    protected $manager;
+    protected Manager $manager;
 
-    protected $order;
+    protected Order $order;
 
     public function setUp(): void
     {
@@ -27,8 +27,7 @@ class ShippingManagerTest extends TestCase
         });
     }
 
-    /** @test */
-    public function it_can_list_available_drivers_for_itemable_model()
+    public function test_shipping_can_list_available_drivers_for_itemable_model(): void
     {
         $this->assertEquals(
             ['local-pickup', 'custom-driver'],
@@ -36,8 +35,7 @@ class ShippingManagerTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_has_local_pickup_driver()
+    public function test_shipping_has_local_pickup_driver(): void
     {
         $driver = $this->manager->driver('local-pickup');
         $this->assertInstanceOf(LocalPickupDriver::class, $driver);
@@ -53,8 +51,7 @@ class ShippingManagerTest extends TestCase
         $this->assertTrue($driver->available($this->order));
     }
 
-    /** @test */
-    public function it_can_have_custom_driver()
+    public function test_shipping_can_have_custom_driver(): void
     {
         $driver = $this->manager->driver('custom-driver');
         $this->assertInstanceOf(CustomShippingDriver::class, $driver);

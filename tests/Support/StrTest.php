@@ -1,15 +1,14 @@
 <?php
 
-namespace Cone\Bazar\Tests\Unit;
+namespace Cone\Bazar\Tests\Support;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Tests\TestCase;
 use Illuminate\Support\Str;
 
-class SupportTest extends TestCase
+class StrTest extends TestCase
 {
-    /** @test */
-    public function str_has_currency_macro()
+    public function test_str_has_currency_macro(): void
     {
         Bazar::setCurrency('eur');
         $this->assertEquals('1,300 EUR', Str::currency(1300));

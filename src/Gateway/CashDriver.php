@@ -6,7 +6,6 @@ use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Illuminate\Http\Request;
-use Throwable;
 
 class CashDriver extends Driver
 {
@@ -43,11 +42,7 @@ class CashDriver extends Driver
      */
     public function checkout(Request $request, Order $order): Response
     {
-        try {
-            $this->pay($order);
-        } catch (Throwable $exception) {
-            $order->markAs(Order::FAILED);
-        }
+        $response = parent::checkout($request, $order);
 
         $url = $order->status === Order::PENDING
             ? $this->config['success_url']
@@ -55,6 +50,6 @@ class CashDriver extends Driver
 
         CheckoutProcessed::dispatch($order);
 
-        return parent::checkout($request, $order)->url($url);
+        return $response->url($url);
     }
 }
