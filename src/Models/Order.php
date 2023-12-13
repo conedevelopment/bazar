@@ -199,7 +199,7 @@ class Order extends Model implements Contract
      */
     public function pay(float $amount = null, string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->getTotalPayable() === 0.0 || $this->paid()) {
+        if (! $this->payable()) {
             throw new TransactionFailedException("Order #{$this->getKey()} is fully paid.");
         }
 
@@ -219,7 +219,7 @@ class Order extends Model implements Contract
      */
     public function refund(float $amount = null, string $driver = null, array $attributes = []): Transaction
     {
-        if ($this->getTotalRefundable() === 0.0 || $this->refunded()) {
+        if (! $this->refundable()) {
             throw new TransactionFailedException("Order #{$this->getKey()} is fully refunded.");
         }
 
@@ -275,11 +275,27 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Determine if the order is payable.
+     */
+    public function payable(): bool
+    {
+        return $this->getTotalPayable() > 0 && ! $this->paid();
+    }
+
+    /**
      * Determine if the order is fully refunded.
      */
     public function refunded(): bool
     {
         return $this->refunds->isNotEmpty() && $this->getTotalPaid() <= $this->getTotalRefunded();
+    }
+
+    /**
+     * Determine if the order is refundable.
+     */
+    public function refundable(): bool
+    {
+        return $this->getTotalRefundable() > 0 && ! $this->refunded();
     }
 
     /**

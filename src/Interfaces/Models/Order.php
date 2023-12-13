@@ -59,9 +59,19 @@ interface Order extends Discountable, Itemable
     public function paid(): bool;
 
     /**
+     * Determine if the order is payable.
+     */
+    public function payable(): bool;
+
+    /**
      * Determine if the order is fully refunded.
      */
     public function refunded(): bool;
+
+    /**
+     * Determine if the order is refundable.
+     */
+    public function refundable(): bool;
 
     /**
      * Set the status by the given value.
