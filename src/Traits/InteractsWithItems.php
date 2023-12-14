@@ -164,7 +164,8 @@ trait InteractsWithItems
     public function needsShipping(): bool
     {
         return $this->items->some(static function (Item $item): bool {
-            return $item->buyable instanceof Inventoryable
+            return ! $item->isFee()
+                && $item->buyable instanceof Inventoryable
                 && $item->buyable->isPhysical();
         });
     }
@@ -294,8 +295,8 @@ trait InteractsWithItems
      */
     public function syncItems(): void
     {
-        $this->items->each(function (Item $item): void {
-            if ($item->buyable && $item->itemable) {
+        $this->items->each(static function (Item $item): void {
+            if (! $item->isFee() && ! is_null($item->itemable)) {
                 $data = $item->buyable->toItem($item->itemable, $item->only('properties'))->only('price');
 
                 $item->fill($data)->calculateTax();

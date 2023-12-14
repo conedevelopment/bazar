@@ -16,7 +16,7 @@ class RefreshInventory
         $event->order->loadMissing(['items', 'items.buyable']);
 
         $event->order->items->each(static function (Item $item): void {
-            if ($item->buyable instanceof Stockable && $item->buyable->tracksQuantity()) {
+            if (! $item->isFee() && $item->buyable instanceof Stockable && $item->buyable->tracksQuantity()) {
                 $item->buyable->decrementQuantity($item->quantity);
             }
         });

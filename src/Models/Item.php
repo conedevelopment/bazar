@@ -107,7 +107,7 @@ class Item extends Model implements Contract
      */
     public function buyable(): MorphTo
     {
-        return $this->morphTo()->withDefault();
+        return $this->morphTo();
     }
 
     /**
@@ -230,5 +230,13 @@ class Item extends Model implements Contract
     public function getQuantity(): float
     {
         return $this->quantity;
+    }
+
+    /**
+     * Determine if the item is a fee.
+     */
+    public function isFee(): bool
+    {
+        return is_null($this->buyable);
     }
 }
