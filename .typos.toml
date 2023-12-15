@@ -1,0 +1,11 @@
+[files]
+extend-exclude = [
+    ".git/",
+    "src/Support/Countries.php",
+]
+ignore-hidden = false
+
+[default.extend-words]
+"encrypter" = "encrypter"
+"invokable" = "invokable"
+"responsable" = "responsable"
