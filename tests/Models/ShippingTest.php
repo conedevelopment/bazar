@@ -101,13 +101,13 @@ class ShippingTest extends TestCase
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
-        $this->assertSame($this->shipping->cost, $this->shipping->getNetTotal());
-        $this->assertSame($this->shipping->getNetTotal(), $this->shipping->netTotal);
+        $this->assertSame($this->shipping->cost, $this->shipping->getSubtotal());
+        $this->assertSame($this->shipping->getSubtotal(), $this->shipping->subtotal);
         $this->assertSame(
-            Str::currency($this->shipping->netTotal, $this->shipping->shippable->currency),
-            $this->shipping->getFormattedNetTotal()
+            Str::currency($this->shipping->subtotal, $this->shipping->shippable->currency),
+            $this->shipping->getFormattedSubtotal()
         );
-        $this->assertSame($this->shipping->getFormattedNetTotal(), $this->shipping->formattedNetTotal);
+        $this->assertSame($this->shipping->getFormattedSubtotal(), $this->shipping->formattedSubtotal);
     }
 
     public function testt_has_driver_name(): void

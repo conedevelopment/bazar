@@ -79,6 +79,30 @@ trait InteractsWithItems
     {
         return new Attribute(
             get: function (): Collection {
+                return $this->items->filter->isLineItem();
+            }
+        );
+    }
+
+    /**
+     * Get the fees attribute.
+     */
+    protected function fees(): Attribute
+    {
+        return new Attribute(
+            get: function (): Collection {
+                return $this->items->filter->isFee();
+            }
+        );
+    }
+
+    /**
+     * Get the taxables attribute.
+     */
+    protected function taxables(): Attribute
+    {
+        return new Attribute(
+            get: function (): Collection {
                 return $this->items->when($this->needsShipping(), function (Collection $items): Collection {
                     return $items->merge([$this->shipping]);
                 });
@@ -111,25 +135,25 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the net total attribute.
+     * Get the subtotal attribute.
      */
-    protected function netTotal(): Attribute
+    protected function subtotal(): Attribute
     {
         return new Attribute(
             get: function (): float {
-                return $this->getNetTotal();
+                return $this->getSubtotal();
             }
         );
     }
 
     /**
-     * Get the formatted net total attribute.
+     * Get the formatted subtotal attribute.
      */
-    protected function formattedNetTotal(): Attribute
+    protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
             get: function (): string {
-                return $this->getFormattedNetTotal();
+                return $this->getFormattedSubtotal();
             }
         );
     }
@@ -183,9 +207,13 @@ trait InteractsWithItems
      */
     public function getTotal(): float
     {
-        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
-            return $value + $item->getTotal();
-        }, -$this->discount);
+        $value = $this->items->sum(static function (LineItem $item): float {
+            return $item->getTotal();
+        });
+
+        $value += $this->shipping->getTotal();
+
+        $value -= $this->discount;
 
         return round($value < 0 ? 0 : $value, 2);
     }
@@ -195,27 +223,47 @@ trait InteractsWithItems
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->getCurrency());
+        return Str::currency($this->getTotal(), $this->getCurrency());
     }
 
     /**
-     * Get the itemable model's total.
+     * Get the itemable model's subtotal.
      */
-    public function getNetTotal(): float
+    public function getSubtotal(): float
     {
-        $value = $this->lineItems->reduce(static function (float $value, LineItem $item): float {
-            return $value + $item->getNetTotal();
-        }, -$this->discount);
+        $value = $this->lineItems->sum(static function (LineItem $item): float {
+            return $item->getSubtotal();
+        });
 
         return round($value < 0 ? 0 : $value, 2);
     }
 
     /**
-     * Get the formatted net total.
+     * Get the formatted subtotal.
      */
-    public function getFormattedNetTotal(): string
+    public function getFormattedSubtotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->getCurrency());
+        return Str::currency($this->getSubtotal(), $this->getCurrency());
+    }
+
+    /**
+     * Get the itemable model's fee total.
+     */
+    public function getFeeTotal(): float
+    {
+        $value = $this->fees->sum(static function (LineItem $item): float {
+            return $item->getSubtotal();
+        });
+
+        return round($value < 0 ? 0 : $value, 2);
+    }
+
+    /**
+     * Get the formatted fee total.
+     */
+    public function getFormattedFeeTotal(): string
+    {
+        return Str::currency($this->getFeeTotal(), $this->getCurrency());
     }
 
     /**
@@ -243,7 +291,7 @@ trait InteractsWithItems
      */
     public function calculateTax(bool $update = true): float
     {
-        return $this->lineItems->sum(static function (LineItem $item) use ($update): float {
+        return $this->taxables->sum(static function (LineItem $item) use ($update): float {
             return $item->calculateTax($update) * $item->getQuantity();
         });
     }
@@ -296,7 +344,7 @@ trait InteractsWithItems
     public function syncItems(): void
     {
         $this->items->each(static function (Item $item): void {
-            if (! $item->isFee() && ! is_null($item->itemable)) {
+            if ($item->isLineItem() && ! is_null($item->itemable)) {
                 $data = $item->buyable->toItem($item->itemable, $item->only('properties'))->only('price');
 
                 $item->fill($data)->calculateTax();

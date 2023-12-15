@@ -54,10 +54,10 @@ class Order extends Model implements Contract
      */
     protected $appends = [
         'formatted_discount',
-        'formatted_net_total',
+        'formatted_subtotal',
         'formatted_tax',
         'formatted_total',
-        'net_total',
+        'subtotal',
         'status_name',
         'tax',
         'total',

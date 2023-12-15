@@ -30,14 +30,14 @@ interface LineItem extends Taxable
     public function getFormattedTotal(): string;
 
     /**
-     * Get the net total.
+     * Get the subtotal.
      */
-    public function getNetTotal(): float;
+    public function getSubtotal(): float;
 
     /**
-     * Get the formatted net total.
+     * Get the formatted subtotal.
      */
-    public function getFormattedNetTotal(): string;
+    public function getFormattedSubtotal(): string;
 
     /**
      * Get the quantity.

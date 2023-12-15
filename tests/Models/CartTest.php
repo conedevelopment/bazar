@@ -83,7 +83,7 @@ class CartTest extends TestCase
         $this->assertEquals($total, $this->cart->total);
     }
 
-    public function test_cart_has_net_total_attribute(): void
+    public function test_cart_has_subtotal_attribute(): void
     {
         $total = $this->cart->items->sum(function ($item) {
             return $item->price * $item->quantity;
@@ -91,7 +91,7 @@ class CartTest extends TestCase
 
         $total -= $this->cart->discount;
 
-        $this->assertEquals($total, $this->cart->netTotal);
+        $this->assertEquals($total, $this->cart->subtotal);
     }
 
     public function test_cart_can_be_locked(): void

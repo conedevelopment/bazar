@@ -52,6 +52,6 @@ trait AsCustomer
         return $this->addresses()->one()->ofMany([
             'default' => 'max',
             'id' => 'min',
-        ]);
+        ])->withDefault();
     }
 }

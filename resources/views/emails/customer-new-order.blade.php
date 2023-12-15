@@ -24,7 +24,7 @@ Your order has been received and now being processed. Your orders are shown belo
 
 **Tax**: {{ $order->formattedTax }}
 
-**Net. Total**: {{ $order->formattedNetTotal }}
+**Subtotal**: {{ $order->formattedSubtotal }}
 
 **Gross Total**: {{ $order->formattedTotal }}
 

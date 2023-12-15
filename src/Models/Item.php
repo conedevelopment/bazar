@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -27,7 +28,7 @@ class Item extends Model implements Contract
      * @var array<string>
      */
     protected $appends = [
-        'net_total',
+        'subtotal',
         'total',
     ];
 
@@ -149,22 +150,22 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the net total attribute.
+     * Get the subtotal attribute.
      */
-    protected function netTotal(): Attribute
+    protected function subtotal(): Attribute
     {
         return new Attribute(
-            get: fn (): float => $this->getNetTotal(),
+            get: fn (): float => $this->getSubtotal(),
         );
     }
 
     /**
-     * Get the formatted net total attribute.
+     * Get the formatted subtotal attribute.
      */
-    protected function formattedNetTotal(): Attribute
+    protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
-            get: fn (): string => $this->getFormattedNetTotal(),
+            get: fn (): string => $this->getFormattedSubtotal(),
         );
     }
 
@@ -209,19 +210,19 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the net total.
+     * Get the subtotal.
      */
-    public function getNetTotal(): float
+    public function getSubtotal(): float
     {
         return $this->getPrice() * $this->getQuantity();
     }
 
     /**
-     * Get the formatted net total.
+     * Get the formatted subtotal.
      */
-    public function getFormattedNetTotal(): string
+    public function getFormattedSubtotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->itemable->getCurrency());
+        return Str::currency($this->getSubtotal(), $this->itemable->getCurrency());
     }
 
     /**
@@ -233,10 +234,18 @@ class Item extends Model implements Contract
     }
 
     /**
+     * Determine if the item is a line item.
+     */
+    public function isLineItem(): bool
+    {
+        return $this->buyable instanceof Buyable;
+    }
+
+    /**
      * Determine if the item is a fee.
      */
     public function isFee(): bool
     {
-        return is_null($this->buyable);
+        return ! $this->isLineItem();
     }
 }

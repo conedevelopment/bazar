@@ -34,14 +34,24 @@ interface Itemable extends Shippable
     public function getFormattedTotal(): string;
 
     /**
-     * Get the net total.
+     * Get the subtotal.
      */
-    public function getNetTotal(): float;
+    public function getSubtotal(): float;
 
     /**
-     * Get the formatted net total.
+     * Get the formatted subtotal.
      */
-    public function getFormattedNetTotal(): string;
+    public function getFormattedSubtotal(): string;
+
+    /**
+     * Get the itemable model's fee total.
+     */
+    public function getFeeTotal(): float;
+
+    /**
+     * Get the formatted fee total.
+     */
+    public function getFormattedFeeTotal(): string;
 
     /**
      * Get the tax.

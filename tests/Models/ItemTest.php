@@ -60,12 +60,12 @@ class ItemTest extends TestCase
             $this->item->getFormattedTotal()
         );
         $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
-        $this->assertSame($this->item->price * $this->item->quantity, $this->item->getNetTotal());
-        $this->assertSame($this->item->getNetTotal(), $this->item->netTotal);
+        $this->assertSame($this->item->price * $this->item->quantity, $this->item->getSubtotal());
+        $this->assertSame($this->item->getSubtotal(), $this->item->subtotal);
         $this->assertSame(
-            Str::currency($this->item->netTotal, $this->item->itemable->currency),
-            $this->item->getFormattedNetTotal()
+            Str::currency($this->item->subtotal, $this->item->itemable->currency),
+            $this->item->getFormattedSubtotal()
         );
-        $this->assertSame($this->item->getFormattedNetTotal(), $this->item->formattedNetTotal);
+        $this->assertSame($this->item->getFormattedSubtotal(), $this->item->formattedSubtotal);
     }
 }

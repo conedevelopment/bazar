@@ -134,25 +134,25 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the net total attribute.
+     * Get the subtotal attribute.
      */
-    protected function netTotal(): Attribute
+    protected function subtotal(): Attribute
     {
         return new Attribute(
             get: function (): float {
-                return $this->getNetTotal();
+                return $this->getSubtotal();
             }
         );
     }
 
     /**
-     * Get the formatted net total attribute.
+     * Get the formatted subtotal attribute.
      */
-    protected function formattedNetTotal(): Attribute
+    protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
             get: function (): string {
-                return $this->getFormattedNetTotal();
+                return $this->getFormattedSubtotal();
             }
         );
     }
@@ -214,19 +214,19 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the shipping's net total.
+     * Get the shipping's subtotal.
      */
-    public function getNetTotal(): float
+    public function getSubtotal(): float
     {
         return $this->getPrice();
     }
 
     /**
-     * Get the shipping's formatted net total.
+     * Get the shipping's formatted subtotal.
      */
-    public function getFormattedNetTotal(): string
+    public function getFormattedSubtotal(): string
     {
-        return Str::currency($this->getNetTotal(), $this->shippable->getCurrency());
+        return Str::currency($this->getSubtotal(), $this->shippable->getCurrency());
     }
 
     /**

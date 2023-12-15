@@ -82,15 +82,13 @@ class OrderTest extends TestCase
         $this->assertEquals($total, $this->order->total);
     }
 
-    public function test_order_has_net_total_attribute(): void
+    public function test_order_has_subtotal_attribute(): void
     {
         $total = $this->order->items->sum(function ($item) {
             return $item->price * $item->quantity;
         });
 
-        $total -= $this->order->discount;
-
-        $this->assertEquals($total, $this->order->netTotal);
+        $this->assertEquals($total, $this->order->subtotal);
     }
 
     public function test_order_has_query_scopes(): void
