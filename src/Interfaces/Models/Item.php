@@ -16,4 +16,14 @@ interface Item extends LineItem
      * Get the itemable model for the item.
      */
     public function itemable(): MorphTo;
+
+    /**
+     * Determine if the item is a line item.
+     */
+    public function isLineItem(): bool;
+
+    /**
+     * Determine if the item is a fee.
+     */
+    public function isFee(): bool;
 }
