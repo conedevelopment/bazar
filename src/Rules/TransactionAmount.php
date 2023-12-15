@@ -10,6 +10,11 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class TransactionAmount implements ValidationRule
 {
     /**
+     * The transaction type.
+     */
+    protected string $type;
+
+    /**
      * The amount to be checked.
      */
     protected float $amount;
