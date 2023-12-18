@@ -207,11 +207,9 @@ trait InteractsWithItems
      */
     public function getTotal(): float
     {
-        $value = $this->items->sum(static function (LineItem $item): float {
+        $value = $this->taxables->sum(static function (LineItem $item): float {
             return $item->getTotal();
         });
-
-        $value += $this->shipping->getTotal();
 
         $value -= $this->discount;
 
@@ -271,7 +269,7 @@ trait InteractsWithItems
      */
     public function getTax(): float
     {
-        $value = $this->lineItems->sum(static function (LineItem $item): float {
+        $value = $this->taxables->sum(static function (LineItem $item): float {
             return $item->getTax() * $item->getQuantity();
         });
 
