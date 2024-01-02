@@ -90,6 +90,14 @@ class Cart extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the order for the cart.
      */
     public function order(): BelongsTo

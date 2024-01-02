@@ -103,6 +103,14 @@ class Address extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the addressable model for the address.
      */
     public function addressable(): MorphTo

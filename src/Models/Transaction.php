@@ -81,6 +81,14 @@ class Transaction extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the order for the transaction.
      */
     public function order(): BelongsTo

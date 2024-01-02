@@ -135,6 +135,14 @@ class Order extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the cart for the order.
      */
     public function cart(): HasOne
@@ -239,7 +247,7 @@ class Order extends Model implements Contract
      */
     public function getTotalPaid(): float
     {
-        return $this->payments->sum('amount');
+        return $this->payments->filter->completed()->sum('amount');
     }
 
     /**
@@ -247,7 +255,7 @@ class Order extends Model implements Contract
      */
     public function getTotalRefunded(): float
     {
-        return $this->refunds->sum('amount');
+        return $this->refunds->filter->completed()->sum('amount');
     }
 
     /**
@@ -255,7 +263,7 @@ class Order extends Model implements Contract
      */
     public function getTotalPayable(): float
     {
-        return $this->getTotal() - $this->getTotalPaid();
+        return max($this->getTotal() - $this->getTotalPaid(), 0);
     }
 
     /**
@@ -263,7 +271,7 @@ class Order extends Model implements Contract
      */
     public function getTotalRefundable(): float
     {
-        return $this->getTotalPaid() - $this->getTotalRefunded();
+        return max($this->getTotalPaid() - $this->getTotalRefunded(), 0);
     }
 
     /**
@@ -287,7 +295,8 @@ class Order extends Model implements Contract
      */
     public function refunded(): bool
     {
-        return $this->refunds->isNotEmpty() && $this->getTotalPaid() <= $this->getTotalRefunded();
+        return $this->refunds->filter->completed()->isNotEmpty()
+            && $this->getTotalPaid() <= $this->getTotalRefunded();
     }
 
     /**
@@ -303,7 +312,8 @@ class Order extends Model implements Contract
      */
     public function isPartiallyRefunded(): bool
     {
-        return $this->refunds->isNotEmpty() && $this->getTotalPaid() > $this->getTotalRefunded();
+        return $this->refunds->filter->completed()->isNotEmpty()
+            && $this->getTotalPaid() > $this->getTotalRefunded();
     }
 
     /**

@@ -104,6 +104,14 @@ class Item extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the buyable model for the item.
      */
     public function buyable(): MorphTo

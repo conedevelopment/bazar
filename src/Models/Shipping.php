@@ -88,6 +88,14 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the shippable model for the shipping.
      */
     public function shippable(): MorphTo

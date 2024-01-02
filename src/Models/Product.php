@@ -68,6 +68,14 @@ class Product extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the categories for the product.
      */
     public function categories(): BelongsToMany

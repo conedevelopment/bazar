@@ -66,6 +66,14 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the product for the transaction.
      */
     public function product(): BelongsTo

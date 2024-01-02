@@ -52,6 +52,14 @@ class Property extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
      * Get the values for the property.
      */
     public function values(): HasMany
