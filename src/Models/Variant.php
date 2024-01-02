@@ -24,7 +24,9 @@ class Variant extends Model implements Contract
     use HasFactory;
     use HasMedia;
     use HasMetaData;
-    use HasPrices;
+    use HasPrices {
+        HasPrices::getPrice as __getPrice;
+    }
     use HasProperties;
     use InteractsWithItemables;
     use InteractsWithProxy;
@@ -85,12 +87,20 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the price by the given type and currency.
+     */
+    public function getPrice(?string $currency = null): ?float
+    {
+        return $this->__getPrice($currency) ?: $this->product->getPrice($currency);
+    }
+
+    /**
      * Get the item representation of the buyable instance.
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge($attributes, [
-            'name' => sprintf('%s - %s', $this->name, $this->alias),
+            'name' => sprintf('%s - %s', $this->product->name, $this->alias),
             'price' => $this->getPrice($itemable->getCurrency()),
         ]))->setRelation('buyable', $this);
     }
