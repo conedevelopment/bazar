@@ -20,7 +20,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'discount' => 0,
+            'discount' => mt_rand(10, 1000),
             'currency' => 'usd',
         ];
     }

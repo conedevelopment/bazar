@@ -23,7 +23,7 @@ class OrderStatus extends Select
     /**
      * {@inheritdoc}
      */
-    public function resolveFormat(Request $request, Model $model): mixed
+    public function resolveFormat(Request $request, Model $model): ?string
     {
         $value = parent::resolveFormat($request, $model);
 
