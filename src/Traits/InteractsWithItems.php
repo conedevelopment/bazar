@@ -67,7 +67,7 @@ trait InteractsWithItems
     {
         return new Attribute(
             get: static function (?string $value = null): string {
-                return $value ?: Bazar::getCurrency();
+                return strtoupper($value ?: Bazar::getCurrency());
             }
         );
     }
@@ -199,7 +199,7 @@ trait InteractsWithItems
      */
     public function getCurrency(): string
     {
-        return $this->currency;
+        return strtoupper($this->currency);
     }
 
     /**

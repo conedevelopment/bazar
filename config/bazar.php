@@ -14,10 +14,10 @@ return [
     */
 
     'currencies' => [
-        'default' => strtolower(env('BAZAR_CURRENCY', 'usd')),
+        'default' => strtolower(env('BAZAR_CURRENCY', 'USD')),
         'available' => [
-            'usd' => 'USD',
-            'eur' => 'EUR',
+            'USD',
+            'EUR',
         ],
     ],
 

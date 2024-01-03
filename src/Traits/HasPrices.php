@@ -49,7 +49,7 @@ trait HasPrices
     {
         $currency ??= Bazar::getCurrency();
 
-        $key = sprintf('price_%s', $currency);
+        $key = sprintf('price_%s', strtolower($currency));
 
         $meta = $this->prices->firstWhere('key', $key);
 

@@ -32,20 +32,17 @@ abstract class Bazar
      */
     public static function getCurrency(): string
     {
-        return static::$currency ?: Config::get('bazar.currencies.default', 'usd');
+        return strtoupper(static::$currency ?: Config::get('bazar.currencies.default', 'USD'));
     }
 
     /**
      * Set the currency in use.
-     *
-     *
-     * @throws \Cone\Bazar\Exceptions\InvalidCurrencyException
      */
     public static function setCurrency(string $currency): void
     {
-        $currency = strtolower($currency);
+        $currency = strtoupper($currency);
 
-        if (! array_key_exists($currency, static::getCurrencies())) {
+        if (! in_array($currency, static::getCurrencies())) {
             throw new InvalidCurrencyException("The [{$currency}] currency is not registered.");
         }
 
