@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Number;
 
 class Order extends Model implements Contract
 {
@@ -200,6 +201,22 @@ class Order extends Model implements Contract
     public function uniqueIds(): array
     {
         return ['uuid'];
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float
+    {
+        return $this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0;
+    }
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountRate(): string
+    {
+        return Number::percentage($this->getDiscountRate());
     }
 
     /**

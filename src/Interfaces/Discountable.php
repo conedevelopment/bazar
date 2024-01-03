@@ -15,6 +15,16 @@ interface Discountable
     public function getFormattedDiscount(): string;
 
     /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float;
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountRate(): string;
+
+    /**
      * Calculate the discount.
      */
     public function calculateDiscount(bool $update = true): float;

@@ -238,6 +238,22 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the tax rate.
+     */
+    public function getTaxRate(): float
+    {
+        return $this->getPrice() > 0 ? ($this->getTax() / $this->getPrice()) * 100 : 0;
+    }
+
+    /**
+     * Get the formatted tax rate.
+     */
+    public function getFormattedTaxRate(): string
+    {
+        return Number::percentage($this->getTaxRate());
+    }
+
+    /**
      * Get the quantity.
      */
     public function getQuantity(): float
