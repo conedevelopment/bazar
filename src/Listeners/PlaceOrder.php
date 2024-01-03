@@ -14,7 +14,7 @@ class PlaceOrder
     {
         $event->order->markAs(Order::IN_PROGRESS);
 
-        if ($event->order->cart) {
+        if (! is_null($event->order->cart)) {
             $event->order->cart->delete();
         }
     }

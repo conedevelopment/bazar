@@ -10,11 +10,16 @@ use Illuminate\Http\Request;
 class CashDriver extends Driver
 {
     /**
+     * The driver name.
+     */
+    protected string $name = 'cash';
+
+    /**
      * Process the payment.
      */
     public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->pay($amount, 'cash', array_merge($attributes, [
+        $transaction = parent::pay($order, $amount, array_merge($attributes, [
             'completed_at' => time(),
         ]));
 
@@ -28,7 +33,7 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->refund($amount, 'cash', array_merge($attributes, [
+        $transaction = parent::refund($order, $amount, array_merge($attributes, [
             'completed_at' => time(),
         ]));
 

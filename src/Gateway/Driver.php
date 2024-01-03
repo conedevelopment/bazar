@@ -11,14 +11,25 @@ use Throwable;
 abstract class Driver extends BaseDriver
 {
     /**
+     * The driver name.
+     */
+    protected string $name;
+
+    /**
      * Process the payment.
      */
-    abstract public function pay(Order $order, float $amount = null, array $attributes = []): Transaction;
+    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
+    {
+        return $order->pay($amount, $this->name, $attributes);
+    }
 
     /**
      * Process the refund.
      */
-    abstract public function refund(Order $order, float $amount = null, array $attributes = []): Transaction;
+    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
+    {
+        return $order->refund($amount, $this->name, $attributes);
+    }
 
     /**
      * Get the URL of the transaction.

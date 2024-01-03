@@ -161,7 +161,7 @@ class ManagerTest extends TestCase
         $this->assertSame('Test', $this->manager->getBilling()->first_name);
     }
 
-    public function test_cart_has_getTotal(): void
+    public function test_cart_has_total(): void
     {
         $this->assertEquals(
             $this->manager->getModel()->total, $this->manager->getTotal()

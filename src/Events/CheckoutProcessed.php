@@ -4,12 +4,10 @@ namespace Cone\Bazar\Events;
 
 use Cone\Bazar\Models\Order;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
 class CheckoutProcessed
 {
     use Dispatchable;
-    use SerializesModels;
 
     /**
      * The order instance.

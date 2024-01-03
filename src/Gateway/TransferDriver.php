@@ -3,26 +3,14 @@
 namespace Cone\Bazar\Gateway;
 
 use Cone\Bazar\Models\Order;
-use Cone\Bazar\Models\Transaction;
 use Illuminate\Http\Request;
 
 class TransferDriver extends Driver
 {
     /**
-     * Process the payment.
+     * The driver name.
      */
-    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
-    {
-        return $order->pay($amount, 'transfer', $attributes);
-    }
-
-    /**
-     * Process the refund.
-     */
-    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
-    {
-        return $order->refund($amount, 'transfer', $attributes);
-    }
+    protected string $name = 'transfer';
 
     /**
      * Handle the checkout request.

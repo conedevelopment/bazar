@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
 
 class Cart extends Model implements Contract
@@ -102,9 +103,21 @@ class Cart extends Model implements Contract
      */
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::getProxiedClass())->withDefault(function (): Order {
-            return Order::proxy()->newInstance($this->toArray());
-        });
+        return $this->belongsTo(Order::getProxiedClass())
+            ->withDefault(function (Order $order): Order {
+                return $order->fill($this->toArray());
+            });
+    }
+
+    /**
+     * Get the address for the model.
+     */
+    public function address(): MorphOne
+    {
+        return $this->morphOne(Address::getProxiedClass(), 'addressable')
+            ->withDefault(function (Address $address): Address {
+                return $address->fill($this->user?->address?->toArray() ?: []);
+            });
     }
 
     /**
@@ -167,8 +180,11 @@ class Cart extends Model implements Contract
         $this->order->items()->createMany($this->items->toArray());
 
         $this->order->address->fill($this->address->toArray())->save();
-        $this->order->shipping->fill($this->shipping->toArray())->save();
-        $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
+
+        if ($this->order->needsShipping()) {
+            $this->order->shipping->fill($this->shipping->toArray())->save();
+            $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
+        }
 
         return $this->order;
     }

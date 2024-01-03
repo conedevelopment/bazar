@@ -13,6 +13,7 @@ use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Tests\TestCase;
 use Exception;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Notification;
 
 class ManagerTest extends TestCase
@@ -102,15 +103,15 @@ class ManagerTest extends TestCase
         $this->assertInstanceOf(TransferDriver::class, $driver);
         $this->assertSame('Transfer', $driver->getName());
 
-        $payment = $driver->pay($this->order, 1);
+        $payment = $driver->pay($this->order, 1, ['completed_at' => Date::now()]);
         $this->assertEquals(1, $payment->amount);
-        $payment = $driver->pay($this->order);
+        $payment = $driver->pay($this->order, null, ['completed_at' => Date::now()]);
         $this->assertTrue($this->order->refresh()->paid());
         $this->assertNull($driver->getTransactionUrl($payment));
 
-        $refund = $driver->refund($this->order, 1);
+        $refund = $driver->refund($this->order, 1, ['completed_at' => Date::now()]);
         $this->assertEquals(1, $refund->amount);
-        $refund = $driver->refund($this->order);
+        $refund = $driver->refund($this->order, null, ['completed_at' => Date::now()]);
         $this->assertTrue($this->order->refresh()->refunded());
         $this->assertNull($driver->getTransactionUrl($payment));
 
@@ -127,15 +128,15 @@ class ManagerTest extends TestCase
         $driver = $this->manager->driver('custom-driver');
         $this->assertInstanceOf(CustomGatewayDriver::class, $driver);
 
-        $payment = $driver->pay($this->order, 1);
+        $payment = $driver->pay($this->order, 1, ['completed_at' => Date::now()]);
         $this->assertEquals(1, $payment->amount);
-        $payment = $driver->pay($this->order);
+        $payment = $driver->pay($this->order, null, ['completed_at' => Date::now()]);
         $this->assertTrue($this->order->refresh()->paid());
         $this->assertSame('fake-url', $driver->getTransactionUrl($payment));
 
-        $refund = $driver->refund($this->order, 1);
+        $refund = $driver->refund($this->order, 1, ['completed_at' => Date::now()]);
         $this->assertEquals(1, $refund->amount);
-        $refund = $driver->refund($this->order);
+        $refund = $driver->refund($this->order, null, ['completed_at' => Date::now()]);
         $this->assertTrue($this->order->refresh()->refunded());
         $this->assertSame('fake-url', $driver->getTransactionUrl($payment));
     }
@@ -163,31 +164,25 @@ class ManagerTest extends TestCase
 
 class CustomGatewayDriver extends Driver
 {
+    protected string $name = 'custom-driver';
+
     public function getTransactionUrl(Transaction $transaction): ?string
     {
         return 'fake-url';
-    }
-
-    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
-    {
-        return $order->pay($amount, 'custom-driver');
-    }
-
-    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
-    {
-        return $order->refund($amount, 'custom-driver');
     }
 }
 
 class FailingDriver extends Driver
 {
+    protected string $name = 'failing';
+
     public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        throw new Exception;
+        throw new Exception();
     }
 
     public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
     {
-        throw new Exception;
+        throw new Exception();
     }
 }
