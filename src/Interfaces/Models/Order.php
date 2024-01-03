@@ -24,14 +24,14 @@ interface Order extends Discountable, Itemable
      *
      * @return \Cone\Bazar\Models\Transaction
      */
-    public function pay(float $amount = null, string $driver = null, array $attributes = []): Transaction;
+    public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
     /**
      * Create a refund transaction for the order.
      *
      * @return \Cone\Bazar\Models\Transaction
      */
-    public function refund(float $amount = null, string $driver = null, array $attributes = []): Transaction;
+    public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
     /**
      * Get the total paid amount.

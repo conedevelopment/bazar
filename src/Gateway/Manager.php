@@ -31,7 +31,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      */
-    public function getAvailableDrivers(Itemable $model = null): array
+    public function getAvailableDrivers(?Itemable $model = null): array
     {
         foreach (array_keys(array_diff_key($this->customCreators, parent::getDrivers())) as $key) {
             if (! isset($this->drivers[$key])) {

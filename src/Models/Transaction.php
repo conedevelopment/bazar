@@ -147,7 +147,7 @@ class Transaction extends Model implements Contract
     /**
      * Mark the transaction as completed.
      */
-    public function markAsCompleted(DateTimeInterface $date = null): void
+    public function markAsCompleted(?DateTimeInterface $date = null): void
     {
         $date = $date ?: Date::now();
 

@@ -176,12 +176,12 @@ class FailingDriver extends Driver
 {
     protected string $name = 'failing';
 
-    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
+    public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception();
     }
 
-    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
+    public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
         throw new Exception();
     }

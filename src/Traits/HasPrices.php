@@ -45,7 +45,7 @@ trait HasPrices
     /**
      * Get the price by the given type and currency.
      */
-    public function getPrice(string $currency = null): ?float
+    public function getPrice(?string $currency = null): ?float
     {
         $currency ??= Bazar::getCurrency();
 
@@ -59,7 +59,7 @@ trait HasPrices
     /**
      * Get the formatted price by the given type and currency.
      */
-    public function getFormattedPrice(string $currency = null): ?string
+    public function getFormattedPrice(?string $currency = null): ?string
     {
         $currency ??= Bazar::getCurrency();
 

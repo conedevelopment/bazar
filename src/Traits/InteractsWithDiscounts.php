@@ -5,7 +5,6 @@ namespace Cone\Bazar\Traits;
 use Cone\Bazar\Support\Facades\Discount;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Number;
-use Illuminate\Support\Str;
 
 trait InteractsWithDiscounts
 {

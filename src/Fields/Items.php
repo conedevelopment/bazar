@@ -26,7 +26,7 @@ class Items extends MorphMany
     /**
      * Create a new relation field instance.
      */
-    public function __construct(string $label = null, Closure|string $modelAttribute = null, Closure|string $relation = null)
+    public function __construct(?string $label = null, Closure|string|null $modelAttribute = null, Closure|string|null $relation = null)
     {
         parent::__construct($label ?: __('Products'), $modelAttribute ?: 'items', $relation);
 

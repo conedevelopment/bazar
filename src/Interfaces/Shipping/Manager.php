@@ -9,5 +9,5 @@ interface Manager
     /**
      * Get the available drivers for the given model.
      */
-    public function getAvailableDrivers(Itemable $model = null): array;
+    public function getAvailableDrivers(?Itemable $model = null): array;
 }

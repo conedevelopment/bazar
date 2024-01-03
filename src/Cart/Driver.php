@@ -201,7 +201,7 @@ abstract class Driver
     /**
      * Update the shipping address and driver.
      */
-    public function updateShipping(array $attributes = [], string $driver = null): void
+    public function updateShipping(array $attributes = [], ?string $driver = null): void
     {
         if (! is_null($driver)) {
             $this->getShipping()->setAttribute('driver', $driver);

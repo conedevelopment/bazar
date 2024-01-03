@@ -7,7 +7,6 @@ use Cone\Root\Fields\Meta;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
-use Illuminate\Support\Str;
 
 class Price extends Meta
 {
@@ -19,7 +18,7 @@ class Price extends Meta
     /**
      * Create a new price field instance.
      */
-    public function __construct(string $label, string $currency = null)
+    public function __construct(string $label, ?string $currency = null)
     {
         $this->currency = $currency ?: Bazar::getCurrency();
 

@@ -13,7 +13,7 @@ class OrderStatus extends Select
     /**
      * Create a new field instance.
      */
-    public function __construct(string $label = null, Closure|string $modelAttribute = 'status')
+    public function __construct(?string $label = null, Closure|string $modelAttribute = 'status')
     {
         parent::__construct($label ?: __('Status'), $modelAttribute);
 

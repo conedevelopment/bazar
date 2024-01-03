@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Number;
-use Illuminate\Support\Str;
 use Throwable;
 
 class Shipping extends Model implements Contract
@@ -112,7 +111,7 @@ class Shipping extends Model implements Contract
     protected function driver(): Attribute
     {
         return new Attribute(
-            get: static function (string $value = null): string {
+            get: static function (?string $value = null): string {
                 return $value ?: Manager::getDefaultDriver();
             }
         );

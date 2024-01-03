@@ -18,7 +18,7 @@ abstract class Driver extends BaseDriver
     /**
      * Process the payment.
      */
-    public function pay(Order $order, float $amount = null, array $attributes = []): Transaction
+    public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
         return $order->pay($amount, $this->name, $attributes);
     }
@@ -26,7 +26,7 @@ abstract class Driver extends BaseDriver
     /**
      * Process the refund.
      */
-    public function refund(Order $order, float $amount = null, array $attributes = []): Transaction
+    public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
         return $order->refund($amount, $this->name, $attributes);
     }
