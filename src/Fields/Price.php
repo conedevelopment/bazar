@@ -6,6 +6,7 @@ use Cone\Bazar\Bazar;
 use Cone\Root\Fields\Meta;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 
 class Price extends Meta
@@ -29,7 +30,7 @@ class Price extends Meta
         $this->field->min(0);
 
         $this->field->format(function (Request $request, Model $model, mixed $value): ?string {
-            return is_null($value) ? null : Str::currency($value, $this->currency);
+            return is_null($value) ? null : Number::currency($value, $this->currency);
         });
     }
 

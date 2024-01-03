@@ -8,7 +8,7 @@ use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
-use Illuminate\Support\Str;
+use Illuminate\Support\Number;
 
 class ItemTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ItemTest extends TestCase
     public function test_item_is_taxable(): void
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
-        $this->assertSame(Str::currency($this->item->tax, $this->item->itemable->currency), $this->item->getFormattedTax());
+        $this->assertSame(Number::currency($this->item->tax, $this->item->itemable->currency), $this->item->getFormattedTax());
         $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
     }
 
@@ -43,7 +43,7 @@ class ItemTest extends TestCase
     {
         $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
-            Str::currency($this->item->price, $this->item->itemable->currency), $this->item->getFormattedPrice()
+            Number::currency($this->item->price, $this->item->itemable->currency), $this->item->getFormattedPrice()
         );
         $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
     }
@@ -56,14 +56,14 @@ class ItemTest extends TestCase
         );
         $this->assertSame($this->item->getTotal(), $this->item->total);
         $this->assertSame(
-            Str::currency($this->item->total, $this->item->itemable->currency),
+            Number::currency($this->item->total, $this->item->itemable->currency),
             $this->item->getFormattedTotal()
         );
         $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
         $this->assertSame($this->item->price * $this->item->quantity, $this->item->getSubtotal());
         $this->assertSame($this->item->getSubtotal(), $this->item->subtotal);
         $this->assertSame(
-            Str::currency($this->item->subtotal, $this->item->itemable->currency),
+            Number::currency($this->item->subtotal, $this->item->itemable->currency),
             $this->item->getFormattedSubtotal()
         );
         $this->assertSame($this->item->getFormattedSubtotal(), $this->item->formattedSubtotal);

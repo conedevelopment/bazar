@@ -4,7 +4,6 @@ namespace Cone\Bazar;
 
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 
 class BazarServiceProvider extends ServiceProvider
 {
@@ -58,7 +57,6 @@ class BazarServiceProvider extends ServiceProvider
         }
 
         $this->registerEvents();
-        $this->registerMacros();
         $this->registerViews();
     }
 
@@ -97,18 +95,6 @@ class BazarServiceProvider extends ServiceProvider
             Console\Commands\Install::class,
             Console\Commands\ClearCarts::class,
         ]);
-    }
-
-    /**
-     * Register macros.
-     */
-    protected function registerMacros(): void
-    {
-        Str::macro('currency', static function (int|float $value, string $currency = null): string {
-            return sprintf(
-                '%s %s', number_format($value), strtoupper($currency ?: Bazar::getCurrency())
-            );
-        });
     }
 
     /**

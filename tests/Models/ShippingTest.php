@@ -10,7 +10,7 @@ use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
-use Illuminate\Support\Str;
+use Illuminate\Support\Number;
 
 class ShippingTest extends TestCase
 {
@@ -84,7 +84,7 @@ class ShippingTest extends TestCase
         $this->assertInstanceOf(Taxable::class, $this->shipping);
         $this->assertSame($this->shipping->price * 0.1, $this->shipping->tax);
         $this->assertSame(
-            Str::currency($this->shipping->tax, $this->shipping->shippable->currency), $this->shipping->getFormattedTax()
+            Number::currency($this->shipping->tax, $this->shipping->shippable->currency), $this->shipping->getFormattedTax()
         );
         $this->assertSame($this->shipping->getFormattedTax(), $this->shipping->formattedTax);
     }
@@ -97,14 +97,14 @@ class ShippingTest extends TestCase
         );
         $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
         $this->assertSame(
-            Str::currency($this->shipping->total, $this->shipping->shippable->currency),
+            Number::currency($this->shipping->total, $this->shipping->shippable->currency),
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
         $this->assertSame($this->shipping->cost, $this->shipping->getSubtotal());
         $this->assertSame($this->shipping->getSubtotal(), $this->shipping->subtotal);
         $this->assertSame(
-            Str::currency($this->shipping->subtotal, $this->shipping->shippable->currency),
+            Number::currency($this->shipping->subtotal, $this->shipping->shippable->currency),
             $this->shipping->getFormattedSubtotal()
         );
         $this->assertSame($this->shipping->getFormattedSubtotal(), $this->shipping->formattedSubtotal);

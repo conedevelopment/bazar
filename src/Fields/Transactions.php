@@ -13,6 +13,7 @@ use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
 use Cone\Root\Fields\URL;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number as NumberFormatter;
 use Illuminate\Support\Str;
 
 class Transactions extends HasMany
@@ -50,7 +51,7 @@ class Transactions extends HasMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Transaction $transaction, ?float $value): string {
-                    return Str::currency($value, $transaction->order->currency);
+                    return NumberFormatter::currency($value, $transaction->order->currency);
                 }),
 
             Select::make(__('Driver'), 'driver')

@@ -15,7 +15,7 @@ Your order has been received and now being processed. Your orders are shown belo
 @foreach ($order->items as $item)
 | {{ $item->name }} | {{ $item->quantity }} | {{ $item->formattedTax }} | {{ $item->formattedPrice }} |
 @endforeach
-| **Subtotal** ||| {{ Str::currency($order->items->sum('total'), $order->currency) }} |
+| **Subtotal** ||| {{ $order->formattedSubtotal }} |
 @endcomponent
 
 **Discount**: {{ $order->formattedDiscount }}

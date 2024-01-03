@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": "^8.1 || ^8.2",
+        "php": "^8.2 || ^8.3",
         "conedevelopment/root": "@dev"
     },
     "require-dev": {
@@ -30,8 +30,8 @@
         "laravel/laravel": "^10.0",
         "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^10.0",
-        "nunomaduro/larastan": "^2.1.6",
-        "laravel/pint": "^1.6"
+        "laravel/pint": "^1.6",
+        "larastan/larastan": "^2.8"
     },
     "extra": {
         "laravel": {

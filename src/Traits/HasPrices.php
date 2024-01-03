@@ -6,7 +6,7 @@ use Cone\Bazar\Bazar;
 use Cone\Bazar\Models\Price;
 use Cone\Bazar\Relations\Prices;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Str;
+use Illuminate\Support\Number;
 
 trait HasPrices
 {
@@ -65,7 +65,7 @@ trait HasPrices
 
         $price = $this->getPrice($currency);
 
-        return is_null($price) ? null : Str::currency($price, $currency);
+        return is_null($price) ? null : Number::currency($price, $currency);
     }
 
     /**

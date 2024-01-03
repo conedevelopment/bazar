@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Str;
+use Illuminate\Support\Number;
 
 trait InteractsWithItems
 {
@@ -221,7 +221,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getTotal(), $this->getCurrency());
+        return Number::currency($this->getTotal(), $this->getCurrency());
     }
 
     /**
@@ -241,7 +241,7 @@ trait InteractsWithItems
      */
     public function getFormattedSubtotal(): string
     {
-        return Str::currency($this->getSubtotal(), $this->getCurrency());
+        return Number::currency($this->getSubtotal(), $this->getCurrency());
     }
 
     /**
@@ -261,7 +261,7 @@ trait InteractsWithItems
      */
     public function getFormattedFeeTotal(): string
     {
-        return Str::currency($this->getFeeTotal(), $this->getCurrency());
+        return Number::currency($this->getFeeTotal(), $this->getCurrency());
     }
 
     /**
@@ -281,7 +281,7 @@ trait InteractsWithItems
      */
     public function getFormattedTax(): string
     {
-        return Str::currency($this->getTax(), $this->getCurrency());
+        return Number::currency($this->getTax(), $this->getCurrency());
     }
 
     /**

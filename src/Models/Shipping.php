@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -202,7 +203,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return Str::currency($this->getPrice(), $this->shippable->getCurrency());
+        return Number::currency($this->getPrice(), $this->shippable->getCurrency());
     }
 
     /**
@@ -218,7 +219,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return Str::currency($this->getTotal(), $this->shippable->getCurrency());
+        return Number::currency($this->getTotal(), $this->shippable->getCurrency());
     }
 
     /**
@@ -234,7 +235,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return Str::currency($this->getSubtotal(), $this->shippable->getCurrency());
+        return Number::currency($this->getSubtotal(), $this->shippable->getCurrency());
     }
 
     /**

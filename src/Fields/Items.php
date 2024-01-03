@@ -11,7 +11,7 @@ use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Number as NumberFormatter;
 
 class Items extends MorphMany
 {
@@ -61,14 +61,14 @@ class Items extends MorphMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return Str::currency($value, $model->itemable->currency);
+                    return NumberFormatter::currency($value, $model->itemable->currency);
                 }),
 
             Number::make(__('TAX'), 'tax')
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return Str::currency($value, $model->itemable->currency);
+                    return NumberFormatter::currency($value, $model->itemable->currency);
                 }),
 
             Number::make(__('Quantity'), 'quantity')
