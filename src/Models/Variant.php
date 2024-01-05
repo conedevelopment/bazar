@@ -40,6 +40,7 @@ class Variant extends Model implements Contract
      */
     protected $fillable = [
         'alias',
+        'description',
     ];
 
     /**

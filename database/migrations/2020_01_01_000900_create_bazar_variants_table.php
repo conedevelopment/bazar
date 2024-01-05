@@ -15,6 +15,7 @@ return new class() extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();
             $table->string('alias')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
