@@ -4,6 +4,7 @@ namespace Cone\Bazar\Database\Factories;
 
 use Cone\Bazar\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class AddressFactory extends Factory
 {
@@ -20,19 +21,19 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         return [
+            'address_secondary' => null,
+            'address' => $this->faker->streetAddress(),
+            'alias' => null,
+            'city' => $this->faker->city(),
+            'company' => $this->faker->company(),
+            'country' => $this->faker->countryCode(),
+            'email' => $this->faker->email(),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            'country' => $this->faker->countryCode(),
-            'city' => $this->faker->city(),
-            'address' => $this->faker->streetAddress(),
-            'address_secondary' => null,
-            'postcode' => $this->faker->postcode(),
-            'company' => $this->faker->company(),
-            'state' => $this->faker->state(),
             'phone' => $this->faker->phoneNumber(),
-            'email' => $this->faker->email(),
-            'alias' => null,
-            'custom' => ['vat' => null],
+            'postcode' => $this->faker->postcode(),
+            'state' => $this->faker->state(),
+            'tax_id' => Str::random()
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Models;
 
+use Closure;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -45,6 +46,7 @@ class Address extends Model implements Contract
         'phone' => null,
         'postcode' => null,
         'state' => null,
+        'tax_id' => null,
     ];
 
     /**
@@ -77,6 +79,7 @@ class Address extends Model implements Contract
         'phone',
         'postcode',
         'state',
+        'tax_id',
     ];
 
     /**
@@ -85,6 +88,11 @@ class Address extends Model implements Contract
      * @var string
      */
     protected $table = 'bazar_addresses';
+
+    /**
+     * The address validator callback.
+     */
+    protected static ?Closure $validator = null;
 
     /**
      * Get the proxied interface.
@@ -100,6 +108,14 @@ class Address extends Model implements Contract
     protected static function newFactory(): Factory
     {
         return AddressFactory::new();
+    }
+
+    /**
+     * Set the address validator callback.
+     */
+    public static function validateUsing(Closure $callback): void
+    {
+        static::$validator = $callback;
     }
 
     /**
@@ -140,5 +156,20 @@ class Address extends Model implements Contract
                 return trim(sprintf('%s %s', $attributes['first_name'], $attributes['last_name']));
             }
         );
+    }
+
+    /**
+     * Validate the address.
+     */
+    public function validate(): bool
+    {
+        $callback = static::$validator ?: static function (Address $address): bool {
+            $data = $address->toArray();
+
+            return (isset($data['company'], $data['tax_id']) || isset($data['first_name'], $data['last_name']))
+                && isset($data['address'], $data['city'], $data['country'], $data['postcode'], $data['email']);
+        };
+
+        return call_user_func_array($callback, [$this]);
     }
 }
