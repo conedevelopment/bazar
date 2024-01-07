@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\TransactionFactory;
+use Cone\Bazar\Events\TransactionCompleted;
 use Cone\Bazar\Interfaces\Models\Transaction as Contract;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -153,6 +154,8 @@ class Transaction extends Model implements Contract
 
         if ($this->pending() || $this->completed_at->notEqualTo($date)) {
             $this->setAttribute('completed_at', $date)->save();
+
+            TransactionCompleted::dispatch($this);
         }
     }
 
