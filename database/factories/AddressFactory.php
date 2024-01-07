@@ -33,7 +33,7 @@ class AddressFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'postcode' => $this->faker->postcode(),
             'state' => $this->faker->state(),
-            'tax_id' => Str::random()
+            'tax_id' => Str::random(),
         ];
     }
 }

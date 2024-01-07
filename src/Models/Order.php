@@ -72,7 +72,7 @@ class Order extends Model implements Contract
     protected $attributes = [
         'currency' => null,
         'discount' => 0,
-        'status' => self::PENDING,
+        'status' => self::ON_HOLD,
     ];
 
     /**
