@@ -56,8 +56,25 @@ class BazarServiceProvider extends ServiceProvider
             $this->registerPublishes();
         }
 
+        if (! $this->app->routesAreCached()) {
+            $this->registerRoutes();
+        }
+
         $this->registerEvents();
         $this->registerViews();
+    }
+
+    /**
+     * Register routes.
+     */
+    protected function registerRoutes(): void
+    {
+        $this->app['router']
+            ->prefix('bazar')
+            ->as('bazar.')
+            ->group(function (): void {
+                $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
+            });
     }
 
     /**
@@ -103,7 +120,7 @@ class BazarServiceProvider extends ServiceProvider
     protected function registerEvents(): void
     {
         $this->app['events']->listen(Logout::class, Listeners\ClearCookies::class);
-        $this->app['events']->listen(Events\CheckoutProcessed::class, Listeners\PlaceOrder::class);
-        $this->app['events']->listen(Events\CheckoutProcessed::class, Listeners\RefreshInventory::class);
+        $this->app['events']->listen(Events\PaymentCaptured::class, Listeners\PlaceOrder::class);
+        $this->app['events']->listen(Events\PaymentCaptured::class, Listeners\RefreshInventory::class);
     }
 }

@@ -5,7 +5,7 @@ namespace Cone\Bazar\Events;
 use Cone\Bazar\Models\Order;
 use Illuminate\Foundation\Events\Dispatchable;
 
-class CheckoutProcessed
+class PaymentCaptured
 {
     use Dispatchable;
 

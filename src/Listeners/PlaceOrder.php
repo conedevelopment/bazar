@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Listeners;
 
-use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Events\PaymentCaptured;
 use Cone\Bazar\Models\Order;
 
 class PlaceOrder
@@ -10,7 +10,7 @@ class PlaceOrder
     /**
      * Handle the event.
      */
-    public function handle(CheckoutProcessed $event): void
+    public function handle(PaymentCaptured $event): void
     {
         $event->order->markAs(Order::IN_PROGRESS);
 

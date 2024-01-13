@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Gateway;
 
-use Cone\Bazar\Models\Order;
+use Closure;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
 class Response implements Arrayable, Responsable
 {
-    /**
-     * The order instance.
-     */
-    protected Order $order;
-
     /**
      * The redirect URL.
      */
@@ -27,11 +22,15 @@ class Response implements Arrayable, Responsable
     protected array $data = [];
 
     /**
+     * The response resolver.
+     */
+    protected ?Closure $responseResolver = null;
+
+    /**
      * Create a new response instance.
      */
-    public function __construct(Order $order, string $url = '/', array $data = [])
+    public function __construct(string $url = '/', array $data = [])
     {
-        $this->order = $order;
         $this->url = $url;
         $this->data = $data;
     }
@@ -47,11 +46,21 @@ class Response implements Arrayable, Responsable
     }
 
     /**
-     * Merge the response data.
+     * Set the response data.
      */
-    public function with(array $data): static
+    public function data(array $data): static
     {
-        $this->data = array_merge($this->data, $data);
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Create a custom response.
+     */
+    public function respondWith(Closure $callback): static
+    {
+        $this->responseResolver = $callback;
 
         return $this;
     }
@@ -63,7 +72,6 @@ class Response implements Arrayable, Responsable
     {
         return array_merge($this->data, [
             'url' => $this->url,
-            'status' => $this->order->status,
         ]);
     }
 
@@ -72,8 +80,12 @@ class Response implements Arrayable, Responsable
      */
     public function toResponse($request): BaseResponse
     {
-        return $request->expectsJson()
-            ? new JsonResponse($this->toArray())
-            : new RedirectResponse($this->url);
+        if (! is_null($this->responseResolver)) {
+            return call_user_func_array($this->responseResolver, [$this->url, $this->data]);
+        } elseif ($request->wantsJson()) {
+            new JsonResponse($this->toArray());
+        }
+
+        new RedirectResponse($this->url);
     }
 }

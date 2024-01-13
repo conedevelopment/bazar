@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Listeners;
 
-use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Events\PaymentCaptured;
 use Cone\Bazar\Interfaces\Stockable;
 use Cone\Bazar\Models\Item;
 
@@ -11,7 +11,7 @@ class RefreshInventory
     /**
      * Handle the event.
      */
-    public function handle(CheckoutProcessed $event): void
+    public function handle(PaymentCaptured $event): void
     {
         $event->order->loadMissing(['items', 'items.buyable']);
 
