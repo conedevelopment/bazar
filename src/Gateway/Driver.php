@@ -160,32 +160,12 @@ abstract class Driver extends BaseDriver
     }
 
     /**
-     * Resolve the order model for notification.
-     */
-    public function resolveOrderForNotification(Request $request): Order
-    {
-        return Order::proxy()->newQuery()->where('uuid', $request->input('order'))->firstOrFail();
-    }
-
-    /**
      * Handle the notification request.
      */
     public function handleNotification(Request $request): Response
     {
-        $order = $this->resolveOrderForNotification($request);
-
-        $this->notification($request, $order);
-
         return (new Response())->respondWith(function (string $url, array $data): HttpResponse {
             return new HttpResponse('', HttpResponse::HTTP_NO_CONTENT);
         });
-    }
-
-    /**
-     * Update the order update after the notification.
-     */
-    public function notification(Request $request, Order $order): Order
-    {
-        return $order;
     }
 }

@@ -73,7 +73,7 @@ class BazarServiceProvider extends ServiceProvider
             ->prefix('bazar')
             ->as('bazar.')
             ->group(function (): void {
-                $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
+                $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
     }
 
