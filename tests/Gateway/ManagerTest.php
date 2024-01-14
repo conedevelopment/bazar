@@ -2,6 +2,8 @@
 
 namespace Cone\Bazar\Tests\Gateway;
 
+use Cone\Bazar\Events\CheckoutFailed;
+use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Gateway\CashDriver;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Gateway\Manager;
@@ -13,8 +15,9 @@ use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Tests\TestCase;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Event;
 
 class ManagerTest extends TestCase
 {
@@ -143,22 +146,20 @@ class ManagerTest extends TestCase
 
     public function test_gateway_can_process_checkout(): void
     {
-        Notification::fake();
+        Event::fake([CheckoutProcessed::class]);
 
-        $order = $this->cart->toOrder();
+        $this->manager->driver('cash')->handleCheckout($this->app['request']);
 
-        $this->manager->driver('cash')->checkout($this->app['request'], $order);
-
-        $this->assertInstanceOf(Order::class, $order);
+        Event::assertDispatched(CheckoutProcessed::class);
     }
 
     public function test_gateway_handles_failed_checkout(): void
     {
-        $order = $this->cart->toOrder();
+        Event::fake([CheckoutFailed::class]);
 
-        $this->manager->driver('failing-driver')->checkout($this->app['request'], $order);
+        $this->manager->driver('failing-driver')->handleCheckout($this->app['request']);
 
-        $this->assertSame('failed', $order->refresh()->status);
+        Event::assertDispatched(CheckoutFailed::class);
     }
 }
 
@@ -176,7 +177,7 @@ class FailingDriver extends Driver
 {
     protected string $name = 'failing';
 
-    public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
+    public function checkout(Request $request, Order $order): Order
     {
         throw new Exception();
     }

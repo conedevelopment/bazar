@@ -66,7 +66,7 @@ abstract class Driver extends BaseDriver
      */
     public function getSuccessUrl(Order $order): string
     {
-        return str_replace(['{order}'], [$order->uuid], $this->config['success_url']);
+        return str_replace(['{order}'], [$order->uuid], $this->config['success_url'] ?? '/');
     }
 
     /**
@@ -74,7 +74,7 @@ abstract class Driver extends BaseDriver
      */
     public function getFailureUrl(Order $order): string
     {
-        return str_replace(['{order}'], [$order->uuid], $this->config['failure_url']);
+        return str_replace(['{order}'], [$order->uuid], $this->config['failure_url'] ?? '/');
     }
 
     /**
