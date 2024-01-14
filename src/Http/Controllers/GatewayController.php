@@ -17,7 +17,7 @@ class GatewayController extends Controller
     }
 
     /**
-     * Handle the notification requrest.
+     * Handle the notification request.
      */
     public function notification(Request $request, string $driver): Response
     {
