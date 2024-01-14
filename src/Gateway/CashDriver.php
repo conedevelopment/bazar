@@ -2,8 +2,11 @@
 
 namespace Cone\Bazar\Gateway;
 
+use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
+use Exception;
+use Illuminate\Http\Request;
 
 class CashDriver extends Driver
 {
@@ -30,5 +33,13 @@ class CashDriver extends Driver
         return parent::refund($order, $amount, array_merge($attributes, [
             'completed_at' => time(),
         ]));
+    }
+
+    /**
+     * Handle the notification request.
+     */
+    public function handleNotification(Request $request): Response
+    {
+        throw new Exception('This payment gateway does not support payment notifications.');
     }
 }
