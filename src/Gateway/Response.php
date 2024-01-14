@@ -86,6 +86,6 @@ class Response implements Arrayable, Responsable
             new JsonResponse($this->toArray());
         }
 
-        new RedirectResponse($this->url);
+        return new RedirectResponse($this->url);
     }
 }
