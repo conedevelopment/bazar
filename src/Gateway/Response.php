@@ -83,7 +83,7 @@ class Response implements Arrayable, Responsable
         if (! is_null($this->responseResolver)) {
             return call_user_func_array($this->responseResolver, [$this->url, $this->data]);
         } elseif ($request->wantsJson()) {
-            new JsonResponse($this->toArray());
+            return new JsonResponse($this->toArray());
         }
 
         return new RedirectResponse($this->url);
