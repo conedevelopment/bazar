@@ -4,7 +4,7 @@ namespace Cone\Bazar\Http\Controllers;
 
 use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class GatewayController extends Controller
 {

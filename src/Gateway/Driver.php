@@ -35,11 +35,7 @@ abstract class Driver extends BaseDriver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = $order->refund($amount, $this->name, $attributes);
-
-        $order->markAs(Order::REFUNDED);
-
-        return $transaction;
+        return $order->refund($amount, $this->name, $attributes);
     }
 
     /**
@@ -135,6 +131,8 @@ abstract class Driver extends BaseDriver
         try {
             $this->capture($request, $order);
 
+            $order->cart?->delete();
+
             PaymentCaptured::dispatch($this->name, $order);
 
             $url = $this->getSuccessUrl($order);
@@ -164,7 +162,7 @@ abstract class Driver extends BaseDriver
      */
     public function handleNotification(Request $request): Response
     {
-        return (new Response())->respondWith(function (string $url, array $data): HttpResponse {
+        return (new Response())->respondWith(static function (): HttpResponse {
             return new HttpResponse('', HttpResponse::HTTP_NO_CONTENT);
         });
     }
