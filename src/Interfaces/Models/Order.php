@@ -77,4 +77,9 @@ interface Order extends Discountable, Itemable
      * Set the status by the given value.
      */
     public function markAs(string $status): void;
+
+    /**
+     * Send the order details notification.
+     */
+    public function sendOrderDetailsNotification(): void;
 }

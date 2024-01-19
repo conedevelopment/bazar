@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\OrderFactory;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
+use Cone\Bazar\Notifications\OrderDetails;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
@@ -20,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Number;
 
 class Order extends Model implements Contract
@@ -340,6 +342,19 @@ class Order extends Model implements Contract
     {
         if ($this->status !== $status) {
             $this->setAttribute('status', $status)->save();
+        }
+    }
+
+    /**
+     * Send the order details notification.
+     */
+    public function sendOrderDetailsNotification(): void
+    {
+        if (is_null($this->user)) {
+            Notification::route('mail', [$this->address->email => $this->address->name])
+                ->notify(new OrderDetails($this));
+        } else {
+            $this->user->notify(new OrderDetails($this));
         }
     }
 

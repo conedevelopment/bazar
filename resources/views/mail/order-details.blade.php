@@ -1,5 +1,4 @@
-@component ('mail::message')
-
+<x-mail::message>
 # Hello, {{ $order->address->name }}!
 
 ## Thank you for your order!
@@ -9,14 +8,14 @@ Your order has been received and now being processed. Your orders are shown belo
 
 # Order details
 
-@component ('mail::table')
+<x-mail::table>
 | Product | Quantity | Tax | Price |
 |:--------|:--------:|:---:|:-----:|
 @foreach ($order->items as $item)
 | {{ $item->name }} | {{ $item->quantity }} | {{ $item->formattedTax }} | {{ $item->formattedPrice }} |
 @endforeach
 | **Subtotal** ||| {{ $order->formattedSubtotal }} |
-@endcomponent
+</x-mail::table>
 
 **Discount**: {{ $order->formattedDiscount }}
 
@@ -38,5 +37,4 @@ Your order has been received and now being processed. Your orders are shown belo
 {{ $order->address->postcode }}
 {{ $order->address->city }},
 {{ $order->address->countryName }}
-
-@endcomponent
+<x-mail::message>
