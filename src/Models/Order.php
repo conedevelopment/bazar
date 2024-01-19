@@ -162,6 +162,19 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Get the base transaction for the order.
+     */
+    public function transaction(): HasOne
+    {
+        return $this->transactions()->one()->ofMany(
+            ['id' => 'MIN'],
+            static function (Builder $query): Builder {
+                return $query->payment();
+            }
+        );
+    }
+
+    /**
      * Get the payments attribute.
      */
     protected function payments(): Attribute

@@ -37,4 +37,4 @@ Your order has been received and now being processed. Your orders are shown belo
 {{ $order->address->postcode }}
 {{ $order->address->city }},
 {{ $order->address->countryName }}
-<x-mail::message>
+</x-mail::message>

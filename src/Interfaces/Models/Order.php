@@ -20,6 +20,11 @@ interface Order extends Discountable, Itemable
     public function transactions(): HasMany;
 
     /**
+     * Get the base transaction for the order.
+     */
+    public function transaction(): HasOne;
+
+    /**
      * Create a payment transaction for the order.
      *
      * @return \Cone\Bazar\Models\Transaction

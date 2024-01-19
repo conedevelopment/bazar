@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Gateway;
 
-use Cone\Bazar\Gateway\Response;
 use Exception;
 use Illuminate\Http\Request;
 

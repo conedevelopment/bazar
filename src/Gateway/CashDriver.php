@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Gateway;
 
-use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Exception;

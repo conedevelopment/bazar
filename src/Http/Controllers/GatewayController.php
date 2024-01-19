@@ -24,4 +24,3 @@ class GatewayController extends Controller
         return Gateway::driver($driver)->handleNotification($request)->toResponse($request);
     }
 }
-
