@@ -6,6 +6,7 @@ use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Itemable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notification;
 
 interface Order extends Discountable, Itemable
 {
@@ -82,6 +83,16 @@ interface Order extends Discountable, Itemable
      * Set the status by the given value.
      */
     public function markAs(string $status): void;
+
+    /**
+     * Get the notifiable object.
+     */
+    public function getNotifiable(): object;
+
+    /**
+     * Send the given notification.
+     */
+    public function sendNotification(Notification $notification): void;
 
     /**
      * Send the order details notification.

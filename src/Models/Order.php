@@ -20,8 +20,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notification as Notification;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Notification as Notifier;
 use Illuminate\Support\Number;
 
 class Order extends Model implements Contract
@@ -365,16 +366,29 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Get the notifiable object.
+     */
+    public function getNotifiable(): object
+    {
+        return is_null($this->user)
+            ? Notifier::route('mail', [$this->address->email => $this->address->name])
+            : $this->user;
+    }
+
+    /**
+     * Send the given notification.
+     */
+    public function sendNotification(Notification $notification): void
+    {
+        $this->getNotifiable()->notify($notification);
+    }
+
+    /**
      * Send the order details notification.
      */
     public function sendOrderDetailsNotification(): void
     {
-        if (is_null($this->user)) {
-            Notification::route('mail', [$this->address->email => $this->address->name])
-                ->notify(new OrderDetails($this));
-        } else {
-            $this->user->notify(new OrderDetails($this));
-        }
+        $this->sendNotification(new OrderDetails($this));
     }
 
     /**
