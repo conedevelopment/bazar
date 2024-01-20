@@ -107,6 +107,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the driver attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function driver(): Attribute
     {
@@ -119,6 +121,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function total(): Attribute
     {
@@ -131,6 +135,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedTotal(): Attribute
     {
@@ -143,6 +149,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function subtotal(): Attribute
     {
@@ -155,6 +163,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the formatted subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedSubtotal(): Attribute
     {
@@ -167,6 +177,8 @@ class Shipping extends Model implements Contract
 
     /**
      * Get the name of the shipping method.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function driverName(): Attribute
     {

@@ -129,6 +129,8 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted price attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedPrice(): Attribute
     {
@@ -139,6 +141,8 @@ class Item extends Model implements Contract
 
     /**
      * Get the total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function total(): Attribute
     {
@@ -149,6 +153,8 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedTotal(): Attribute
     {
@@ -159,6 +165,8 @@ class Item extends Model implements Contract
 
     /**
      * Get the subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function subtotal(): Attribute
     {
@@ -169,6 +177,8 @@ class Item extends Model implements Contract
 
     /**
      * Get the formatted subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedSubtotal(): Attribute
     {

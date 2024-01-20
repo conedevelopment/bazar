@@ -99,6 +99,8 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the name of the gateway driver.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
      */
     protected function driverName(): Attribute
     {
@@ -115,6 +117,8 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the URL of the transaction.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
      */
     protected function url(): Attribute
     {

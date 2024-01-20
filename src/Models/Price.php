@@ -34,6 +34,8 @@ class Price extends Meta
 
     /**
      * Get the currency attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function currency(): Attribute
     {
@@ -46,6 +48,8 @@ class Price extends Meta
 
     /**
      * Get the currency symbol attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function symbol(): Attribute
     {
