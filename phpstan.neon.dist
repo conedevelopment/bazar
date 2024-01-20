@@ -1,12 +1,15 @@
 includes:
-    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon
 parameters:
-    level: 5
-    checkMissingIterableValueType: false
     paths:
         - src/
         - config/
         - database/
         - routes/
+    databaseMigrationsPath:
+        - database/migrations/
+        - vendor/orchestra/testbench-core/laravel/migrations/
+    level: 5
+    checkMissingIterableValueType: false
     ignoreErrors:
-        - '#^Unsafe usage of new static#'
+        - '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'

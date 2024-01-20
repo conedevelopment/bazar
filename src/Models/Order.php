@@ -176,6 +176,8 @@ class Order extends Model implements Contract
 
     /**
      * Get the payments attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
      */
     protected function payments(): Attribute
     {
@@ -188,6 +190,8 @@ class Order extends Model implements Contract
 
     /**
      * Get the refunds attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
      */
     protected function refunds(): Attribute
     {
@@ -200,6 +204,8 @@ class Order extends Model implements Contract
 
     /**
      * Get the status name attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function statusName(): Attribute
     {

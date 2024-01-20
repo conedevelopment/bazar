@@ -85,6 +85,8 @@ class Variant extends Model implements Contract
 
     /**
      * Get the alias attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
      */
     protected function alias(): Attribute
     {

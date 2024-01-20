@@ -136,6 +136,8 @@ class Address extends Model implements Contract
 
     /**
      * Get the alias attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
      */
     protected function alias(): Attribute
     {
@@ -148,6 +150,8 @@ class Address extends Model implements Contract
 
     /**
      * Get the name attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function name(): Attribute
     {

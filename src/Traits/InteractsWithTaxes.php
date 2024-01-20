@@ -13,6 +13,8 @@ trait InteractsWithTaxes
 {
     /**
      * Get the formatted tax attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedTax(): Attribute
     {

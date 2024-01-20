@@ -62,6 +62,8 @@ trait InteractsWithItems
 
     /**
      * Get the currency attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function currency(): Attribute
     {
@@ -74,6 +76,8 @@ trait InteractsWithItems
 
     /**
      * Get the line items attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
      */
     protected function lineItems(): Attribute
     {
@@ -86,6 +90,8 @@ trait InteractsWithItems
 
     /**
      * Get the fees attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
      */
     protected function fees(): Attribute
     {
@@ -98,6 +104,8 @@ trait InteractsWithItems
 
     /**
      * Get the taxables attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
      */
     protected function taxables(): Attribute
     {
@@ -112,6 +120,8 @@ trait InteractsWithItems
 
     /**
      * Get the total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function total(): Attribute
     {
@@ -124,6 +134,8 @@ trait InteractsWithItems
 
     /**
      * Get the formatted total attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedTotal(): Attribute
     {
@@ -136,6 +148,8 @@ trait InteractsWithItems
 
     /**
      * Get the subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function subtotal(): Attribute
     {
@@ -148,6 +162,8 @@ trait InteractsWithItems
 
     /**
      * Get the formatted subtotal attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedSubtotal(): Attribute
     {
@@ -160,6 +176,8 @@ trait InteractsWithItems
 
     /**
      * Get the tax attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
      */
     protected function tax(): Attribute
     {
@@ -172,6 +190,8 @@ trait InteractsWithItems
 
     /**
      * Get the formatted tax attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedTax(): Attribute
     {

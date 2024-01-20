@@ -24,6 +24,8 @@ trait HasPrices
 
     /**
      * Get the price attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float|null, never>
      */
     protected function price(): Attribute
     {
@@ -34,6 +36,8 @@ trait HasPrices
 
     /**
      * Get the formatted price attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
      */
     protected function formattedPrice(): Attribute
     {

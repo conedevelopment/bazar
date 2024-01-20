@@ -10,6 +10,8 @@ trait InteractsWithDiscounts
 {
     /**
      * Get the formatted discount attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function formattedDiscount(): Attribute
     {

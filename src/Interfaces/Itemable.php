@@ -75,8 +75,6 @@ interface Itemable extends Shippable
 
     /**
      * Merge the given item into the collection.
-     *
-     * @param  \Cone\Bazar\Models\Item  $items
      */
     public function mergeItem(Item $item): Item;
 
