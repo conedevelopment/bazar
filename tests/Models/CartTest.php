@@ -8,17 +8,22 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\User;
 use Illuminate\Support\Facades\Date;
 
 class CartTest extends TestCase
 {
     protected Cart $cart;
 
+    protected User $user;
+
     public function setUp(): void
     {
         parent::setUp();
 
         $this->cart = Cart::factory()->create();
+
+        $this->user = User::factory()->create();
 
         Product::factory(3)->create()->each(function ($product) {
             $this->cart->items()->create([

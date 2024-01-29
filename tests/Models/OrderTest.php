@@ -8,16 +8,20 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\User;
 
 class OrderTest extends TestCase
 {
     protected Order $order;
+
+    protected User $user;
 
     public function setUp(): void
     {
         parent::setUp();
 
         $this->order = Order::factory()->create();
+        $this->user = User::factory()->create();
 
         Product::factory()->count(3)->create()->each(function ($product) {
             $this->order->items()->create([

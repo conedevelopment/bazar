@@ -6,10 +6,13 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\User;
 
 class TransactionTest extends TestCase
 {
     protected Order $order;
+
+    protected User $user;
 
     protected Transaction $transaction;
 
@@ -17,7 +20,8 @@ class TransactionTest extends TestCase
     {
         parent::setUp();
 
-        $this->order = $this->admin->orders()->save(Order::factory()->make());
+        $this->user = User::factory()->create();
+        $this->order = $this->user->orders()->save(Order::factory()->make());
         $this->transaction = Transaction::factory()->make();
         $this->transaction->order()->associate($this->order)->save();
     }

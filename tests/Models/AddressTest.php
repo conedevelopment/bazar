@@ -7,9 +7,19 @@ use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\User;
 
 class AddressTest extends TestCase
 {
+    protected User $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+    }
+
     public function test_address_belongs_to_user(): void
     {
         $address = Address::factory()->make();

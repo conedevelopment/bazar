@@ -23,7 +23,7 @@
     },
     "require": {
         "php": "^8.2 || ^8.3",
-        "conedevelopment/root": "@dev"
+        "conedevelopment/root": "dev-master"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

@@ -10,11 +10,14 @@ use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
+use Cone\Bazar\Tests\User;
 use Illuminate\Support\Number;
 
 class ShippingTest extends TestCase
 {
     protected Cart $cart;
+
+    protected User $user;
 
     protected Shipping $shipping;
 
@@ -26,6 +29,7 @@ class ShippingTest extends TestCase
             return $item->price * 0.1;
         });
 
+        $this->user = User::factory()->create();
         $this->cart = Cart::factory()->create();
         $this->shipping = Shipping::factory()->make();
         $this->shipping->shippable()->associate($this->cart)->save();
@@ -48,7 +52,7 @@ class ShippingTest extends TestCase
 
     public function test_shipping_belongs_to_an_order(): void
     {
-        $order = $this->admin->orders()->save(Order::factory()->make());
+        $order = $this->user->orders()->save(Order::factory()->make());
         $shipping = Shipping::factory()->make();
         $shipping->shippable()->associate($order)->save();
 
@@ -60,7 +64,7 @@ class ShippingTest extends TestCase
 
     public function test_shipping_has_address(): void
     {
-        $order = $this->admin->orders()->save(Order::factory()->make());
+        $order = $this->user->orders()->save(Order::factory()->make());
         $shipping = Shipping::factory()->make();
         $shipping->shippable()->associate($order)->save();
 
