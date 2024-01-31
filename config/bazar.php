@@ -56,14 +56,12 @@ return [
     'gateway' => [
         'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
-            'cash' => [
-                'success_url' => '/?order={order}&status=success',
-                'failure_url' => '/?order={order}&status=failed',
-            ],
-            'transfer' => [
-                'success_url' => '/?order={order}&status=success',
-                'failure_url' => '/?order={order}&status=failed',
-            ],
+            'cash' => [],
+            'transfer' => [],
+        ],
+        'urls' => [
+            'success' => '/?order={order}',
+            'failure' => '/?order={order}',
         ],
     ],
 

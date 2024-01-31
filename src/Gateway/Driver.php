@@ -12,6 +12,7 @@ use Cone\Bazar\Support\Driver as BaseDriver;
 use Cone\Bazar\Support\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
 use Throwable;
 
@@ -62,7 +63,9 @@ abstract class Driver extends BaseDriver
      */
     public function getSuccessUrl(Order $order): string
     {
-        return URL::to(str_replace(['{order}'], [$order->uuid], $this->config['success_url'] ?? '/'));
+        $url = $this->config['success_url'] ?? Config::get('bazar.gateway.urls.success');
+
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
     }
 
     /**
@@ -70,7 +73,9 @@ abstract class Driver extends BaseDriver
      */
     public function getFailureUrl(Order $order): string
     {
-        return URL::to(str_replace(['{order}'], [$order->uuid], $this->config['failure_url'] ?? '/'));
+        $url = $this->config['failure_url'] ?? Config::get('bazar.gateway.urls.failure');
+
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
     }
 
     /**
