@@ -23,11 +23,11 @@
     },
     "require": {
         "php": "^8.2 || ^8.3",
-        "conedevelopment/root": "dev-master"
+        "conedevelopment/root": "dev-master || ^2.0.0-beta"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel/laravel": "^10.43",
+        "laravel/laravel": "^10.3.2",
         "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^10.0",
         "laravel/pint": "^1.6",
