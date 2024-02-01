@@ -64,9 +64,7 @@ abstract class Driver extends BaseDriver
     {
         $url = $this->config['success_url'] ?? Config::get('bazar.gateway.urls.success');
 
-        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'), [
-            'driver' => $this->name,
-        ]);
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
     }
 
     /**
@@ -76,9 +74,7 @@ abstract class Driver extends BaseDriver
     {
         $url = $this->config['failure_url'] ?? Config::get('bazar.gateway.urls.failure');
 
-        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'), [
-            'driver' => $this->name,
-        ]);
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
     }
 
     /**

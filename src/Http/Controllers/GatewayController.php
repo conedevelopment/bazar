@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Http\Controllers;
 
+use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class GatewayController extends Controller
 {
@@ -15,7 +15,9 @@ class GatewayController extends Controller
     {
         $gateway = Gateway::driver($driver);
 
-        return $gateway->handleCapture($request, $gateway->resolveOrderForCapture($request))->toResponse($request);
+        return $gateway->handleCapture(
+            $request, $gateway->resolveOrderForCapture($request)
+        );
     }
 
     /**
@@ -23,6 +25,6 @@ class GatewayController extends Controller
      */
     public function notification(Request $request, string $driver): Response
     {
-        return Gateway::driver($driver)->handleNotification($request)->toResponse($request);
+        return Gateway::driver($driver)->handleNotification($request);
     }
 }
