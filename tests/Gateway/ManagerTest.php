@@ -148,7 +148,7 @@ class ManagerTest extends TestCase
     {
         Event::fake([CheckoutProcessed::class]);
 
-        $this->manager->driver('cash')->handleCheckout($this->app['request']);
+        $this->manager->driver('cash')->handleCheckout($this->app['request'], $this->order);
 
         Event::assertDispatched(CheckoutProcessed::class);
     }
@@ -157,7 +157,7 @@ class ManagerTest extends TestCase
     {
         Event::fake([CheckoutFailed::class]);
 
-        $this->manager->driver('failing-driver')->handleCheckout($this->app['request']);
+        $this->manager->driver('failing-driver')->handleCheckout($this->app['request'], $this->order);
 
         Event::assertDispatched(CheckoutFailed::class);
     }
