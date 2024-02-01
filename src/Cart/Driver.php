@@ -250,8 +250,8 @@ abstract class Driver
      */
     public function checkout(string $driver): Response
     {
-        return App::call(static function (Request $request) use ($driver): Response {
-            return Gateway::driver($driver)->handleCheckout($request);
+        return App::call(function (Request $request) use ($driver): Response {
+            return Gateway::driver($driver)->handleCheckout($request, $this->getModel()->toOrder());
         });
     }
 

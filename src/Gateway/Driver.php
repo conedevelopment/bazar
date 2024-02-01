@@ -9,7 +9,6 @@ use Cone\Bazar\Events\PaymentCaptureFailed;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Support\Driver as BaseDriver;
-use Cone\Bazar\Support\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Config;
@@ -65,7 +64,9 @@ abstract class Driver extends BaseDriver
     {
         $url = $this->config['success_url'] ?? Config::get('bazar.gateway.urls.success');
 
-        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'), [
+            'driver' => $this->name,
+        ]);
     }
 
     /**
@@ -75,24 +76,16 @@ abstract class Driver extends BaseDriver
     {
         $url = $this->config['failure_url'] ?? Config::get('bazar.gateway.urls.failure');
 
-        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'));
-    }
-
-    /**
-     * Resolve the order model for checkout.
-     */
-    public function resolveOrderForCheckout(Request $request): Order
-    {
-        return Cart::getModel()->toOrder();
+        return URL::to(str_replace(['{order}'], [$order->uuid], $url ?? '/'), [
+            'driver' => $this->name,
+        ]);
     }
 
     /**
      * Handle the checkout request.
      */
-    public function handleCheckout(Request $request): Response
+    public function handleCheckout(Request $request, Order $order): Response
     {
-        $order = $this->resolveOrderForCheckout($request);
-
         try {
             $this->checkout($request, $order);
 
@@ -129,10 +122,8 @@ abstract class Driver extends BaseDriver
     /**
      * Handle the capture request.
      */
-    public function handleCapture(Request $request): Response
+    public function handleCapture(Request $request, Order $order): Response
     {
-        $order = $this->resolveOrderForCapture($request);
-
         try {
             $this->capture($request, $order);
 

@@ -13,7 +13,9 @@ class GatewayController extends Controller
      */
     public function capture(Request $request, string $driver): Response
     {
-        return Gateway::driver($driver)->handleCapture($request)->toResponse($request);
+        $gateway = Gateway::driver($driver);
+
+        return $gateway->handleCapture($request, $gateway->resolveOrderForCapture($request))->toResponse($request);
     }
 
     /**
