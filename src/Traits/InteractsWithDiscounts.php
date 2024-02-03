@@ -2,9 +2,9 @@
 
 namespace Cone\Bazar\Traits;
 
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Discount;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Number;
 
 trait InteractsWithDiscounts
 {
@@ -35,7 +35,7 @@ trait InteractsWithDiscounts
      */
     public function getFormattedDiscount(): string
     {
-        return Number::currency($this->getDiscount(), $this->currency);
+        return (new Currency($this->getDiscount(), $this->currency))->format();
     }
 
     /**

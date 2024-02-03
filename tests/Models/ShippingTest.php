@@ -7,11 +7,11 @@ use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
 use Cone\Bazar\Tests\User;
-use Illuminate\Support\Number;
 
 class ShippingTest extends TestCase
 {
@@ -88,7 +88,8 @@ class ShippingTest extends TestCase
         $this->assertInstanceOf(Taxable::class, $this->shipping);
         $this->assertSame($this->shipping->price * 0.1, $this->shipping->tax);
         $this->assertSame(
-            Number::currency($this->shipping->tax, $this->shipping->shippable->currency), $this->shipping->getFormattedTax()
+            (new Currency($this->shipping->tax, $this->shipping->shippable->currency))->format(),
+            $this->shipping->getFormattedTax()
         );
         $this->assertSame($this->shipping->getFormattedTax(), $this->shipping->formattedTax);
     }
@@ -101,14 +102,14 @@ class ShippingTest extends TestCase
         );
         $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
         $this->assertSame(
-            Number::currency($this->shipping->total, $this->shipping->shippable->currency),
+            (new Currency($this->shipping->total, $this->shipping->shippable->currency))->format(),
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
         $this->assertSame($this->shipping->cost, $this->shipping->getSubtotal());
         $this->assertSame($this->shipping->getSubtotal(), $this->shipping->subtotal);
         $this->assertSame(
-            Number::currency($this->shipping->subtotal, $this->shipping->shippable->currency),
+            (new Currency($this->shipping->subtotal, $this->shipping->shippable->currency))->format(),
             $this->shipping->getFormattedSubtotal()
         );
         $this->assertSame($this->shipping->getFormattedSubtotal(), $this->shipping->formattedSubtotal);

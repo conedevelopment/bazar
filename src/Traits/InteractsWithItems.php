@@ -7,6 +7,7 @@ use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,7 +18,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Number;
 
 trait InteractsWithItems
 {
@@ -241,7 +241,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotal(): string
     {
-        return Number::currency($this->getTotal(), $this->getCurrency());
+        return (new Currency($this->getTotal(), $this->getCurrency()))->format();
     }
 
     /**
@@ -261,7 +261,7 @@ trait InteractsWithItems
      */
     public function getFormattedSubtotal(): string
     {
-        return Number::currency($this->getSubtotal(), $this->getCurrency());
+        return (new Currency($this->getSubtotal(), $this->getCurrency()))->format();
     }
 
     /**
@@ -281,7 +281,7 @@ trait InteractsWithItems
      */
     public function getFormattedFeeTotal(): string
     {
-        return Number::currency($this->getFeeTotal(), $this->getCurrency());
+        return (new Currency($this->getFeeTotal(), $this->getCurrency()))->format();
     }
 
     /**
@@ -301,7 +301,7 @@ trait InteractsWithItems
      */
     public function getFormattedTax(): string
     {
-        return Number::currency($this->getTax(), $this->getCurrency());
+        return (new Currency($this->getTax(), $this->getCurrency()))->format();
     }
 
     /**

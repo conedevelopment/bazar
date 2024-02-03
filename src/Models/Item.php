@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -208,7 +209,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return Number::currency($this->getPrice(), $this->itemable->getCurrency());
+        return (new Currency($this->getPrice(), $this->itemable->getCurrency()))->format();
     }
 
     /**
@@ -224,7 +225,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return Number::currency($this->getTotal(), $this->itemable->getCurrency());
+        return (new Currency($this->getTotal(), $this->itemable->getCurrency()))->format();
     }
 
     /**
@@ -240,7 +241,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return Number::currency($this->getSubtotal(), $this->itemable->getCurrency());
+        return (new Currency($this->getSubtotal(), $this->itemable->getCurrency()))->format();
     }
 
     /**

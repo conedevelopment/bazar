@@ -4,6 +4,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ShippingFactory;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithTaxes;
@@ -214,7 +215,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return Number::currency($this->getPrice(), $this->shippable->getCurrency());
+        return (new Currency($this->getPrice(), $this->shippable->getCurrency()))->format();
     }
 
     /**
@@ -230,7 +231,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return Number::currency($this->getTotal(), $this->shippable->getCurrency());
+        return (new Currency($this->getTotal(), $this->shippable->getCurrency()))->format();
     }
 
     /**
@@ -246,7 +247,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return Number::currency($this->getSubtotal(), $this->shippable->getCurrency());
+        return (new Currency($this->getSubtotal(), $this->shippable->getCurrency()))->format();
     }
 
     /**

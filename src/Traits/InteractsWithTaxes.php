@@ -5,9 +5,9 @@ namespace Cone\Bazar\Traits;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Tax;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Number;
 
 trait InteractsWithTaxes
 {
@@ -46,7 +46,7 @@ trait InteractsWithTaxes
             $currency = $this->shippable->currency;
         }
 
-        return Number::currency($this->getTax(), $currency);
+        return (new Currency($this->getTax(), $currency))->format();
     }
 
     /**
