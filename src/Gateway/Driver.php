@@ -162,7 +162,7 @@ abstract class Driver extends BaseDriver
     /**
      * Handle the manual transaction creation.
      */
-    public function handleManualTransaction(Transaction $model): void
+    public function handleManualTransaction(Transaction $transaction): void
     {
         //
     }
