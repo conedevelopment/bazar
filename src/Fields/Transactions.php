@@ -5,6 +5,7 @@ namespace Cone\Bazar\Fields;
 use Closure;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Fields\Date;
 use Cone\Root\Fields\HasMany;
@@ -12,8 +13,8 @@ use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
 use Cone\Root\Fields\URL;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Number as NumberFormatter;
 
 class Transactions extends HasMany
 {
@@ -50,7 +51,7 @@ class Transactions extends HasMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Transaction $transaction, ?float $value): string {
-                    return NumberFormatter::currency($value, $transaction->order->currency);
+                    return (new Currency($value ?: 0, $transaction->order->currency))->format();
                 }),
 
             Select::make(__('Driver'), 'driver')
@@ -71,5 +72,15 @@ class Transactions extends HasMany
             Date::make(__('Completed At'), 'completed_at')
                 ->withTime(),
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function saved(Request $request, Model $model): void
+    {
+        if ($model->wasRecentlyCreated) {
+            Gateway::driver($model->driver)->handleManualTransaction($model);
+        }
     }
 }

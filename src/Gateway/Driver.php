@@ -158,4 +158,12 @@ abstract class Driver extends BaseDriver
             return new HttpResponse('', HttpResponse::HTTP_NO_CONTENT);
         });
     }
+
+    /**
+     * Handle the manual transaction creation.
+     */
+    public function handleManualTransaction(Transaction $model): void
+    {
+        //
+    }
 }
