@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Events\OrderStatusChanged;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Notifications\OrderDetails;
@@ -349,7 +350,7 @@ class Order extends Model implements Contract
     /**
      * Determine if the orderis partially refunded.
      */
-    public function isPartiallyRefunded(): bool
+    public function partiallyRefunded(): bool
     {
         return $this->refunds->filter->completed()->isNotEmpty()
             && $this->getTotalPaid() > $this->getTotalRefunded();
@@ -361,7 +362,11 @@ class Order extends Model implements Contract
     public function markAs(string $status): void
     {
         if ($this->status !== $status) {
+            $from = $this->status;
+
             $this->setAttribute('status', $status)->save();
+
+            OrderStatusChanged::dispatch($this, $status, $from);
         }
     }
 
