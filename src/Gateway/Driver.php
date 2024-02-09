@@ -91,6 +91,8 @@ abstract class Driver extends BaseDriver
         } catch (Throwable $exception) {
             report($exception);
 
+            $order->markAs(Order::FAILED);
+
             CheckoutFailed::dispatch($this->name, $order);
 
             $url = $this->getFailureUrl($order);
@@ -104,6 +106,8 @@ abstract class Driver extends BaseDriver
      */
     public function checkout(Request $request, Order $order): Order
     {
+        $order->markAs(Order::ON_HOLD);
+
         return $order;
     }
 
@@ -133,6 +137,8 @@ abstract class Driver extends BaseDriver
 
             PaymentCaptureFailed::dispatch($this->name, $order);
 
+            $order->markAs(Order::FAILED);
+
             $url = $this->getFailureUrl($order);
         }
 
@@ -145,6 +151,8 @@ abstract class Driver extends BaseDriver
     public function capture(Request $request, Order $order): Order
     {
         $this->pay($order);
+
+        $order->markAs(Order::PENDING);
 
         return $order;
     }
