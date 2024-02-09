@@ -43,13 +43,13 @@ class Items extends MorphMany
             MorphTo::make(__('Buyable Item'), 'buyable')
                 ->required()
                 ->types([
-                    Product::class,
-                    Variant::class,
+                    Product::getProxiedClass(),
+                    Variant::getProxiedClass(),
                 ])
                 ->display(static function (Model $relatable): ?string {
                     return (string) match ($relatable::class) {
-                        Product::class => $relatable->name,
-                        Variant::class => $relatable->alias,
+                        Product::getProxiedClass() => $relatable->name,
+                        Variant::getProxiedClass() => $relatable->alias,
                         default => $relatable->getKey(),
                     };
                 }),

@@ -19,9 +19,11 @@ class CashDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return parent::pay($order, $amount, array_merge($attributes, [
-            'completed_at' => time(),
-        ]));
+        $transaction = parent::pay($order, $amount, $attributes);
+
+        $transaction->markAsCompleted();
+
+        return $transaction;
     }
 
     /**
@@ -29,9 +31,11 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return parent::refund($order, $amount, array_merge($attributes, [
-            'completed_at' => time(),
-        ]));
+        $transaction = parent::refund($order, $amount, $attributes);
+
+        $transaction->markAsCompleted();
+
+        return $transaction;
     }
 
     /**
