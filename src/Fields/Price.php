@@ -5,6 +5,7 @@ namespace Cone\Bazar\Fields;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Support\Currency;
 use Cone\Root\Fields\Meta;
+use Cone\Root\Fields\Number;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -24,12 +25,12 @@ class Price extends Meta
 
         parent::__construct($label, sprintf('price_%s', strtolower($this->currency)));
 
-        $this->asNumber();
-
-        $this->field->min(0);
-
-        $this->field->format(function (Request $request, Model $model, mixed $value): ?string {
-            return is_null($value) ? null : (new Currency($value, $this->currency))->format();
+        $this->asNumber(function (Number $field): void {
+            $field->min(0)
+                ->format(function (Request $request, Model $model, mixed $value): ?string {
+                    return is_null($value) ? null : (new Currency($value, $this->currency))->format();
+                })
+                ->suffix(strtoupper($this->currency));
         });
     }
 
