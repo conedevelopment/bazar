@@ -80,8 +80,7 @@ class Product extends Model implements Contract
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product')
-            ->using(CategoryPivot::class);
+        return $this->belongsToMany(Category::getProxiedClass(), 'bazar_category_product');
     }
 
     /**
@@ -134,7 +133,7 @@ class Product extends Model implements Contract
                     return $query->selectRaw('count(*)')
                         ->from('bazar_buyable_property_value')
                         ->whereIn('bazar_buyable_property_value.buyable_id', $this->variants()->select('bazar_variants.id'))
-                        ->where('bazar_buyable_property_value.buyable_type', Variant::class);
+                        ->where('bazar_buyable_property_value.buyable_type', Variant::getProxiedClass());
                 }
             )
             ->first();
