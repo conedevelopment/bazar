@@ -50,9 +50,13 @@ class Variants extends HasMany
 
             BelongsToMany::make(__('Property Values'), 'propertyValues')
                 ->withRelatableQuery(static function (Request $request, Builder $query, Variant $model): Builder {
+                    $product = $model->relationLoaded('product')
+                        ? $model->product
+                        : $model->product()->make()->forceFill(['id' => $model->product_id]);
+
                     return $query->whereIn(
                         $query->qualifyColumn('id'),
-                        $model->product->propertyValues()->select('bazar_property_values.id')
+                        $product->propertyValues()->select('bazar_property_values.id')
                     );
                 })
                 ->with(['property'])
