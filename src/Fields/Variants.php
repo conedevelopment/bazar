@@ -4,13 +4,10 @@ namespace Cone\Bazar\Fields;
 
 use Closure;
 use Cone\Bazar\Bazar;
-use Cone\Bazar\Fields\Price;
-use Cone\Bazar\Models\Variant;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Text;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class Variants extends HasMany

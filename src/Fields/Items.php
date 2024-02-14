@@ -5,13 +5,13 @@ namespace Cone\Bazar\Fields;
 use Closure;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Variant;
+use Cone\Bazar\Support\Currency;
 use Cone\Root\Fields\MorphMany;
 use Cone\Root\Fields\MorphTo;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Text;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Number as NumberFormatter;
 
 class Items extends MorphMany
 {
@@ -61,14 +61,14 @@ class Items extends MorphMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return NumberFormatter::currency($value, $model->itemable->currency);
+                    return (new Currency($value, $model->itemable->currency))->format();
                 }),
 
             Number::make(__('TAX'), 'tax')
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return NumberFormatter::currency($value, $model->itemable->currency);
+                    return (new Currency($value, $model->itemable->currency))->format();
                 }),
 
             Number::make(__('Quantity'), 'quantity')
