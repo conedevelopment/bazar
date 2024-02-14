@@ -256,7 +256,7 @@ abstract class Driver
 
             $response = $gateway->handleCheckout($request, $order = $this->getModel()->toOrder());
 
-            if (! is_null($callback)) {
+            if ($callback instanceof Closure) {
                 call_user_func_array($callback, [$request, $response, $driver, $order]);
             }
 
