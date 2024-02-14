@@ -24,7 +24,7 @@ abstract class Bazar
      */
     public static function getCurrencies(): array
     {
-        return Config::get('bazar.currencies.available', []);
+        return array_keys(Config::get('bazar.currencies.available', []));
     }
 
     /**

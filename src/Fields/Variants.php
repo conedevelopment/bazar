@@ -6,7 +6,6 @@ use Closure;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Fields\Price;
 use Cone\Bazar\Models\Variant;
-use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\HasMany;
 use Cone\Root\Fields\ID;
@@ -48,20 +47,7 @@ class Variants extends HasMany
 
             Price::make(__('Price'), Bazar::getCurrency()),
 
-            BelongsToMany::make(__('Property Values'), 'propertyValues')
-                ->withRelatableQuery(static function (Request $request, Builder $query, Variant $model): Builder {
-                    $product = $model->relationLoaded('product')
-                        ? $model->product
-                        : $model->product()->make()->forceFill(['id' => $model->product_id]);
-
-                    return $query->whereIn(
-                        $query->qualifyColumn('id'),
-                        $product->propertyValues()->select('bazar_property_values.id')
-                    );
-                })
-                ->with(['property'])
-                ->display('name')
-                ->groupOptionsBy('property.name'),
+            VariantProperties::make(__('Properties'), 'propertyValues'),
 
             Editor::make(__('Description'), 'description'),
         ];

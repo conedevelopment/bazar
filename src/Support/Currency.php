@@ -5,6 +5,7 @@ namespace Cone\Bazar\Support;
 use Closure;
 use Cone\Bazar\Bazar;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Traits\Macroable;
 use JsonSerializable;
 use NumberFormatter;
@@ -46,7 +47,7 @@ class Currency implements JsonSerializable, Stringable
     {
         $this->value = $value;
         $this->currency = $currency ?: Bazar::getCurrency();
-        $this->precision = $precision;
+        $this->precision = $precision ?: Config::get('bazar.currencies.available.'.$currency.'.precision', 2);
         $this->locale = $locale ?: App::getLocale();
     }
 
