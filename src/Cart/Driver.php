@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Cart;
 
+use Closure;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Interfaces\Buyable;
@@ -248,10 +249,18 @@ abstract class Driver
     /**
      * Perform the checkout using the given driver.
      */
-    public function checkout(string $driver): Response
+    public function checkout(string $driver, ?Closure $callback = null): Response
     {
-        return App::call(function (Request $request) use ($driver): Response {
-            return Gateway::driver($driver)->handleCheckout($request, $this->getModel()->toOrder());
+        return App::call(function (Request $request) use ($driver, $callback): Response {
+            $gateway = Gateway::driver($driver);
+
+            $response = $gateway->handleCheckout($request, $order = $this->getModel()->toOrder());
+
+            if (! is_null($callback)) {
+                call_user_func_array($callback, [$request, $response, $driver, $order]);
+            }
+
+            return $response;
         });
     }
 

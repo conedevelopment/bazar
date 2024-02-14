@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static float count()
  * @method static bool isEmpty()
  * @method static bool isNotEmpty()
- * @method static \Cone\Bazar\Gateway\Response checkout(string $driver)
+ * @method static \Cone\Bazar\Gateway\Response checkout(string $driver, \Closure|null $callback)
  *
  * @see \Cone\Bazar\Cart\Driver
  */
