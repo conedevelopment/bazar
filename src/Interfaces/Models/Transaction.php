@@ -2,7 +2,6 @@
 
 namespace Cone\Bazar\Interfaces\Models;
 
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 interface Transaction
@@ -25,7 +24,7 @@ interface Transaction
     /**
      * Mark the transaction as completed.
      */
-    public function markAsCompleted(?DateTimeInterface $date = null): void;
+    public function markAsCompleted(): void;
 
     /**
      * Mark the transaction as pending.

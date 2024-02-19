@@ -152,12 +152,10 @@ class Transaction extends Model implements Contract
     /**
      * Mark the transaction as completed.
      */
-    public function markAsCompleted(?DateTimeInterface $date = null): void
+    public function markAsCompleted(): void
     {
-        $date = $date ?: Date::now();
-
-        if ($this->pending() || $this->completed_at->notEqualTo($date)) {
-            $this->setAttribute('completed_at', $date)->save();
+        if ($this->pending()) {
+            $this->setAttribute('completed_at', Date::now())->save();
 
             TransactionCompleted::dispatch($this);
         }
