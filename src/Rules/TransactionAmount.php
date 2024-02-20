@@ -3,32 +3,22 @@
 namespace Cone\Bazar\Rules;
 
 use Closure;
-use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class TransactionAmount implements ValidationRule
 {
     /**
-     * The transaction type.
+     * The transaction instance.
      */
-    protected string $type;
-
-    /**
-     * The amount to be checked.
-     */
-    protected float $amount;
+    protected Transaction $transaction;
 
     /**
      * Create a new rule instance.
      */
-    public function __construct(Order $order, string $type = Transaction::PAYMENT)
+    public function __construct(Transaction $transaction)
     {
-        $this->type = $type;
-
-        $this->amount = $type === Transaction::PAYMENT
-            ? $order->getTotalPayable()
-            : $order->getTotalRefundable();
+        $this->transaction = $transaction;
     }
 
     /**
@@ -36,11 +26,15 @@ class TransactionAmount implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (is_null($value) || (float) $value > $this->amount) {
+        $max = $this->transaction->type === Transaction::PAYMENT
+            ? $this->transaction->order->getTotalPayable()
+            : $this->transaction->order->getTotalRefundable();
+
+        if (is_null($value) || (float) $value > $max) {
             call_user_func($fail, match (true) {
-                $this->amount <= 0 && $this->type === Transaction::PAYMENT => __('The order is fully paid.'),
-                $this->amount <= 0 && $this->type === Transaction::REFUND => __('The order is fully refunded.'),
-                default => __('The :attribute must be less than :value.', ['value' => $this->amount]),
+                $max <= 0 && $this->type === Transaction::PAYMENT => __('The order is fully paid.'),
+                $max <= 0 && $this->type === Transaction::REFUND => __('The order is fully refunded.'),
+                default => __('The :attribute must be less than :value.', ['value' => $max]),
             });
         }
     }

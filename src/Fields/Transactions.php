@@ -5,6 +5,7 @@ namespace Cone\Bazar\Fields;
 use Closure;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Models\Transaction;
+use Cone\Bazar\Rules\TransactionAmount;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Fields\Date;
@@ -52,6 +53,14 @@ class Transactions extends HasMany
                 ->required()
                 ->format(static function (Request $request, Transaction $transaction, ?float $value): string {
                     return (new Currency($value ?: 0, $transaction->order->currency))->format();
+                })
+                ->rules(static function (Request $request, Transaction $transaction): array {
+                    return [
+                        'required',
+                        'numeric',
+                        'gt:0',
+                        new TransactionAmount($transaction),
+                    ];
                 }),
 
             Select::make(__('Driver'), 'driver')
