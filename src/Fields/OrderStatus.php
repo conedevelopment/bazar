@@ -46,7 +46,7 @@ class OrderStatus extends Select
         return match ($value) {
             Order::PENDING, Order::ON_HOLD => 'status--warning',
             Order::CANCELLED, Order::FAILED => 'status--danger',
-            Order::REFUNDED, Order::PARTIALLY_REFUNDED, Order::COMPLETED => 'status--success',
+            Order::FULFILLED => 'status--success',
             Order::IN_PROGRESS => 'status--info',
             default => 'status--info',
         };
