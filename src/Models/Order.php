@@ -318,7 +318,7 @@ class Order extends Model implements Contract
     }
 
     /**
-     * Determine if the order is partially refunded.
+     * Determine if the order is partially paid.
      */
     public function partiallyPaid(): bool
     {
