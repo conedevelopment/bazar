@@ -38,7 +38,7 @@ class Order extends Model implements Contract
 
     public const CANCELLED = 'cancelled';
 
-    public const COMPLETED = 'completed';
+    public const FULFILLED = 'fulfilled';
 
     public const FAILED = 'failed';
 
@@ -46,11 +46,7 @@ class Order extends Model implements Contract
 
     public const ON_HOLD = 'on_hold';
 
-    public const PARTIALLY_REFUNDED = 'partially_refunded';
-
     public const PENDING = 'pending';
-
-    public const REFUNDED = 'refunded';
 
     /**
      * The accessors to append to the model's array form.
@@ -131,11 +127,9 @@ class Order extends Model implements Contract
             static::PENDING => __('Pending'),
             static::ON_HOLD => __('On Hold'),
             static::IN_PROGRESS => __('In Progress'),
-            static::COMPLETED => __('Completed'),
+            static::FULFILLED => __('Fulfilled'),
             static::CANCELLED => __('Cancelled'),
             static::FAILED => __('Failed'),
-            static::REFUNDED => __('Refunded'),
-            static::PARTIALLY_REFUNDED => __('Partially Refunded'),
         ];
     }
 
@@ -319,7 +313,17 @@ class Order extends Model implements Contract
      */
     public function paid(): bool
     {
-        return $this->payments->isNotEmpty() && $this->getTotal() <= $this->getTotalPaid();
+        return $this->payments->filter()->completed()->isNotEmpty()
+            && $this->getTotal() <= $this->getTotalPaid();
+    }
+
+    /**
+     * Determine if the order is partially refunded.
+     */
+    public function partiallyPaid(): bool
+    {
+        return $this->payments->filter->completed()->isNotEmpty()
+            && $this->getTotal() > $this->getTotalPaid();
     }
 
     /**

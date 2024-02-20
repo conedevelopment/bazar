@@ -7,7 +7,6 @@ use Cone\Bazar\Events\TransactionCompleted;
 use Cone\Bazar\Interfaces\Models\Transaction as Contract;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Traits\InteractsWithProxy;
-use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;

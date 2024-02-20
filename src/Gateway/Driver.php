@@ -112,11 +112,19 @@ abstract class Driver extends BaseDriver
     }
 
     /**
+     * Resolve the order by the given UUID.
+     */
+    public function resolveOrder(string $id): Order
+    {
+        return Order::proxy()->newQuery()->where('bazar_orders.uuid', $id)->firstOrFail();
+    }
+
+    /**
      * Resolve the order model for payment capture.
      */
     public function resolveOrderForCapture(Request $request): Order
     {
-        return Order::proxy()->newQuery()->where('uuid', $request->input('order'))->firstOrFail();
+        return $this->resolveOrder($request->input('order'));
     }
 
     /**
