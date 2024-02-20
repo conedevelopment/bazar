@@ -313,7 +313,7 @@ class Order extends Model implements Contract
      */
     public function paid(): bool
     {
-        return $this->payments->filter()->completed()->isNotEmpty()
+        return $this->payments->filter->completed()->isNotEmpty()
             && $this->getTotal() <= $this->getTotalPaid();
     }
 
