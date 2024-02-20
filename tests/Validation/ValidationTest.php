@@ -33,10 +33,12 @@ class ValidationTest extends TestCase
     {
         $order = Order::factory()->create();
 
-        $v = new Validator($this->translator, ['amount' => 0], ['amount' => [new TransactionAmount($order)]]);
+        $transaction = $order->transaction()->make();
+
+        $v = new Validator($this->translator, ['amount' => 0], ['amount' => [new TransactionAmount($transaction)]]);
         $this->assertTrue($v->passes());
 
-        $v = new Validator($this->translator, ['amount' => 10000], ['amount' => [new TransactionAmount($order)]]);
+        $v = new Validator($this->translator, ['amount' => 10000], ['amount' => [new TransactionAmount($transaction)]]);
         $this->assertFalse($v->passes());
     }
 }

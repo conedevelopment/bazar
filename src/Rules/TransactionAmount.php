@@ -32,8 +32,8 @@ class TransactionAmount implements ValidationRule
 
         if (is_null($value) || (float) $value > $max) {
             call_user_func($fail, match (true) {
-                $max <= 0 && $this->type === Transaction::PAYMENT => __('The order is fully paid.'),
-                $max <= 0 && $this->type === Transaction::REFUND => __('The order is fully refunded.'),
+                $max <= 0 && $this->transaction->type === Transaction::PAYMENT => __('The order is fully paid.'),
+                $max <= 0 && $this->transaction->type === Transaction::REFUND => __('The order is fully refunded.'),
                 default => __('The :attribute must be less than :value.', ['value' => $max]),
             });
         }
