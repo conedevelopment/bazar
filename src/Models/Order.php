@@ -213,6 +213,26 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Get the payment status name attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function paymentStatus(): Attribute
+    {
+        return new Attribute(
+            get: function (): string {
+                return match (true) {
+                    $this->refunded() => __('Refunded'),
+                    $this->partiallyRefunded() => __('Partially Refunded'),
+                    $this->paid() => __('Paid'),
+                    $this->partiallyPaid() => __('Partially Paid'),
+                    default => __('Pending Payment'),
+                };
+            }
+        );
+    }
+
+    /**
      * Get the columns that should receive a unique identifier.
      */
     public function uniqueIds(): array
