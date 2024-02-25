@@ -12,7 +12,7 @@ abstract class Bazar
      *
      * @var string
      */
-    public const VERSION = '1.0.0-beta';
+    public const VERSION = '1.0.0';
 
     /**
      * The currency in use.
