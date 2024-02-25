@@ -20,7 +20,7 @@ Bazar provides a flexible and easily extensible system, respecting the Laravel c
 ## 📚 Documentation
 
 > [!NOTE]
-> The new documentaion is coming soon, as part of the [Root documentation](https://root.conedevelopment.com).
+> The new documentation is coming soon, as part of the [Root documentation](https://root.conedevelopment.com).
 
 ## 📝 License
 
