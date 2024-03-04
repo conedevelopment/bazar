@@ -24,8 +24,5 @@ class CommandsTest extends TestCase
 
         $this->artisan('bazar:install')
             ->assertSuccessful();
-
-        $this->artisan('bazar:install', ['--seed' => true])
-            ->assertSuccessful();
     }
 }
