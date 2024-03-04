@@ -5,6 +5,7 @@ namespace Cone\Bazar\Models;
 use Closure;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Bazar\Interfaces\Models\Address as Contract;
+use Cone\Root\Support\Filters;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -143,7 +144,11 @@ class Address extends Model implements Contract
     {
         return new Attribute(
             get: function (?string $value): ?string {
-                return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
+                return Filters::apply(
+                    'bazar:address.alias_attribute',
+                    $this->exists ? ($value ?: "#{$this->getKey()}") : $value,
+                    $this
+                );
             }
         );
     }
@@ -156,8 +161,12 @@ class Address extends Model implements Contract
     protected function name(): Attribute
     {
         return new Attribute(
-            get: static function (mixed $value, array $attributes): string {
-                return trim(sprintf('%s %s', $attributes['first_name'], $attributes['last_name']));
+            get: function (mixed $value, array $attributes): string {
+                return Filters::apply(
+                    'bazar:address.name_attribute',
+                    trim(sprintf('%s %s', $attributes['first_name'], $attributes['last_name'])),
+                    $this
+                );
             }
         );
     }
