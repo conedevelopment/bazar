@@ -47,6 +47,8 @@ class Variants extends HasMany
             VariantProperties::make(__('Properties'), 'propertyValues'),
 
             Editor::make(__('Description'), 'description'),
+
+            Inventory::make(),
         ];
     }
 }

@@ -2,6 +2,12 @@
 
 namespace Cone\Bazar;
 
+use Cone\Bazar\Resources\CategoryResource;
+use Cone\Bazar\Resources\OrderResource;
+use Cone\Bazar\Resources\ProductResource;
+use Cone\Bazar\Resources\PropertyResource;
+use Cone\Root\Root;
+use Cone\Root\Support\Filters;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Support\ServiceProvider;
 
@@ -62,6 +68,7 @@ class BazarServiceProvider extends ServiceProvider
 
         $this->registerEvents();
         $this->registerViews();
+        $this->registerResources();
     }
 
     /**
@@ -97,10 +104,6 @@ class BazarServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/bazar'),
         ], 'bazar-views');
-
-        $this->publishes([
-            __DIR__.'/../stubs/BazarServiceProvider.stub' => $this->app->path('Providers/BazarServiceProvider.php'),
-        ], 'bazar-provider');
     }
 
     /**
@@ -121,5 +124,20 @@ class BazarServiceProvider extends ServiceProvider
     {
         $this->app['events']->listen(Logout::class, Listeners\ClearCookies::class);
         $this->app['events']->listen(Events\PaymentCaptured::class, Listeners\RefreshInventory::class);
+    }
+
+    /**
+     * Register the resources.
+     */
+    protected function registerResources(): void
+    {
+        $resources = Filters::apply('bazar:resources', [
+            new CategoryResource(),
+            new ProductResource(),
+            new PropertyResource(),
+            new OrderResource(),
+        ]);
+
+        $this->app->make(Root::class)->resources->register($resources);
     }
 }
