@@ -9,6 +9,7 @@ use Cone\Bazar\Resources\PropertyResource;
 use Cone\Root\Root;
 use Cone\Root\Support\Filters;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\ServiceProvider;
 
 class BazarServiceProvider extends ServiceProvider
@@ -105,6 +106,8 @@ class BazarServiceProvider extends ServiceProvider
      */
     protected function registerCommands(): void
     {
+        AboutCommand::add('Bazar', fn (): array => ['Version' => Bazar::VERSION]);
+
         $this->commands([
             Console\Commands\Install::class,
             Console\Commands\ClearCarts::class,
