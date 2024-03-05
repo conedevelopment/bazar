@@ -66,8 +66,10 @@ class BazarServiceProvider extends ServiceProvider
             $this->registerRoutes();
         }
 
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'bazar');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
+
         $this->registerEvents();
-        $this->registerViews();
         $this->registerResources();
     }
 
@@ -82,14 +84,6 @@ class BazarServiceProvider extends ServiceProvider
             ->group(function (): void {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
-    }
-
-    /**
-     * Register views.
-     */
-    protected function registerViews(): void
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
     }
 
     /**
