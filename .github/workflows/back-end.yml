@@ -14,7 +14,7 @@ jobs:
       matrix:
         os: ["ubuntu-22.04"]
         php: ["8.2", "8.3"]
-        laravel: ["^10.0"]
+        laravel: ["^11.0"]
         dependency-version: ["highest"]
 
     name: "Unit - PHP ${{ matrix.php }} - L ${{ matrix.laravel }} - ${{ matrix.dependency-version }}"
@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -51,9 +51,9 @@ jobs:
         run: composer exec -- phpunit
 
       - name: Send coverage to Coveralls
-        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.php == '8.2' && matrix.laravel == '^10.0' }}
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.php == '8.2' && matrix.laravel == '^11.0' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.5.2/php-coveralls.phar"
+          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.7.0/php-coveralls.phar"
           php ./php-coveralls.phar -v
