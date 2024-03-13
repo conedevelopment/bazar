@@ -16,9 +16,9 @@ return new class() extends Migration
             $table->morphs('itemable');
             $table->nullableMorphs('buyable');
             $table->string('name');
-            $table->unsignedDecimal('price');
-            $table->unsignedDecimal('tax')->default(0);
-            $table->unsignedDecimal('quantity');
+            $table->float('price')->unsigned();
+            $table->float('tax')->unsigned()->default(0);
+            $table->float('quantity')->unsigned();
             $table->json('properties')->nullable();
             $table->timestamps();
         });

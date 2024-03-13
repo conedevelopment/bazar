@@ -67,10 +67,6 @@ class ManagerTest extends TestCase
 
     public function test_cart_has_session_driver(): void
     {
-        $this->session([]);
-
-        $this->app['request']->setLaravelSession($this->app['session']);
-
         $this->assertInstanceOf(SessionDriver::class, $this->manager->driver('session'));
         $this->assertInstanceOf(Cart::class, $this->manager->driver('session')->getModel());
     }

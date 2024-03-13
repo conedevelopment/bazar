@@ -16,7 +16,7 @@ return new class() extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained('bazar_orders')->cascadeOnDelete();
             $table->string('currency');
-            $table->unsignedDecimal('discount')->default(0);
+            $table->float('discount')->unsigned()->default(0);
             $table->boolean('locked')->default(false);
             $table->timestamps();
         });

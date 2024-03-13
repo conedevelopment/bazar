@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->string('status');
             $table->string('currency');
-            $table->unsignedDecimal('discount')->default(0);
+            $table->float('discount')->unsigned()->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

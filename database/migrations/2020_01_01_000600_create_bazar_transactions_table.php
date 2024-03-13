@@ -17,7 +17,7 @@ return new class() extends Migration
             $table->string('key')->nullable()->unique();
             $table->string('driver');
             $table->string('type');
-            $table->unsignedDecimal('amount');
+            $table->float('amount')->unsigned();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
