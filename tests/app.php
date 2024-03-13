@@ -17,7 +17,7 @@ return Application::configure(basePath: __DIR__.'/../vendor/laravel/laravel')
     })
     ->withProviders([
         RootServiceProvider::class,
-        BazarServiceProvider::class
+        BazarServiceProvider::class,
     ])
     ->withExceptions(function (Exceptions $exceptions) {
         //
