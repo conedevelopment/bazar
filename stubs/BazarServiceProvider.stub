@@ -1,0 +1,41 @@
+<?php
+
+namespace {{ namespace }}Providers;
+
+use {{ namespace }}Root\Resources\CategoryResource;
+use {{ namespace }}Root\Resources\OrderResource;
+use {{ namespace }}Root\Resources\ProductResource;
+use {{ namespace }}Root\Resources\PropertyResource;
+use Cone\Root\Root;
+use Illuminate\Support\ServiceProvider;
+
+class BazarServiceProvider extends ServiceProvider
+{
+    /**
+     * All of the container bindings that should be registered.
+     */
+    public array $bindings = [
+        //
+    ];
+
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Root::instance()->resources->register([
+            new CategoryResource(),
+            new ProductResource(),
+            new PropertyResource(),
+            new OrderResource(),
+        ]);
+    }
+}

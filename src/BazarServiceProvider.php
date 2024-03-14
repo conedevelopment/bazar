@@ -2,14 +2,9 @@
 
 namespace Cone\Bazar;
 
-use Cone\Bazar\Resources\CategoryResource;
-use Cone\Bazar\Resources\OrderResource;
-use Cone\Bazar\Resources\ProductResource;
-use Cone\Bazar\Resources\PropertyResource;
-use Cone\Root\Root;
-use Cone\Root\Support\Filters;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Foundation\Events\VendorTagPublished;
 use Illuminate\Support\ServiceProvider;
 
 class BazarServiceProvider extends ServiceProvider
@@ -71,7 +66,6 @@ class BazarServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'bazar');
 
         $this->registerEvents();
-        $this->registerResources();
     }
 
     /**
@@ -99,6 +93,14 @@ class BazarServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/bazar'),
         ], 'bazar-views');
+
+        $this->publishes([
+            __DIR__.'/../stubs/BazarServiceProvider.stub' => $this->app->basePath('app/Providers/BazarServiceProvider.php'),
+            __DIR__.'/../stubs/CategoryResource.stub' => $this->app->basePath('app/Root/Resources/CategoryResource.php'),
+            __DIR__.'/../stubs/ProductResource.stub' => $this->app->basePath('app/Root/Resources/ProductResource.php'),
+            __DIR__.'/../stubs/PropertyResource.stub' => $this->app->basePath('app/Root/Resources/PropertyResource.php'),
+            __DIR__.'/../stubs/OrderResource.stub' => $this->app->basePath('app/Root/Resources/OrderResource.php'),
+        ], 'bazar-stubs');
     }
 
     /**
@@ -121,20 +123,6 @@ class BazarServiceProvider extends ServiceProvider
     {
         $this->app['events']->listen(Logout::class, Listeners\ClearCookies::class);
         $this->app['events']->listen(Events\PaymentCaptured::class, Listeners\RefreshInventory::class);
-    }
-
-    /**
-     * Register the resources.
-     */
-    protected function registerResources(): void
-    {
-        $resources = Filters::apply('bazar:resources', [
-            new CategoryResource(),
-            new ProductResource(),
-            new PropertyResource(),
-            new OrderResource(),
-        ]);
-
-        $this->app->make(Root::class)->resources->register($resources);
+        $this->app['events']->listen(VendorTagPublished::class, Listeners\FormatBazarStubs::class);
     }
 }

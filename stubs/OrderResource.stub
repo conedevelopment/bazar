@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Resources;
+namespace {{ namespace }}Root\Resources;
 
 use Cone\Bazar\Actions\SendOrderDetails;
 use Cone\Bazar\Bazar;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Resources;
+namespace {{ namespace }}Root\Resources;
 
 use Cone\Bazar\Models\Category;
 use Cone\Root\Fields\Editor;

@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Console\Commands;
 
+use Cone\Bazar\BazarServiceProvider;
 use Illuminate\Console\Command;
 
 class Install extends Command
@@ -26,5 +27,10 @@ class Install extends Command
     public function handle(): void
     {
         $this->call('migrate');
+
+        $this->call('vendor:publish', [
+            '--provider' => BazarServiceProvider::class,
+            '--tag' => 'bazar-stubs',
+        ]);
     }
 }

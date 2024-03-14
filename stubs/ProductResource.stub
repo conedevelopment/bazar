@@ -1,6 +1,6 @@
 <?php
 
-namespace Cone\Bazar\Resources;
+namespace {{ namespace }}Root\Resources;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Fields\Inventory;
@@ -49,7 +49,7 @@ class ProductResource extends Resource
      */
     public function fields(Request $request): array
     {
-        return array_merge(parent::fields($request), [
+        return [
             ID::make(),
 
             Text::make(__('Name'), 'name')
@@ -76,6 +76,6 @@ class ProductResource extends Resource
                 ->groupOptionsBy('property.name'),
 
             Variants::make(),
-        ]);
+        ];
     }
 }
