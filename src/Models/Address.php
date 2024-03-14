@@ -143,7 +143,7 @@ class Address extends Model implements Contract
     {
         return new Attribute(
             get: function (?string $value): ?string {
-                return $this->exists ? ($value ?: "#{$this->getKey()}") : $value;
+                return $this->exists ? ($value ?: $this->name) : $value;
             }
         );
     }
