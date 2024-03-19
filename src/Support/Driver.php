@@ -23,6 +23,7 @@ abstract class Driver
     public function __construct(array $config = [])
     {
         $this->config = $config;
+        $this->enabled = (bool) ($config['enabled'] ?? false);
     }
 
     /**

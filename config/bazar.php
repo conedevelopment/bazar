@@ -60,8 +60,12 @@ return [
     'gateway' => [
         'default' => env('BAZAR_GATEWAY_DRIVER', 'transfer'),
         'drivers' => [
-            'cash' => [],
-            'transfer' => [],
+            'cash' => [
+                'enabled' => true,
+            ],
+            'transfer' => [
+                'enabled' => true,
+            ],
         ],
         'urls' => [
             'success' => '/?order={order}',
