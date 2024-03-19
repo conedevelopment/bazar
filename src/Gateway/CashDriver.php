@@ -6,6 +6,7 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CashDriver extends Driver
 {
@@ -19,7 +20,7 @@ class CashDriver extends Driver
      */
     public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = parent::pay($order, $amount, $attributes);
+        $transaction = parent::pay($order, $amount, array_merge(['key' => Str::random()], $attributes));
 
         $transaction->markAsCompleted();
 
@@ -31,7 +32,7 @@ class CashDriver extends Driver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        $transaction = parent::refund($order, $amount, $attributes);
+        $transaction = parent::refund($order, $amount, array_merge(['key' => Str::random()], $attributes));
 
         $transaction->markAsCompleted();
 
