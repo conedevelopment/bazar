@@ -98,6 +98,6 @@ class AddressTest extends TestCase
         $address->addressable()->associate($this->user);
         $address->save();
 
-        $this->assertSame("#{$address->id}", $address->alias);
+        $this->assertSame($address->name, $address->alias);
     }
 }
