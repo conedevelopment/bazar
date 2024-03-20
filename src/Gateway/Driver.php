@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use Throwable;
 
 abstract class Driver extends BaseDriver
@@ -27,7 +28,7 @@ abstract class Driver extends BaseDriver
      */
     public function pay(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return $order->pay($amount, $this->name, $attributes);
+        return $order->pay($amount, $this->name, array_merge(['key' => Str::random()], $attributes));
     }
 
     /**
@@ -35,7 +36,7 @@ abstract class Driver extends BaseDriver
      */
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        return $order->refund($amount, $this->name, $attributes);
+        return $order->refund($amount, $this->name, array_merge(['key' => Str::random()], $attributes));
     }
 
     /**
