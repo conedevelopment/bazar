@@ -351,7 +351,9 @@ class Order extends Model implements Contract
      */
     public function payable(): bool
     {
-        return $this->getTotalPayable() > 0 && ! $this->paid();
+        return in_array($this->status, [static::ON_HOLD, static::CANCELLED])
+            && $this->getTotalPayable() > 0
+            && ! $this->paid();
     }
 
     /**
