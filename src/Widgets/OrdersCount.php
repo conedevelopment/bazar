@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Widgets;
 
-use App\Models\Order;
+use Cone\Bazar\Models\Order;
 use Cone\Root\Widgets\Value;
 use Illuminate\Database\Eloquent\Builder;
 
