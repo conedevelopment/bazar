@@ -2,7 +2,9 @@
 
 namespace Cone\Bazar\Database\Factories;
 
+use Cone\Bazar\Bazar;
 use Cone\Bazar\Models\Order;
+use Cone\Bazar\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -31,7 +33,43 @@ class OrderFactory extends Factory
     {
         return [
             'discount' => 0,
-            'currency' => 'usd',
+            'currency' => Bazar::getCurrency(),
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Order $order): void {
+            $order->transactions->each(function (Transaction $transaction) use ($order): void {
+                $transaction->order()->associate($order)->save();
+            });
+        });
+    }
+
+    /**
+     * Configure the paid state.
+     */
+    public function paid(): static
+    {
+        return $this->afterMaking(function (Order $order): void {
+            $order->transactions->push(
+                (Transaction::proxy())::factory()->completed()->make(['amount' => $order->getTotalPayable()])
+            );
+        });
+    }
+
+    /**
+     * Configure the refunded state.
+     */
+    public function refunded(): static
+    {
+        return $this->paid()->afterMaking(function (Order $order): void {
+            $order->transactions->push(
+                (Transaction::proxy())::factory()->refund()->completed()->make(['amount' => $order->getTotalPayable()])
+            );
+        });
     }
 }

@@ -59,10 +59,10 @@ class ManagerTest extends TestCase
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {
-            return new CustomGatewayDriver();
+            return new CustomGatewayDriver(['enabled' => true]);
         });
         $this->manager->extend('failing-driver', function () {
-            return new FailingDriver();
+            return new FailingDriver(['enabled' => true]);
         });
     }
 

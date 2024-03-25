@@ -87,7 +87,9 @@ return [
     'shipping' => [
         'default' => env('BAZAR_SHIPPING_DRIVER', 'local-pickup'),
         'drivers' => [
-            'local-pickup' => [],
+            'local-pickup' => [
+                'enabled' => true,
+            ],
         ],
     ],
 

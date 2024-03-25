@@ -4,7 +4,7 @@ namespace Cone\Bazar\Database\Factories;
 
 use Cone\Bazar\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Date;
 
 class TransactionFactory extends Factory
 {
@@ -32,8 +32,32 @@ class TransactionFactory extends Factory
     {
         return [
             'driver' => 'cash',
-            'amount' => mt_rand(10, 1000) / 10,
-            'type' => Arr::random([Transaction::PAYMENT, Transaction::REFUND]),
+            'amount' => mt_rand(10, 1000),
+            'type' => Transaction::PAYMENT,
         ];
+    }
+
+    /**
+     * Configure the refund state.
+     */
+    public function refund(): static
+    {
+        return $this->state(function (): array {
+            return [
+                'type' => Transaction::REFUND,
+            ];
+        });
+    }
+
+    /**
+     * Configure the completed state.
+     */
+    public function completed(): static
+    {
+        return $this->state(function (): array {
+            return [
+                'completed_at' => Date::now(),
+            ];
+        });
     }
 }

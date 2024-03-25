@@ -53,7 +53,7 @@ class OrderTest extends TestCase
         );
 
         $this->assertSame(
-            $this->order->transactions->pluck('id')->all(), $transactions->pluck('id')->all()
+            $this->order->refresh()->transactions->pluck('id')->all(), $transactions->pluck('id')->all()
         );
     }
 
