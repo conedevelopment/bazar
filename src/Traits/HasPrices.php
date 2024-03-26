@@ -79,6 +79,6 @@ trait HasPrices
     {
         $price = $this->getPrice();
 
-        return is_null($price) || $price === 0;
+        return is_null($price) || $price === 0.0;
     }
 }
