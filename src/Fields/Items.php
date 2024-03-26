@@ -46,7 +46,7 @@ class Items extends MorphMany
                     Product::getProxiedClass(),
                     Variant::getProxiedClass(),
                 ])
-                ->display(static function (Model $relatable): ?string {
+                ->display(static function (Model $relatable): string {
                     return (string) match ($relatable::class) {
                         Product::getProxiedClass() => $relatable->name,
                         Variant::getProxiedClass() => $relatable->alias,

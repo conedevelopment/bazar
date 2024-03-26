@@ -71,7 +71,7 @@ class Cart extends Model implements Contract
     protected static function booted(): void
     {
         static::creating(static function (self $cart): void {
-            $cart->currency = $cart->currency ?: Bazar::getCurrency();
+            $cart->setAttribute('currency', $cart->currency ?: Bazar::getCurrency());
         });
     }
 
