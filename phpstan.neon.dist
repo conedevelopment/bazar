@@ -13,3 +13,13 @@ parameters:
     checkMissingIterableValueType: false
     ignoreErrors:
         - '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model::#'
+        # Incorrect framework types
+        -
+            path: 'src/Traits/HasPrices.php'
+            message: '#^Parameter \#2 \$type of method Illuminate\\Database\\Eloquent\\Model::getMorphs\(\) expects string, null given\.$#'
+            count: 2
+        -
+            path: 'src/Traits/HasPrices.php'
+            message: '#^Parameter \#3 \$id of method Illuminate\\Database\\Eloquent\\Model::getMorphs\(\) expects string, null given\.$#'
+            count: 2
+

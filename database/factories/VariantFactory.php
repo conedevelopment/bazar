@@ -7,12 +7,15 @@ use Cone\Bazar\Models\Variant;
 use Cone\Root\Models\Meta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class VariantFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Variant::class;
 

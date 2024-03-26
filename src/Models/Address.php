@@ -20,7 +20,7 @@ class Address extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var list<string>
      */
     protected $appends = [
         'name',
@@ -62,7 +62,7 @@ class Address extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $fillable = [
         'address_secondary',

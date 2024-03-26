@@ -6,12 +6,15 @@ use Cone\Bazar\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Date;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class TransactionFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Transaction::class;
 

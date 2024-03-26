@@ -6,12 +6,15 @@ use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class ShippingFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Shipping::class;
 

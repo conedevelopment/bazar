@@ -7,12 +7,15 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class OrderFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Order::class;
 

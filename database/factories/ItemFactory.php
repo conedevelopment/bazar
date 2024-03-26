@@ -5,12 +5,15 @@ namespace Cone\Bazar\Database\Factories;
 use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class ItemFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Item::class;
 

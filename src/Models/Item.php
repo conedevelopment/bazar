@@ -26,7 +26,7 @@ class Item extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $appends = [
         'subtotal',
@@ -60,7 +60,7 @@ class Item extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $fillable = [
         'buyable_id',
@@ -75,7 +75,7 @@ class Item extends Model implements Contract
     /**
      * The attributes that should be hidden for arrays.
      *
-     * @var array
+     * @var list<string>
      */
     protected $hidden = [
         'itemable',

@@ -50,7 +50,7 @@ class Cart extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $fillable = [
         'currency',
@@ -101,6 +101,8 @@ class Cart extends Model implements Contract
 
     /**
      * Get the order for the cart.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Cone\Bazar\Models\Order, \Cone\Bazar\Models\Cart>
      */
     public function order(): BelongsTo
     {

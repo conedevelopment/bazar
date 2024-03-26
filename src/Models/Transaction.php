@@ -28,7 +28,7 @@ class Transaction extends Model implements Contract
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $appends = [
         'driver_name',
@@ -47,7 +47,7 @@ class Transaction extends Model implements Contract
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var list<string>
      */
     protected $fillable = [
         'amount',
@@ -90,6 +90,8 @@ class Transaction extends Model implements Contract
 
     /**
      * Get the order for the transaction.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Cone\Bazar\Models\Order, \Cone\Bazar\Models\Transaction>
      */
     public function order(): BelongsTo
     {

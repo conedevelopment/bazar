@@ -20,6 +20,8 @@ trait InteractsWithItemables
 
     /**
      * Get the products for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<\Cone\Bazar\Models\Order>
      */
     public function orders(): HasManyThrough
     {
@@ -30,6 +32,8 @@ trait InteractsWithItemables
 
     /**
      * Get the carts for the product.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<\Cone\Bazar\Models\Cart>
      */
     public function carts(): HasManyThrough
     {
