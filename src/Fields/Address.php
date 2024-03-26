@@ -33,9 +33,9 @@ class Address extends MorphOne
 
             Text::make(__('Last Name'), 'last_name'),
 
-            Text::make(__('Company'), 'copmany'),
+            Text::make(__('Company'), 'company'),
 
-            Text::make(__('Tax ID'), 'copmany'),
+            Text::make(__('Tax ID'), 'tax_id'),
 
             Email::make(__('Email'), 'email'),
 
