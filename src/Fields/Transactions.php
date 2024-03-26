@@ -59,7 +59,7 @@ class Transactions extends HasMany
                         'required',
                         'numeric',
                         'gt:0',
-                        new TransactionAmount($transaction),
+                        new TransactionAmount($transaction->fill(['type' => $request->input('type')])),
                     ];
                 }),
 
