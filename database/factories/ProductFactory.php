@@ -8,12 +8,15 @@ use Cone\Root\Models\Meta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class ProductFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Product::class;
 

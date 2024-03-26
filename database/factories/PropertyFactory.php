@@ -6,12 +6,15 @@ use Cone\Bazar\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class PropertyFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
      */
     protected $model = Property::class;
 
