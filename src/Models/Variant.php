@@ -110,9 +110,10 @@ class Variant extends Model implements Contract
      */
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
-        return $this->items()->make(array_merge($attributes, [
+        return $this->items()->make(array_merge([
             'name' => sprintf('%s - %s', $this->product->name, $this->alias),
             'price' => $this->getPrice($itemable->getCurrency()),
-        ]))->setRelation('buyable', $this);
+            'quantity' => 1,
+        ], $attributes))->setRelation('buyable', $this);
     }
 }

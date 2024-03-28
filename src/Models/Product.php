@@ -148,9 +148,10 @@ class Product extends Model implements Contract
             return $variant->toItem($itemable, $attributes);
         }
 
-        return $this->items()->make(array_merge($attributes, [
+        return $this->items()->make(array_merge([
             'name' => $this->name,
             'price' => $this->getPrice($itemable->getCurrency()),
-        ]))->setRelation('buyable', $this);
+            'quantity' => 1,
+        ], $attributes))->setRelation('buyable', $this);
     }
 }
