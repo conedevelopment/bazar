@@ -84,6 +84,20 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the name attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function name(): Attribute
+    {
+        return new Attribute(
+            get: function (): string {
+                return sprintf('%s - %s', $this->product->name, $this->alias);
+            }
+        );
+    }
+
+    /**
      * Get the alias attribute.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
@@ -111,7 +125,7 @@ class Variant extends Model implements Contract
     public function toItem(Itemable $itemable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge([
-            'name' => sprintf('%s - %s', $this->product->name, $this->alias),
+            'name' => $this->name,
             'price' => $this->getPrice($itemable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);
