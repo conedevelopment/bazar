@@ -112,6 +112,14 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Determine whether the buyable object is available for the itemable instance.
+     */
+    public function buyable(Itemable $itemable): bool
+    {
+        return true;
+    }
+
+    /**
      * Get the price by the given type and currency.
      */
     public function getPrice(?string $currency = null): ?float
