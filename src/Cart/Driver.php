@@ -3,6 +3,7 @@
 namespace Cone\Bazar\Cart;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Exceptions\CartException;
 use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Models\Address;
@@ -88,6 +89,10 @@ abstract class Driver
      */
     public function addItem(Buyable $buyable, float $quantity = 1, array $properties = []): Item
     {
+        if (! $buyable->buyable($this->getModel())) {
+            throw new CartException(sprintf('Unable to add [%s] item to the cart.', get_class($buyable)));
+        }
+
         $item = $buyable->toItem(
             $this->getModel(),
             ['quantity' => $quantity, 'properties' => $properties]

@@ -92,6 +92,14 @@ class Product extends Model implements Contract
     }
 
     /**
+     * Determine whether the buyable object is available for the itemable instance.
+     */
+    public function buyable(Itemable $itemable): bool
+    {
+        return true;
+    }
+
+    /**
      * Scope the query only to the models that are out of stock.
      */
     public function scopeOutOfStock(Builder $query): Builder

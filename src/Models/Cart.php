@@ -4,6 +4,8 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Exceptions\CartException;
+use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
@@ -189,6 +191,12 @@ class Cart extends Model implements Contract
      */
     public function toOrder(): Order
     {
+        $this->lineItems->each(function (Buyable $buyable): void {
+            if (! $buyable->buyable($this->order)) {
+                throw new CartException(sprintf('Unable to add [%s] item to the order.', get_class($buyable)));
+            }
+        });
+
         $this->order->user()->associate($this->user)->save();
 
         if ($this->order_id !== $this->order->getKey()) {
