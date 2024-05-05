@@ -73,6 +73,8 @@ class Items extends MorphMany
 
             Number::make(__('Quantity'), 'quantity')
                 ->required()
+                ->default(1)
+                ->rules(['required', 'numeric', 'gt:0'])
                 ->min(0),
         ];
     }

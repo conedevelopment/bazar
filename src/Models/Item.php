@@ -41,7 +41,7 @@ class Item extends Model implements Contract
     protected $attributes = [
         'price' => 0,
         'properties' => '[]',
-        'quantity' => 0,
+        'quantity' => 1,
         'tax' => 0,
     ];
 
