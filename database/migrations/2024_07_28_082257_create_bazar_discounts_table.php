@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_variants', static function (Blueprint $table): void {
+        Schema::create('bazar_discounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('bazar_products')->cascadeOnDelete();
-            $table->string('alias')->nullable();
-            $table->text('description')->nullable();
             $table->timestamps();
-            $table->softDeletes();
-
-            $table->unique(['alias', 'product_id']);
         });
     }
 
@@ -28,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bazar_variants');
+        Schema::dropIfExists('bazar_discounts');
     }
 };

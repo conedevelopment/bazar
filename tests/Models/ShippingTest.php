@@ -45,7 +45,7 @@ class ShippingTest extends TestCase
 
     public function test_shipping_belongs_to_a_cart_by_default(): void
     {
-        $shipping = new Shipping();
+        $shipping = new Shipping;
 
         $this->assertInstanceOf(Cart::class, $shipping->shippable);
     }

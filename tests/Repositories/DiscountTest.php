@@ -34,7 +34,7 @@ class DiscountTest extends TestCase
 
     public function test_discount_repository_calculates_discounts(): void
     {
-        Discount::register('custom-object', new CustomDiscount());
+        Discount::register('custom-object', new CustomDiscount);
         Discount::register('custom-closure', function (Discountable $model) {
             return 100;
         });

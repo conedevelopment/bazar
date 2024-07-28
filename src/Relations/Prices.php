@@ -13,6 +13,6 @@ class Prices extends MorphMany
     {
         parent::addConstraints();
 
-        $this->query->where($this->query->qualifyColumn('key'), 'like', 'price_%');
+        $this->getQuery()->where($this->getQuery()->qualifyColumn('key'), 'like', 'price_%');
     }
 }

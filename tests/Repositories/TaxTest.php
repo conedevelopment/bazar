@@ -36,7 +36,7 @@ class TaxTest extends TestCase
 
     public function test_tax_repository_calculates_taxes(): void
     {
-        Tax::register('custom-object', new CustomTax());
+        Tax::register('custom-object', new CustomTax);
         Tax::register('custom-closure', function (Taxable $model) {
             return $model instanceof Shipping ? 20 : 30;
         });

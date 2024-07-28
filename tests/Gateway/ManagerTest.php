@@ -179,11 +179,11 @@ class FailingDriver extends Driver
 
     public function checkout(Request $request, Order $order): Order
     {
-        throw new Exception();
+        throw new Exception;
     }
 
     public function refund(Order $order, ?float $amount = null, array $attributes = []): Transaction
     {
-        throw new Exception();
+        throw new Exception;
     }
 }

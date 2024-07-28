@@ -25,6 +25,8 @@ class Price extends Meta
 
         parent::__construct($label, sprintf('price_%s', strtolower($this->currency)));
 
+        $this->aggregateResolver = null;
+
         $this->as(Number::class, function (Number $field): void {
             $field->min(0)
                 ->format(function (Request $request, Model $model, mixed $value): ?string {

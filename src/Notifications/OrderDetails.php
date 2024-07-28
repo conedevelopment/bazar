@@ -40,7 +40,7 @@ class OrderDetails extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject(__('Order Details (#:order)', ['order' => $this->order->getKey()]))
             ->markdown('root::mail.order-details', [
                 'order' => $this->order,

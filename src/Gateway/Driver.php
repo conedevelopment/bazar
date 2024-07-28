@@ -171,7 +171,7 @@ abstract class Driver extends BaseDriver
      */
     public function handleNotification(Request $request): Response
     {
-        return (new Response())->respondWith(static function (): HttpResponse {
+        return (new Response)->respondWith(static function (): HttpResponse {
             return new HttpResponse('', HttpResponse::HTTP_NO_CONTENT);
         });
     }
