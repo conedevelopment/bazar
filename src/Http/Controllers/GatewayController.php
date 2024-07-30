@@ -25,6 +25,10 @@ class GatewayController extends Controller
      */
     public function notification(Request $request, string $driver): Response
     {
-        return Gateway::driver($driver)->handleNotification($request);
+        $gateway = Gateway::driver($driver);
+
+        return $gateway->handleNotification(
+            $request, $gateway->resolveOrderForNotification($request)
+        );
     }
 }

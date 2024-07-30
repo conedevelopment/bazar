@@ -129,6 +129,14 @@ abstract class Driver extends BaseDriver
     }
 
     /**
+     * Resolve the order model for notification.
+     */
+    public function resolveOrderForNotification(Request $request): Order
+    {
+        return $this->resolveOrder($request->input('order'));
+    }
+
+    /**
      * Handle the capture request.
      */
     public function handleCapture(Request $request, Order $order): Response
@@ -169,7 +177,7 @@ abstract class Driver extends BaseDriver
     /**
      * Handle the notification request.
      */
-    public function handleNotification(Request $request): Response
+    public function handleNotification(Request $request, Order $order): Response
     {
         return (new Response)->respondWith(static function (): HttpResponse {
             return new HttpResponse('', HttpResponse::HTTP_NO_CONTENT);
