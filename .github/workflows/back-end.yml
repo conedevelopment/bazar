@@ -8,7 +8,6 @@ on:
 
 jobs:
   unit_tests:
-
     strategy:
       fail-fast: true
       matrix:
@@ -57,3 +56,47 @@ jobs:
         run: |
           wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.7.0/php-coveralls.phar"
           php ./php-coveralls.phar -v
+
+  static_analysis:
+    name: "Static Analysis"
+    runs-on: "ubuntu-22.04"
+    timeout-minutes: 5
+    steps:
+    -
+      name: "Set up PHP"
+      uses: "shivammathur/setup-php@v2"
+      with:
+        php-version: "8.2"
+        extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+        coverage: "none"
+    -
+      name: "Checkout repository"
+      uses: "actions/checkout@v4"
+    -
+      name: "Check JSON files"
+      run: |
+        git ls-files --cached -z -- '*.json' \
+          | xargs -t --null -L 1 -- \
+            php -r 'json_decode(file_get_contents($argv[1]), null, 512, JSON_THROW_ON_ERROR);'
+    -
+      name: "Validate Composer configuration"
+      run: "composer validate --no-interaction --strict"
+    -
+      name: "Install dependencies"
+      uses: "ramsey/composer-install@v3"
+      with:
+        dependency-versions: "locked"
+    -
+      name: "Check PSR-4 mapping"
+      run: "composer dump-autoload --dev --optimize --strict-psr"
+    -
+      # https://github.com/phpstan/phpstan/issues/9475
+      name: "Search for $this->$this typo"
+      run: |
+        ! git grep --line-number -e '\$this\s*->\s*\$this' -- ':!:*/back-end\.yml'
+    -
+      name: "Install orchestra/testbench"
+      run: "composer require --dev --update-with-all-dependencies orchestra/testbench"
+    -
+      name: "Perform static analysis"
+      run: "composer exec -- phpstan || true 'Annotate only'"
