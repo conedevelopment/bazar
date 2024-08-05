@@ -41,7 +41,7 @@ class ManualDriver extends Driver
     /**
      * Handle the notification request.
      */
-    public function handleNotification(Request $request): Response
+    public function handleNotification(Request $request, Order $order): Response
     {
         throw new Exception('This payment gateway does not support payment notifications.');
     }
