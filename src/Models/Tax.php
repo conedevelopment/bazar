@@ -2,9 +2,21 @@
 
 namespace Cone\Bazar\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Cone\Bazar\Interfaces\Models\Tax as Contract;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Tax extends MorphPivot
+class Tax extends Model implements Contract
 {
-    //
+    use HasFactory;
+    use InteractsWithProxy;
+
+    /**
+     * Get the proxied interface.
+     */
+    public static function getProxiedInterface(): string
+    {
+        return Contract::class;
+    }
 }

@@ -2,9 +2,21 @@
 
 namespace Cone\Bazar\Models;
 
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Cone\Bazar\Interfaces\Models\Discount as Contract;
+use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class Discount extends MorphPivot
+class Discount extends Model implements Contract
 {
-    //
+    use HasFactory;
+    use InteractsWithProxy;
+
+    /**
+     * Get the proxied interface.
+     */
+    public static function getProxiedInterface(): string
+    {
+        return Contract::class;
+    }
 }
