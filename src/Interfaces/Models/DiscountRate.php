@@ -13,6 +13,11 @@ interface DiscountRate
     public function applicable(Discountable $model): bool;
 
     /**
+     * Calculate the discount for the given model.
+     */
+    public function calculate(Discountable $model): float;
+
+    /**
      * Apply the discount rate on the model.
      */
     public function apply(Discountable $model): ?Discount;

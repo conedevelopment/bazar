@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_taxes', function (Blueprint $table) {
+        Schema::create('bazar_taxes', static function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('tax_rate_id')->constrained('bazar_tax_rates')->nullOnDelete();
-            $table->foreignId('item_id')->constrained('bazar_items')->nullOnDelete();
+            $table->foreignId('tax_rate_id')->nullable()->constrained('bazar_tax_rates')->nullOnDelete();
+            $table->foreignId('item_id')->nullable()->constrained('bazar_items')->nullOnDelete();
             $table->float('value')->unsigned();
             $table->timestamps();
         });

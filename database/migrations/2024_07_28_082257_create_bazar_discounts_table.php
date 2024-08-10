@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_discounts', function (Blueprint $table) {
+        Schema::create('bazar_discounts', static function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('discount_rate_id')->constrained('bazar_discount_rates')->nullOnDelete();
+            $table->foreignId('discount_rate_id')->nullable()->constrained('bazar_discount_rates')->nullOnDelete();
             $table->morphs('discountable');
             $table->float('value')->unsigned();
             $table->timestamps();

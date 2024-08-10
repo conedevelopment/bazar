@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 interface Product extends Buyable, Stockable
 {
@@ -36,6 +37,11 @@ interface Product extends Buyable, Stockable
      * Get the variants for the product.
      */
     public function variants(): HasMany;
+
+    /**
+     * Get the tax rates for the product.
+     */
+    public function taxRates(): MorphToMany;
 
     /**
      * Get the variant of the given option.

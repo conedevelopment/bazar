@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_discount_rates', static function (Blueprint $table): void {
+        Schema::create('bazar_buyable_tax_rate', static function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->float('value')->unsigned();
+            $table->foreignId('tax_rate_id')->constrained('bazar_tax_rates')->cascadeOnDelete();
+            $table->morphs('buyable');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bazar_discount_rates');
+        Schema::dropIfExists('bazar_buyable_tax_rate');
     }
 };
