@@ -32,10 +32,10 @@ class BazarServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Root::instance()->resources->register([
-            new CategoryResource(),
-            new ProductResource(),
-            new PropertyResource(),
-            new OrderResource(),
+            new CategoryResource,
+            new ProductResource,
+            new PropertyResource,
+            new OrderResource,
         ]);
     }
 }
