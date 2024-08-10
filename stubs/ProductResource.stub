@@ -10,6 +10,7 @@ use Cone\Bazar\Models\Product;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Editor;
 use Cone\Root\Fields\ID;
+use Cone\Root\Fields\MorphToMany;
 use Cone\Root\Fields\Slug;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
@@ -76,6 +77,10 @@ class ProductResource extends Resource
                 ->groupOptionsBy('property.name'),
 
             Variants::make(),
+
+            MorphToMany::make(__('Tax Rates'), 'taxRates')
+                ->display('name')
+                ->hiddenOn(['index']),
         ];
     }
 }
