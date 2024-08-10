@@ -43,7 +43,6 @@ class ManagerTest extends TestCase
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
-                'tax' => 0,
                 'price' => $product->price,
                 'name' => $product->name,
             ]);
@@ -51,7 +50,6 @@ class ManagerTest extends TestCase
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
-                'tax' => 0,
                 'price' => $product->price,
                 'name' => $product->name,
             ]);
@@ -66,7 +64,7 @@ class ManagerTest extends TestCase
         });
     }
 
-    public function test_gateway_can_list_available_drivers_for_itemable_model(): void
+    public function test_gateway_can_list_available_drivers_for_checkoutable_model(): void
     {
         $this->assertEquals(
             ['cash', 'transfer', 'custom-driver', 'failing-driver'],

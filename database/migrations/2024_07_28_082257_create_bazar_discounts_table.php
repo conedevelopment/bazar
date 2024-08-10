@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('bazar_discounts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('discount_rate_id')->constrained('bazar_discount_rates')->nullOnDelete();
+            $table->morphs('discountable');
+            $table->float('value')->unsigned();
             $table->timestamps();
         });
     }

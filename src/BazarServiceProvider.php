@@ -36,8 +36,6 @@ class BazarServiceProvider extends ServiceProvider
     public array $singletons = [
         Interfaces\Cart\Manager::class => Cart\Manager::class,
         Interfaces\Gateway\Manager::class => Gateway\Manager::class,
-        Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
-        Interfaces\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
         Interfaces\Shipping\Manager::class => Shipping\Manager::class,
     ];
 

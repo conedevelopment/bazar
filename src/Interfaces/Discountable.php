@@ -2,30 +2,27 @@
 
 namespace Cone\Bazar\Interfaces;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
 interface Discountable
 {
     /**
+     * Get the discounts.
+     */
+    public function discounts(): MorphMany;
+
+    /**
      * Get the discount.
      */
-    public function getDiscount(): float;
+    public function getTotalDiscount(): float;
 
     /**
      * Get the formatted discount.
      */
-    public function getFormattedDiscount(): string;
-
-    /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float;
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string;
+    public function getFormattedTotalDiscount(): string;
 
     /**
      * Calculate the discount.
      */
-    public function calculateDiscount(bool $update = true): float;
+    public function calculateDiscount(): float;
 }

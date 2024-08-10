@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Traits;
 
+use Cone\Bazar\Models\DiscountRate;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Discount;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -41,14 +42,14 @@ trait InteractsWithDiscounts
     /**
      * Calculate the discount.
      */
-    public function calculateDiscount(bool $update = true): float
+    public function calculateDiscount(): float
     {
-        $this->discount = Discount::calculate($this);
+        $total = 0;
 
-        if ($update) {
-            $this->save();
-        }
+        DiscountRate::query()->get()->each(function (DiscountRate $rate) use (&$total): void {
+            $total += $rate->apply($this)?->value ?: 0;
+        });
 
-        return $this->discount;
+        return $total;
     }
 }

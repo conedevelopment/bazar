@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Number;
 
 class Cart extends Model implements Contract
 {
@@ -122,22 +121,6 @@ class Cart extends Model implements Contract
             ->withDefault(function (Address $address): Address {
                 return $address->fill($this->user?->address?->toArray() ?: []);
             });
-    }
-
-    /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        return $this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0;
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
     }
 
     /**

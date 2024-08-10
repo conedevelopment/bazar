@@ -20,7 +20,7 @@ class Items extends MorphMany
      */
     protected array $with = [
         'buyable',
-        'itemable',
+        'checkoutable',
     ];
 
     /**
@@ -61,14 +61,14 @@ class Items extends MorphMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return (new Currency($value, $model->itemable->currency))->format();
+                    return (new Currency($value, $model->checkoutable->currency))->format();
                 }),
 
             Number::make(__('TAX'), 'tax')
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return (new Currency($value, $model->itemable->currency))->format();
+                    return (new Currency($value, $model->checkoutable->currency))->format();
                 }),
 
             Number::make(__('Quantity'), 'quantity')

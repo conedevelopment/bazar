@@ -3,11 +3,11 @@
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\VariantFactory;
-use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
 use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\HasProperties;
-use Cone\Bazar\Traits\InteractsWithItemables;
+use Cone\Bazar\Traits\InteractsWithCheckoutables;
 use Cone\Bazar\Traits\InteractsWithStock;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMetaData;
@@ -28,7 +28,7 @@ class Variant extends Model implements Contract
         HasPrices::getPrice as __getPrice;
     }
     use HasProperties;
-    use InteractsWithItemables;
+    use InteractsWithCheckoutables;
     use InteractsWithProxy;
     use InteractsWithStock;
     use SoftDeletes;
@@ -112,9 +112,9 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Determine whether the buyable object is available for the itemable instance.
+     * Determine whether the buyable object is available for the checkoutable instance.
      */
-    public function buyable(Itemable $itemable): bool
+    public function buyable(Checkoutable $checkoutable): bool
     {
         return true;
     }
@@ -130,11 +130,11 @@ class Variant extends Model implements Contract
     /**
      * Get the item representation of the buyable instance.
      */
-    public function toItem(Itemable $itemable, array $attributes = []): Item
+    public function toItem(Checkoutable $checkoutable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge([
             'name' => $this->name,
-            'price' => $this->getPrice($itemable->getCurrency()),
+            'price' => $this->getPrice($checkoutable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);
     }

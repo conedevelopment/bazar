@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('bazar_taxes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tax_rate_id')->constrained('bazar_tax_rates')->nullOnDelete();
+            $table->foreignId('item_id')->constrained('bazar_items')->nullOnDelete();
+            $table->float('value')->unsigned();
             $table->timestamps();
         });
     }

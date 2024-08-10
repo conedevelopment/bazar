@@ -7,12 +7,12 @@ use Cone\Bazar\Models\Item;
 interface Buyable
 {
     /**
-     * Determine whether the buyable object is available for the itemable instance.
+     * Determine whether the buyable object is available for the checkoutable instance.
      */
-    public function buyable(Itemable $itemable): bool;
+    public function buyable(Checkoutable $checkoutable): bool;
 
     /**
      * Get the item representation of the buyable instance.
      */
-    public function toItem(Itemable $itemable, array $attributes = []): Item;
+    public function toItem(Checkoutable $checkoutable, array $attributes = []): Item;
 }

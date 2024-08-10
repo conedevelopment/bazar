@@ -6,7 +6,7 @@ use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Itemable extends Shippable
+interface Checkoutable extends Shippable
 {
     /**
      * Get the user for the model.
@@ -44,7 +44,7 @@ interface Itemable extends Shippable
     public function getFormattedSubtotal(): string;
 
     /**
-     * Get the itemable model's fee total.
+     * Get the checkoutable model's fee total.
      */
     public function getFeeTotal(): float;
 

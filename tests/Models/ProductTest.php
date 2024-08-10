@@ -38,7 +38,7 @@ class ProductTest extends TestCase
             'tax' => 0,
             'quantity' => 3,
             'name' => $this->product->name,
-        ])->itemable()->associate($order);
+        ])->checkoutable()->associate($order);
 
         $this->product->items()->save($item);
 
@@ -54,7 +54,7 @@ class ProductTest extends TestCase
             'tax' => 0,
             'quantity' => 3,
             'name' => $this->product->name,
-        ])->itemable()->associate($cart);
+        ])->checkoutable()->associate($cart);
 
         $this->product->items()->save($item);
 

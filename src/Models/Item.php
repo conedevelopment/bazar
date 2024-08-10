@@ -78,7 +78,7 @@ class Item extends Model implements Contract
      * @var list<string>
      */
     protected $hidden = [
-        'itemable',
+        'checkoutable',
     ];
 
     /**
@@ -121,9 +121,9 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the itemable model for the item.
+     * Get the checkoutable model for the item.
      */
-    public function itemable(): MorphTo
+    public function checkoutable(): MorphTo
     {
         return $this->morphTo()->withDefault();
     }
@@ -209,7 +209,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return (new Currency($this->getPrice(), $this->itemable->getCurrency()))->format();
+        return (new Currency($this->getPrice(), $this->checkoutable->getCurrency()))->format();
     }
 
     /**
@@ -225,7 +225,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return (new Currency($this->getTotal(), $this->itemable->getCurrency()))->format();
+        return (new Currency($this->getTotal(), $this->checkoutable->getCurrency()))->format();
     }
 
     /**
@@ -241,7 +241,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return (new Currency($this->getSubtotal(), $this->itemable->getCurrency()))->format();
+        return (new Currency($this->getSubtotal(), $this->checkoutable->getCurrency()))->format();
     }
 
     /**

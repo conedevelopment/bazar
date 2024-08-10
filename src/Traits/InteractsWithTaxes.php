@@ -39,7 +39,7 @@ trait InteractsWithTaxes
         $currency = Bazar::getCurrency();
 
         if ($this instanceof Item) {
-            $currency = $this->itemable->currency;
+            $currency = $this->checkoutable->currency;
         }
 
         if ($this instanceof Shipping) {

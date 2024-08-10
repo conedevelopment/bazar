@@ -30,15 +30,15 @@ class ClearCarts extends Command
     {
         if ($this->option('all')) {
             Cart::proxy()->newQuery()->truncate();
-            Item::proxy()->newQuery()->where('itemable_type', Cart::getProxiedClass())->delete();
+            Item::proxy()->newQuery()->where('checkoutable_type', Cart::getProxiedClass())->delete();
             Shipping::proxy()->newQuery()->where('shippable_type', Cart::getProxiedClass())->delete();
 
             $this->info('All carts have been deleted.');
         } else {
             Item::proxy()
                 ->newQuery()
-                ->where('itemable_type', Cart::getProxiedClass())
-                ->whereIn('itemable_id', Cart::proxy()->newQuery()->expired()->select('id'))
+                ->where('checkoutable_type', Cart::getProxiedClass())
+                ->whereIn('checkoutable_id', Cart::proxy()->newQuery()->expired()->select('id'))
                 ->delete();
 
             Shipping::proxy()

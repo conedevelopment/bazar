@@ -3,7 +3,7 @@
 namespace Cone\Bazar\Gateway;
 
 use Cone\Bazar\Interfaces\Gateway\Manager as Contract;
-use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Checkoutable;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 
@@ -31,7 +31,7 @@ class Manager extends BaseManager implements Contract
     /**
      * Get the available drivers for the given model.
      */
-    public function getAvailableDrivers(?Itemable $model = null): array
+    public function getAvailableDrivers(?Checkoutable $model = null): array
     {
         foreach (array_keys(array_diff_key($this->customCreators, parent::getDrivers())) as $key) {
             if (! isset($this->drivers[$key])) {

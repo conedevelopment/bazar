@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('bazar_discount_rates', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('type');
+            $table->float('value')->unsigned();
             $table->timestamps();
         });
     }

@@ -13,9 +13,9 @@ interface Item extends LineItem
     public function buyable(): MorphTo;
 
     /**
-     * Get the itemable model for the item.
+     * Get the checkoutable model for the item.
      */
-    public function itemable(): MorphTo;
+    public function checkoutable(): MorphTo;
 
     /**
      * Determine if the item is a line item.
