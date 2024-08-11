@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_discounts', function (Blueprint $table) {
+        Schema::create('bazar_buyable_tax_rate', static function (Blueprint $table): void {
             $table->id();
             $table->timestamps();
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bazar_discounts');
+        Schema::dropIfExists('bazar_buyable_tax_rate');
     }
 };

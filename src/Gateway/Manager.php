@@ -2,8 +2,8 @@
 
 namespace Cone\Bazar\Gateway;
 
-use Cone\Bazar\Interfaces\Gateway\Manager as Contract;
 use Cone\Bazar\Interfaces\Checkoutable;
+use Cone\Bazar\Interfaces\Gateway\Manager as Contract;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Manager as BaseManager;
 

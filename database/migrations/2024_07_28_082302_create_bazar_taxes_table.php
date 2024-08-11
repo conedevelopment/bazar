@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_taxes', function (Blueprint $table) {
+        Schema::create('bazar_taxes', static function (Blueprint $table): void {
             $table->id();
             $table->timestamps();
         });
