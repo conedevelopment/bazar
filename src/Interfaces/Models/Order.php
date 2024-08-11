@@ -3,12 +3,12 @@
 namespace Cone\Bazar\Interfaces\Models;
 
 use Cone\Bazar\Interfaces\Discountable;
-use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Checkoutable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Notifications\Notification;
 
-interface Order extends Discountable, Itemable
+interface Order extends Discountable, Checkoutable
 {
     /**
      * Get the cart for the order.

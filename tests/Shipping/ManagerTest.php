@@ -27,7 +27,7 @@ class ManagerTest extends TestCase
         });
     }
 
-    public function test_shipping_can_list_available_drivers_for_itemable_model(): void
+    public function test_shipping_can_list_available_drivers_for_checkoutable_model(): void
     {
         $this->assertEquals(
             ['local-pickup', 'custom-driver'],

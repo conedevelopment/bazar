@@ -47,7 +47,7 @@ trait InteractsWithItems
      */
     public function items(): MorphMany
     {
-        return $this->morphMany(Item::getProxiedClass(), 'itemable');
+        return $this->morphMany(Item::getProxiedClass(), 'checkoutable');
     }
 
     /**
@@ -223,7 +223,7 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the itemable model's total.
+     * Get the checkoutable model's total.
      */
     public function getTotal(): float
     {
@@ -245,7 +245,7 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the itemable model's subtotal.
+     * Get the checkoutable model's subtotal.
      */
     public function getSubtotal(): float
     {
@@ -265,7 +265,7 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the itemable model's fee total.
+     * Get the checkoutable model's fee total.
      */
     public function getFeeTotal(): float
     {
@@ -320,8 +320,8 @@ trait InteractsWithItems
     public function findItem(array $attributes): ?Item
     {
         $attributes = array_merge(['properties' => null], $attributes, [
-            'itemable_id' => $this->getKey(),
-            'itemable_type' => static::class,
+            'checkoutable_id' => $this->getKey(),
+            'checkoutable_type' => static::class,
         ]);
 
         return $this->items->first(static function (Item $item) use ($attributes): bool {
@@ -342,9 +342,9 @@ trait InteractsWithItems
         );
 
         if (is_null($stored)) {
-            $item->itemable()->associate($this);
+            $item->checkoutable()->associate($this);
 
-            $item->setRelation('itemable', $this->withoutRelations());
+            $item->setRelation('checkoutable', $this->withoutRelations());
 
             $this->items->push($item);
 
@@ -362,8 +362,8 @@ trait InteractsWithItems
     public function syncItems(): void
     {
         $this->items->each(static function (Item $item): void {
-            if ($item->isLineItem() && ! is_null($item->itemable)) {
-                $data = $item->buyable->toItem($item->itemable, $item->only('properties'))->only('price');
+            if ($item->isLineItem() && ! is_null($item->checkoutable)) {
+                $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only('price');
 
                 $item->fill($data)->calculateTax();
             }

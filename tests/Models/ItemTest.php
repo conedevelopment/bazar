@@ -29,14 +29,14 @@ class ItemTest extends TestCase
             'properties' => ['text' => 'test-text'],
         ]);
 
-        $this->item->buyable()->associate($product)->itemable()->associate($cart)->save();
+        $this->item->buyable()->associate($product)->checkoutable()->associate($cart)->save();
     }
 
     public function test_item_is_taxable(): void
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(
-            (new Currency($this->item->tax, $this->item->itemable->currency))->format(),
+            (new Currency($this->item->tax, $this->item->checkoutable->currency))->format(),
             $this->item->getFormattedTax()
         );
         $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
@@ -46,7 +46,7 @@ class ItemTest extends TestCase
     {
         $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
-            (new Currency($this->item->price, $this->item->itemable->currency))->format(),
+            (new Currency($this->item->price, $this->item->checkoutable->currency))->format(),
             $this->item->getFormattedPrice()
         );
         $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
@@ -60,14 +60,14 @@ class ItemTest extends TestCase
         );
         $this->assertSame($this->item->getTotal(), $this->item->total);
         $this->assertSame(
-            (new Currency($this->item->total, $this->item->itemable->currency))->format(),
+            (new Currency($this->item->total, $this->item->checkoutable->currency))->format(),
             $this->item->getFormattedTotal()
         );
         $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
         $this->assertSame($this->item->price * $this->item->quantity, $this->item->getSubtotal());
         $this->assertSame($this->item->getSubtotal(), $this->item->subtotal);
         $this->assertSame(
-            (new Currency($this->item->subtotal, $this->item->itemable->currency))->format(),
+            (new Currency($this->item->subtotal, $this->item->checkoutable->currency))->format(),
             $this->item->getFormattedSubtotal()
         );
         $this->assertSame($this->item->getFormattedSubtotal(), $this->item->formattedSubtotal);

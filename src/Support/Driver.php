@@ -2,7 +2,7 @@
 
 namespace Cone\Bazar\Support;
 
-use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Checkoutable;
 use Illuminate\Support\Str;
 
 abstract class Driver
@@ -29,7 +29,7 @@ abstract class Driver
     /**
      * Determine if the driver is available for the given model.
      */
-    public function available(Itemable $model): bool
+    public function available(Checkoutable $model): bool
     {
         return $this->enabled();
     }

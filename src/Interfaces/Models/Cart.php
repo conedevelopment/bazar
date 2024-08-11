@@ -3,10 +3,10 @@
 namespace Cone\Bazar\Interfaces\Models;
 
 use Cone\Bazar\Interfaces\Discountable;
-use Cone\Bazar\Interfaces\Itemable;
+use Cone\Bazar\Interfaces\Checkoutable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-interface Cart extends Discountable, Itemable
+interface Cart extends Discountable, Checkoutable
 {
     /**
      * Get the order for the cart.

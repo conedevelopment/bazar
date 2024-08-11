@@ -6,7 +6,7 @@ use Cone\Bazar\Interfaces\Shipping\Manager;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Itemable $model)
+ * @method static array getAvailableDrivers(\Cone\Bazar\Interfaces\Checkoutable $model)
  *
  * @see \Cone\Bazar\Interfaces\Shipping\Manager
  */
