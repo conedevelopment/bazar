@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('bazar_categories', static function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('parent_id')->nullable()->constrained('bazar_categories')->nullOnDelete();
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
