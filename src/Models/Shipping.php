@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Number;
 use Throwable;
 
 class Shipping extends Model implements Contract
@@ -30,8 +29,7 @@ class Shipping extends Model implements Contract
      * @var array<string, mixed>
      */
     protected $attributes = [
-        'cost' => 0,
-        'tax' => 0,
+        'fee' => 0,
     ];
 
     /**
@@ -40,8 +38,7 @@ class Shipping extends Model implements Contract
      * @var array<string, string>
      */
     protected $casts = [
-        'cost' => 'float',
-        'tax' => 'float',
+        'fee' => 'float',
     ];
 
     /**
@@ -50,9 +47,8 @@ class Shipping extends Model implements Contract
      * @var list<string>
      */
     protected $fillable = [
-        'cost',
+        'fee',
         'driver',
-        'tax',
     ];
 
     /**
@@ -203,11 +199,19 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the tax base.
+     */
+    public function getTaxBase(): float
+    {
+        return $this->fee;
+    }
+
+    /**
      * Get the price.
      */
     public function getPrice(): float
     {
-        return $this->cost;
+        return $this->fee;
     }
 
     /**
@@ -223,7 +227,7 @@ class Shipping extends Model implements Contract
      */
     public function getTotal(): float
     {
-        return $this->getPrice() + $this->getTax();
+        return $this->getPrice() + $this->getTaxTotal();
     }
 
     /**
@@ -251,19 +255,11 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the tax rate.
+     * Get the formatted tax total.
      */
-    public function getTaxRate(): float
+    public function getFormattedTaxTotal(): string
     {
-        return $this->getPrice() > 0 ? ($this->getTax() / $this->getPrice()) * 100 : 0;
-    }
-
-    /**
-     * Get the formatted tax rate.
-     */
-    public function getFormattedTaxRate(): string
-    {
-        return Number::percentage($this->getTaxRate());
+        return (new Currency($this->getTaxTotal(), $this->shippable->getCurrency()))->format();
     }
 
     /**
@@ -275,20 +271,30 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Calculate the cost.
+     * Calculate the fee.
      */
-    public function calculateCost(bool $update = true): float
+    public function calculateFee(): float
     {
         try {
-            $this->cost = Manager::driver($this->driver)->calculate($this->shippable);
-
-            if ($update) {
-                $this->save();
-            }
+            $this->update([
+                'fee' => Manager::driver($this->driver)->calculate($this->shippable),
+            ]);
         } catch (Throwable $exception) {
             //
-        } finally {
-            return $this->cost;
         }
+
+        return $this->fee;
+    }
+
+    /**
+     * Calculate the taxes.
+     */
+    public function calculateTaxes(): float
+    {
+        TaxRate::proxy()->newQuery()->applicableForShipping()->cursor()->each(function (TaxRate $taxRate): void {
+            $taxRate->calculate($this);
+        });
+
+        return $this->getTaxTotal();
     }
 }

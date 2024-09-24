@@ -2,64 +2,49 @@
 
 namespace Cone\Bazar\Traits;
 
-use Cone\Bazar\Bazar;
-use Cone\Bazar\Models\Item;
-use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Support\Currency;
-use Cone\Bazar\Support\Facades\Tax;
+use Cone\Bazar\Models\Tax;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait InteractsWithTaxes
 {
+    /**
+     * Get the taxes for the model.
+     */
+    public function taxes(): MorphMany
+    {
+        return $this->morphMany(Tax::getProxiedClass(), 'taxable');
+    }
+
+    /**
+     * Get the tax total.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function taxTotal(): Attribute
+    {
+        return new Attribute(
+            get: fn (): float => $this->getTaxTotal()
+        );
+    }
+
     /**
      * Get the formatted tax attribute.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    protected function formattedTax(): Attribute
+    protected function formattedTaxTotal(): Attribute
     {
         return new Attribute(
-            get: fn (): string => $this->getFormattedTax()
+            get: fn (): string => $this->getFormattedTaxTotal()
         );
     }
 
     /**
-     * Get the tax.
+     * Get the tax total.
      */
-    public function getTax(): float
+    public function getTaxTotal(): float
     {
-        return $this->tax;
-    }
-
-    /**
-     * Get the formatted tax.
-     */
-    public function getFormattedTax(): string
-    {
-        $currency = Bazar::getCurrency();
-
-        if ($this instanceof Item) {
-            $currency = $this->checkoutable->currency;
-        }
-
-        if ($this instanceof Shipping) {
-            $currency = $this->shippable->currency;
-        }
-
-        return (new Currency($this->getTax(), $currency))->format();
-    }
-
-    /**
-     * Calculate the tax.
-     */
-    public function calculateTax(bool $update = true): float
-    {
-        $this->tax = Tax::calculate($this);
-
-        if ($update) {
-            $this->save();
-        }
-
-        return $this->tax;
+        return $this->taxes->sum('value');
     }
 }

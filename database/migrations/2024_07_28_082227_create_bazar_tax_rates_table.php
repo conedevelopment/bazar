@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('bazar_tax_rates', static function (Blueprint $table): void {
             $table->id();
+            $table->integer('value')->unsigned();
+            $table->boolean('shipping')->default(false);
             $table->timestamps();
         });
     }

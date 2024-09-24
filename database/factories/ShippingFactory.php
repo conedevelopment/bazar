@@ -34,8 +34,7 @@ class ShippingFactory extends Factory
     public function definition(): array
     {
         return [
-            'tax' => mt_rand(0, 20),
-            'cost' => mt_rand(0, 100),
+            'fee' => mt_rand(0, 100),
             'driver' => Manager::getDefaultDriver(),
         ];
     }

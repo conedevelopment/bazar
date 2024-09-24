@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model implements Contract
@@ -81,6 +82,14 @@ class Variant extends Model implements Contract
     {
         return $this->belongsTo(Product::getProxiedClass())
             ->withDefault();
+    }
+
+    /**
+     * Get the tax rates.
+     */
+    public function taxRates(): MorphToMany
+    {
+        return $this->morphToMany(TaxRate::getProxiedClass(), 'buyable', 'bazar_buyable_tax_rate');
     }
 
     /**

@@ -69,8 +69,8 @@ abstract class Driver
             if (! $cart->locked && $cart->currency !== Bazar::getCurrency()) {
                 $cart->setAttribute('currency', Bazar::getCurrency());
                 $cart->syncItems();
-                $cart->shipping->calculateCost(false);
-                $cart->shipping->calculateTax();
+                $cart->shipping->calculateFee();
+                $cart->shipping->calculateTaxes();
                 $cart->calculateDiscount();
             }
         });
@@ -147,7 +147,7 @@ abstract class Driver
     public function updateItem(string $id, array $properties = []): void
     {
         if ($item = $this->getItem($id)) {
-            $item->fill($properties)->calculateTax();
+            $item->fill($properties)->calculateTaxes();
 
             $this->sync();
         }
@@ -161,7 +161,7 @@ abstract class Driver
         $items = $this->getItems()->whereIn('id', array_keys($data));
 
         $items->each(static function (Item $item) use ($data): void {
-            $item->fill($data[$item->getKey()])->calculateTax();
+            $item->fill($data[$item->getKey()])->calculateTaxes();
         });
 
         if ($items->isNotEmpty()) {
@@ -229,7 +229,7 @@ abstract class Driver
         $this->getModel()->items()->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
-        $this->getShipping()->update(['tax' => 0, 'cost' => 0]);
+        $this->getShipping()->update(['tax' => 0, 'fee' => 0]);
 
         $this->getModel()->calculateDiscount();
     }
@@ -273,8 +273,10 @@ abstract class Driver
      */
     public function sync(): void
     {
-        $this->getShipping()->calculateCost(false);
-        $this->getShipping()->calculateTax();
+        $this->getShipping()->calculateFee();
+        $this->getShipping()->save();
+
+        $this->getShipping()->calculateTaxes();
 
         $this->getModel()->calculateDiscount();
     }

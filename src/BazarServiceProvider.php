@@ -22,6 +22,8 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Models\Property::class => Models\Property::class,
         Interfaces\Models\PropertyValue::class => Models\PropertyValue::class,
         Interfaces\Models\Shipping::class => Models\Shipping::class,
+        Interfaces\Models\Tax::class => Models\Tax::class,
+        Interfaces\Models\TaxRate::class => Models\TaxRate::class,
         Interfaces\Models\Transaction::class => Models\Transaction::class,
         Interfaces\Models\Variant::class => Models\Variant::class,
     ];
@@ -33,7 +35,6 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Cart\Manager::class => Cart\Manager::class,
         Interfaces\Gateway\Manager::class => Gateway\Manager::class,
         Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
-        Interfaces\Repositories\TaxRepository::class => Repositories\TaxRepository::class,
         Interfaces\Shipping\Manager::class => Shipping\Manager::class,
     ];
 

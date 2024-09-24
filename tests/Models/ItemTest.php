@@ -7,7 +7,6 @@ use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Support\Currency;
-use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
 
 class ItemTest extends TestCase
@@ -17,10 +16,6 @@ class ItemTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Tax::register('fix-10%', function (Taxable $item) {
-            return $item->price * 0.1;
-        });
 
         $cart = Cart::factory()->create();
         $product = Product::factory()->create();
@@ -36,10 +31,10 @@ class ItemTest extends TestCase
     {
         $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(
-            (new Currency($this->item->tax, $this->item->checkoutable->currency))->format(),
-            $this->item->getFormattedTax()
+            (new Currency($this->item->getTaxTotal(), $this->item->checkoutable->currency))->format(),
+            $this->item->getFormattedTaxTotal()
         );
-        $this->assertSame($this->item->getFormattedTax(), $this->item->formattedTax);
+        $this->assertSame($this->item->getFormattedTaxTotal(), $this->item->formattedTaxTotal);
     }
 
     public function test_item_has_price_attribute(): void

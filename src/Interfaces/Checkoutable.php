@@ -66,7 +66,7 @@ interface Checkoutable extends Shippable
     /**
      * Calculate the tax.
      */
-    public function calculateTax(bool $update = true): float;
+    public function calculateTax(): float;
 
     /**
      * Find an item by its attributes or make a new instance.

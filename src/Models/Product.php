@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
@@ -92,9 +93,17 @@ class Product extends Model implements Contract
     }
 
     /**
+     * Get the tax rates.
+     */
+    public function taxRates(): MorphToMany
+    {
+        return $this->morphToMany(TaxRate::getProxiedClass(), 'buyable', 'bazar_buyable_tax_rate');
+    }
+
+    /**
      * Determine whether the buyable object is available for the checkoutable instance.
      */
-    public function buyable(Checkoutable $checkoutable): bool
+    public function buyable(Checkoutable $model): bool
     {
         return true;
     }

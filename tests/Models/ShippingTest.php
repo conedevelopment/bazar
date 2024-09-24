@@ -2,14 +2,12 @@
 
 namespace Cone\Bazar\Tests\Models;
 
-use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
-use Cone\Bazar\Support\Facades\Tax;
 use Cone\Bazar\Tests\TestCase;
 use Cone\Bazar\Tests\User;
 
@@ -24,10 +22,6 @@ class ShippingTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        Tax::register('fix-10%', function (Taxable $item) {
-            return $item->price * 0.1;
-        });
 
         $this->user = User::factory()->create();
         $this->cart = Cart::factory()->create();
@@ -75,29 +69,21 @@ class ShippingTest extends TestCase
         $this->assertSame($address->id, $shipping->address->id);
     }
 
-    public function testt_can_calculate_calculateCost(): void
+    public function test_shipping_can_calculate_fee(): void
     {
-        $cost = $this->shipping->calculateCost();
-        $this->assertSame($cost, $this->shipping->cost);
+        $fee = $this->shipping->calculateFee();
+        $this->assertSame($fee, $this->shipping->fee);
     }
 
-    public function testt_is_taxable(): void
+    public function test_shipping_is_taxable(): void
     {
-        $this->shipping->calculateTax();
-
-        $this->assertInstanceOf(Taxable::class, $this->shipping);
-        $this->assertSame($this->shipping->price * 0.1, $this->shipping->tax);
-        $this->assertSame(
-            (new Currency($this->shipping->tax, $this->shipping->shippable->currency))->format(),
-            $this->shipping->getFormattedTax()
-        );
-        $this->assertSame($this->shipping->getFormattedTax(), $this->shipping->formattedTax);
+        $this->assertSame($this->shipping->getFormattedTaxTotal(), $this->shipping->formattedTaxTotal);
     }
 
     public function testt_has_total_attribute(): void
     {
         $this->assertSame(
-            $this->shipping->cost + $this->shipping->tax,
+            $this->shipping->fee + $this->shipping->tax,
             $this->shipping->getTotal()
         );
         $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
@@ -106,7 +92,7 @@ class ShippingTest extends TestCase
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
-        $this->assertSame($this->shipping->cost, $this->shipping->getSubtotal());
+        $this->assertSame($this->shipping->fee, $this->shipping->getSubtotal());
         $this->assertSame($this->shipping->getSubtotal(), $this->shipping->subtotal);
         $this->assertSame(
             (new Currency($this->shipping->subtotal, $this->shipping->shippable->currency))->format(),

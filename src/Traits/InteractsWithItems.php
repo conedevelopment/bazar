@@ -290,7 +290,7 @@ trait InteractsWithItems
     public function getTax(): float
     {
         $value = $this->taxables->sum(static function (LineItem $item): float {
-            return $item->getTax() * $item->getQuantity();
+            return $item->getTaxTotal() * $item->getQuantity();
         });
 
         return round($value, 2);
@@ -307,10 +307,10 @@ trait InteractsWithItems
     /**
      * Calculate the tax.
      */
-    public function calculateTax(bool $update = true): float
+    public function calculateTax(): float
     {
-        return $this->taxables->sum(static function (LineItem $item) use ($update): float {
-            return $item->calculateTax($update) * $item->getQuantity();
+        return $this->taxables->sum(static function (LineItem $item): float {
+            return $item->calculateTaxes() * $item->getQuantity();
         });
     }
 
@@ -365,7 +365,7 @@ trait InteractsWithItems
             if ($item->isLineItem() && ! is_null($item->checkoutable)) {
                 $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only('price');
 
-                $item->fill($data)->calculateTax();
+                $item->fill($data)->calculateTaxes();
             }
         });
     }

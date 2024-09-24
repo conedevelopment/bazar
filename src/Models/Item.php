@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Support\Number;
 
 class Item extends Model implements Contract
 {
@@ -42,7 +41,6 @@ class Item extends Model implements Contract
         'price' => 0,
         'properties' => '[]',
         'quantity' => 1,
-        'tax' => 0,
     ];
 
     /**
@@ -54,7 +52,6 @@ class Item extends Model implements Contract
         'price' => 'float',
         'properties' => 'json',
         'quantity' => 'float',
-        'tax' => 'float',
     ];
 
     /**
@@ -69,7 +66,6 @@ class Item extends Model implements Contract
         'price',
         'properties',
         'quantity',
-        'tax',
     ];
 
     /**
@@ -148,7 +144,7 @@ class Item extends Model implements Contract
     protected function total(): Attribute
     {
         return new Attribute(
-            get: fn (): float => $this->getTotal(),
+            get: fn (): float => $this->getTotal()
         );
     }
 
@@ -160,7 +156,7 @@ class Item extends Model implements Contract
     protected function formattedTotal(): Attribute
     {
         return new Attribute(
-            get: fn (): string => $this->getFormattedTotal(),
+            get: fn (): string => $this->getFormattedTotal()
         );
     }
 
@@ -172,7 +168,7 @@ class Item extends Model implements Contract
     protected function subtotal(): Attribute
     {
         return new Attribute(
-            get: fn (): float => $this->getSubtotal(),
+            get: fn (): float => $this->getSubtotal()
         );
     }
 
@@ -184,7 +180,7 @@ class Item extends Model implements Contract
     protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
-            get: fn (): string => $this->getFormattedSubtotal(),
+            get: fn (): string => $this->getFormattedSubtotal()
         );
     }
 
@@ -217,7 +213,7 @@ class Item extends Model implements Contract
      */
     public function getTotal(): float
     {
-        return ($this->getPrice() + $this->getTax()) * $this->getQuantity();
+        return ($this->getPrice() + $this->getTaxTotal()) * $this->getQuantity();
     }
 
     /**
@@ -245,19 +241,19 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the tax rate.
+     * Get the tax base.
      */
-    public function getTaxRate(): float
+    public function getTaxBase(): float
     {
-        return $this->getPrice() > 0 ? ($this->getTax() / $this->getPrice()) * 100 : 0;
+        return $this->price;
     }
 
     /**
-     * Get the formatted tax rate.
+     * Get the formatted tax.
      */
-    public function getFormattedTaxRate(): string
+    public function getFormattedTaxTotal(): string
     {
-        return Number::percentage($this->getTaxRate());
+        return (new Currency($this->getTaxTotal(), $this->checkoutable->getCurrency()))->format();
     }
 
     /**
@@ -282,5 +278,17 @@ class Item extends Model implements Contract
     public function isFee(): bool
     {
         return ! $this->isLineItem();
+    }
+
+    /**
+     * Calculate the taxes.
+     */
+    public function calculateTaxes(): float
+    {
+        $this->buyable->taxRates->each(function (TaxRate $taxRate): void {
+            $taxRate->calculate($this);
+        });
+
+        return $this->getTaxTotal();
     }
 }

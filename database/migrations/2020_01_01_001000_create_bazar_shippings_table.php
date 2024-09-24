@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('shippable');
             $table->string('driver');
-            $table->float('cost')->unsigned()->default(0);
-            $table->float('tax')->unsigned()->default(0);
+            $table->float('fee')->unsigned()->default(0);
             $table->timestamps();
         });
     }

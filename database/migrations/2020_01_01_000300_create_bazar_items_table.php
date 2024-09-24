@@ -17,7 +17,6 @@ return new class extends Migration
             $table->nullableMorphs('buyable');
             $table->string('name');
             $table->float('price')->unsigned();
-            $table->float('tax')->unsigned()->default(0);
             $table->float('quantity')->unsigned();
             $table->json('properties')->nullable();
             $table->timestamps();

@@ -33,7 +33,6 @@ class ItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'tax' => mt_rand(10, 100),
             'name' => $this->faker->company(),
             'price' => mt_rand(10, 100),
             'quantity' => mt_rand(1, 10),

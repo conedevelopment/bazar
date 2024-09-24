@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('bazar_buyable_tax_rate', static function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tax_rate_id')->constrained('bazar_tax_rates')->cascadeOnDelete();
+            $table->morphs('buyable');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ interface Shipping extends LineItem
     public function shippable(): MorphTo;
 
     /**
-     * Calculate the cost.
+     * Calculate the fee.
      */
-    public function calculateCost(bool $update = true): float;
+    public function calculateFee(): float;
 }

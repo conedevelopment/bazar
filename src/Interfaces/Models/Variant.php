@@ -11,22 +11,22 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 interface Variant extends Buyable, Stockable
 {
     /**
-     * Get the items for the product.
+     * Get the items for the variant.
      */
     public function items(): MorphMany;
 
     /**
-     * Get the orders for the product.
+     * Get the orders for the variant.
      */
     public function orders(): HasManyThrough;
 
     /**
-     * Get the carts for the product.
+     * Get the carts for the variant.
      */
     public function carts(): HasManyThrough;
 
     /**
-     * Get the product for the transaction.
+     * Get the product for the variant.
      */
     public function product(): BelongsTo;
 }

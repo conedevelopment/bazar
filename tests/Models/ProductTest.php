@@ -35,7 +35,6 @@ class ProductTest extends TestCase
 
         $item = Item::factory()->make([
             'price' => 100,
-            'tax' => 0,
             'quantity' => 3,
             'name' => $this->product->name,
         ])->checkoutable()->associate($order);
@@ -51,7 +50,6 @@ class ProductTest extends TestCase
 
         $item = Item::factory()->make([
             'price' => 100,
-            'tax' => 0,
             'quantity' => 3,
             'name' => $this->product->name,
         ])->checkoutable()->associate($cart);

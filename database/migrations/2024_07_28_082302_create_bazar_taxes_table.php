@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('bazar_taxes', static function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tax_rate_id')->nullable()->constrained('bazar_tax_rates')->nullOnDelete();
+            $table->morphs('taxable');
+            $table->float('value')->unsigned();
             $table->timestamps();
+
+            $table->unique(['taxable_id', 'taxable_type', 'tax_rate_id']);
         });
     }
 
