@@ -276,9 +276,9 @@ class Shipping extends Model implements Contract
     public function calculateFee(): float
     {
         try {
-            $this->update([
+            $this->fill([
                 'fee' => Manager::driver($this->driver)->calculate($this->shippable),
-            ]);
+            ])->save();
         } catch (Throwable $exception) {
             //
         }

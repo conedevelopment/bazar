@@ -229,7 +229,8 @@ abstract class Driver
         $this->getModel()->items()->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
-        $this->getShipping()->update(['tax' => 0, 'fee' => 0]);
+        $this->getShipping()->update(['fee' => 0]);
+        $this->getShipping()->taxes()->delete();
 
         $this->getModel()->calculateDiscount();
     }
@@ -274,7 +275,6 @@ abstract class Driver
     public function sync(): void
     {
         $this->getShipping()->calculateFee();
-        $this->getShipping()->save();
 
         $this->getShipping()->calculateTaxes();
 

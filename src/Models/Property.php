@@ -40,7 +40,7 @@ class Property extends Model implements Contract
      */
     protected static function booted(): void
     {
-        static::deleted(static function (self $property): void {
+        static::deleting(static function (self $property): void {
             $property->values()->delete();
         });
     }

@@ -85,6 +85,16 @@ class Item extends Model implements Contract
     protected $table = 'bazar_items';
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(static function (self $item): void {
+            $item->taxes()->delete();
+        });
+    }
+
+    /**
      * Get the proxied interface.
      */
     public static function getProxiedInterface(): string
