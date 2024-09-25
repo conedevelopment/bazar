@@ -2,10 +2,10 @@
 
 namespace Cone\Bazar\Tests\Models;
 
-use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\TaxRate;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Tests\TestCase;
 
@@ -20,6 +20,9 @@ class ItemTest extends TestCase
         $cart = Cart::factory()->create();
         $product = Product::factory()->create();
 
+        $taxRate = TaxRate::factory()->create();
+        $product->taxRates()->attach($taxRate);
+
         $this->item = Item::factory()->make([
             'properties' => ['text' => 'test-text'],
         ]);
@@ -29,12 +32,10 @@ class ItemTest extends TestCase
 
     public function test_item_is_taxable(): void
     {
-        $this->assertInstanceOf(Taxable::class, $this->item);
         $this->assertSame(
-            (new Currency($this->item->getTaxTotal(), $this->item->checkoutable->currency))->format(),
-            $this->item->getFormattedTaxTotal()
+            $this->item->calculateTaxes(),
+            $this->item->getTaxTotal()
         );
-        $this->assertSame($this->item->getFormattedTaxTotal(), $this->item->formattedTaxTotal);
     }
 
     public function test_item_has_price_attribute(): void

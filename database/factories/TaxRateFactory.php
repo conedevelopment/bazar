@@ -33,7 +33,9 @@ class TaxRateFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'value' => $value = mt_rand(10, 30),
+            'name' => sprintf('%d%% Tax Rate', $value),
+            'shipping' => false,
         ];
     }
 }

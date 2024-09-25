@@ -9,7 +9,7 @@ trait InteractsWithStock
     /**
      * Get the formatted dimensions.
      */
-    public function getFormattedDimensions(string $glue = 'x'): ?string
+    public function getFormattedDimensions(): ?string
     {
         $dimensions = $this->metaData->whereIn('key', ['length', 'width', 'height'])->filter()->values();
 
@@ -17,7 +17,7 @@ trait InteractsWithStock
             return null;
         }
 
-        return sprintf('%s %s', $dimensions->implode('value', $glue), Config::get('bazar.dimension_unit'));
+        return sprintf('%s %s', $dimensions->implode('value', 'x'), Config::get('bazar.dimension_unit'));
     }
 
     /**

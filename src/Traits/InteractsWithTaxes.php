@@ -3,17 +3,22 @@
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Models\Tax;
+use Cone\Bazar\Models\TaxRate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait InteractsWithTaxes
 {
     /**
      * Get the taxes for the model.
      */
-    public function taxes(): MorphMany
+    public function taxes(): MorphToMany
     {
-        return $this->morphMany(Tax::getProxiedClass(), 'taxable');
+        return $this->morphToMany(TaxRate::getProxiedClass(), 'taxable', 'bazar_taxes')
+            ->as('tax')
+            ->using(Tax::getProxiedClass())
+            ->withPivot('value')
+            ->withTimestamps();
     }
 
     /**
@@ -45,6 +50,6 @@ trait InteractsWithTaxes
      */
     public function getTaxTotal(): float
     {
-        return $this->taxes->sum('value');
+        return $this->taxes->sum('tax.value');
     }
 }

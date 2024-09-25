@@ -9,6 +9,7 @@ use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Property;
 use Cone\Bazar\Models\PropertyValue;
+use Cone\Bazar\Models\TaxRate;
 use Cone\Bazar\Models\Variant;
 use Cone\Bazar\Tests\TestCase;
 
@@ -95,6 +96,19 @@ class ProductTest extends TestCase
         );
 
         $this->assertNull($this->product->toVariant(['size' => 'fake']));
+    }
+
+    public function test_a_product_belongs_to_tax_rates(): void
+    {
+        $taxRate = TaxRate::factory()->create();
+
+        $this->assertTrue($this->product->taxRates->isEmpty());
+
+        $this->product->taxRates()->attach($taxRate);
+
+        $this->product->refresh();
+
+        $this->assertTrue($this->product->taxRates->contains($taxRate));
     }
 
     public function test_product_interacts_with_stock(): void

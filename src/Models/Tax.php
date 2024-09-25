@@ -2,19 +2,14 @@
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Database\Factories\TaxFactory;
 use Cone\Bazar\Interfaces\Models\Tax as Contract;
 use Cone\Bazar\Support\Currency;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
 
-class Tax extends Model implements Contract
+class Tax extends MorphPivot implements Contract
 {
-    use HasFactory;
     use InteractsWithProxy;
 
     /**
@@ -60,30 +55,6 @@ class Tax extends Model implements Contract
     }
 
     /**
-     * Create a new factory instance for the model.
-     */
-    protected static function newFactory(): TaxFactory
-    {
-        return TaxFactory::new();
-    }
-
-    /**
-     * Get the taxable model for the model.
-     */
-    public function taxable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-    /**
-     * Get the tax rate for the model.
-     */
-    public function taxRate(): BelongsTo
-    {
-        return $this->belongsTo(TaxRate::getProxiedClass());
-    }
-
-    /**
      * Get the formatted value attribute.
      */
     protected function formattedValue(): Attribute
@@ -98,6 +69,6 @@ class Tax extends Model implements Contract
      */
     public function format(): string
     {
-        return (new Currency($this->value, $this->taxable?->checkoutable?->getCurrency()))->format();
+        return (new Currency($this->value, $this->pivotParent?->checkoutable?->getCurrency()))->format();
     }
 }

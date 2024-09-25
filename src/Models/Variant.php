@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class Variant extends Model implements Contract
 {
@@ -75,7 +75,7 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the product for the transaction.
+     * Get the product for the variant.
      */
     public function product(): BelongsTo
     {
@@ -84,11 +84,11 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the tax rates.
+     * Get the applicable tax rates.
      */
-    public function taxRates(): MorphToMany
+    public function getApplicableTaxRates(): Collection
     {
-        return $this->morphToMany(TaxRate::getProxiedClass(), 'buyable', 'bazar_buyable_tax_rate');
+        return $this->product->getApplicableTaxRates();
     }
 
     /**
@@ -99,9 +99,7 @@ class Variant extends Model implements Contract
     protected function name(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return sprintf('%s - %s', $this->product->name, $this->alias);
-            }
+            get: fn (): string => sprintf('%s - %s', $this->product->name, $this->alias)
         );
     }
 
@@ -124,7 +122,7 @@ class Variant extends Model implements Contract
      */
     public function buyable(Checkoutable $checkoutable): bool
     {
-        return true;
+        return $this->product->buyable($checkoutable);
     }
 
     /**

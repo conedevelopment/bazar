@@ -10,7 +10,6 @@ use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -291,10 +290,16 @@ class Shipping extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
-        TaxRate::proxy()->newQuery()->applicableForShipping()->cursor()->each(function (TaxRate $taxRate): void {
-            $taxRate->calculate($this);
-        });
+        $taxes = TaxRate::proxy()
+            ->newQuery()
+            ->applicableForShipping()
+            ->get()
+            ->mapWithKeys(function (TaxRate $taxRate): array {
+                return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
+            });
 
-        return $this->getTaxTotal();
+        $this->taxes()->sync($taxes);
+
+        return $taxes->sum('value');
     }
 }

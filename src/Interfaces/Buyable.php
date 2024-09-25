@@ -3,7 +3,7 @@
 namespace Cone\Bazar\Interfaces;
 
 use Cone\Bazar\Models\Item;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 interface Buyable
 {
@@ -13,12 +13,12 @@ interface Buyable
     public function buyable(Checkoutable $checkoutable): bool;
 
     /**
-     * Get the tax rates for the variant.
-     */
-    public function taxRates(): MorphToMany;
-
-    /**
      * Get the item representation of the buyable instance.
      */
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item;
+
+    /**
+     * Get the applicable tax rates.
+     */
+    public function getApplicableTaxRates(): Collection;
 }

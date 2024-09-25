@@ -2,14 +2,14 @@
 
 namespace Cone\Bazar\Interfaces;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 interface Taxable
 {
     /**
      * Get the taxes for the model.
      */
-    public function taxes(): MorphMany;
+    public function taxes(): MorphToMany;
 
     /**
      * Get the tax base.

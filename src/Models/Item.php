@@ -294,10 +294,12 @@ class Item extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
-        $this->buyable->taxRates->each(function (TaxRate $taxRate): void {
-            $taxRate->calculate($this);
+        $taxes = $this->buyable->getApplicableTaxRates()->mapWithKeys(function (TaxRate $taxRate): array {
+            return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
         });
 
-        return $this->getTaxTotal();
+        $this->taxes()->sync($taxes);
+
+        return $taxes->sum('value');
     }
 }

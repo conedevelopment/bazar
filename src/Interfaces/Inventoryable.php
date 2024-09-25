@@ -7,7 +7,7 @@ interface Inventoryable
     /**
      * Get the formatted dimensions.
      */
-    public function getFormattedDimensions(string $glue = 'x'): ?string;
+    public function getFormattedDimensions(): ?string;
 
     /**
      * Get the formatted weight.

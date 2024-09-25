@@ -6,6 +6,7 @@ use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\TaxRate;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Bazar\Tests\TestCase;
@@ -77,7 +78,12 @@ class ShippingTest extends TestCase
 
     public function test_shipping_is_taxable(): void
     {
-        $this->assertSame($this->shipping->getFormattedTaxTotal(), $this->shipping->formattedTaxTotal);
+        TaxRate::factory()->create(['shipping' => true]);
+
+        $this->assertSame(
+            $this->shipping->calculateTaxes(),
+            $this->shipping->getTaxTotal()
+        );
     }
 
     public function testt_has_total_attribute(): void

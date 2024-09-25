@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\Collection;
 
 class Product extends Model implements Contract
 {
@@ -92,11 +93,19 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the tax rates.
+     * Get the tax rates for the product.
      */
     public function taxRates(): MorphToMany
     {
         return $this->morphToMany(TaxRate::getProxiedClass(), 'buyable', 'bazar_buyable_tax_rate');
+    }
+
+    /**
+     * Get the applicable tax rates.
+     */
+    public function getApplicableTaxRates(): Collection
+    {
+        return $this->taxRates;
     }
 
     /**
