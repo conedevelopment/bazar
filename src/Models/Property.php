@@ -6,7 +6,6 @@ use Cone\Bazar\Database\Factories\PropertyFactory;
 use Cone\Bazar\Interfaces\Models\Property as Contract;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -56,7 +55,7 @@ class Property extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): PropertyFactory
     {
         return PropertyFactory::new();
     }

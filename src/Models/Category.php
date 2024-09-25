@@ -6,7 +6,6 @@ use Cone\Bazar\Database\Factories\CategoryFactory;
 use Cone\Bazar\Interfaces\Models\Category as Contract;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\InteractsWithProxy;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,7 +48,7 @@ class Category extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): CategoryFactory
     {
         return CategoryFactory::new();
     }

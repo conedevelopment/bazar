@@ -5,7 +5,6 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\PropertyValueFactory;
 use Cone\Bazar\Interfaces\Models\PropertyValue as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -43,7 +42,7 @@ class PropertyValue extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): PropertyValueFactory
     {
         return PropertyValueFactory::new();
     }

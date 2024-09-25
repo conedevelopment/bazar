@@ -2,6 +2,7 @@
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\TaxFactory;
 use Cone\Bazar\Interfaces\Models\Tax as Contract;
 use Cone\Bazar\Support\Currency;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -56,6 +57,14 @@ class Tax extends Model implements Contract
     public static function getProxiedInterface(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): TaxFactory
+    {
+        return TaxFactory::new();
     }
 
     /**

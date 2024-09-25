@@ -79,7 +79,7 @@ class Shipping extends Model implements Contract
     /**
      * Create a new factory instance for the model.
      */
-    protected static function newFactory(): Factory
+    protected static function newFactory(): ShippingFactory
     {
         return ShippingFactory::new();
     }
