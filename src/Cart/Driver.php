@@ -111,11 +111,11 @@ abstract class Driver
     public function removeItem(string $id): void
     {
         if ($item = $this->getItem($id)) {
-            $item->delete();
-
             $key = $this->getItems()->search(static function (Item $item) use ($id) {
                 return $item->getKey() === $id;
             });
+
+            $item->delete();
 
             $this->getItems()->forget($key);
 
@@ -147,7 +147,8 @@ abstract class Driver
     public function updateItem(string $id, array $properties = []): void
     {
         if ($item = $this->getItem($id)) {
-            $item->fill($properties)->calculateTaxes();
+            $item->fill($properties)->save();
+            $item->calculateTaxes();
 
             $this->sync();
         }
@@ -161,7 +162,8 @@ abstract class Driver
         $items = $this->getItems()->whereIn('id', array_keys($data));
 
         $items->each(static function (Item $item) use ($data): void {
-            $item->fill($data[$item->getKey()])->calculateTaxes();
+            $item->fill($data[$item->getKey()])->save();
+            $item->calculateTaxes();
         });
 
         if ($items->isNotEmpty()) {
@@ -174,7 +176,7 @@ abstract class Driver
      */
     public function getItems(): Collection
     {
-        return $this->getModel()->items;
+        return $this->getModel()->getItems();
     }
 
     /**
@@ -276,7 +278,7 @@ abstract class Driver
     {
         $this->getShipping()->calculateFee();
 
-        $this->getShipping()->calculateTaxes();
+        $this->getModel()->calculateTax();
 
         $this->getModel()->calculateDiscount();
     }

@@ -14,7 +14,7 @@ trait HasProperties
      */
     public function propertyValues(): MorphToMany
     {
-        return $this->morphToMany(PropertyValue::class, 'buyable', 'bazar_buyable_property_value');
+        return $this->morphToMany(PropertyValue::getProxiedClass(), 'buyable', 'bazar_buyable_property_value');
     }
 
     /**
@@ -22,7 +22,7 @@ trait HasProperties
      */
     public function properties(): HasManyThrough
     {
-        return $this->hasManyThrough(Property::class, PropertyValue::class, 'bazar_buyable_property_value.buyable_id', 'id', 'id', 'property_id')
+        return $this->hasManyThrough(Property::getProxiedClass(), PropertyValue::getProxiedClass(), 'bazar_buyable_property_value.buyable_id', 'id', 'id', 'property_id')
             ->join('bazar_buyable_property_value', 'bazar_buyable_property_value.property_value_id', '=', 'bazar_property_values.id')
             ->where('bazar_buyable_property_value.buyable_type', static::class);
     }

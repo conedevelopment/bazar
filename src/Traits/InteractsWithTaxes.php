@@ -6,9 +6,22 @@ use Cone\Bazar\Models\Tax;
 use Cone\Bazar\Models\TaxRate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait InteractsWithTaxes
 {
+    /**
+     * Boot the trait.
+     */
+    public static function bootInteractsWithTaxes(): void
+    {
+        static::deleting(static function (self $model): void {
+            if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
+                $model->taxes()->detach();
+            }
+        });
+    }
+
     /**
      * Get the taxes for the model.
      */
@@ -50,6 +63,6 @@ trait InteractsWithTaxes
      */
     public function getTaxTotal(): float
     {
-        return $this->taxes->sum('tax.value');
+        return $this->taxes->sum('tax.value') * $this->getQuantity();
     }
 }

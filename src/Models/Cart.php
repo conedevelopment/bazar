@@ -189,7 +189,7 @@ class Cart extends Model implements Contract
      */
     public function toOrder(): Order
     {
-        $this->lineItems->each(function (Item $item): void {
+        $this->getLineItems()->each(function (Item $item): void {
             if (! $item->buyable->buyable($this->order)) {
                 throw new CartException(sprintf('Unable to add [%s] item to the order.', get_class($item->buyable)));
             }
@@ -210,6 +210,8 @@ class Cart extends Model implements Contract
             $this->order->shipping->fill($this->shipping->toArray())->save();
             $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
         }
+
+        $this->order->calculateTax();
 
         return $this->order;
     }

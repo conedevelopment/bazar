@@ -300,6 +300,6 @@ class Shipping extends Model implements Contract
 
         $this->taxes()->sync($taxes);
 
-        return $taxes->sum('value');
+        return $this->getTaxTotal();
     }
 }

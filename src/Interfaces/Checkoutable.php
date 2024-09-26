@@ -5,6 +5,7 @@ namespace Cone\Bazar\Interfaces;
 use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Collection;
 
 interface Checkoutable extends Shippable
 {
@@ -17,6 +18,26 @@ interface Checkoutable extends Shippable
      * Get the items for the model.
      */
     public function items(): MorphMany;
+
+    /**
+     * Get the checkoutable items.
+     */
+    public function getItems(): Collection;
+
+    /**
+     * Get the checkoutable taxable items.
+     */
+    public function getTaxables(): Collection;
+
+    /**
+     * Get the checkoutable fee items.
+     */
+    public function getFees(): Collection;
+
+    /**
+     * Get the checkoutable line items.
+     */
+    public function getLineItems(): Collection;
 
     /**
      * Get the currency.

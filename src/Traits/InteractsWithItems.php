@@ -5,6 +5,7 @@ namespace Cone\Bazar\Traits;
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
+use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Currency;
@@ -28,8 +29,8 @@ trait InteractsWithItems
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
-                $model->items()->delete();
-                $model->shipping()->delete();
+                $model->items->each->delete();
+                $model->shipping->delete();
             }
         });
     }
@@ -75,47 +76,37 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the line items attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
+     * Get the items.
      */
-    protected function lineItems(): Attribute
+    public function getItems(): Collection
     {
-        return new Attribute(
-            get: function (): Collection {
-                return $this->items->filter->isLineItem();
-            }
-        );
+        return $this->items;
     }
 
     /**
-     * Get the fees attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
+     * Get the line items.
      */
-    protected function fees(): Attribute
+    public function getLineItems(): Collection
     {
-        return new Attribute(
-            get: function (): Collection {
-                return $this->items->filter->isFee();
-            }
-        );
+        return $this->getItems()->filter->isLineItem();
     }
 
     /**
-     * Get the taxables attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<\Illuminate\Support\Collection, never>
+     * Get the fees.
      */
-    protected function taxables(): Attribute
+    public function getFees(): Collection
     {
-        return new Attribute(
-            get: function (): Collection {
-                return $this->items->when($this->needsShipping(), function (Collection $items): Collection {
-                    return $items->merge([$this->shipping]);
-                });
-            }
-        );
+        return $this->getItems()->filter->isFee();
+    }
+
+    /**
+     * Get the taxables.
+     */
+    public function getTaxables(): Collection
+    {
+        return $this->getItems()->when($this->needsShipping(), function (Collection $items): Collection {
+            return $items->merge([$this->shipping]);
+        });
     }
 
     /**
@@ -227,9 +218,11 @@ trait InteractsWithItems
      */
     public function getTotal(): float
     {
-        $value = $this->taxables->sum(static function (LineItem $item): float {
+        $value = $this->items->sum(static function (Item $item): float {
             return $item->getTotal();
         });
+
+        $value += $this->needsShipping() ? $this->shipping->getTotal() : 0;
 
         $value -= $this->discount;
 
@@ -249,7 +242,7 @@ trait InteractsWithItems
      */
     public function getSubtotal(): float
     {
-        $value = $this->lineItems->sum(static function (LineItem $item): float {
+        $value = $this->getLineItems()->sum(static function (LineItem $item): float {
             return $item->getSubtotal();
         });
 
@@ -269,7 +262,7 @@ trait InteractsWithItems
      */
     public function getFeeTotal(): float
     {
-        $value = $this->fees->sum(static function (LineItem $item): float {
+        $value = $this->getFees()->sum(static function (LineItem $item): float {
             return $item->getSubtotal();
         });
 
@@ -289,8 +282,8 @@ trait InteractsWithItems
      */
     public function getTax(): float
     {
-        $value = $this->taxables->sum(static function (LineItem $item): float {
-            return $item->getTaxTotal() * $item->getQuantity();
+        $value = $this->getTaxables()->sum(static function (Taxable $item): float {
+            return $item->getTaxTotal();
         });
 
         return round($value, 2);
@@ -309,9 +302,13 @@ trait InteractsWithItems
      */
     public function calculateTax(): float
     {
-        return $this->taxables->sum(static function (LineItem $item): float {
-            return $item->calculateTaxes() * $item->getQuantity();
+        $value = $this->getTaxables()->each(static function (Taxable $item): void {
+            $item->calculateTaxes();
+        })->sum(static function (Taxable $item): float {
+            return $item->getTaxTotal();
         });
+
+        return round($value, 2);
     }
 
     /**
@@ -365,7 +362,8 @@ trait InteractsWithItems
             if ($item->isLineItem() && ! is_null($item->checkoutable)) {
                 $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only('price');
 
-                $item->fill($data)->calculateTaxes();
+                $item->fill($data)->save();
+                $item->calculateTaxes();
             }
         });
     }

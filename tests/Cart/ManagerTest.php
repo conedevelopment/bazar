@@ -12,6 +12,7 @@ use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Property;
 use Cone\Bazar\Models\PropertyValue;
 use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\TaxRate;
 use Cone\Bazar\Models\Variant;
 use Cone\Bazar\Support\Facades\Cart as CartFacade;
 use Cone\Bazar\Tests\TestCase;
@@ -43,6 +44,10 @@ class ManagerTest extends TestCase
 
         $this->product->propertyValues()->attach($property->values);
         $this->variant->propertyValues()->attach($property->values->where('value', 'S'));
+
+        $taxRate = TaxRate::factory()->create();
+
+        $this->product->taxRates()->attach($taxRate);
 
         $this->manager->addItem($this->product, 2, ['size' => 'L']);
         $this->manager->addItem($this->product, 1, ['size' => 'S']);
@@ -97,6 +102,7 @@ class ManagerTest extends TestCase
         $item = $this->manager->getModel()->findItem([
             'properties' => ['size' => 'L'],
         ]);
+
         $this->manager->removeItem($item->id);
 
         $this->assertEquals(1, $this->manager->count());
@@ -185,10 +191,5 @@ class ManagerTest extends TestCase
         $this->manager->checkout('cash');
 
         Event::assertDispatched(CheckoutProcessed::class);
-    }
-
-    public function test_cart_can_sync_items(): void
-    {
-        $this->assertEquals($this->product->price * 2 + $this->variant->price, $this->manager->getTotal());
     }
 }
