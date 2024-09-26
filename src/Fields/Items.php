@@ -76,6 +76,12 @@ class Items extends MorphMany
                 ->default(1)
                 ->rules(['required', 'numeric', 'gt:0'])
                 ->min(0),
+
+            Number::make(__('Total'), function (Request $request, Model $model): float {
+                return $model->getTotal();
+            })->format(static function (Request $request, Model $model, float $value): string {
+                return (new Currency($value, $model->checkoutable->currency))->format();
+            }),
         ];
     }
 }
