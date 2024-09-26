@@ -212,7 +212,7 @@ class Item extends Model implements Contract
      */
     public function getTotal(): float
     {
-        return ($this->getPrice() + $this->getTaxTotal()) * $this->getQuantity();
+        return ($this->getPrice() + $this->getTax()) * $this->getQuantity();
     }
 
     /**
@@ -245,6 +245,14 @@ class Item extends Model implements Contract
     public function getTaxBase(): float
     {
         return $this->price;
+    }
+
+    /**
+     * Get the formatted tax.
+     */
+    public function getFormattedTax(): string
+    {
+        return (new Currency($this->getTax(), $this->checkoutable->getCurrency()))->format();
     }
 
     /**

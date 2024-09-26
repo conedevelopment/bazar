@@ -19,10 +19,20 @@ interface Taxable
     /**
      * Get the tax total.
      */
-    public function getTaxTotal(): float;
+    public function getTax(): float;
 
     /**
      * Get the formatted tax.
+     */
+    public function getFormattedTax(): string;
+
+    /**
+     * Get the tax total total.
+     */
+    public function getTaxTotal(): float;
+
+    /**
+     * Get the formatted tax total.
      */
     public function getFormattedTaxTotal(): string;
 

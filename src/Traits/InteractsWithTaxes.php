@@ -39,6 +39,38 @@ trait InteractsWithTaxes
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
+    protected function tax(): Attribute
+    {
+        return new Attribute(
+            get: fn (): float => $this->getTax()
+        );
+    }
+
+    /**
+     * Get the formatted tax attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function formattedTax(): Attribute
+    {
+        return new Attribute(
+            get: fn (): string => $this->getFormattedTax()
+        );
+    }
+
+    /**
+     * Get the tax total.
+     */
+    public function getTax(): float
+    {
+        return $this->taxes->sum('tax.value');
+    }
+
+    /**
+     * Get the tax total.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
     protected function taxTotal(): Attribute
     {
         return new Attribute(

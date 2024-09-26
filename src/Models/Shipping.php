@@ -256,6 +256,14 @@ class Shipping extends Model implements Contract
     /**
      * Get the formatted tax total.
      */
+    public function getFormattedTax(): string
+    {
+        return (new Currency($this->getTax(), $this->shippable->getCurrency()))->format();
+    }
+
+    /**
+     * Get the formatted tax total.
+     */
     public function getFormattedTaxTotal(): string
     {
         return (new Currency($this->getTaxTotal(), $this->shippable->getCurrency()))->format();

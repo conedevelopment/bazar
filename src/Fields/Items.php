@@ -21,6 +21,7 @@ class Items extends MorphMany
     protected array $with = [
         'buyable',
         'checkoutable',
+        'taxes',
     ];
 
     /**
@@ -64,12 +65,11 @@ class Items extends MorphMany
                     return (new Currency($value, $model->checkoutable->currency))->format();
                 }),
 
-            Number::make(__('TAX'), 'tax')
-                ->min(0)
-                ->required()
-                ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return (new Currency($value, $model->checkoutable->currency))->format();
-                }),
+            Number::make(__('TAX'), function (Request $request, Model $model): float {
+                return $model->getTax();
+            })->format(static function (Request $request, Model $model, float $value): string {
+                return (new Currency($value, $model->checkoutable->currency))->format();
+            }),
 
             Number::make(__('Quantity'), 'quantity')
                 ->required()
