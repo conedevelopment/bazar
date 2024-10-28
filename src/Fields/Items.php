@@ -65,7 +65,7 @@ class Items extends MorphMany
                     return (new Currency($value, $model->checkoutable->currency))->format();
                 }),
 
-            Number::make(__('TAX'), function (Request $request, Model $model): float {
+            Number::make(__('Tax'), function (Request $request, Model $model): float {
                 return $model->getTax();
             })->format(static function (Request $request, Model $model, float $value): string {
                 return (new Currency($value, $model->checkoutable->currency))->format();
