@@ -74,7 +74,7 @@ abstract class Countries
     }
 
     /**
-     * Get all the Anctarctican countries.
+     * Get all the Antarctican countries.
      */
     public static function antarctica(): array
     {
