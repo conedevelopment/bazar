@@ -111,6 +111,11 @@ class ProductTest extends TestCase
         $this->assertTrue($this->product->taxRates->contains($taxRate));
     }
 
+    public function test_(): void
+    {
+        $this->assertTrue(true);
+    }
+
     public function test_product_interacts_with_stock(): void
     {
         $this->assertTrue(true);

@@ -136,6 +136,18 @@ class Item extends Model implements Contract
     }
 
     /**
+     * Get the formatted gross price attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function formattedGrossPrice(): Attribute
+    {
+        return new Attribute(
+            get: fn (): string => $this->getFormattedGrossPrice(),
+        );
+    }
+
+    /**
      * Get the total attribute.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
@@ -208,11 +220,27 @@ class Item extends Model implements Contract
     }
 
     /**
+     * Get the gross price.
+     */
+    public function getGrossPrice(): float
+    {
+        return $this->getPrice() + $this->getTax();
+    }
+
+    /**
+     * Get the formatted price.
+     */
+    public function getFormattedGrossPrice(): string
+    {
+        return (new Currency($this->getGrossPrice(), $this->checkoutable->getCurrency()))->format();
+    }
+
+    /**
      * Get the total.
      */
     public function getTotal(): float
     {
-        return ($this->getPrice() + $this->getTax()) * $this->getQuantity();
+        return $this->getGrossPrice() * $this->getQuantity();
     }
 
     /**

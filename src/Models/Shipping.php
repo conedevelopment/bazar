@@ -222,11 +222,27 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the gross price.
+     */
+    public function getGrossPrice(): float
+    {
+        return $this->getPrice() + $this->getTax();
+    }
+
+    /**
+     * Get the formatted price.
+     */
+    public function getFormattedGrossPrice(): string
+    {
+        return (new Currency($this->getGrossPrice(), $this->shippable->getCurrency()))->format();
+    }
+
+    /**
      * Get the shipping's total.
      */
     public function getTotal(): float
     {
-        return $this->getPrice() + $this->getTaxTotal();
+        return $this->getGrossPrice() * $this->getQuantity();
     }
 
     /**

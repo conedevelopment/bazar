@@ -20,6 +20,16 @@ interface LineItem extends Taxable
     public function getFormattedPrice(): string;
 
     /**
+     * Get the gross price.
+     */
+    public function getGrossPrice(): float;
+
+    /**
+     * Get the formatted price.
+     */
+    public function getFormattedGrossPrice(): string;
+
+    /**
      * Get the total.
      */
     public function getTotal(): float;
