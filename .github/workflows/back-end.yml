@@ -13,7 +13,7 @@ jobs:
       fail-fast: true
       matrix:
         os: ["ubuntu-22.04"]
-        php: ["8.2", "8.3"]
+        php: ["8.3"]
         laravel: ["^11.0"]
         dependency-version: ["highest"]
 
@@ -51,7 +51,7 @@ jobs:
         run: composer exec -- phpunit
 
       - name: Send coverage to Coveralls
-        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.php == '8.2' && matrix.laravel == '^11.0' }}
+        if: ${{ matrix.os == 'ubuntu-22.04' && matrix.php == '8.3' && matrix.laravel == '^11.0' }}
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

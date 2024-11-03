@@ -22,7 +22,7 @@
         }
     },
     "require": {
-        "php": "~8.2.0 || ~8.3.0",
+        "php": "~8.3.0",
         "conedevelopment/root": "^2.2.5"
     },
     "require-dev": {
