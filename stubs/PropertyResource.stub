@@ -2,7 +2,7 @@
 
 namespace {{ namespace }}Root\Resources;
 
-use Cone\Bazar\Resources\PropertyResource as Respource;
+use Cone\Bazar\Resources\PropertyResource as Resource;
 use Illuminate\Http\Request;
 
 class PropertyResource extends Resource

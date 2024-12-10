@@ -2,7 +2,7 @@
 
 namespace {{ namespace }}Root\Resources;
 
-use Cone\Bazar\Resources\CategoryResource as Respource;
+use Cone\Bazar\Resources\CategoryResource as Resource;
 use Illuminate\Http\Request;
 
 class CategoryResource extends Resource

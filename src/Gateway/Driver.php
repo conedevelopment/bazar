@@ -81,7 +81,7 @@ abstract class Driver extends BaseDriver
     /**
      * Handle the checkout request.
      */
-    public function x(Request $request, Order $order): Response
+    public function handleCheckout(Request $request, Order $order): Response
     {
         try {
             $this->checkout($request, $order);

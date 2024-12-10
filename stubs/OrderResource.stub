@@ -2,7 +2,7 @@
 
 namespace {{ namespace }}Root\Resources;
 
-use Cone\Bazar\Resources\OrderResource as Respource;
+use Cone\Bazar\Resources\OrderResource as Resource;
 use Illuminate\Http\Request;
 
 class OrderResource extends Resource
