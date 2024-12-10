@@ -81,7 +81,7 @@ abstract class Driver extends BaseDriver
     /**
      * Handle the checkout request.
      */
-    public function handleCheckout(Request $request, Order $order): Response
+    public function x(Request $request, Order $order): Response
     {
         try {
             $this->checkout($request, $order);
@@ -107,7 +107,7 @@ abstract class Driver extends BaseDriver
      */
     public function checkout(Request $request, Order $order): Order
     {
-        $order->markAs(Order::ON_HOLD);
+        $order->markAs(Order::PENDING);
 
         return $order;
     }
@@ -169,7 +169,7 @@ abstract class Driver extends BaseDriver
     {
         $this->pay($order);
 
-        $order->markAs(Order::PENDING);
+        $order->markAs(Order::ON_HOLD);
 
         return $order;
     }
