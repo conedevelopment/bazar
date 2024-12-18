@@ -45,10 +45,10 @@ class TaxRateResource extends Resource
                 ->sortable()
                 ->required(),
 
-            Number::make(__('Rate'), 'rate')
+            Number::make(__('Rate'), 'value')
                 ->required()
                 ->rules(['required', 'numeric', 'min:0'])
-                ->step(0.1)
+                ->step(1)
                 ->min(0)
                 ->suffix('%')
                 ->format(static function (Request $request, Model $model): string {
