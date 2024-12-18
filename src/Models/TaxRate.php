@@ -96,7 +96,7 @@ class TaxRate extends Model implements Contract
     protected function formattedValue(): Attribute
     {
         return new Attribute(
-            get: fn (): string => Number::percentage($this->value)
+            get: fn (): string => Number::percentage($this->value, 2)
         );
     }
 
