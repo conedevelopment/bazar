@@ -5,6 +5,7 @@ namespace Cone\Bazar\Widgets;
 use Cone\Bazar\Models\Order;
 use Cone\Root\Widgets\Value;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 
 class OrdersCount extends Value
 {
@@ -14,10 +15,12 @@ class OrdersCount extends Value
     protected ?string $icon = 'archive';
 
     /**
-     * Create a new Eloquent query.
+     * {@inheritdoc}
      */
-    public function query(): Builder
+    public function resolveQuery(Request $request): Builder
     {
-        return Order::query()->status(Order::FULFILLED);
+        $this->queryResolver = fn (): Builder => Order::query()->status(Order::FULFILLED);
+
+        return parent::resolveQuery($request);
     }
 }
