@@ -32,6 +32,14 @@ class TaxRateResource extends Resource
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function modelTitle(Model $model): string
+    {
+        return sprintf('%s (%s)', $model->name, $model->formattedValue);
+    }
+
+    /**
      * Define the fields.
      */
     public function fields(Request $request): array
@@ -48,7 +56,7 @@ class TaxRateResource extends Resource
             Number::make(__('Rate'), 'value')
                 ->required()
                 ->rules(['required', 'numeric', 'min:0'])
-                ->step(1)
+                ->step(0.1)
                 ->min(0)
                 ->suffix('%')
                 ->format(static function (Request $request, Model $model): string {
