@@ -23,15 +23,15 @@
     },
     "require": {
         "php": "^8.3.0 || ^8.4.0",
-        "conedevelopment/root": "^2.2.5"
+        "conedevelopment/root": "^2.6.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel/laravel": "^11.0",
+        "laravel/laravel": "^12.0",
         "mockery/mockery": "^1.4.4",
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^11.5",
         "laravel/pint": "^1.6",
-        "larastan/larastan": "^2.8"
+        "larastan/larastan": "^3.0"
     },
     "extra": {
         "laravel": {
