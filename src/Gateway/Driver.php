@@ -4,6 +4,7 @@ namespace Cone\Bazar\Gateway;
 
 use Cone\Bazar\Events\CheckoutFailed;
 use Cone\Bazar\Events\CheckoutProcessed;
+use Cone\Bazar\Events\CheckoutProcessing;
 use Cone\Bazar\Events\PaymentCaptured;
 use Cone\Bazar\Events\PaymentCaptureFailed;
 use Cone\Bazar\Models\Order;
@@ -84,6 +85,8 @@ abstract class Driver extends BaseDriver
     public function handleCheckout(Request $request, Order $order): Response
     {
         try {
+            CheckoutProcessing::dispatch($this->name, $order);
+
             $this->checkout($request, $order);
 
             CheckoutProcessed::dispatch($this->name, $order);
