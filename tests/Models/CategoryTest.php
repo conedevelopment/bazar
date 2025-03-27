@@ -10,7 +10,7 @@ class CategoryTest extends TestCase
 {
     protected Category $category;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

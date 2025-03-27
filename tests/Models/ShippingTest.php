@@ -20,7 +20,7 @@ class ShippingTest extends TestCase
 
     protected Shipping $shipping;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

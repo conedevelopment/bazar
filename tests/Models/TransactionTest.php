@@ -16,7 +16,7 @@ class TransactionTest extends TestCase
 
     protected Transaction $transaction;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -2,9 +2,11 @@
 
 namespace Cone\Bazar\Http\Controllers;
 
-use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Support\Facades\Gateway;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response as ResponseFactory;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class GatewayController extends Controller
 {
@@ -13,11 +15,17 @@ class GatewayController extends Controller
      */
     public function capture(Request $request, string $driver): Response
     {
-        $gateway = Gateway::driver($driver);
+        try {
+            $gateway = Gateway::driver($driver);
 
-        return $gateway->handleCapture(
-            $request, $gateway->resolveOrderForCapture($request)
-        );
+            return $gateway->handleCapture(
+                $request, $gateway->resolveOrderForCapture($request)
+            )->toResponse($request);
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return ResponseFactory::make('Invalid request.', Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -25,10 +33,16 @@ class GatewayController extends Controller
      */
     public function notification(Request $request, string $driver): Response
     {
-        $gateway = Gateway::driver($driver);
+        try {
+            $gateway = Gateway::driver($driver);
 
-        return $gateway->handleNotification(
-            $request, $gateway->resolveOrderForNotification($request)
-        );
+            return $gateway->handleNotification(
+                $request, $gateway->resolveOrderForNotification($request)
+            )->toResponse($request);
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return ResponseFactory::make('Invalid request.', Response::HTTP_BAD_REQUEST);
+        }
     }
 }

@@ -64,7 +64,7 @@ class TaxRateResource extends Resource
                 }),
 
             Boolean::make(__('Shipping'), 'shipping')
-                ->help(__('If the box is checked, the tax rate is applied for the shipping costs.'))
+                ->help(__('If the box is checked, the tax rate is applied for the shipping costs.')),
         ];
     }
 }

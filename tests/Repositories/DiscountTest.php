@@ -13,7 +13,7 @@ class DiscountTest extends TestCase
 {
     protected Cart $cart;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -19,7 +19,7 @@ class ProductTest extends TestCase
 
     protected Property $property;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

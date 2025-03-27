@@ -128,7 +128,7 @@ abstract class Driver extends BaseDriver
      */
     public function resolveOrderForCapture(Request $request): Order
     {
-        return $this->resolveOrder($request->input('order'));
+        return $this->resolveOrder($request->input('order', ''));
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class Driver extends BaseDriver
      */
     public function resolveOrderForNotification(Request $request): Order
     {
-        return $this->resolveOrder($request->input('order'));
+        return $this->resolveOrder($request->input('order', ''));
     }
 
     /**

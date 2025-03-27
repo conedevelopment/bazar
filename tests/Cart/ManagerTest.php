@@ -26,7 +26,7 @@ class ManagerTest extends TestCase
 
     protected Variant $variant;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

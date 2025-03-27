@@ -13,7 +13,7 @@ class ItemTest extends TestCase
 {
     protected Item $item;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
