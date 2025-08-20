@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Events;
 
 use Cone\Bazar\Models\Order;

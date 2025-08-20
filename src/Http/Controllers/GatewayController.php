@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Http\Controllers;
 
 use Cone\Bazar\Support\Facades\Gateway;

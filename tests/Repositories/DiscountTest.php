@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Tests\Repositories;
 
 use Cone\Bazar\Interfaces\Discount as Contract;

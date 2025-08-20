@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Gateway;
 
 class CashDriver extends ManualDriver

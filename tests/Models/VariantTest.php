@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Product;

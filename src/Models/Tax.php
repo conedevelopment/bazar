@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Interfaces\Models\Tax as Contract;

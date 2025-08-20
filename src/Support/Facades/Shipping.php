@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Support\Facades;
 
 use Cone\Bazar\Interfaces\Shipping\Manager;

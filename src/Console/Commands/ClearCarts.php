@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Console\Commands;
 
 use Cone\Bazar\Models\Cart;

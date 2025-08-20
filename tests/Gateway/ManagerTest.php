@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Tests\Gateway;
 
 use Cone\Bazar\Events\CheckoutFailed;

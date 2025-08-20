@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Cone\Bazar\Http\Controllers\GatewayController;
 use Illuminate\Support\Facades\Route;
 

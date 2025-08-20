@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Tests;
 
 use Cone\Root\Interfaces\Models\User as UserContract;

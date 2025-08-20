@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cone\Bazar\Widgets;
 
 use Cone\Bazar\Models\Order;
