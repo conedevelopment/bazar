@@ -14,7 +14,7 @@ abstract class Bazar
      *
      * @var string
      */
-    public const VERSION = '1.2.2';
+    public const VERSION = '1.3.0';
 
     /**
      * The currency in use.
