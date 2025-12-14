@@ -37,15 +37,6 @@ class Transaction extends Model implements Contract
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'completed_at' => 'datetime',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -79,6 +70,16 @@ class Transaction extends Model implements Contract
     protected static function newFactory(): TransactionFactory
     {
         return TransactionFactory::new();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'completed_at' => 'datetime',
+        ];
     }
 
     /**

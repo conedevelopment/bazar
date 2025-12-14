@@ -10,6 +10,7 @@ use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -42,17 +43,6 @@ class Item extends Model implements Contract
         'price' => 0,
         'properties' => '[]',
         'quantity' => 1,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'price' => 'float',
-        'properties' => 'json',
-        'quantity' => 'float',
     ];
 
     /**
@@ -107,6 +97,18 @@ class Item extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'price' => 'float',
+            'properties' => AsArrayObject::class,
+            'quantity' => 'float',
+        ];
     }
 
     /**

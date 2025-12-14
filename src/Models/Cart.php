@@ -36,15 +36,6 @@ class Cart extends Model implements Contract
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'locked' => 'bool',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -93,6 +84,18 @@ class Cart extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function casts(): array
+    {
+        return [
+            'locked' => 'bool',
+        ];
     }
 
     /**

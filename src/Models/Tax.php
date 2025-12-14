@@ -24,15 +24,6 @@ class Tax extends MorphPivot implements Contract
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'value' => 'float',
-    ];
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -54,6 +45,16 @@ class Tax extends MorphPivot implements Contract
     public static function getProxiedInterface(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'value' => 'float',
+        ];
     }
 
     /**

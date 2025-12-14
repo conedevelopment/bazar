@@ -6,5 +6,6 @@ namespace Cone\Bazar\Enums;
 
 enum CouponType: string
 {
-    //
+    case FIX = 'fixed';
+    case PERCENT = 'percent';
 }

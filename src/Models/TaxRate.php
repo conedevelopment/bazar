@@ -36,16 +36,7 @@ class TaxRate extends Model implements Contract
      */
     protected $attributes = [
         'shipping' => false,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'shipping' => 'bool',
-        'value' => 'float',
+        'value' => 0,
     ];
 
     /**
@@ -80,6 +71,17 @@ class TaxRate extends Model implements Contract
     protected static function newFactory(): TaxRateFactory
     {
         return TaxRateFactory::new();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'value' => 'float',
+            'shipping' => 'bool',
+        ];
     }
 
     /**

@@ -360,7 +360,7 @@ trait InteractsWithItems
     {
         $this->items->each(static function (Item $item): void {
             if ($item->isLineItem() && ! is_null($item->checkoutable)) {
-                $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only('price');
+                $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only(['price']);
 
                 $item->fill($data)->save();
                 $item->calculateTaxes();
