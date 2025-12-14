@@ -8,6 +8,8 @@ use Cone\Bazar\Bazar;
 use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Interfaces\Taxable;
+use Cone\Bazar\Models\AppliedCoupon;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Currency;
@@ -17,17 +19,18 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
-trait InteractsWithItems
+trait AsOrder
 {
     /**
      * Boot the trait.
      */
-    public static function bootInteractsWithItems(): void
+    public static function bootAsOrder(): void
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
@@ -61,6 +64,17 @@ trait InteractsWithItems
         return $this->morphOne(Shipping::getProxiedClass(), 'shippable')->withDefault([
             'driver' => ShippingManager::getDefaultDriver(),
         ]);
+    }
+
+    /**
+     * Get the coupons for the model.
+     */
+    public function coupons(): MorphToMany
+    {
+        return $this->morphToMany(Coupon::getProxiedClass(), 'couponable', 'bazar_couponables')
+            ->using(AppliedCoupon::getProxiedClass())
+            ->withPivot('value')
+            ->withTimestamps();
     }
 
     /**
@@ -374,5 +388,13 @@ trait InteractsWithItems
     public function needsPayment(): bool
     {
         return $this->getTotal() > 0;
+    }
+
+    /**
+     * Apply a coupon to the checkoutable model.
+     */
+    public function applyCoupon(string|Coupon $coupon): AppliedCoupon
+    {
+        //
     }
 }

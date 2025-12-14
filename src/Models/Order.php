@@ -11,7 +11,7 @@ use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Notifications\OrderDetails;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Traits\Addressable;
-use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Bazar\Traits\AsOrder;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -28,9 +28,9 @@ use Illuminate\Support\Facades\Notification as Notifier;
 class Order extends Model implements Contract
 {
     use Addressable;
+    use AsOrder;
     use HasFactory;
     use HasUuids;
-    use InteractsWithItems;
     use InteractsWithProxy;
     use SoftDeletes;
 

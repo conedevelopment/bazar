@@ -9,7 +9,7 @@ use Cone\Bazar\Database\Factories\CartFactory;
 use Cone\Bazar\Exceptions\CartException;
 use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
-use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Bazar\Traits\AsOrder;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\Date;
 class Cart extends Model implements Contract
 {
     use Addressable;
+    use AsOrder;
     use HasFactory;
-    use InteractsWithItems;
     use InteractsWithProxy;
 
     /**

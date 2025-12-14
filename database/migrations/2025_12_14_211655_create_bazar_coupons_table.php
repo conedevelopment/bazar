@@ -17,10 +17,11 @@ return new class extends Migration
         Schema::create('bazar_coupons', static function (Blueprint $table): void {
             $table->id();
             $table->string('code')->unique();
-            $table->float('discount', 10, 2)->unsigned();
+            $table->float('value', 10, 2)->unsigned();
             $table->enum('type', CouponType::cases())->default(CouponType::FIX->value);
-            $table->integer('limit')->unsigned()->nullable();
-            $table->timestamp('available_at')->nullable();
+            $table->json('rules')->nullable();
+            $table->boolean('active')->default(true);
+            $table->boolean('stackable')->default(false);
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });

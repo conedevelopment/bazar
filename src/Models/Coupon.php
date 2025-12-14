@@ -7,6 +7,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Enums\CouponType;
 use Cone\Bazar\Interfaces\Models\Coupon as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model implements Contract
@@ -16,18 +17,27 @@ class Coupon extends Model implements Contract
     /**
      * The model's default values for attributes.
      */
-    protected $attributes = [];
+    protected $attributes = [
+        'active' => true,
+        'code' => null,
+        'expires_at' => null,
+        'rules' => '[]',
+        'stackable' => false,
+        'type' => CouponType::FIX,
+        'value' => 0,
+    ];
 
     /**
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'available_at',
+        'active',
         'code',
-        'discount',
         'expires_at',
-        'limit',
+        'rules',
+        'stackable',
         'type',
+        'value',
     ];
 
     /**
@@ -57,11 +67,12 @@ class Coupon extends Model implements Contract
     public function casts(): array
     {
         return [
-            'available_at' => 'datetime',
+            'active' => 'boolean',
             'expires_at' => 'datetime',
-            'discount' => 'float',
-            'limit' => 'integer',
+            'rules' => AsArrayObject::class,
+            'stackable' => 'boolean',
             'type' => CouponType::class,
+            'value' => 'float',
         ];
     }
 }
