@@ -367,4 +367,12 @@ trait InteractsWithItems
             }
         });
     }
+
+    /**
+     * Determine whether the checkoutable models needs payment.
+     */
+    public function needsPayment(): bool
+    {
+        return $this->getTotal() > 0;
+    }
 }

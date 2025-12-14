@@ -105,4 +105,9 @@ interface Checkoutable extends Shippable
      * Sync the items.
      */
     public function syncItems(): void;
+
+    /**
+     * Determine whether the checkoutable models needs payment.
+     */
+    public function needsPayment(): bool;
 }
