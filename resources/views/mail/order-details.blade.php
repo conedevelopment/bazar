@@ -17,8 +17,6 @@ Your order has been received and now being processed. Your orders are shown belo
 | **Subtotal** ||| {{ $order->formattedSubtotal }} |
 </x-mail::table>
 
-**Discount**: {{ $order->formattedDiscount }}
-
 **Shipping** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
 
 **Tax**: {{ $order->formattedTax }}

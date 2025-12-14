@@ -18,8 +18,6 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Models\Address::class => Models\Address::class,
         Interfaces\Models\Cart::class => Models\Cart::class,
         Interfaces\Models\Category::class => Models\Category::class,
-        Interfaces\Models\Coupon::class => Models\Coupon::class,
-        Interfaces\Models\Discount::class => Models\Discount::class,
         Interfaces\Models\Item::class => Models\Item::class,
         Interfaces\Models\Order::class => Models\Order::class,
         Interfaces\Models\Product::class => Models\Product::class,
@@ -38,7 +36,6 @@ class BazarServiceProvider extends ServiceProvider
     public array $singletons = [
         Interfaces\Cart\Manager::class => Cart\Manager::class,
         Interfaces\Gateway\Manager::class => Gateway\Manager::class,
-        Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
         Interfaces\Shipping\Manager::class => Shipping\Manager::class,
     ];
 

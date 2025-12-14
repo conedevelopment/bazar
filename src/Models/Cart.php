@@ -9,7 +9,6 @@ use Cone\Bazar\Database\Factories\CartFactory;
 use Cone\Bazar\Exceptions\CartException;
 use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
-use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithItems;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,13 +17,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Number;
 
 class Cart extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
-    use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
 
@@ -35,7 +32,6 @@ class Cart extends Model implements Contract
      */
     protected $attributes = [
         'currency' => null,
-        'discount' => 0,
         'locked' => false,
     ];
 
@@ -45,7 +41,6 @@ class Cart extends Model implements Contract
      * @var array<string, string>
      */
     protected $casts = [
-        'discount' => 'float',
         'locked' => 'bool',
     ];
 
@@ -56,7 +51,6 @@ class Cart extends Model implements Contract
      */
     protected $fillable = [
         'currency',
-        'discount',
         'locked',
     ];
 
@@ -123,22 +117,6 @@ class Cart extends Model implements Contract
             ->withDefault(function (Address $address): Address {
                 return $address->fill($this->user?->address?->toArray() ?: []);
             });
-    }
-
-    /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        return $this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0;
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
     }
 
     /**

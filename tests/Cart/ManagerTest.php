@@ -179,13 +179,6 @@ class ManagerTest extends TestCase
         );
     }
 
-    public function test_cart_has_calculates_discount(): void
-    {
-        $this->assertEquals(
-            $this->manager->getModel()->discount, $this->manager->calculateDiscount()
-        );
-    }
-
     public function test_cart_can_checkout(): void
     {
         Event::fake([CheckoutProcessed::class]);

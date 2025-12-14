@@ -226,8 +226,6 @@ trait InteractsWithItems
 
         $value += $this->needsShipping() ? $this->shipping->getTotal() : 0;
 
-        $value -= $this->discount;
-
         return round($value < 0 ? 0 : $value, 2);
     }
 

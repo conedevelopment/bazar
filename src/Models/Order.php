@@ -11,7 +11,6 @@ use Cone\Bazar\Interfaces\Models\Order as Contract;
 use Cone\Bazar\Notifications\OrderDetails;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Bazar\Traits\Addressable;
-use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithItems;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,14 +24,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification as Notifier;
-use Illuminate\Support\Number;
 
 class Order extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
     use HasUuids;
-    use InteractsWithDiscounts;
     use InteractsWithItems;
     use InteractsWithProxy;
     use SoftDeletes;
@@ -55,7 +52,6 @@ class Order extends Model implements Contract
      * @var list<string>
      */
     protected $appends = [
-        'formatted_discount',
         'formatted_subtotal',
         'formatted_tax',
         'formatted_total',
@@ -72,17 +68,7 @@ class Order extends Model implements Contract
      */
     protected $attributes = [
         'currency' => null,
-        'discount' => 0,
         'status' => self::ON_HOLD,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'discount' => 'float',
     ];
 
     /**
@@ -92,7 +78,6 @@ class Order extends Model implements Contract
      */
     protected $fillable = [
         'currency',
-        'discount',
         'status',
     ];
 
@@ -242,22 +227,6 @@ class Order extends Model implements Contract
     }
 
     /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        return $this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0;
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
-    }
-
-    /**
      * Create a payment transaction for the order.
      */
     public function pay(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction
@@ -402,9 +371,10 @@ class Order extends Model implements Contract
      */
     public function getNotifiable(): object
     {
-        return is_null($this->user)
-            ? Notifier::route('mail', [$this->address->email => $this->address->name])
-            : $this->user;
+        return match (true) {
+            is_null($this->user) => Notifier::route('mail', [$this->address->email => $this->address->name]),
+            default => $this->user,
+        };
     }
 
     /**

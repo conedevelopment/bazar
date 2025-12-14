@@ -83,8 +83,6 @@ class OrderTest extends TestCase
             return ($item->price + $item->tax) * $item->quantity;
         });
 
-        $total -= $this->order->discount;
-
         $this->assertEquals($total, $this->order->total);
     }
 

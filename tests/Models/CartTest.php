@@ -85,8 +85,6 @@ class CartTest extends TestCase
             return ($item->price + $item->tax) * $item->quantity;
         });
 
-        $total -= $this->cart->discount;
-
         $this->assertEquals($total, $this->cart->total);
     }
 
@@ -95,8 +93,6 @@ class CartTest extends TestCase
         $total = $this->cart->items->sum(function ($item) {
             return $item->price * $item->quantity;
         });
-
-        $total -= $this->cart->discount;
 
         $this->assertEquals($total, $this->cart->subtotal);
     }

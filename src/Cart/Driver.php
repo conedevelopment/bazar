@@ -73,7 +73,6 @@ abstract class Driver
                 $cart->syncItems();
                 $cart->shipping->calculateFee();
                 $cart->shipping->calculateTaxes();
-                $cart->calculateDiscount();
             }
         });
     }
@@ -235,8 +234,6 @@ abstract class Driver
 
         $this->getShipping()->update(['fee' => 0]);
         $this->getShipping()->taxes()->delete();
-
-        $this->getModel()->calculateDiscount();
     }
 
     /**
@@ -281,8 +278,6 @@ abstract class Driver
         $this->getShipping()->calculateFee();
 
         $this->getModel()->calculateTax();
-
-        $this->getModel()->calculateDiscount();
     }
 
     /**
