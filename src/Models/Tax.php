@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Interfaces\Models\Tax as Contract;
-use Cone\Bazar\Support\Currency;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
@@ -20,7 +19,7 @@ class Tax extends MorphPivot implements Contract
      * @var array<string, mixed>
      */
     protected $attributes = [
-        'value' => null,
+        'value' => 0,
     ];
 
     /**
@@ -72,6 +71,6 @@ class Tax extends MorphPivot implements Contract
      */
     public function format(): string
     {
-        return (new Currency($this->value, $this->pivotParent?->checkoutable?->getCurrency()))->format();
+        return $this->pivotParent?->checkoutable?->getCurrency()?->format($this->value) ?: '';
     }
 }

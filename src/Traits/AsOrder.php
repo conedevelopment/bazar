@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Interfaces\Taxable;
@@ -12,7 +13,6 @@ use Cone\Bazar\Models\AppliedCoupon;
 use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -224,9 +224,9 @@ trait AsOrder
     /**
      * Get the currency.
      */
-    public function getCurrency(): string
+    public function getCurrency(): Currency
     {
-        return strtoupper($this->currency);
+        return $this->currency ?: Bazar::getCurrency();
     }
 
     /**
@@ -248,7 +248,7 @@ trait AsOrder
      */
     public function getFormattedTotal(): string
     {
-        return (new Currency($this->getTotal(), $this->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getTotal());
     }
 
     /**
@@ -268,7 +268,7 @@ trait AsOrder
      */
     public function getFormattedSubtotal(): string
     {
-        return (new Currency($this->getSubtotal(), $this->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getSubtotal());
     }
 
     /**
@@ -288,7 +288,7 @@ trait AsOrder
      */
     public function getFormattedFeeTotal(): string
     {
-        return (new Currency($this->getFeeTotal(), $this->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getFeeTotal());
     }
 
     /**
@@ -308,7 +308,7 @@ trait AsOrder
      */
     public function getFormattedTax(): string
     {
-        return (new Currency($this->getTax(), $this->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getTax());
     }
 
     /**
@@ -393,8 +393,45 @@ trait AsOrder
     /**
      * Apply a coupon to the checkoutable model.
      */
-    public function applyCoupon(string|Coupon $coupon): AppliedCoupon
+    public function applyCoupon(string|Coupon $coupon): void
     {
-        //
+        $coupon = match (true) {
+            is_string($coupon) => Coupon::query()->where('bazar_coupons.code', $coupon)->available()->firstOrFail(),
+            default => $coupon,
+        };
+
+        $coupon->apply($this);
+    }
+
+    /**
+     * Get the discount.
+     */
+    public function getDiscount(): float
+    {
+        return $this->coupons->sum('pivot.value');
+    }
+
+    /**
+     * Get the formatted discount.
+     */
+    public function getFormattedDiscount(): string
+    {
+        return 0;
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float
+    {
+        return 0;
+    }
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountRate(): string
+    {
+        return 0;
     }
 }

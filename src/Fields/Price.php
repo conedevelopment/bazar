@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Fields;
 
 use Cone\Bazar\Bazar;
-use Cone\Bazar\Support\Currency;
+use Cone\Bazar\Enums\Currency;
 use Cone\Root\Fields\Meta;
 use Cone\Root\Fields\Number;
 use Illuminate\Database\Eloquent\Model;
@@ -16,36 +16,39 @@ class Price extends Meta
     /**
      * The price currency.
      */
-    protected string $currency;
+    protected Currency $currency;
 
     /**
      * Create a new price field instance.
      */
-    public function __construct(string $label, ?string $currency = null)
+    public function __construct(string $label, ?Currency $currency = null)
     {
         $this->currency = $currency ?: Bazar::getCurrency();
 
-        parent::__construct($label, sprintf('price_%s', strtolower($this->currency)));
+        parent::__construct($label, sprintf('price_%s', $this->currency->key()));
 
         $this->aggregateResolver = null;
 
         $this->as(Number::class, function (Number $field): void {
             $field->min(0)
                 ->format(function (Request $request, Model $model, mixed $value): ?string {
-                    return is_null($value) ? null : (new Currency($value, $this->currency))->format();
+                    return match (true) {
+                        is_null($value) => null,
+                        default => $model->checkoutable->getCurrency()->format((float) ($value ?? 0)),
+                    };
                 })
-                ->suffix(strtoupper($this->currency));
+                ->suffix($this->currency->value);
         });
     }
 
     /**
      * Set the currency attribute.
      */
-    public function currency(string $value): static
+    public function currency(Currency $value): static
     {
         $this->currency = $value;
 
-        $this->modelAttribute = sprintf('price_%s', strtolower($value));
+        $this->modelAttribute = sprintf('price_%s', $value->key());
 
         return $this;
     }

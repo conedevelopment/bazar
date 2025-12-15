@@ -6,6 +6,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Interfaces\Models\AppliedCoupon as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 
 class AppliedCoupon extends MorphPivot implements Contract
@@ -53,5 +54,23 @@ class AppliedCoupon extends MorphPivot implements Contract
         return [
             'value' => 'float',
         ];
+    }
+
+    /**
+     * Get the formatted value attribute.
+     */
+    protected function formattedValue(): Attribute
+    {
+        return new Attribute(
+            get: fn (): string => $this->format()
+        );
+    }
+
+    /**
+     * Get the formatted coupon value.
+     */
+    public function format(): string
+    {
+        return $this->pivotParent?->checkoutable?->getCurrency()?->format($this->value) ?: '';
     }
 }

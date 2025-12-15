@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\VariantFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
 use Cone\Bazar\Traits\HasPrices;
@@ -130,7 +131,7 @@ class Variant extends Model implements Contract
     /**
      * Get the price by the given type and currency.
      */
-    public function getPrice(?string $currency = null): ?float
+    public function getPrice(?Currency $currency = null): ?float
     {
         return $this->__getPrice($currency) ?: $this->product->getPrice($currency);
     }

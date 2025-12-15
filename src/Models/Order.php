@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\OrderFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Events\OrderStatusChanged;
 use Cone\Bazar\Exceptions\TransactionFailedException;
 use Cone\Bazar\Interfaces\Models\Order as Contract;
@@ -116,6 +117,16 @@ class Order extends Model implements Contract
             static::FULFILLED => __('Fulfilled'),
             static::CANCELLED => __('Cancelled'),
             static::FAILED => __('Failed'),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'currency' => Currency::class,
         ];
     }
 

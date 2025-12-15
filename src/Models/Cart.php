@@ -6,6 +6,7 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Exceptions\CartException;
 use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
@@ -94,6 +95,7 @@ class Cart extends Model implements Contract
     public function casts(): array
     {
         return [
+            'currency' => Currency::class,
             'locked' => 'bool',
         ];
     }

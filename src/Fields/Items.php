@@ -7,7 +7,6 @@ namespace Cone\Bazar\Fields;
 use Closure;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Variant;
-use Cone\Bazar\Support\Currency;
 use Cone\Root\Fields\MorphMany;
 use Cone\Root\Fields\MorphTo;
 use Cone\Root\Fields\Number;
@@ -64,13 +63,13 @@ class Items extends MorphMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Model $model, ?float $value): string {
-                    return (new Currency($value, $model->checkoutable->currency))->format();
+                    return $model->checkoutable->getCurrency()->format($value ?? 0);
                 }),
 
             Number::make(__('Tax'), function (Request $request, Model $model): float {
                 return $model->getTax();
             })->format(static function (Request $request, Model $model, float $value): string {
-                return (new Currency($value, $model->checkoutable->currency))->format();
+                return $model->checkoutable->getCurrency()->format($value ?? 0);
             }),
 
             Number::make(__('Quantity'), 'quantity')
@@ -82,7 +81,7 @@ class Items extends MorphMany
             Number::make(__('Total'), function (Request $request, Model $model): float {
                 return $model->getTotal();
             })->format(static function (Request $request, Model $model, float $value): string {
-                return (new Currency($value, $model->checkoutable->currency))->format();
+                return $model->checkoutable->getCurrency()->format($value ?? 0);
             }),
         ];
     }

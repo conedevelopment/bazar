@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
-use Cone\Bazar\Models\AppliedCoupon;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,7 +52,7 @@ interface Checkoutable extends Shippable
     /**
      * Get the currency.
      */
-    public function getCurrency(): string;
+    public function getCurrency(): Currency;
 
     /**
      * Get the total.
@@ -122,5 +122,5 @@ interface Checkoutable extends Shippable
     /**
      * Apply a coupon to the checkoutable model.
      */
-    public function applyCoupon(string|Coupon $coupon): AppliedCoupon;
+    public function applyCoupon(string|Coupon $coupon): void;
 }

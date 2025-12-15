@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Cone\Bazar\Enums\Currency;
+
 return [
 
     /*
@@ -16,15 +18,8 @@ return [
     */
 
     'currencies' => [
-        'default' => strtolower(env('BAZAR_CURRENCY', 'USD')),
-        'available' => [
-            'USD' => [
-                'precision' => 2,
-            ],
-            'EUR' => [
-                'precision' => 2,
-            ],
-        ],
+        'default' => env('BAZAR_CURRENCY', 'USD'),
+        'available' => [Currency::USD, Currency::EUR],
     ],
 
     /*

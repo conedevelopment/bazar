@@ -6,7 +6,6 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ShippingFactory;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
-use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\InteractsWithTaxes;
@@ -221,7 +220,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return (new Currency($this->getPrice(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getPrice());
     }
 
     /**
@@ -237,7 +236,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedGrossPrice(): string
     {
-        return (new Currency($this->getGrossPrice(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getGrossPrice());
     }
 
     /**
@@ -253,7 +252,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return (new Currency($this->getTotal(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getTotal());
     }
 
     /**
@@ -269,7 +268,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return (new Currency($this->getSubtotal(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getSubtotal());
     }
 
     /**
@@ -277,7 +276,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTax(): string
     {
-        return (new Currency($this->getTax(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getTax());
     }
 
     /**
@@ -285,7 +284,7 @@ class Shipping extends Model implements Contract
      */
     public function getFormattedTaxTotal(): string
     {
-        return (new Currency($this->getTaxTotal(), $this->shippable->getCurrency()))->format();
+        return $this->shippable->getCurrency()->format($this->getTaxTotal());
     }
 
     /**
