@@ -95,14 +95,14 @@ class ShippingTest extends TestCase
         );
         $this->assertSame($this->shipping->getTotal(), $this->shipping->total);
         $this->assertSame(
-            $this->shipping->shippable->currency->format($this->shipping->total),
+            $this->shipping->shippable->getCurrency()->format($this->shipping->total),
             $this->shipping->getFormattedTotal()
         );
         $this->assertSame($this->shipping->getFormattedTotal(), $this->shipping->formattedTotal);
         $this->assertSame($this->shipping->fee, $this->shipping->getSubtotal());
         $this->assertSame($this->shipping->getSubtotal(), $this->shipping->subtotal);
         $this->assertSame(
-            $this->shipping->shippable->currency->format($this->shipping->subtotal),
+            $this->shipping->shippable->getCurrency()->format($this->shipping->subtotal),
             $this->shipping->getFormattedSubtotal()
         );
         $this->assertSame($this->shipping->getFormattedSubtotal(), $this->shipping->formattedSubtotal);

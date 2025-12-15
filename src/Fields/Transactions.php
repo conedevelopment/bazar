@@ -53,7 +53,7 @@ class Transactions extends HasMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Transaction $transaction, ?float $value): string {
-                    return $transaction->order->currency->format($value ?: 0);
+                    return $transaction->order->getCurrency()->format($value ?: 0);
                 })
                 ->rules(static function (Request $request, Transaction $transaction): array {
                     return [

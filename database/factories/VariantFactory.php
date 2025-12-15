@@ -48,7 +48,7 @@ class VariantFactory extends Factory
     {
         return $this->afterMaking(static function (Variant $variant): void {
             $variant->setRelation('metaData', $variant->metaData()->makeMany([
-                ['key' => 'price_'.strtolower(Bazar::getCurrency()), 'value' => mt_rand(10, 100)],
+                ['key' => 'price_'.Bazar::getCurrency()->key(), 'value' => mt_rand(10, 100)],
             ]));
         })->afterCreating(static function (Variant $variant): void {
             $variant->metaData->each(static function (Meta $meta) use ($variant) {

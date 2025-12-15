@@ -78,20 +78,6 @@ trait AsOrder
     }
 
     /**
-     * Get the currency attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
-     */
-    protected function currency(): Attribute
-    {
-        return new Attribute(
-            get: static function (?string $value = null): string {
-                return strtoupper($value ?: Bazar::getCurrency());
-            }
-        );
-    }
-
-    /**
      * Get the items.
      */
     public function getItems(): Collection
@@ -248,7 +234,7 @@ trait AsOrder
      */
     public function getFormattedTotal(): string
     {
-        return $this->checkoutable->getCurrency()->format($this->getTotal());
+        return $this->checkoutable?->getCurrency()?->format($this->getTotal()) ?: '';
     }
 
     /**
@@ -268,7 +254,7 @@ trait AsOrder
      */
     public function getFormattedSubtotal(): string
     {
-        return $this->checkoutable->getCurrency()->format($this->getSubtotal());
+        return $this->checkoutable?->getCurrency()?->format($this->getSubtotal()) ?: '';
     }
 
     /**
@@ -308,7 +294,7 @@ trait AsOrder
      */
     public function getFormattedTax(): string
     {
-        return $this->checkoutable->getCurrency()->format($this->getTax());
+        return $this->checkoutable?->getCurrency()?->format($this->getTax()) ?: '';
     }
 
     /**
@@ -330,6 +316,7 @@ trait AsOrder
      */
     public function findItem(array $attributes): ?Item
     {
+
         $attributes = array_merge(['properties' => null], $attributes, [
             'checkoutable_id' => $this->getKey(),
             'checkoutable_type' => static::class,

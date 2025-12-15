@@ -43,7 +43,7 @@ class ItemTest extends TestCase
     {
         $this->assertSame($this->item->price, $this->item->getPrice());
         $this->assertSame(
-            $this->item->checkoutable->currency->format($this->item->price),
+            $this->item->checkoutable->getCurrency()->format($this->item->price),
             $this->item->getFormattedPrice()
         );
         $this->assertSame($this->item->getFormattedPrice(), $this->item->formattedPrice);
@@ -57,14 +57,14 @@ class ItemTest extends TestCase
         );
         $this->assertSame($this->item->getTotal(), $this->item->total);
         $this->assertSame(
-            $this->item->checkoutable->currency->format($this->item->total),
+            $this->item->checkoutable->getCurrency()->format($this->item->total),
             $this->item->getFormattedTotal()
         );
         $this->assertSame($this->item->getFormattedTotal(), $this->item->formattedTotal);
         $this->assertSame($this->item->price * $this->item->quantity, $this->item->getSubtotal());
         $this->assertSame($this->item->getSubtotal(), $this->item->subtotal);
         $this->assertSame(
-            $this->item->checkoutable->currency->format($this->item->subtotal),
+            $this->item->checkoutable->getCurrency()->format($this->item->subtotal),
             $this->item->getFormattedSubtotal()
         );
         $this->assertSame($this->item->getFormattedSubtotal(), $this->item->formattedSubtotal);

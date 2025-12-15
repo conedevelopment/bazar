@@ -9,7 +9,6 @@ use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -105,7 +104,7 @@ class Item extends Model implements Contract
     {
         return [
             'price' => 'float',
-            'properties' => AsArrayObject::class,
+            'properties' => 'array',
             'quantity' => 'float',
         ];
     }
