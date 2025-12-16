@@ -6,6 +6,10 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Enums\CouponType;
 use Cone\Bazar\Models\Coupon;
+use Cone\Bazar\Models\Product;
+use Cone\Root\Fields\Boolean;
+use Cone\Root\Fields\Date;
+use Cone\Root\Fields\Fieldset;
 use Cone\Root\Fields\ID;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Select;
@@ -26,6 +30,13 @@ class CouponResource extends Resource
      * The group for the resource.
      */
     protected string $group = 'Shop';
+
+    /**
+     * The relations to eager load on every query.
+     */
+    protected array $withCount = [
+        'applications',
+    ];
 
     /**
      * Get the model for the resource.
@@ -72,6 +83,40 @@ class CouponResource extends Resource
                         CouponType::PERCENT => $model->value.'%',
                         default => $model->value,
                     };
+                }),
+
+            Boolean::make(__('Active'), 'active')
+                ->sortable(),
+
+            Date::make(__('Expires At'), 'expires_at')
+                ->withTime()
+                ->sortable(),
+
+            Boolean::make(__('Stackable'), 'stackable')
+                ->sortable(),
+
+            Fieldset::make(__('Rules'), 'rules')
+                ->withFields(static function (): array {
+                    return [
+                        Number::make(__('Limit'), 'rules->limit')
+                            ->min(0)
+                            ->rules(['nullable', 'numeric', 'min:0']),
+
+                        Number::make(__('Limit Per Customer'), 'rules->limit_customer')
+                            ->min(0)
+                            ->rules(['nullable', 'numeric', 'min:0']),
+
+                        Select::make(__('Products'), 'rules->products')
+                            ->multiple()
+                            ->options(function (): array {
+                                return Product::proxy()
+                                    ->query()
+                                    ->get()
+                                    ->pluck('name', 'id')
+                                    ->toArray();
+                            })
+                            ->rules(['nullable', 'array']),
+                    ];
                 }),
         ];
     }

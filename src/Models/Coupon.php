@@ -12,8 +12,8 @@ use DateTimeInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Date;
 
 class Coupon extends Model implements Contract
@@ -68,6 +68,29 @@ class Coupon extends Model implements Contract
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'active' => 'boolean',
+            'expires_at' => 'datetime',
+            'rules' => 'json',
+            'stackable' => 'boolean',
+            'type' => CouponType::class,
+            'value' => 'float',
+        ];
+    }
+
+    /**
+     * Get the applications of the coupon.
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(AppliedCoupon::getProxiedClass());
+    }
+
+    /**
      * Validate the coupon for the checkoutable model.
      */
     public function validate(Checkoutable $model): bool
@@ -119,20 +142,5 @@ class Coupon extends Model implements Contract
         return $query->active()
             ->whereNull($query->qualifyColumn('expires_at'))
             ->orWhere($query->qualifyColumn('expires_at'), '>', $date);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function casts(): array
-    {
-        return [
-            'active' => 'boolean',
-            'expires_at' => 'datetime',
-            'rules' => AsArrayObject::class,
-            'stackable' => 'boolean',
-            'type' => CouponType::class,
-            'value' => 'float',
-        ];
     }
 }

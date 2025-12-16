@@ -31,10 +31,10 @@ class Price extends Meta
 
         $this->as(Number::class, function (Number $field): void {
             $field->min(0)
-                ->format(static function (Request $request, Model $model, mixed $value): ?string {
+                ->format(function (Request $request, Model $model, mixed $value): ?string {
                     return match (true) {
                         is_null($value) => null,
-                        default => $model->checkoutable->getCurrency()->format((float) ($value ?? 0)),
+                        default => $this->currency->format((float) ($value ?? 0)),
                     };
                 })
                 ->suffix($this->currency->value);
