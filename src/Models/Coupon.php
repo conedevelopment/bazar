@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\CouponFactory;
 use Cone\Bazar\Enums\CouponType;
 use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Coupon as Contract;
@@ -12,6 +13,7 @@ use DateTimeInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Date;
@@ -19,6 +21,7 @@ use Illuminate\Support\Facades\Date;
 class Coupon extends Model implements Contract
 {
     use InteractsWithProxy;
+    use HasFactory;
 
     /**
      * The model's default values for attributes.
@@ -57,6 +60,14 @@ class Coupon extends Model implements Contract
     public static function getProxiedInterface(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): CouponFactory
+    {
+        return CouponFactory::new();
     }
 
     /**

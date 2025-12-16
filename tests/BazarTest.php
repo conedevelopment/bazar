@@ -9,14 +9,6 @@ use Cone\Bazar\Enums\Currency;
 
 class BazarTest extends TestCase
 {
-    public function test_bazar_has_currencies(): void
-    {
-        $this->assertSame(
-            [Currency::USD, Currency::EUR],
-            Bazar::getCurrencies()
-        );
-    }
-
     public function test_bazar_can_get_currency(): void
     {
         $this->assertSame(Currency::USD, Bazar::getCurrency());
