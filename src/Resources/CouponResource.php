@@ -102,10 +102,6 @@ class CouponResource extends Resource
                             ->min(0)
                             ->rules(['nullable', 'numeric', 'min:0']),
 
-                        Number::make(__('Limit Per Customer'), 'rules->limit_customer')
-                            ->min(0)
-                            ->rules(['nullable', 'numeric', 'min:0']),
-
                         Select::make(__('Products'), 'rules->products')
                             ->multiple()
                             ->options(function (): array {

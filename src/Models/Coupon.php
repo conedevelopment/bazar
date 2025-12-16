@@ -91,10 +91,30 @@ class Coupon extends Model implements Contract
     }
 
     /**
+     * Get the limit of the coupon.
+     */
+    public function limit(): int
+    {
+        return (int) ($this->rules['limit'] ?? 0);
+    }
+
+    /**
      * Validate the coupon for the checkoutable model.
      */
     public function validate(Checkoutable $model): bool
     {
+        if (! $this->active) {
+            return false;
+        }
+
+        if (! is_null($this->expires_at) && $this->expires_at->isPast()) {
+            return false;
+        }
+
+        if ($this->limit() > 0 && $this->applications()->count() >= $this->limit()) {
+            return false;
+        }
+
         return true;
     }
 
@@ -103,7 +123,10 @@ class Coupon extends Model implements Contract
      */
     public function calculate(Checkoutable $model): float
     {
-        return 0;
+        return match ($this->type) {
+            CouponType::PERCENT => round($model->getSubtotal() * ($this->value / 100), 2),
+            CouponType::FIX => min($this->value, $model->getSubtotal()),
+        };
     }
 
     /**
