@@ -63,7 +63,7 @@ class OrderResource extends Resource
             }),
 
             Select::make(__('Currency'), 'currency')
-                ->options(Bazar::getCurrencies())
+                ->options(array_column(Bazar::getCurrencies(), 'name', 'value'))
                 ->hiddenOn(['index']),
 
             OrderStatus::make(),

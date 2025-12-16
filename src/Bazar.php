@@ -26,7 +26,19 @@ abstract class Bazar
      */
     public static function getCurrencies(): array
     {
-        return Config::get('bazar.currencies.available', []);
+        $currencies = array_filter(Currency::cases(), static function (Currency $currency): bool {
+            return $currency->available();
+        });
+
+        return array_values($currencies);
+    }
+
+    /**
+     * Get the default currency.
+     */
+    public static function getDefaultCurrency(): Currency
+    {
+        return Currency::tryFrom(Config::get('bazar.currencies.default', 'USD')) ?: Currency::USD;
     }
 
     /**
@@ -34,7 +46,7 @@ abstract class Bazar
      */
     public static function getCurrency(): Currency
     {
-        return static::$currency ??= Currency::from(Config::get('bazar.currencies.default', 'USD'));
+        return static::$currency ??= static::getDefaultCurrency();
     }
 
     /**
