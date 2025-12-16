@@ -73,6 +73,7 @@ abstract class Driver
                 $cart->syncItems();
                 $cart->shipping->calculateFee();
                 $cart->shipping->calculateTaxes();
+                $cart->getModel()->calculateDiscount();
             }
         });
     }
@@ -229,11 +230,14 @@ abstract class Driver
      */
     public function empty(): void
     {
+        $this->getModel()->coupons()->detach();
         $this->getModel()->items()->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
         $this->getShipping()->update(['fee' => 0]);
         $this->getShipping()->taxes()->delete();
+
+        $this->getModel()->calculateDiscount();
     }
 
     /**
@@ -278,6 +282,8 @@ abstract class Driver
         $this->getShipping()->calculateFee();
 
         $this->getModel()->calculateTax();
+
+        $this->getModel()->calculateDiscount();
     }
 
     /**
