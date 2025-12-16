@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Number;
 
 trait AsOrder
 {
@@ -226,7 +227,9 @@ trait AsOrder
 
         $value += $this->needsShipping() ? $this->shipping->getTotal() : 0;
 
-        return round($value < 0 ? 0 : $value, 2);
+        $value -= $this->getDiscount();
+
+        return round(max($value, 0), 2);
     }
 
     /**
@@ -234,7 +237,7 @@ trait AsOrder
      */
     public function getFormattedTotal(): string
     {
-        return $this->checkoutable?->getCurrency()?->format($this->getTotal()) ?: '';
+        return $this->getCurrency()->format($this->getTotal());
     }
 
     /**
@@ -254,7 +257,7 @@ trait AsOrder
      */
     public function getFormattedSubtotal(): string
     {
-        return $this->checkoutable?->getCurrency()?->format($this->getSubtotal()) ?: '';
+        return $this->getCurrency()->format($this->getSubtotal());
     }
 
     /**
@@ -274,7 +277,7 @@ trait AsOrder
      */
     public function getFormattedFeeTotal(): string
     {
-        return $this->checkoutable->getCurrency()->format($this->getFeeTotal());
+        return $this->getCurrency()->format($this->getFeeTotal());
     }
 
     /**
@@ -294,7 +297,7 @@ trait AsOrder
      */
     public function getFormattedTax(): string
     {
-        return $this->checkoutable?->getCurrency()?->format($this->getTax()) ?: '';
+        return $this->getCurrency()->format($this->getTax());
     }
 
     /**
@@ -403,7 +406,7 @@ trait AsOrder
      */
     public function getFormattedDiscount(): string
     {
-        return 0;
+        return $this->getCurrency()->format($this->getDiscount());
     }
 
     /**
@@ -411,7 +414,9 @@ trait AsOrder
      */
     public function getDiscountRate(): float
     {
-        return 0;
+        $value = $this->getSubtotal() > 0 ? $this->getDiscount() / $this->getSubtotal() : 0;
+
+        return round($value * 100, 2);
     }
 
     /**
@@ -419,6 +424,6 @@ trait AsOrder
      */
     public function getFormattedDiscountRate(): string
     {
-        return 0;
+        return Number::percentage($this->getDiscountRate());
     }
 }
