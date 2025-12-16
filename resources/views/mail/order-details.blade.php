@@ -1,7 +1,7 @@
 <x-mail::message>
-# Hello, {{ $order->address->name }}!
+# {{ __('Hello') }}, {{ $order->address->name }}!
 
-## Thank you for your order!
+## {{ __('Thank you for your order!') }}
 
 Your order has been received and now being processed. Your orders are shown below for your reference:
 **Order #{{ $order->getKey() }}**
@@ -16,6 +16,8 @@ Your order has been received and now being processed. Your orders are shown belo
 @endforeach
 | **Subtotal** ||| {{ $order->formattedSubtotal }} |
 </x-mail::table>
+
+**Discount**: {{ $order->formattedDiscount }}
 
 **Shipping** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
 

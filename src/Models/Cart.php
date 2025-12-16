@@ -12,6 +12,7 @@ use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
 use Cone\Bazar\Traits\AsOrder;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -54,13 +55,14 @@ class Cart extends Model implements Contract
     protected $table = 'bazar_carts';
 
     /**
-     * The "booted" method of the model.
+     * {@inheritdoc}
      */
-    protected static function booted(): void
+    public function __construct(array $attributes = [])
     {
-        static::creating(static function (self $cart): void {
-            $cart->setAttribute('currency', $cart->currency ?: Bazar::getCurrency());
-        });
+        parent::__construct(array_merge(
+            ['currency' => Bazar::getCurrency()],
+            $attributes
+        ));
     }
 
     /**
@@ -147,7 +149,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the locked carts.
      */
-    public function scopeLocked(Builder $query): Builder
+    #[Scope]
+    protected function locked(Builder $query): Builder
     {
         return $query->where($query->qualifyColumn('locked'), true);
     }
@@ -155,7 +158,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the unlocked carts.
      */
-    public function scopeUnlocked(Builder $query): Builder
+    #[Scope]
+    protected function unlocked(Builder $query): Builder
     {
         return $query->where($query->qualifyColumn('locked'), false);
     }
@@ -163,7 +167,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the expired carts.
      */
-    public function scopeExpired(Builder $query): Builder
+    #[Scope]
+    protected function expired(Builder $query): Builder
     {
         return $query->whereNull($query->qualifyColumn('user_id'))
             ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));

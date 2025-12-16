@@ -53,11 +53,13 @@ class Order extends Model implements Contract
      * @var list<string>
      */
     protected $appends = [
+        'discount',
+        'formatted_discount',
         'formatted_subtotal',
         'formatted_tax',
         'formatted_total',
-        'subtotal',
         'status_name',
+        'subtotal',
         'tax',
         'total',
     ];

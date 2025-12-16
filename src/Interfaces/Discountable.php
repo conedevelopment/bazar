@@ -25,4 +25,9 @@ interface Discountable
      * Get the formatted discount rate.
      */
     public function getFormattedDiscountRate(): string;
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float;
 }

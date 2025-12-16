@@ -25,6 +25,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Number;
+use Throwable;
 
 trait AsOrder
 {
@@ -120,9 +121,7 @@ trait AsOrder
     protected function total(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getTotal();
-            }
+            get: fn (): float => $this->getTotal()
         );
     }
 
@@ -134,9 +133,7 @@ trait AsOrder
     protected function formattedTotal(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedTotal();
-            }
+            get: fn (): string => $this->getFormattedTotal()
         );
     }
 
@@ -148,9 +145,7 @@ trait AsOrder
     protected function subtotal(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getSubtotal();
-            }
+            get: fn (): float => $this->getSubtotal()
         );
     }
 
@@ -162,9 +157,7 @@ trait AsOrder
     protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedSubtotal();
-            }
+            get: fn (): string => $this->getFormattedSubtotal()
         );
     }
 
@@ -176,9 +169,7 @@ trait AsOrder
     protected function tax(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getTax();
-            }
+            get: fn (): float => $this->getTax()
         );
     }
 
@@ -190,9 +181,31 @@ trait AsOrder
     protected function formattedTax(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedTax();
-            }
+            get: fn (): string => $this->getFormattedTax()
+        );
+    }
+
+    /**
+     * Get the discount attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
+     */
+    protected function discount(): Attribute
+    {
+        return new Attribute(
+            get: fn (): float => $this->getDiscount()
+        );
+    }
+
+    /**
+     * Get the formatted discount attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function formattedDiscount(): Attribute
+    {
+        return new Attribute(
+            get: fn (): string => $this->getFormattedDiscount()
         );
     }
 
@@ -390,7 +403,11 @@ trait AsOrder
             default => $coupon,
         };
 
-        $coupon->apply($this);
+        try {
+            $coupon->apply($this);
+        } catch (Throwable $exception) {
+            $this->coupons()->detach([$coupon->getKey()]);
+        }
     }
 
     /**
@@ -425,5 +442,17 @@ trait AsOrder
     public function getFormattedDiscountRate(): string
     {
         return Number::percentage($this->getDiscountRate());
+    }
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float
+    {
+        $this->coupons->each(function (Coupon $coupon): void {
+            $this->applyCoupon($coupon);
+        });
+
+        return $this->getDiscount();
     }
 }
