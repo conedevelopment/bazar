@@ -10,6 +10,7 @@ use Cone\Bazar\Gateway\Response;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Gateway;
@@ -51,7 +52,7 @@ abstract class Driver
             $cart->user()->associate($request->user())->save();
         }
 
-        $cart->loadMissing(['items', 'items.buyable']);
+        $cart->loadMissing(['items', 'items.buyable', 'coupons']);
     }
 
     /**
@@ -73,7 +74,7 @@ abstract class Driver
                 $cart->syncItems();
                 $cart->shipping->calculateFee();
                 $cart->shipping->calculateTaxes();
-                $cart->calculateDiscount();
+                $cart->getModel()->calculateDiscount();
             }
         });
     }
@@ -230,6 +231,7 @@ abstract class Driver
      */
     public function empty(): void
     {
+        $this->getModel()->coupons()->detach();
         $this->getModel()->items()->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
@@ -263,6 +265,14 @@ abstract class Driver
         return App::call(function (Request $request) use ($driver): Response {
             return Gateway::driver($driver)->handleCheckout($request, $this->getModel()->toOrder());
         });
+    }
+
+    /**
+     * Apply the given coupon.
+     */
+    public function applyCoupon(string|Coupon $coupon): void
+    {
+        $this->getModel()->applyCoupon($coupon);
     }
 
     /**

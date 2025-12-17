@@ -5,29 +5,35 @@ declare(strict_types=1);
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Interfaces\Taxable;
+use Cone\Bazar\Models\AppliedCoupon;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Number;
+use Throwable;
 
-trait InteractsWithItems
+trait AsOrder
 {
     /**
      * Boot the trait.
      */
-    public static function bootInteractsWithItems(): void
+    public static function bootAsOrder(): void
     {
         static::deleting(static function (self $model): void {
             if (! in_array(SoftDeletes::class, class_uses_recursive($model)) || $model->forceDeleting) {
@@ -64,17 +70,15 @@ trait InteractsWithItems
     }
 
     /**
-     * Get the currency attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * Get the coupons for the model.
      */
-    protected function currency(): Attribute
+    public function coupons(): MorphToMany
     {
-        return new Attribute(
-            get: static function (?string $value = null): string {
-                return strtoupper($value ?: Bazar::getCurrency());
-            }
-        );
+        return $this->morphToMany(Coupon::getProxiedClass(), 'couponable', 'bazar_couponables')
+            ->as('coupon')
+            ->using(AppliedCoupon::getProxiedClass())
+            ->withPivot(['value'])
+            ->withTimestamps();
     }
 
     /**
@@ -119,9 +123,7 @@ trait InteractsWithItems
     protected function total(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getTotal();
-            }
+            get: fn (): float => $this->getTotal()
         );
     }
 
@@ -133,9 +135,7 @@ trait InteractsWithItems
     protected function formattedTotal(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedTotal();
-            }
+            get: fn (): string => $this->getFormattedTotal()
         );
     }
 
@@ -147,9 +147,7 @@ trait InteractsWithItems
     protected function subtotal(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getSubtotal();
-            }
+            get: fn (): float => $this->getSubtotal()
         );
     }
 
@@ -161,9 +159,7 @@ trait InteractsWithItems
     protected function formattedSubtotal(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedSubtotal();
-            }
+            get: fn (): string => $this->getFormattedSubtotal()
         );
     }
 
@@ -175,9 +171,7 @@ trait InteractsWithItems
     protected function tax(): Attribute
     {
         return new Attribute(
-            get: function (): float {
-                return $this->getTax();
-            }
+            get: fn (): float => $this->getTax()
         );
     }
 
@@ -189,9 +183,31 @@ trait InteractsWithItems
     protected function formattedTax(): Attribute
     {
         return new Attribute(
-            get: function (): string {
-                return $this->getFormattedTax();
-            }
+            get: fn (): string => $this->getFormattedTax()
+        );
+    }
+
+    /**
+     * Get the discount attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float, never>
+     */
+    protected function discount(): Attribute
+    {
+        return new Attribute(
+            get: fn (): float => $this->getDiscount()
+        );
+    }
+
+    /**
+     * Get the formatted discount attribute.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function formattedDiscount(): Attribute
+    {
+        return new Attribute(
+            get: fn (): string => $this->getFormattedDiscount()
         );
     }
 
@@ -210,9 +226,9 @@ trait InteractsWithItems
     /**
      * Get the currency.
      */
-    public function getCurrency(): string
+    public function getCurrency(): Currency
     {
-        return strtoupper($this->currency);
+        return $this->currency ?: Bazar::getCurrency();
     }
 
     /**
@@ -226,9 +242,9 @@ trait InteractsWithItems
 
         $value += $this->needsShipping() ? $this->shipping->getTotal() : 0;
 
-        $value -= $this->discount;
+        $value -= $this->getDiscount();
 
-        return round($value < 0 ? 0 : $value, 2);
+        return round(max($value, 0), 2);
     }
 
     /**
@@ -236,7 +252,7 @@ trait InteractsWithItems
      */
     public function getFormattedTotal(): string
     {
-        return (new Currency($this->getTotal(), $this->getCurrency()))->format();
+        return $this->getCurrency()->format($this->getTotal());
     }
 
     /**
@@ -256,7 +272,7 @@ trait InteractsWithItems
      */
     public function getFormattedSubtotal(): string
     {
-        return (new Currency($this->getSubtotal(), $this->getCurrency()))->format();
+        return $this->getCurrency()->format($this->getSubtotal());
     }
 
     /**
@@ -276,7 +292,7 @@ trait InteractsWithItems
      */
     public function getFormattedFeeTotal(): string
     {
-        return (new Currency($this->getFeeTotal(), $this->getCurrency()))->format();
+        return $this->getCurrency()->format($this->getFeeTotal());
     }
 
     /**
@@ -296,7 +312,7 @@ trait InteractsWithItems
      */
     public function getFormattedTax(): string
     {
-        return (new Currency($this->getTax(), $this->getCurrency()))->format();
+        return $this->getCurrency()->format($this->getTax());
     }
 
     /**
@@ -318,6 +334,7 @@ trait InteractsWithItems
      */
     public function findItem(array $attributes): ?Item
     {
+
         $attributes = array_merge(['properties' => null], $attributes, [
             'checkoutable_id' => $this->getKey(),
             'checkoutable_type' => static::class,
@@ -362,11 +379,84 @@ trait InteractsWithItems
     {
         $this->items->each(static function (Item $item): void {
             if ($item->isLineItem() && ! is_null($item->checkoutable)) {
-                $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only('price');
+                $data = $item->buyable->toItem($item->checkoutable, $item->only('properties'))->only(['price']);
 
                 $item->fill($data)->save();
                 $item->calculateTaxes();
             }
         });
+    }
+
+    /**
+     * Determine whether the checkoutable models needs payment.
+     */
+    public function needsPayment(): bool
+    {
+        return $this->getTotal() > 0;
+    }
+
+    /**
+     * Apply a coupon to the checkoutable model.
+     */
+    public function applyCoupon(string|Coupon $coupon): void
+    {
+        try {
+            $coupon = match (true) {
+                is_string($coupon) => Coupon::query()->code($coupon)->available()->firstOrFail(),
+                default => $coupon,
+            };
+
+            $coupon->apply($this);
+        } catch (ModelNotFoundException $exception) {
+            //
+        } catch (Throwable $exception) {
+            $this->coupons()->detach([$coupon->getKey()]);
+        }
+    }
+
+    /**
+     * Get the discount.
+     */
+    public function getDiscount(): float
+    {
+        return $this->coupons->sum('coupon.value');
+    }
+
+    /**
+     * Get the formatted discount.
+     */
+    public function getFormattedDiscount(): string
+    {
+        return $this->getCurrency()->format($this->getDiscount());
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float
+    {
+        $value = $this->getSubtotal() > 0 ? $this->getDiscount() / $this->getSubtotal() : 0;
+
+        return round($value * 100, 2);
+    }
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountRate(): string
+    {
+        return Number::percentage($this->getDiscountRate());
+    }
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float
+    {
+        $this->coupons->each(function (Coupon $coupon): void {
+            $this->applyCoupon($coupon);
+        });
+
+        return $this->getDiscount();
     }
 }

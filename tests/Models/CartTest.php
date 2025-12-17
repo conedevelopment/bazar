@@ -6,6 +6,7 @@ namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Shipping;
@@ -32,11 +33,12 @@ class CartTest extends TestCase
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
-                'tax' => 0,
                 'price' => $product->price,
                 'name' => $product->name,
             ]);
         });
+
+        $this->cart->applyCoupon(Coupon::factory()->create(['code' => 'TEST']));
     }
 
     public function test_cart_can_belong_to_order(): void
@@ -79,13 +81,18 @@ class CartTest extends TestCase
         $this->assertSame($address->id, $this->cart->address->id);
     }
 
+    public function test_cart_has_coupons(): void
+    {
+        $coupon = Coupon::query()->code('TEST')->first();
+
+        $this->assertTrue($this->cart->refresh()->coupons->contains($coupon));
+    }
+
     public function test_cart_has_total_attribute(): void
     {
         $total = $this->cart->items->sum(function ($item) {
             return ($item->price + $item->tax) * $item->quantity;
         });
-
-        $total -= $this->cart->discount;
 
         $this->assertEquals($total, $this->cart->total);
     }
@@ -95,8 +102,6 @@ class CartTest extends TestCase
         $total = $this->cart->items->sum(function ($item) {
             return $item->price * $item->quantity;
         });
-
-        $total -= $this->cart->discount;
 
         $this->assertEquals($total, $this->cart->subtotal);
     }

@@ -8,6 +8,7 @@ use Closure;
 use Cone\Bazar\Database\Factories\AddressFactory;
 use Cone\Bazar\Interfaces\Models\Address as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,16 +49,6 @@ class Address extends Model implements Contract
         'postcode' => null,
         'state' => null,
         'tax_id' => null,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'custom' => 'json',
-        'default' => 'bool',
     ];
 
     /**
@@ -125,6 +116,17 @@ class Address extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'custom' => AsArrayObject::class,
+            'default' => 'bool',
+        ];
     }
 
     /**

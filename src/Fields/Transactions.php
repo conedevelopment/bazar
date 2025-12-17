@@ -8,7 +8,6 @@ use Closure;
 use Cone\Bazar\Gateway\Driver;
 use Cone\Bazar\Models\Transaction;
 use Cone\Bazar\Rules\TransactionAmount;
-use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Support\Facades\Gateway;
 use Cone\Root\Fields\Date;
 use Cone\Root\Fields\HasMany;
@@ -54,7 +53,7 @@ class Transactions extends HasMany
                 ->min(0)
                 ->required()
                 ->format(static function (Request $request, Transaction $transaction, ?float $value): string {
-                    return (new Currency($value ?: 0, $transaction->order->currency))->format();
+                    return $transaction->order->getCurrency()->format($value ?: 0);
                 })
                 ->rules(static function (Request $request, Transaction $transaction): array {
                     return [

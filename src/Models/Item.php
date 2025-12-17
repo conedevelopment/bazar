@@ -7,7 +7,6 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
-use Cone\Bazar\Support\Currency;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -42,17 +41,6 @@ class Item extends Model implements Contract
         'price' => 0,
         'properties' => '[]',
         'quantity' => 1,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'price' => 'float',
-        'properties' => 'json',
-        'quantity' => 'float',
     ];
 
     /**
@@ -107,6 +95,18 @@ class Item extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'price' => 'float',
+            'properties' => 'array',
+            'quantity' => 'float',
+        ];
     }
 
     /**
@@ -218,7 +218,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedPrice(): string
     {
-        return (new Currency($this->getPrice(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getPrice());
     }
 
     /**
@@ -234,7 +234,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedGrossPrice(): string
     {
-        return (new Currency($this->getGrossPrice(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getGrossPrice());
     }
 
     /**
@@ -250,7 +250,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTotal(): string
     {
-        return (new Currency($this->getTotal(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getTotal());
     }
 
     /**
@@ -266,7 +266,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedSubtotal(): string
     {
-        return (new Currency($this->getSubtotal(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getSubtotal());
     }
 
     /**
@@ -282,7 +282,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTax(): string
     {
-        return (new Currency($this->getTax(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getTax());
     }
 
     /**
@@ -290,7 +290,7 @@ class Item extends Model implements Contract
      */
     public function getFormattedTaxTotal(): string
     {
-        return (new Currency($this->getTaxTotal(), $this->checkoutable->getCurrency()))->format();
+        return $this->checkoutable->getCurrency()->format($this->getTaxTotal());
     }
 
     /**

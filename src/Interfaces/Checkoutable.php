@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
+use Cone\Bazar\Enums\Currency;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Item;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 
 interface Checkoutable extends Shippable
@@ -20,6 +23,11 @@ interface Checkoutable extends Shippable
      * Get the items for the model.
      */
     public function items(): MorphMany;
+
+    /**
+     * Get the coupons for the model.
+     */
+    public function coupons(): MorphToMany;
 
     /**
      * Get the checkoutable items.
@@ -44,7 +52,7 @@ interface Checkoutable extends Shippable
     /**
      * Get the currency.
      */
-    public function getCurrency(): string;
+    public function getCurrency(): Currency;
 
     /**
      * Get the total.
@@ -105,4 +113,14 @@ interface Checkoutable extends Shippable
      * Sync the items.
      */
     public function syncItems(): void;
+
+    /**
+     * Determine whether the checkoutable models needs payment.
+     */
+    public function needsPayment(): bool;
+
+    /**
+     * Apply a coupon to the checkoutable model.
+     */
+    public function applyCoupon(string|Coupon $coupon): void;
 }

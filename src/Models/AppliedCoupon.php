@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Interfaces\Models\Tax as Contract;
+use Cone\Bazar\Interfaces\Models\AppliedCoupon as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class Tax extends MorphPivot implements Contract
+class AppliedCoupon extends MorphPivot implements Contract
 {
     use InteractsWithProxy;
 
@@ -36,7 +38,7 @@ class Tax extends MorphPivot implements Contract
      *
      * @var string
      */
-    protected $table = 'bazar_taxes';
+    protected $table = 'bazar_couponables';
 
     /**
      * Get the proxied interface.
@@ -57,6 +59,22 @@ class Tax extends MorphPivot implements Contract
     }
 
     /**
+     * Get the coupon for the model.
+     */
+    public function coupon(): BelongsTo
+    {
+        return $this->belongsTo(Coupon::getProxiedClass());
+    }
+
+    /**
+     * Get the couponable model for the model.
+     */
+    public function couponable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * Get the formatted value attribute.
      */
     protected function formattedValue(): Attribute
@@ -67,7 +85,7 @@ class Tax extends MorphPivot implements Contract
     }
 
     /**
-     * Get the formatted tax.
+     * Get the formatted coupon value.
      */
     public function format(): string
     {

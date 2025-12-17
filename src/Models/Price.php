@@ -13,15 +13,6 @@ use Illuminate\Support\Str;
 class Price extends Meta
 {
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'value' => 'float',
-    ];
-
-    /**
      * The value formatters.
      */
     protected static array $formatters = [];
@@ -32,6 +23,16 @@ class Price extends Meta
     public static function formatCurrency(string $currency, Closure $callback): void
     {
         static::$formatters[$currency] = $callback;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function casts(): array
+    {
+        return [
+            'value' => 'float',
+        ];
     }
 
     /**

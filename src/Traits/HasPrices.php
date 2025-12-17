@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Cone\Bazar\Traits;
 
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Models\Price;
 use Cone\Bazar\Relations\Prices;
-use Cone\Bazar\Support\Currency;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 trait HasPrices
@@ -51,27 +51,25 @@ trait HasPrices
     /**
      * Get the price by the given type and currency.
      */
-    public function getPrice(?string $currency = null): ?float
+    public function getPrice(?Currency $currency = null): ?float
     {
         $currency ??= Bazar::getCurrency();
 
-        $key = sprintf('price_%s', strtolower($currency));
+        $key = sprintf('price_%s', $currency->key());
 
-        $meta = $this->prices->firstWhere('key', $key);
-
-        return is_null($meta) ? null : $meta->value;
+        return $this->prices->firstWhere('key', $key)?->value;
     }
 
     /**
      * Get the formatted price by the given type and currency.
      */
-    public function getFormattedPrice(?string $currency = null): ?string
+    public function getFormattedPrice(?Currency $currency = null): ?string
     {
         $currency ??= Bazar::getCurrency();
 
         $price = $this->getPrice($currency);
 
-        return is_null($price) ? null : (new Currency($price, $currency))->format();
+        return is_null($price) ? null : $currency->format($price);
     }
 
     /**

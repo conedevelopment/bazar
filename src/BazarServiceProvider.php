@@ -18,6 +18,7 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Models\Address::class => Models\Address::class,
         Interfaces\Models\Cart::class => Models\Cart::class,
         Interfaces\Models\Category::class => Models\Category::class,
+        Interfaces\Models\Coupon::class => Models\Coupon::class,
         Interfaces\Models\Item::class => Models\Item::class,
         Interfaces\Models\Order::class => Models\Order::class,
         Interfaces\Models\Product::class => Models\Product::class,
@@ -36,7 +37,6 @@ class BazarServiceProvider extends ServiceProvider
     public array $singletons = [
         Interfaces\Cart\Manager::class => Cart\Manager::class,
         Interfaces\Gateway\Manager::class => Gateway\Manager::class,
-        Interfaces\Repositories\DiscountRepository::class => Repositories\DiscountRepository::class,
         Interfaces\Shipping\Manager::class => Shipping\Manager::class,
     ];
 
@@ -100,6 +100,7 @@ class BazarServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../stubs/BazarServiceProvider.stub' => $this->app->basePath('app/Providers/BazarServiceProvider.php'),
             __DIR__.'/../stubs/CategoryResource.stub' => $this->app->basePath('app/Root/Resources/CategoryResource.php'),
+            __DIR__.'/../stubs/CouponResource.stub' => $this->app->basePath('app/Root/Resources/CouponResource.php'),
             __DIR__.'/../stubs/OrderResource.stub' => $this->app->basePath('app/Root/Resources/OrderResource.php'),
             __DIR__.'/../stubs/ProductResource.stub' => $this->app->basePath('app/Root/Resources/ProductResource.php'),
             __DIR__.'/../stubs/PropertyResource.stub' => $this->app->basePath('app/Root/Resources/PropertyResource.php'),

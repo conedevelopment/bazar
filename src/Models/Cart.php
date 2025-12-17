@@ -6,26 +6,27 @@ namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Bazar;
 use Cone\Bazar\Database\Factories\CartFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Exceptions\CartException;
 use Cone\Bazar\Interfaces\Models\Cart as Contract;
 use Cone\Bazar\Traits\Addressable;
-use Cone\Bazar\Traits\InteractsWithDiscounts;
-use Cone\Bazar\Traits\InteractsWithItems;
+use Cone\Bazar\Traits\AsOrder;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Number;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class Cart extends Model implements Contract
 {
     use Addressable;
+    use AsOrder;
     use HasFactory;
-    use InteractsWithDiscounts;
-    use InteractsWithItems;
     use InteractsWithProxy;
 
     /**
@@ -35,18 +36,7 @@ class Cart extends Model implements Contract
      */
     protected $attributes = [
         'currency' => null,
-        'discount' => 0,
         'locked' => false,
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'discount' => 'float',
-        'locked' => 'bool',
     ];
 
     /**
@@ -56,7 +46,6 @@ class Cart extends Model implements Contract
      */
     protected $fillable = [
         'currency',
-        'discount',
         'locked',
     ];
 
@@ -68,13 +57,14 @@ class Cart extends Model implements Contract
     protected $table = 'bazar_carts';
 
     /**
-     * The "booted" method of the model.
+     * {@inheritdoc}
      */
-    protected static function booted(): void
+    public function __construct(array $attributes = [])
     {
-        static::creating(static function (self $cart): void {
-            $cart->setAttribute('currency', $cart->currency ?: Bazar::getCurrency());
-        });
+        parent::__construct(array_merge(
+            ['currency' => Bazar::getCurrency()],
+            $attributes
+        ));
     }
 
     /**
@@ -102,6 +92,19 @@ class Cart extends Model implements Contract
     }
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    public function casts(): array
+    {
+        return [
+            'currency' => Currency::class,
+            'locked' => 'bool',
+        ];
+    }
+
+    /**
      * Get the order for the cart.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\Cone\Bazar\Models\Order, \Cone\Bazar\Models\Cart>
@@ -123,22 +126,6 @@ class Cart extends Model implements Contract
             ->withDefault(function (Address $address): Address {
                 return $address->fill($this->user?->address?->toArray() ?: []);
             });
-    }
-
-    /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        return $this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0;
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
     }
 
     /**
@@ -164,7 +151,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the locked carts.
      */
-    public function scopeLocked(Builder $query): Builder
+    #[Scope]
+    protected function locked(Builder $query): Builder
     {
         return $query->where($query->qualifyColumn('locked'), true);
     }
@@ -172,7 +160,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the unlocked carts.
      */
-    public function scopeUnlocked(Builder $query): Builder
+    #[Scope]
+    protected function unlocked(Builder $query): Builder
     {
         return $query->where($query->qualifyColumn('locked'), false);
     }
@@ -180,7 +169,8 @@ class Cart extends Model implements Contract
     /**
      * Scope a query to only include the expired carts.
      */
-    public function scopeExpired(Builder $query): Builder
+    #[Scope]
+    protected function expired(Builder $query): Builder
     {
         return $query->whereNull($query->qualifyColumn('user_id'))
             ->where($query->qualifyColumn('updated_at'), '<', Date::now()->subDays(3));
@@ -197,23 +187,33 @@ class Cart extends Model implements Contract
             }
         });
 
-        $this->order->user()->associate($this->user)->save();
+        try {
+            DB::transaction(function (): void {
+                $this->order->user()->associate($this->user)->save();
 
-        if ($this->order_id !== $this->order->getKey()) {
-            $this->order()->associate($this->order)->save();
+                if ($this->order_id !== $this->order->getKey()) {
+                    $this->order()->associate($this->order)->save();
+                }
+
+                $this->order->items()->delete();
+                $this->order->items()->createMany($this->items->toArray());
+
+                $this->order->address->fill($this->address->toArray())->save();
+
+                if ($this->order->needsShipping()) {
+                    $this->order->shipping->fill($this->shipping->toArray())->save();
+                    $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
+                }
+
+                $this->coupons->each(function (Coupon $coupon): void {
+                    $this->order->applyCoupon($coupon);
+                });
+
+                $this->order->calculateTax();
+            });
+        } catch (Throwable $exception) {
+            //
         }
-
-        $this->order->items()->delete();
-        $this->order->items()->createMany($this->items->toArray());
-
-        $this->order->address->fill($this->address->toArray())->save();
-
-        if ($this->order->needsShipping()) {
-            $this->order->shipping->fill($this->shipping->toArray())->save();
-            $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
-        }
-
-        $this->order->calculateTax();
 
         return $this->order;
     }

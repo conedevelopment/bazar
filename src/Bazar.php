@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar;
 
-use Cone\Bazar\Exceptions\InvalidCurrencyException;
+use Cone\Bazar\Enums\Currency;
 use Illuminate\Support\Facades\Config;
 
 abstract class Bazar
@@ -14,40 +14,46 @@ abstract class Bazar
      *
      * @var string
      */
-    public const VERSION = '1.3.0';
+    public const VERSION = '1.4.0';
 
     /**
      * The currency in use.
      */
-    protected static ?string $currency = null;
+    protected static ?Currency $currency = null;
 
     /**
      * Get all the available currencies.
      */
     public static function getCurrencies(): array
     {
-        return array_keys(Config::get('bazar.currencies.available', []));
+        $currencies = array_filter(Currency::cases(), static function (Currency $currency): bool {
+            return $currency->available();
+        });
+
+        return array_values($currencies);
+    }
+
+    /**
+     * Get the default currency.
+     */
+    public static function getDefaultCurrency(): Currency
+    {
+        return Currency::tryFrom(Config::get('bazar.currencies.default', 'USD')) ?: Currency::USD;
     }
 
     /**
      * Get the currency in use.
      */
-    public static function getCurrency(): string
+    public static function getCurrency(): Currency
     {
-        return strtoupper(static::$currency ?: Config::get('bazar.currencies.default', 'USD'));
+        return static::$currency ??= static::getDefaultCurrency();
     }
 
     /**
      * Set the currency in use.
      */
-    public static function setCurrency(string $currency): void
+    public static function setCurrency(Currency $currency): void
     {
-        $currency = strtoupper($currency);
-
-        if (! in_array($currency, static::getCurrencies())) {
-            throw new InvalidCurrencyException("The [{$currency}] currency is not registered.");
-        }
-
         static::$currency = $currency;
     }
 }

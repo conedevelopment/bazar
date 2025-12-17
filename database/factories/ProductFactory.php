@@ -51,7 +51,7 @@ class ProductFactory extends Factory
     {
         return $this->afterMaking(static function (Product $product): void {
             $product->setRelation('metaData', $product->metaData()->makeMany([
-                ['key' => 'price_'.strtolower(Bazar::getCurrency()), 'value' => mt_rand(10, 100)],
+                ['key' => 'price_'.Bazar::getCurrency()->key(), 'value' => mt_rand(10, 100)],
             ]));
         })->afterCreating(static function (Product $product): void {
             $product->metaData->each(static function (Meta $meta) use ($product) {

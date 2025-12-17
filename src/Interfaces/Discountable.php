@@ -29,5 +29,5 @@ interface Discountable
     /**
      * Calculate the discount.
      */
-    public function calculateDiscount(bool $update = true): float;
+    public function calculateDiscount(): float;
 }
