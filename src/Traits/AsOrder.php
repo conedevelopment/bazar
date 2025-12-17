@@ -16,6 +16,7 @@ use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -398,13 +399,15 @@ trait AsOrder
      */
     public function applyCoupon(string|Coupon $coupon): void
     {
-        $coupon = match (true) {
-            is_string($coupon) => Coupon::query()->where('bazar_coupons.code', $coupon)->available()->firstOrFail(),
-            default => $coupon,
-        };
-
         try {
+            $coupon = match (true) {
+                is_string($coupon) => Coupon::query()->code($coupon)->available()->firstOrFail(),
+                default => $coupon,
+            };
+
             $coupon->apply($this);
+        } catch (ModelNotFoundException $exception) {
+            //
         } catch (Throwable $exception) {
             $this->coupons()->detach([$coupon->getKey()]);
         }

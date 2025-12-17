@@ -32,7 +32,6 @@ class CartTest extends TestCase
                 'buyable_id' => $product->id,
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
-                'tax' => 0,
                 'price' => $product->price,
                 'name' => $product->name,
             ]);

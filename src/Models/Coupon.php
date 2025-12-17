@@ -20,8 +20,8 @@ use Illuminate\Support\Facades\Date;
 
 class Coupon extends Model implements Contract
 {
-    use InteractsWithProxy;
     use HasFactory;
+    use InteractsWithProxy;
 
     /**
      * The model's default values for attributes.
@@ -176,5 +176,14 @@ class Coupon extends Model implements Contract
         return $query->active()
             ->whereNull($query->qualifyColumn('expires_at'))
             ->orWhere($query->qualifyColumn('expires_at'), '>', $date);
+    }
+
+    /**
+     * Scope the query to only include the coupons with the given code.
+     */
+    #[Scope]
+    protected function code(Builder $query, string $code): Builder
+    {
+        return $query->whereRaw('lower(`bazar_coupons`.`code`) like ?', [strtolower($code)]);
     }
 }

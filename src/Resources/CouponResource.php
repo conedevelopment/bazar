@@ -6,7 +6,6 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Enums\CouponType;
 use Cone\Bazar\Models\Coupon;
-use Cone\Bazar\Models\Product;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\Date;
 use Cone\Root\Fields\Fieldset;
@@ -101,17 +100,6 @@ class CouponResource extends Resource
                         Number::make(__('Limit'), 'rules->limit')
                             ->min(0)
                             ->rules(['nullable', 'numeric', 'min:0']),
-
-                        Select::make(__('Products'), 'rules->products')
-                            ->multiple()
-                            ->options(function (): array {
-                                return Product::proxy()
-                                    ->query()
-                                    ->get()
-                                    ->pluck('name', 'id')
-                                    ->toArray();
-                            })
-                            ->rules(['nullable', 'array']),
                     ];
                 }),
         ];
