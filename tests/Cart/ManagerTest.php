@@ -10,6 +10,7 @@ use Cone\Bazar\Cart\SessionDriver;
 use Cone\Bazar\Events\CheckoutProcessed;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Property;
 use Cone\Bazar\Models\PropertyValue;
@@ -47,12 +48,14 @@ class ManagerTest extends TestCase
         $this->product->propertyValues()->attach($property->values);
         $this->variant->propertyValues()->attach($property->values->where('value', 'S'));
 
-        $taxRate = TaxRate::factory()->create();
-
-        $this->product->taxRates()->attach($taxRate);
-
         $this->manager->addItem($this->product, 2, ['size' => 'L']);
         $this->manager->addItem($this->product, 1, ['size' => 'S']);
+
+        $this->product->taxRates()->attach(TaxRate::factory()->create());
+
+        $this->manager->applyCoupon(Coupon::factory()->create());
+
+        $this->manager->getModel()->refresh();
     }
 
     public function test_cart_can_be_resolved_via_facade(): void

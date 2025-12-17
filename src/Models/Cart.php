@@ -19,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class Cart extends Model implements Contract
 {
@@ -185,23 +187,33 @@ class Cart extends Model implements Contract
             }
         });
 
-        $this->order->user()->associate($this->user)->save();
+        try {
+            DB::transaction(function (): void {
+                $this->order->user()->associate($this->user)->save();
 
-        if ($this->order_id !== $this->order->getKey()) {
-            $this->order()->associate($this->order)->save();
+                if ($this->order_id !== $this->order->getKey()) {
+                    $this->order()->associate($this->order)->save();
+                }
+
+                $this->order->items()->delete();
+                $this->order->items()->createMany($this->items->toArray());
+
+                $this->order->address->fill($this->address->toArray())->save();
+
+                if ($this->order->needsShipping()) {
+                    $this->order->shipping->fill($this->shipping->toArray())->save();
+                    $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
+                }
+
+                $this->coupons->each(function (Coupon $coupon): void {
+                    $this->order->applyCoupon($coupon);
+                });
+
+                $this->order->calculateTax();
+            });
+        } catch (Throwable $exception) {
+            //
         }
-
-        $this->order->items()->delete();
-        $this->order->items()->createMany($this->items->toArray());
-
-        $this->order->address->fill($this->address->toArray())->save();
-
-        if ($this->order->needsShipping()) {
-            $this->order->shipping->fill($this->shipping->toArray())->save();
-            $this->order->shipping->address->fill($this->shipping->address->toArray())->save();
-        }
-
-        $this->order->calculateTax();
 
         return $this->order;
     }

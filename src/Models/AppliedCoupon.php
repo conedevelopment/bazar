@@ -7,7 +7,9 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Interfaces\Models\AppliedCoupon as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class AppliedCoupon extends MorphPivot implements Contract
 {
@@ -54,6 +56,22 @@ class AppliedCoupon extends MorphPivot implements Contract
         return [
             'value' => 'float',
         ];
+    }
+
+    /**
+     * Get the coupon for the model.
+     */
+    public function coupon(): BelongsTo
+    {
+        return $this->belongsTo(Coupon::getProxiedClass());
+    }
+
+    /**
+     * Get the couponable model for the model.
+     */
+    public function couponable(): MorphTo
+    {
+        return $this->morphTo();
     }
 
     /**

@@ -75,8 +75,9 @@ trait AsOrder
     public function coupons(): MorphToMany
     {
         return $this->morphToMany(Coupon::getProxiedClass(), 'couponable', 'bazar_couponables')
+            ->as('coupon')
             ->using(AppliedCoupon::getProxiedClass())
-            ->withPivot('value')
+            ->withPivot(['value'])
             ->withTimestamps();
     }
 
@@ -418,7 +419,7 @@ trait AsOrder
      */
     public function getDiscount(): float
     {
-        return $this->coupons->sum('pivot.value');
+        return $this->coupons->sum('coupon.value');
     }
 
     /**

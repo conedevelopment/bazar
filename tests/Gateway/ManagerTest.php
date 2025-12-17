@@ -12,6 +12,7 @@ use Cone\Bazar\Gateway\Manager;
 use Cone\Bazar\Gateway\TransferDriver;
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
@@ -40,22 +41,24 @@ class ManagerTest extends TestCase
 
         $this->order = Order::factory()->create();
 
-        Product::factory()->count(3)->create()->each(function ($product) {
+        Product::factory()->count(3)->create()->each(function (Product $product): void {
             $this->cart->items()->create([
-                'buyable_id' => $product->id,
+                'buyable_id' => $product->getKey(),
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'price' => $product->price,
                 'name' => $product->name,
             ]);
             $this->order->items()->create([
-                'buyable_id' => $product->id,
+                'buyable_id' => $product->getKey(),
                 'buyable_type' => Product::class,
                 'quantity' => mt_rand(1, 5),
                 'price' => $product->price,
                 'name' => $product->name,
             ]);
         });
+
+        $this->cart->applyCoupon(Coupon::factory()->create());
 
         $this->manager = $this->app->make(Manager::class);
         $this->manager->extend('custom-driver', function () {
