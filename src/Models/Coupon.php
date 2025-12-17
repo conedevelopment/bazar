@@ -114,27 +114,14 @@ class Coupon extends Model implements Contract
      */
     public function validate(Checkoutable $model): bool
     {
-        if (! $this->active) {
-            return false;
-        }
-
-        if (! is_null($this->expires_at) && $this->expires_at->isPast()) {
-            return false;
-        }
-
-        if ($model->coupons->where('stackable', false)->isNotEmpty()) {
-            return false;
-        }
-
-        if (! $this->stackable && $model->coupons->isNotEmpty()) {
-            return false;
-        }
-
-        if ($this->limit() > 0 && $this->applications()->count() >= $this->limit()) {
-            return false;
-        }
-
-        return true;
+        return match (true) {
+            ! $this->active => false,
+            ! is_null($this->expires_at) && $this->expires_at->isPast() => false,
+            $model->coupons->where('stackable', false)->isNotEmpty() => false,
+            ! $this->stackable && $model->coupons->isNotEmpty() => false,
+            $this->limit() > 0 && $this->applications()->count() >= $this->limit() => false,
+            default => true,
+        };
     }
 
     /**

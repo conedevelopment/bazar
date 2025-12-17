@@ -66,4 +66,22 @@ class CouponTest extends TestCase
             $this->order->getDiscount()
         );
     }
+
+    public function test_coupon_has_query_scopes(): void
+    {
+        $this->assertSame(
+            'select * from "bazar_coupons" where "bazar_coupons"."active" = ?',
+            Coupon::query()->active()->toSql()
+        );
+
+        $this->assertSame(
+            'select * from "bazar_coupons" where ("bazar_coupons"."active" = ? and "bazar_coupons"."expires_at" is null or "bazar_coupons"."expires_at" > ?)',
+            Coupon::query()->available()->toSql()
+        );
+
+        $this->assertSame(
+            'select * from "bazar_coupons" where lower(`bazar_coupons`.`code`) like ?',
+            Coupon::query()->code('TEST')->toSql()
+        );
+    }
 }

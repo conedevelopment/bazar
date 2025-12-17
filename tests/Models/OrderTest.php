@@ -6,6 +6,7 @@ namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Address;
 use Cone\Bazar\Models\Cart;
+use Cone\Bazar\Models\Coupon;
 use Cone\Bazar\Models\Order;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Models\Transaction;
@@ -34,6 +35,8 @@ class OrderTest extends TestCase
                 'name' => $product->name,
             ]);
         });
+
+        $this->order->applyCoupon(Coupon::factory()->create(['code' => 'TEST']));
     }
 
     public function test_order_can_belong_to_customer(): void
@@ -74,6 +77,13 @@ class OrderTest extends TestCase
         );
 
         $this->assertSame($address->id, $this->order->address->id);
+    }
+
+    public function test_order_has_coupons(): void
+    {
+        $coupon = Coupon::query()->code('TEST')->first();
+
+        $this->assertTrue($this->order->refresh()->coupons->contains($coupon));
     }
 
     public function test_order_has_total_attribute(): void
