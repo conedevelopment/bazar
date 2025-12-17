@@ -122,6 +122,14 @@ class Coupon extends Model implements Contract
             return false;
         }
 
+        if ($model->coupons->where('stackable', false)->isNotEmpty()) {
+            return false;
+        }
+
+        if (! $this->stackable && $model->coupons->isNotEmpty()) {
+            return false;
+        }
+
         if ($this->limit() > 0 && $this->applications()->count() >= $this->limit()) {
             return false;
         }
