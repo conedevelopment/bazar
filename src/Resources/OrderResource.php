@@ -63,7 +63,12 @@ class OrderResource extends Resource
             }),
 
             Select::make(__('Currency'), 'currency')
-                ->options(array_column(Bazar::getCurrencies(), 'name', 'value'))
+                ->options(static function (Request $request, Order $model): array {
+                    return array_merge(
+                        array_column(Bazar::getCurrencies(), 'name', 'value'),
+                        [$model->currency->value => $model->currency->name]
+                    );
+                })
                 ->hiddenOn(['index']),
 
             OrderStatus::make(),
