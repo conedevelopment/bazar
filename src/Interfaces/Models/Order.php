@@ -42,6 +42,11 @@ interface Order extends Checkoutable, Discountable
     public function refund(?float $amount = null, ?string $driver = null, array $attributes = []): Transaction;
 
     /**
+     * Get the label for the order.
+     */
+    public function getLabel(): string;
+
+    /**
      * Get the total paid amount.
      */
     public function getTotalPaid(): float;

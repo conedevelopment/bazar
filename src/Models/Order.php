@@ -280,6 +280,14 @@ class Order extends Model implements Contract
     }
 
     /**
+     * Get the label for the order.
+     */
+    public function getLabel(): string
+    {
+        return __('Order #:id', ['id' => $this->getKey()]);
+    }
+
+    /**
      * Get the total paid amount.
      */
     public function getTotalPaid(): float
