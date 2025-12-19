@@ -231,8 +231,7 @@ abstract class Driver
      */
     public function empty(): void
     {
-        $this->getModel()->coupons()->detach();
-        $this->getModel()->items()->delete();
+        $this->getModel()->items->each->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
         $this->getShipping()->update(['fee' => 0]);
@@ -258,10 +257,22 @@ abstract class Driver
     }
 
     /**
+     * Validate the cart.
+     */
+    public function validate(): bool
+    {
+        return true;
+    }
+
+    /**
      * Perform the checkout using the given driver.
      */
     public function checkout(string $driver): Response
     {
+        if (! $this->validate()) {
+            throw new CartException('The cart is not valid for checkout.');
+        }
+
         return App::call(function (Request $request) use ($driver): Response {
             return Gateway::driver($driver)->handleCheckout($request, $this->getModel()->toOrder());
         });
