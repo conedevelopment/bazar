@@ -18,4 +18,9 @@ interface Shipping extends LineItem
      * Calculate the fee.
      */
     public function calculateFee(): float;
+
+    /**
+     * Validate the shipping address.
+     */
+    public function validate(): bool;
 }

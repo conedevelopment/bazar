@@ -328,4 +328,12 @@ class Shipping extends Model implements Contract
 
         return $this->getTaxTotal();
     }
+
+    /**
+     * Validate the shipping address.
+     */
+    public function validate(): bool
+    {
+        return $this->address->validate();
+    }
 }

@@ -55,6 +55,8 @@ class ManagerTest extends TestCase
 
         $this->manager->applyCoupon(Coupon::factory()->create());
 
+        $this->manager->updateShipping(Address::factory()->make()->toArray(), 'local-pickup');
+        $this->manager->updateBilling(Address::factory()->make()->toArray());
         $this->manager->getModel()->refresh();
     }
 

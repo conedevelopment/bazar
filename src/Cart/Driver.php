@@ -283,9 +283,9 @@ abstract class Driver
     /**
      * Apply the given coupon.
      */
-    public function applyCoupon(string|Coupon $coupon): void
+    public function applyCoupon(string|Coupon $coupon): bool
     {
-        $this->getModel()->applyCoupon($coupon);
+        return $this->getModel()->applyCoupon($coupon);
     }
 
     /**

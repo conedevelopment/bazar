@@ -398,7 +398,7 @@ trait AsOrder
     /**
      * Apply a coupon to the checkoutable model.
      */
-    public function applyCoupon(string|Coupon $coupon): void
+    public function applyCoupon(string|Coupon $coupon): bool
     {
         try {
             $coupon = match (true) {
@@ -407,11 +407,15 @@ trait AsOrder
             };
 
             $coupon->apply($this);
+
+            return true;
         } catch (ModelNotFoundException $exception) {
             //
         } catch (Throwable $exception) {
             $this->coupons()->detach([$coupon->getKey()]);
         }
+
+        return false;
     }
 
     /**
