@@ -289,6 +289,14 @@ abstract class Driver
     }
 
     /**
+     * Remove the given coupon.
+     */
+    public function removeCoupon(string|Coupon $coupon): void
+    {
+        $this->getModel()->removeCoupon($coupon);
+    }
+
+    /**
      * Determine if the cart is not empty.
      */
     public function isNotEmpty(): bool

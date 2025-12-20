@@ -415,6 +415,23 @@ trait AsOrder
     }
 
     /**
+     * Remove a coupon from the checkoutable model.
+     */
+    public function removeCoupon(string|Coupon $coupon): void
+    {
+        try {
+            $coupon = match (true) {
+                is_string($coupon) => Coupon::query()->code($coupon)->firstOrFail(),
+                default => $coupon,
+            };
+
+            $this->coupons()->detach([$coupon->getKey()]);
+        } catch (Throwable $exception) {
+            //
+        }
+    }
+
+    /**
      * Get the discount.
      */
     public function getDiscount(): float

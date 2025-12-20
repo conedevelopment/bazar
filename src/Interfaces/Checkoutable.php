@@ -123,4 +123,9 @@ interface Checkoutable extends Shippable
      * Apply a coupon to the checkoutable model.
      */
     public function applyCoupon(string|Coupon $coupon): void;
+
+    /**
+     * Remove a coupon from the checkoutable model.
+     */
+    public function removeCoupon(string|Coupon $coupon): void;
 }
