@@ -24,7 +24,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static float count()
  * @method static bool isEmpty()
  * @method static bool isNotEmpty()
- * @method static void applyCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
+ * @method static bool validate()
+ * @method static bool applyCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
+ * @method static void removeCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
  * @method static \Cone\Bazar\Gateway\Response checkout(string $driver)
  *
  * @see \Cone\Bazar\Cart\Driver
