@@ -19,6 +19,7 @@ class BazarServiceProvider extends ServiceProvider
         Interfaces\Models\Cart::class => Models\Cart::class,
         Interfaces\Models\Category::class => Models\Category::class,
         Interfaces\Models\Coupon::class => Models\Coupon::class,
+        Interfaces\Models\DiscountRule::class => Models\DiscountRule::class,
         Interfaces\Models\Item::class => Models\Item::class,
         Interfaces\Models\Order::class => Models\Order::class,
         Interfaces\Models\Product::class => Models\Product::class,
