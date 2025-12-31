@@ -26,6 +26,21 @@ class Items extends MorphMany
     ];
 
     /**
+     * The buyable types.
+     */
+    protected array $buyableTypes = [];
+
+    /**
+     * The buyable searchable columns.
+     */
+    protected array $buyableSearchableColumns = [];
+
+    /**
+     * The buyable item display resolver.
+     */
+    protected ?Closure $buyableItemDisplayResolver = null;
+
+    /**
      * Create a new relation field instance.
      */
     public function __construct(?string $label = null, Closure|string|null $modelAttribute = null, Closure|string|null $relation = null)
@@ -34,6 +49,16 @@ class Items extends MorphMany
 
         $this->display('name');
         $this->asSubResource();
+
+        $this->buyableTypes([
+            Product::getProxiedClass(),
+            Variant::getProxiedClass(),
+        ]);
+
+        $this->buyableSearchableColumns([
+            Product::getProxiedClass() => ['id', 'name', 'slug', 'description'],
+            Variant::getProxiedClass() => ['id', 'alias', 'description'],
+        ]);
     }
 
     /**
@@ -44,16 +69,11 @@ class Items extends MorphMany
         return [
             MorphTo::make(__('Buyable Item'), 'buyable')
                 ->required()
-                ->types([
-                    Product::getProxiedClass(),
-                    Variant::getProxiedClass(),
-                ])
-                ->display(static function (Model $relatable): string {
-                    return (string) match ($relatable::class) {
-                        Product::getProxiedClass() => $relatable->name,
-                        Variant::getProxiedClass() => $relatable->alias,
-                        default => $relatable->getKey(),
-                    };
+                ->async()
+                ->searchable(columns: $this->buyableSearchableColumns)
+                ->types($this->buyableTypes)
+                ->display(function (Model $buyable) use ($request): string {
+                    return $this->resolveBuyableItemDisplay($request, $buyable);
                 }),
 
             Text::make(__('Name'), 'name')
@@ -84,5 +104,51 @@ class Items extends MorphMany
                 return $model->checkoutable->getCurrency()->format($value ?? 0);
             }),
         ];
+    }
+
+    /**
+     * Set the buyable item display resolver.
+     */
+    public function displayBuyableItem(Closure $callback): static
+    {
+        $this->buyableItemDisplayResolver = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Resolve the buyable item display.
+     */
+    public function resolveBuyableItemDisplay(Request $request, Model $buyable): string
+    {
+        $callback = $this->buyableItemDisplayResolver ?: static function (Request $request, Model $buyable): string {
+            return (string) match ($buyable::class) {
+                Product::getProxiedClass() => $buyable->name,
+                Variant::getProxiedClass() => $buyable->alias,
+                default => $buyable->getKey(),
+            };
+        };
+
+        return call_user_func_array($callback, [$request, $buyable]);
+    }
+
+    /**
+     * Set the buyable types.
+     */
+    public function buyableTypes(array $types): static
+    {
+        $this->buyableTypes = array_merge($this->buyableTypes, $types);
+
+        return $this;
+    }
+
+    /**
+     * Set the buyable searchable columns.
+     */
+    public function buyableSearchableColumns(array $columns): static
+    {
+        $this->buyableSearchableColumns = array_merge($this->buyableSearchableColumns, $columns);
+
+        return $this;
     }
 }
