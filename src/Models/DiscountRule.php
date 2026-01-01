@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Enums\DiscountRuleType;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
@@ -27,14 +28,24 @@ class DiscountRule extends Model implements Contract
      *
      * @var array<string, mixed>
      */
-    protected $attributes = [];
+    protected $attributes = [
+        'active' => true,
+        'stackable' => false,
+        'type' => DiscountRuleType::CART,
+    ];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'active',
+        'name',
+        'rules',
+        'stackable',
+        'type',
+    ];
 
     /**
      * The table associated with the model.
@@ -49,6 +60,27 @@ class DiscountRule extends Model implements Contract
     public static function getProxiedInterface(): string
     {
         return Contract::class;
+    }
+
+    /**
+     * Get the morph class for the model.
+     */
+    public function getMorphClass(): string
+    {
+        return static::getProxiedClass();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function casts(): array
+    {
+        return [
+            'active' => 'boolean',
+            'rules' => 'json',
+            'stackable' => 'boolean',
+            'type' => DiscountRuleType::class,
+        ];
     }
 
     /**
