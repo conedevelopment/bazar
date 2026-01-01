@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Database\Factories\DiscountRuleFactory;
 use Cone\Bazar\Enums\DiscountRuleType;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class DiscountRule extends Model implements Contract
 {
+    use HasFactory;
     use InteractsWithProxy;
 
     /**
@@ -68,6 +71,14 @@ class DiscountRule extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory(): DiscountRuleFactory
+    {
+        return DiscountRuleFactory::new();
     }
 
     /**
