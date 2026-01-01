@@ -1,0 +1,19 @@
+<?php
+
+namespace {{ namespace }}Root\Resources;
+
+use Cone\Bazar\Resources\DiscountRuleResource as Resource;
+use Illuminate\Http\Request;
+
+class DiscountRuleResource extends Resource
+{
+    /**
+     * Define the fields.
+     */
+    public function fields(Request $request): array
+    {
+        return array_merge(parent::fields($request), [
+            //
+        ]);
+    }
+}
