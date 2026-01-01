@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -61,5 +62,25 @@ class DiscountRule extends Model implements Contract
             'discount_rule_id',
             'user_id'
         )->withTimestamps();
+    }
+
+    /**
+     * Calculate the discount for the given discountable.
+     */
+    public function calculate(Discountable $discountable): float
+    {
+        return 0.0;
+    }
+
+    /**
+     * Apply the discount rule to the given discountable.
+     */
+    public function apply(Discountable $discountable): void
+    {
+        $value = $this->calculate($discountable);
+
+        $discountable->discounts()->syncWithoutDetaching([
+            $this->getKey() => ['value' => $value],
+        ]);
     }
 }

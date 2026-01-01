@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+
 interface Discountable
 {
+    /**
+     * Get the discounts for the model.
+     */
+    public function discounts(): MorphToMany;
+
     /**
      * Get the discount.
      */

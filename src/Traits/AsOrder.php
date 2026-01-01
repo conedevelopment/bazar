@@ -30,6 +30,8 @@ use Throwable;
 
 trait AsOrder
 {
+    use InteractsWithDiscounts;
+
     /**
      * Boot the trait.
      */

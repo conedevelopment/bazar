@@ -12,4 +12,9 @@ interface TaxRate
      * Calculate the tax for the taxable model.
      */
     public function calculate(Taxable $taxable): float;
+
+    /**
+     * Apply the tax rate to the taxable model.
+     */
+    public function apply(Taxable $taxable): void;
 }

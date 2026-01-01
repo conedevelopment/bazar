@@ -8,6 +8,7 @@ use Cone\Bazar\Database\Factories\ShippingFactory;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -20,6 +21,7 @@ class Shipping extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
+    use InteractsWithDiscounts;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
@@ -316,15 +318,15 @@ class Shipping extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
+        $this->taxes()->detach();
+
         $taxes = TaxRate::proxy()
             ->newQuery()
             ->applicableForShipping()
             ->get()
-            ->mapWithKeys(function (TaxRate $taxRate): array {
-                return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
+            ->each(function (TaxRate $taxRate): void {
+                $taxRate->apply($this);
             });
-
-        $this->taxes()->sync($taxes);
 
         return $this->getTaxTotal();
     }

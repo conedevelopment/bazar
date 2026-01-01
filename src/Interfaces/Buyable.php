@@ -5,10 +5,20 @@ declare(strict_types=1);
 namespace Cone\Bazar\Interfaces;
 
 use Cone\Bazar\Models\Item;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 interface Buyable
 {
+    /**
+     * Get the tax rates for the product.
+     */
+    public function taxRates(): MorphToMany;
+
+    /**
+     * Get the discount rules for the product.
+     */
+    public function discountRules(): MorphToMany;
+
     /**
      * Determine whether the buyable object is available for the checkoutable instance.
      */
@@ -18,9 +28,4 @@ interface Buyable
      * Get the item representation of the buyable instance.
      */
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item;
-
-    /**
-     * Get the applicable tax rates.
-     */
-    public function getApplicableTaxRates(): Collection;
 }

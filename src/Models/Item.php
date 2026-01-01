@@ -7,6 +7,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ItemFactory;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,6 +20,7 @@ class Item extends Model implements Contract
 {
     use HasFactory;
     use HasUuids;
+    use InteractsWithDiscounts;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
@@ -322,11 +324,9 @@ class Item extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
-        $taxes = $this->buyable->getApplicableTaxRates()->mapWithKeys(function (TaxRate $taxRate): array {
-            return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
-        });
+        $this->taxes()->detach();
 
-        $this->taxes()->sync($taxes);
+        $this->buyable->taxRates->each->apply($this);
 
         return $this->getTaxTotal();
     }
