@@ -8,6 +8,7 @@ use Cone\Bazar\Models\Discount;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Throwable;
 
 trait InteractsWithDiscounts
 {
@@ -33,5 +34,29 @@ trait InteractsWithDiscounts
             ->using(Discount::getProxiedClass())
             ->withPivot(['value'])
             ->withTimestamps();
+    }
+
+    /**
+     * Apply a discount rule to the checkoutable model.
+     */
+    public function applyDiscount(DiscountRule $discountRule): bool
+    {
+        try {
+            $discountRule->apply($this);
+
+            return true;
+        } catch (Throwable $exception) {
+            $this->removeDiscount($discountRule);
+        }
+
+        return false;
+    }
+
+    /**
+     * Remove a discount rule from the discountable model.
+     */
+    public function removeDiscount(DiscountRule $discountRule): void
+    {
+        $this->discounts()->detach([$discountRule->getKey()]);
     }
 }

@@ -9,6 +9,7 @@ use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -97,9 +98,17 @@ class DiscountRule extends Model implements Contract
     }
 
     /**
+     * Validate the discount rule for the given discountable.
+     */
+    public function validate(Discountable $model): bool
+    {
+        return true;
+    }
+
+    /**
      * Calculate the discount for the given discountable.
      */
-    public function calculate(Discountable $discountable): float
+    public function calculate(Discountable $model): float
     {
         return 0.0;
     }
@@ -107,11 +116,15 @@ class DiscountRule extends Model implements Contract
     /**
      * Apply the discount rule to the given discountable.
      */
-    public function apply(Discountable $discountable): void
+    public function apply(Discountable $model): void
     {
-        $value = $this->calculate($discountable);
+        if (! $this->validate($model)) {
+            throw new Exception('The discount rule is not valid for this discountable model.');
+        }
 
-        $discountable->discounts()->syncWithoutDetaching([
+        $value = $this->calculate($model);
+
+        $model->discounts()->syncWithoutDetaching([
             $this->getKey() => ['value' => $value],
         ]);
     }
