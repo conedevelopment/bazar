@@ -320,7 +320,7 @@ class Shipping extends Model implements Contract
     {
         $this->taxes()->detach();
 
-        $taxes = TaxRate::proxy()
+        TaxRate::proxy()
             ->newQuery()
             ->applicableForShipping()
             ->get()
@@ -329,6 +329,14 @@ class Shipping extends Model implements Contract
             });
 
         return $this->getTaxTotal();
+    }
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float
+    {
+        return 0.0;
     }
 
     /**

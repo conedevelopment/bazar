@@ -330,4 +330,12 @@ class Item extends Model implements Contract
 
         return $this->getTaxTotal();
     }
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float
+    {
+        return 0.0;
+    }
 }

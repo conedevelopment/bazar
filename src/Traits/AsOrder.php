@@ -414,7 +414,7 @@ trait AsOrder
         } catch (ModelNotFoundException $exception) {
             //
         } catch (Throwable $exception) {
-            $this->coupons()->detach([$coupon->getKey()]);
+            $this->removeCoupon($coupon);
         }
 
         return false;
