@@ -480,6 +480,9 @@ trait AsOrder
             $this->applyCoupon($coupon);
         });
 
+        // calculate cart levet discount
+        // calculate item level discount
+
         return $this->getDiscount();
     }
 }

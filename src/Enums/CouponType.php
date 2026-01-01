@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Enums;
 
+use Cone\Root\Enums\Arrayable;
+
 enum CouponType: string
 {
+    use Arrayable;
+
     case FIX = 'fix';
     case PERCENT = 'percent';
 
@@ -18,18 +22,5 @@ enum CouponType: string
             self::FIX => __('Fixed Amount'),
             self::PERCENT => __('Percentage'),
         };
-    }
-
-    /**
-     * Convert to array.
-     */
-    public static function toArray(): array
-    {
-        return array_reduce(self::cases(), function (array $cases, self $case): array {
-            return array_merge(
-                $cases,
-                [$case->value => $case->label()]
-            );
-        }, []);
     }
 }

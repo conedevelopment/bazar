@@ -103,6 +103,7 @@ class BazarServiceProvider extends ServiceProvider
             __DIR__.'/../stubs/BazarServiceProvider.stub' => $this->app->basePath('app/Providers/BazarServiceProvider.php'),
             __DIR__.'/../stubs/CategoryResource.stub' => $this->app->basePath('app/Root/Resources/CategoryResource.php'),
             __DIR__.'/../stubs/CouponResource.stub' => $this->app->basePath('app/Root/Resources/CouponResource.php'),
+            __DIR__.'/../stubs/DiscountRuleResource.stub' => $this->app->basePath('app/Root/Resources/DiscountRuleResource.php'),
             __DIR__.'/../stubs/OrderResource.stub' => $this->app->basePath('app/Root/Resources/OrderResource.php'),
             __DIR__.'/../stubs/ProductResource.stub' => $this->app->basePath('app/Root/Resources/ProductResource.php'),
             __DIR__.'/../stubs/PropertyResource.stub' => $this->app->basePath('app/Root/Resources/PropertyResource.php'),
