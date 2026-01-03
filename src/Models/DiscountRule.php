@@ -11,6 +11,7 @@ use Cone\Root\Traits\InteractsWithProxy;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class DiscountRule extends Model implements Contract
 {
@@ -30,7 +31,7 @@ class DiscountRule extends Model implements Contract
      */
     protected $attributes = [
         'active' => true,
-        'discountable_type' => Cart::class,
+        'discountable_type' => null,
         'rules' => '[]',
         'stackable' => false,
     ];
@@ -107,6 +108,20 @@ class DiscountRule extends Model implements Contract
             'discount_rule_id',
             'user_id'
         )->withTimestamps();
+    }
+
+    /**
+     * Get the discountables associated with the discount rule.
+     */
+    public function discountables(): MorphToMany
+    {
+        return $this->morphToMany(
+            $this->discountable_type ?: static::getDiscountableTypes()[0],
+            'discountable',
+            'bazar_discountables',
+            'discount_rule_id',
+            'discountable_id'
+        );
     }
 
     /**

@@ -129,6 +129,14 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Get the price by the given type and currency.
      */
     public function getPrice(?Currency $currency = null): ?float
@@ -142,7 +150,7 @@ class Variant extends Model implements Contract
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge([
-            'name' => $this->name,
+            'name' => $this->getBuyableName(),
             'price' => $this->getPrice($checkoutable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);

@@ -20,6 +20,11 @@ interface Buyable
     public function buyable(Checkoutable $checkoutable): bool;
 
     /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string;
+
+    /**
      * Get the item representation of the buyable instance.
      */
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item;

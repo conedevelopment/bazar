@@ -6,15 +6,20 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Enums\DiscountType;
+use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Models\DiscountRule;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Variant;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\ID;
+use Cone\Root\Fields\MorphToMany;
 use Cone\Root\Fields\Number;
 use Cone\Root\Fields\Repeater;
 use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -87,6 +92,21 @@ class DiscountRuleResource extends Resource
                 ->sortable()
                 ->rules(['required', 'string'])
                 ->hydratesOnChange(),
+
+            MorphToMany::make(__('Discountables'), 'discountables')
+                ->withRelatableQuery(static function (Request $request, Builder $query, Model $model): Builder {
+                    return match (true) {
+                        $query->getModel() instanceof Product,
+                        $query->getModel() instanceof Variant => $query,
+                        default => $query->whereRaw('1 = 0'),
+                    };
+                })
+                ->display(function (Model $model): string {
+                    return match (true) {
+                        $model instanceof Buyable => sprintf('#%s - %s', (string) $model->getKey(), $model->getBuyableName()),
+                        default => (string) $model->getKey(),
+                    };
+                }),
 
             Select::make(__('Value Type'), 'value_type')
                 ->options(DiscountRuleValueType::toArray())
