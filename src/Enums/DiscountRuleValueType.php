@@ -6,12 +6,12 @@ namespace Cone\Bazar\Enums;
 
 use Cone\Root\Enums\Arrayable;
 
-enum DiscountValueType: string
+enum DiscountRuleValueType: string
 {
     use Arrayable;
 
-    case FIX = 'fixed_amount';
-    case PERCENT = 'percent';
+    case TOTAL = 'total';
+    case QUANTITY = 'quantity';
 
     /**
      * Get the label of the target.
@@ -19,8 +19,8 @@ enum DiscountValueType: string
     public function label(): string
     {
         return match ($this) {
-            self::FIX => __('Fixed Amount'),
-            self::PERCENT => __('Percentage'),
+            self::TOTAL => __('Total'),
+            self::QUANTITY => __('Quantity'),
         };
     }
 }

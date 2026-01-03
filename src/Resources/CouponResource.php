@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Resources;
 
-use Cone\Bazar\Enums\CouponType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Models\Coupon;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\Date;
@@ -68,9 +68,9 @@ class CouponResource extends Resource
                 ->required(),
 
             Select::make(__('Type'), 'type')
-                ->options(CouponType::toArray())
+                ->options(DiscountType::toArray())
                 ->required()
-                ->rules(['required', Rule::in(array_column(CouponType::cases(), 'value'))]),
+                ->rules(['required', Rule::in(array_column(DiscountType::cases(), 'value'))]),
 
             Number::make(__('Value'), 'value')
                 ->required()
@@ -79,7 +79,7 @@ class CouponResource extends Resource
                 ->min(0)
                 ->format(static function (Request $request, Model $model): string {
                     return (string) match ($model->type) {
-                        CouponType::PERCENT => $model->value.'%',
+                        DiscountType::PERCENT => $model->value.'%',
                         default => $model->value,
                     };
                 }),

@@ -6,7 +6,7 @@ namespace Cone\Bazar\Enums;
 
 use Cone\Root\Enums\Arrayable;
 
-enum CouponType: string
+enum DiscountType: string
 {
     use Arrayable;
 

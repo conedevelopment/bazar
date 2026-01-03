@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Enums\DiscountRuleType;
+use Cone\Bazar\Enums\DiscountRuleValueType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Models\DiscountRule;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\ID;
+use Cone\Root\Fields\Number;
+use Cone\Root\Fields\Repeater;
 use Cone\Root\Fields\Select;
 use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
@@ -43,7 +47,7 @@ class DiscountRuleResource extends Resource
      */
     public function modelTitle(Model $model): string
     {
-        return $model->name;
+        return $model->name ?: parent::modelTitle($model);
     }
 
     /**
@@ -57,25 +61,51 @@ class DiscountRuleResource extends Resource
             Text::make(__('Name'), 'name')
                 ->sortable()
                 ->searchable()
+                ->hydratesOnChange()
                 ->rules(['required', 'string', 'max:255']),
 
             Boolean::make(__('Active'), 'active')
                 ->sortable()
-                ->rules(['required', 'boolean']),
-
-            Select::make(__('Type'), 'type')
-                ->options(DiscountRuleType::toArray())
-                ->sortable()
-                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleType::cases(), 'value'))]),
+                ->rules(['boolean']),
 
             Boolean::make(__('Stackable'), 'stackable')
                 ->sortable()
-                ->rules(['required', 'boolean']),
+                ->rules(['boolean']),
 
             BelongsToMany::make(__('Users'), 'users')
                 ->searchable(columns: ['name', 'email'])
                 ->async()
                 ->display('name'),
+
+            Select::make(__('Type'), 'type')
+                ->options(DiscountRuleType::toArray())
+                ->sortable()
+                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleType::cases(), 'value'))])
+                ->hydratesOnChange(),
+
+            Select::make(__('Value Type'), 'value_type')
+                ->options(DiscountRuleValueType::toArray())
+                ->sortable()
+                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleValueType::cases(), 'value'))])
+                ->hydratesOnChange(),
+
+            //
+
+            Repeater::make(__('Rules'), 'rules')
+                ->withFields(static function (Request $request): array {
+                    return [
+                        Number::make(__('Value'), 'value')
+                            ->rules(['required', 'numeric', 'min:0']),
+
+                        Select::make(__('Type'), 'type')
+                            ->options(DiscountType::toArray())
+                            ->required()
+                            ->rules(['required', Rule::in(array_column(DiscountType::cases(), 'value'))]),
+
+                        Number::make(__('Discount'), 'discount')
+                            ->rules(['required', 'numeric', 'min:0']),
+                    ];
+                }),
         ];
     }
 }

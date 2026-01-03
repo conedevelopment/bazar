@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\CouponFactory;
-use Cone\Bazar\Enums\CouponType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Coupon as Contract;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -32,7 +32,7 @@ class Coupon extends Model implements Contract
         'expires_at' => null,
         'rules' => '[]',
         'stackable' => false,
-        'type' => CouponType::FIX,
+        'type' => DiscountType::FIX,
         'value' => 0,
     ];
 
@@ -88,7 +88,7 @@ class Coupon extends Model implements Contract
             'expires_at' => 'datetime',
             'rules' => 'json',
             'stackable' => 'boolean',
-            'type' => CouponType::class,
+            'type' => DiscountType::class,
             'value' => 'float',
         ];
     }
@@ -130,8 +130,8 @@ class Coupon extends Model implements Contract
     public function calculate(Checkoutable $model): float
     {
         return match ($this->type) {
-            CouponType::PERCENT => round($model->getSubtotal() * ($this->value / 100), 2),
-            CouponType::FIX => min($this->value, $model->getSubtotal()),
+            DiscountType::PERCENT => round($model->getSubtotal() * ($this->value / 100), 2),
+            DiscountType::FIX => min($this->value, $model->getSubtotal()),
         };
     }
 

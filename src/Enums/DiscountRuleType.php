@@ -15,18 +15,6 @@ enum DiscountRuleType: string
     case SHIPPING = 'shipping';
 
     /**
-     * Get the priority of the target.
-     */
-    public function priority(): int
-    {
-        return match ($this) {
-            self::CART => 3,
-            self::BUYABLE => 2,
-            self::SHIPPING => 1,
-        };
-    }
-
-    /**
      * Get the label of the target.
      */
     public function label(): string

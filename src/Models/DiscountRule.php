@@ -31,6 +31,7 @@ class DiscountRule extends Model implements Contract
      */
     protected $attributes = [
         'active' => true,
+        'rules' => '[]',
         'stackable' => false,
         'type' => DiscountRuleType::CART,
     ];
