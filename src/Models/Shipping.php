@@ -340,6 +340,14 @@ class Shipping extends Model implements Contract
     }
 
     /**
+     * Get the formatted discount.
+     */
+    public function getFormattedDiscount(): string
+    {
+        return $this->shippable->getCurrency()->format($this->getDiscount());
+    }
+
+    /**
      * Validate the shipping address.
      */
     public function validate(): bool

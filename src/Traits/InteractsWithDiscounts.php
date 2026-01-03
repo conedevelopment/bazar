@@ -8,6 +8,7 @@ use Cone\Bazar\Models\Discount;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Number;
 use Throwable;
 
 trait InteractsWithDiscounts
@@ -58,5 +59,32 @@ trait InteractsWithDiscounts
     public function removeDiscount(DiscountRule $discountRule): void
     {
         $this->discounts()->detach([$discountRule->getKey()]);
+    }
+
+    /**
+     * Get the discount.
+     */
+    public function getDiscount(): float
+    {
+        return $this->discounts->sum('discount.value');
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float
+    {
+        return (float) match (true) {
+            $this->getSubtotal() > 0 => round(($this->getDiscount() / $this->getSubtotal()) * 100, 2),
+            default => 0,
+        };
+    }
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountRate(): string
+    {
+        return Number::percentage($this->getDiscountRate());
     }
 }

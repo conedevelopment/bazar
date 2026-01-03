@@ -338,4 +338,20 @@ class Item extends Model implements Contract
     {
         return 0.0;
     }
+
+    /**
+     * Get the formatted discount.
+     */
+    public function getFormattedDiscount(): string
+    {
+        return $this->checkoutable->getCurrency()->format($this->getDiscount());
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountRate(): float
+    {
+        return round($this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0, 2);
+    }
 }

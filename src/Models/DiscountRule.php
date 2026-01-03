@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
-use Cone\Bazar\Enums\DiscountRuleType;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
@@ -33,7 +32,7 @@ class DiscountRule extends Model implements Contract
         'active' => true,
         'rules' => '[]',
         'stackable' => false,
-        'type' => DiscountRuleType::CART,
+        'discountable_type' => Cart::class,
     ];
 
     /**
@@ -46,7 +45,7 @@ class DiscountRule extends Model implements Contract
         'name',
         'rules',
         'stackable',
-        'type',
+        'discountable_type',
     ];
 
     /**
@@ -81,7 +80,6 @@ class DiscountRule extends Model implements Contract
             'active' => 'boolean',
             'rules' => 'json',
             'stackable' => 'boolean',
-            'type' => DiscountRuleType::class,
         ];
     }
 

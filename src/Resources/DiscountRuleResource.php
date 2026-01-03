@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Resources;
 
-use Cone\Bazar\Enums\DiscountRuleType;
 use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Enums\DiscountType;
+use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\DiscountRule;
+use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
+use Cone\Bazar\Models\Variant;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\ID;
@@ -77,10 +80,19 @@ class DiscountRuleResource extends Resource
                 ->async()
                 ->display('name'),
 
-            Select::make(__('Type'), 'type')
-                ->options(DiscountRuleType::toArray())
+            Select::make(__('Discountable Type'), 'discountable_type')
+                ->options([
+                    __('Cart') => [
+                        Cart::getProxiedClass() => __('Cart'),
+                        Shipping::getProxiedClass() => __('Shipping'),
+                    ],
+                    __('Buyable Item') => [
+                        Product::getProxiedClass() => __('Product'),
+                        Variant::getProxiedClass() => __('Variant'),
+                    ],
+                ])
                 ->sortable()
-                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleType::cases(), 'value'))])
+                ->rules(['required', 'string'])
                 ->hydratesOnChange(),
 
             Select::make(__('Value Type'), 'value_type')
@@ -89,9 +101,7 @@ class DiscountRuleResource extends Resource
                 ->rules(['required', 'string', Rule::in(array_column(DiscountRuleValueType::cases(), 'value'))])
                 ->hydratesOnChange(),
 
-            //
-
-            Repeater::make(__('Rules'), 'rules')
+            Repeater::make(__('Rules'), 'rules->conditions')
                 ->withFields(static function (Request $request): array {
                     return [
                         Number::make(__('Value'), 'value')
