@@ -30,9 +30,9 @@ class DiscountRule extends Model implements Contract
      */
     protected $attributes = [
         'active' => true,
+        'discountable_type' => Cart::class,
         'rules' => '[]',
         'stackable' => false,
-        'discountable_type' => Cart::class,
     ];
 
     /**
@@ -42,10 +42,10 @@ class DiscountRule extends Model implements Contract
      */
     protected $fillable = [
         'active',
+        'discountable_type',
         'name',
         'rules',
         'stackable',
-        'discountable_type',
     ];
 
     /**
@@ -69,6 +69,19 @@ class DiscountRule extends Model implements Contract
     public function getMorphClass(): string
     {
         return static::getProxiedClass();
+    }
+
+    /**
+     * Get the discountable types.
+     */
+    public static function getDiscountableTypes(): array
+    {
+        return [
+            Cart::getProxiedClass(),
+            Shipping::getProxiedClass(),
+            Product::getProxiedClass(),
+            Variant::getProxiedClass(),
+        ];
     }
 
     /**

@@ -6,11 +6,7 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Enums\DiscountType;
-use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\DiscountRule;
-use Cone\Bazar\Models\Product;
-use Cone\Bazar\Models\Shipping;
-use Cone\Bazar\Models\Variant;
 use Cone\Root\Fields\BelongsToMany;
 use Cone\Root\Fields\Boolean;
 use Cone\Root\Fields\ID;
@@ -21,6 +17,7 @@ use Cone\Root\Fields\Text;
 use Cone\Root\Resources\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class DiscountRuleResource extends Resource
@@ -81,16 +78,12 @@ class DiscountRuleResource extends Resource
                 ->display('name'),
 
             Select::make(__('Discountable Type'), 'discountable_type')
-                ->options([
-                    __('Cart') => [
-                        Cart::getProxiedClass() => __('Cart'),
-                        Shipping::getProxiedClass() => __('Shipping'),
-                    ],
-                    __('Buyable Item') => [
-                        Product::getProxiedClass() => __('Product'),
-                        Variant::getProxiedClass() => __('Variant'),
-                    ],
-                ])
+                ->options(array_combine(
+                    DiscountRule::getDiscountableTypes(),
+                    array_map(static function (string $type): string {
+                        return __(Str::of($type)->classBasename()->value());
+                    }, DiscountRule::getDiscountableTypes()),
+                ))
                 ->sortable()
                 ->rules(['required', 'string'])
                 ->hydratesOnChange(),
