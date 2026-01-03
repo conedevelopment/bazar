@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Resources;
 
+use Cone\Bazar\Bazar;
 use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Interfaces\Buyable;
@@ -101,7 +102,7 @@ class DiscountRuleResource extends Resource
                         default => $query->whereRaw('1 = 0'),
                     };
                 })
-                ->display(function (Model $model): string {
+                ->display(static function (Model $model): string {
                     return match (true) {
                         $model instanceof Buyable => sprintf('#%s - %s', (string) $model->getKey(), $model->getBuyableName()),
                         default => (string) $model->getKey(),
@@ -111,11 +112,10 @@ class DiscountRuleResource extends Resource
             Select::make(__('Value Type'), 'value_type')
                 ->options(DiscountRuleValueType::toArray())
                 ->sortable()
-                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleValueType::cases(), 'value'))])
-                ->hydratesOnChange(),
+                ->rules(['required', 'string', Rule::in(array_column(DiscountRuleValueType::cases(), 'value'))]),
 
             Repeater::make(__('Rules'), 'rules->conditions')
-                ->withFields(static function (Request $request): array {
+                ->withFields(static function (): array {
                     return [
                         Number::make(__('Value'), 'value')
                             ->rules(['required', 'numeric', 'min:0']),
@@ -127,6 +127,10 @@ class DiscountRuleResource extends Resource
 
                         Number::make(__('Discount'), 'discount')
                             ->rules(['required', 'numeric', 'min:0']),
+
+                        Select::make(__('Currency'), 'currency')
+                            ->nullable()
+                            ->options(array_column(Bazar::getCurrencies(), 'name', 'value')),
                     ];
                 }),
         ];
