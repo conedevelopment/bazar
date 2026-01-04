@@ -7,6 +7,7 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Exceptions\DiscountException;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
+use Cone\Bazar\Models\Discountable as DiscountablePivot;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -123,7 +124,7 @@ class DiscountRule extends Model implements Contract
             'bazar_discountables',
             'discount_rule_id',
             'discountable_id'
-        )->using(Discountable::class);
+        )->using(DiscountablePivot::class);
     }
 
     /**

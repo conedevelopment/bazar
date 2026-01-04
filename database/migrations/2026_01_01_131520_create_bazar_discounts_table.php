@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('bazar_discounts', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('discount_rule_id')->constrained('bazar_discount_rules')->cascadeOnDelete();
-            $table->morphs('discountable');
+            $table->uuidMorphs('discountable');
             $table->decimal('value', 10, 2);
             $table->timestamps();
         });

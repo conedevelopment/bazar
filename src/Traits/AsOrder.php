@@ -448,7 +448,14 @@ trait AsOrder
      */
     public function getDiscount(): float
     {
-        return $this->coupons->sum('coupon.value');
+        $value = $this->coupons->sum('coupon.value');
+        $value += $this->discounts->sum('discount.value');
+        $value += ($this->needsShipping() ? $this->shipping->getDiscount() : 0);
+        $value += $this->items->sum(static function (Item $item): float {
+            return $item->getDiscount();
+        });
+
+        return $value;
     }
 
     /**
@@ -511,7 +518,7 @@ trait AsOrder
         return DiscountRule::proxy()
             ->newQuery()
             ->active()
-            ->where(static function (Builder $query): Builder {
+            ->where(function (Builder $query): Builder {
                 return $query->whereIn(
                     $query->qualifyColumn('discountable_type'),
                     [Cart::getProxiedClass(), Shipping::getProxiedClass()]
@@ -531,7 +538,7 @@ trait AsOrder
             ->where(function (Builder $query): Builder {
                 return $query->whereDoesntHave('users')
                     ->orWhereHas('users', function (Builder $query): Builder {
-                        return $query->where($query->qualifyColumn('user_id'), $this->user_id);
+                        return $query->where($query->getModel()->getQualifiedKeyName(), $this->user_id);
                     });
             });
     }
