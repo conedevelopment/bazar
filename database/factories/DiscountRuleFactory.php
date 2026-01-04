@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Database\Factories;
 
-use Cone\Bazar\Enums\DiscountRuleType;
+use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class DiscountRuleFactory extends Factory
 {
@@ -34,10 +35,11 @@ class DiscountRuleFactory extends Factory
     {
         return [
             'active' => true,
-            'name' => fake()->words(3, true),
+            'name' => $this->faker->words(3, true),
             'rules' => [],
             'stackable' => false,
-            'type' => DiscountRuleType::CART,
+            'discountable_type' => Arr::random(DiscountRule::getDiscountableTypes()),
+            'value_type' => DiscountRuleValueType::TOTAL,
         ];
     }
 }

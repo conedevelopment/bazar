@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Tests\Models;
 
-use Cone\Bazar\Enums\DiscountRuleType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\DiscountRule;
-use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Product;
+use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Tests\TestCase;
 use Cone\Bazar\Tests\User;
 
@@ -22,7 +22,11 @@ class DiscountRuleTest extends TestCase
     {
         parent::setUp();
 
-        $this->discountRule = DiscountRule::factory()->create();
+        $this->discountRule = DiscountRule::factory()->create([
+            'rules' => [
+                ['value' => 1, 'type' => DiscountType::FIX->value, 'discount' => 10, 'currency' => null],
+            ],
+        ]);
 
         $this->cart = Cart::factory()->create();
 
@@ -41,7 +45,6 @@ class DiscountRuleTest extends TestCase
     {
         $this->assertTrue($this->discountRule->active);
         $this->assertFalse($this->discountRule->stackable);
-        $this->assertEquals(DiscountRuleType::CART, $this->discountRule->type);
         $this->assertIsArray($this->discountRule->rules);
     }
 
@@ -68,13 +71,15 @@ class DiscountRuleTest extends TestCase
     {
         $value = $this->discountRule->calculate($this->cart);
 
-        $this->assertIsFloat($value);
-        $this->assertEquals(0.0, $value);
+        $this->assertEquals(10.0, $value);
     }
 
     public function test_discount_rule_can_be_applied_to_discountable(): void
     {
         $this->assertCount(0, $this->cart->discounts);
+
+        $this->discountRule->discountable_type = Cart::class;
+        $this->discountRule->save();
 
         $this->discountRule->apply($this->cart);
 
@@ -90,6 +95,9 @@ class DiscountRuleTest extends TestCase
 
         $this->assertCount(0, $item->discounts);
 
+        $this->discountRule->discountable_type = $item->buyable_type;
+        $this->discountRule->save();
+
         $this->discountRule->apply($item);
 
         $item->refresh();
@@ -98,38 +106,16 @@ class DiscountRuleTest extends TestCase
         $this->assertTrue($item->discounts->contains($this->discountRule));
     }
 
-    public function test_discount_rule_types_have_priorities(): void
-    {
-        $this->assertEquals(3, DiscountRuleType::CART->priority());
-        $this->assertEquals(2, DiscountRuleType::BUYABLE->priority());
-        $this->assertEquals(1, DiscountRuleType::SHIPPING->priority());
-    }
-
-    public function test_discount_rule_types_have_labels(): void
-    {
-        $this->assertEquals('Cart Total', DiscountRuleType::CART->label());
-        $this->assertEquals('Buyable Item', DiscountRuleType::BUYABLE->label());
-        $this->assertEquals('Shipping', DiscountRuleType::SHIPPING->label());
-    }
-
-    public function test_discount_rule_can_have_different_types(): void
-    {
-        $cartRule = DiscountRule::factory()->create(['type' => DiscountRuleType::CART]);
-        $buyableRule = DiscountRule::factory()->create(['type' => DiscountRuleType::BUYABLE]);
-        $shippingRule = DiscountRule::factory()->create(['type' => DiscountRuleType::SHIPPING]);
-
-        $this->assertEquals(DiscountRuleType::CART, $cartRule->type);
-        $this->assertEquals(DiscountRuleType::BUYABLE, $buyableRule->type);
-        $this->assertEquals(DiscountRuleType::SHIPPING, $shippingRule->type);
-    }
-
     public function test_discount_rule_applies_to_shipping(): void
     {
         $shipping = $this->cart->shipping()->create([
             'name' => 'Standard Shipping',
-            'cost' => 10.0,
+            'fee' => 30.0,
             'driver' => 'local-pickup',
         ]);
+
+        $this->discountRule->discountable_type = Shipping::class;
+        $this->discountRule->save();
 
         $this->assertCount(0, $shipping->discounts);
 
@@ -143,8 +129,20 @@ class DiscountRuleTest extends TestCase
 
     public function test_multiple_discount_rules_can_be_applied(): void
     {
-        $rule1 = DiscountRule::factory()->create(['stackable' => true]);
-        $rule2 = DiscountRule::factory()->create(['stackable' => true]);
+        $rule1 = DiscountRule::factory()->create([
+            'stackable' => true,
+            'discountable_type' => Cart::class,
+            'rules' => [
+                ['value' => 1, 'type' => DiscountType::FIX->value, 'discount' => 10, 'currency' => null],
+            ],
+        ]);
+        $rule2 = DiscountRule::factory()->create([
+            'stackable' => true,
+            'discountable_type' => Cart::class,
+            'rules' => [
+                ['value' => 1, 'type' => DiscountType::FIX->value, 'discount' => 10, 'currency' => null],
+            ],
+        ]);
 
         $rule1->apply($this->cart);
         $rule2->apply($this->cart);
@@ -174,6 +172,9 @@ class DiscountRuleTest extends TestCase
 
     public function test_discount_rule_relationship_uses_correct_table(): void
     {
+        $this->discountRule->discountable_type = Cart::class;
+        $this->discountRule->save();
+
         $this->discountRule->apply($this->cart);
 
         $this->assertDatabaseHas('bazar_discounts', [

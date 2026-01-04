@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\DiscountRuleFactory;
-use Cone\Bazar\Enums\DiscountRuleType;
 use Cone\Bazar\Enums\DiscountRuleValueType;
 use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Exceptions\DiscountException;
@@ -14,9 +13,9 @@ use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Bazar\Models\Discountable as DiscountablePivot;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -90,7 +89,7 @@ class DiscountRule extends Model implements Contract
     {
         return DiscountRuleFactory::new();
     }
-   
+
     /**
      * Get the discountable types.
      */
@@ -207,7 +206,7 @@ class DiscountRule extends Model implements Contract
         $value = $this->calculate($model);
 
         if ($value <= 0) {
-            throw new DiscountException('The discount rule is not valid for this discountable model.');
+            throw new DiscountException('The discount value is 0.');
         }
 
         $model->discounts()->syncWithoutDetaching([

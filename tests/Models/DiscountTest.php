@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cone\Bazar\Tests\Models;
 
 use Cone\Bazar\Models\Cart;
-use Cone\Bazar\Models\Discount;
 use Cone\Bazar\Models\DiscountRule;
 use Cone\Bazar\Models\Product;
 use Cone\Bazar\Tests\TestCase;
@@ -33,16 +32,6 @@ class DiscountTest extends TestCase
                 'name' => $product->name,
             ]);
         });
-    }
-
-    public function test_discount_has_default_value(): void
-    {
-        $this->discountRule->apply($this->cart);
-
-        $discount = $this->cart->discounts()->first()->discount;
-
-        $this->assertInstanceOf(Discount::class, $discount);
-        $this->assertEquals(0.0, $discount->value);
     }
 
     public function test_discount_value_can_be_set(): void

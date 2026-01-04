@@ -72,18 +72,24 @@ class InteractsWithDiscountsTest extends TestCase
 
     public function test_discounts_are_detached_on_model_deletion(): void
     {
+        $cartId = $this->cart->id;
+
         $this->cart->discounts()->attach($this->discountRule, ['value' => 10.0]);
 
         $this->assertCount(1, $this->cart->discounts);
 
-        $cartId = $this->cart->id;
+        $this->assertDatabaseHas('bazar_discounts', [
+            'discountable_id' => $cartId,
+            'discountable_type' => Cart::class,
+        ]);
+
         $this->cart->delete();
 
-        // Verify the discount relationship is removed
-        $cart = Cart::withTrashed()->find($cartId);
-        if ($cart) {
-            $this->assertCount(0, $cart->discounts);
-        }
+        $this->assertDatabaseMissing('bazar_carts', ['id' => $cartId]);
+        $this->assertDatabaseMissing('bazar_discounts', [
+            'discountable_id' => $cartId,
+            'discountable_type' => Cart::class,
+        ]);
     }
 
     public function test_discount_pivot_has_value(): void
@@ -138,19 +144,9 @@ class InteractsWithDiscountsTest extends TestCase
 
         $discount = $this->cart->discounts()->first();
 
-        $this->assertNotNull($discount->pivot);
-        $this->assertEquals($this->cart->id, $discount->pivot->discountable_id);
-        $this->assertEquals(get_class($this->cart), $discount->pivot->discountable_type);
-    }
-
-    public function test_discount_relationship_includes_timestamps(): void
-    {
-        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.0]);
-
-        $discount = $this->cart->discounts()->first()->discount;
-
-        $this->assertObjectHasProperty('created_at', $discount);
-        $this->assertObjectHasProperty('updated_at', $discount);
+        $this->assertNotNull($discount->discount);
+        $this->assertEquals($this->cart->id, $discount->discount->discountable_id);
+        $this->assertEquals(get_class($this->cart), $discount->discount->discountable_type);
     }
 
     public function test_shipping_can_have_discounts(): void
