@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
@@ -350,11 +351,11 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Get the formatted discount.
+     * Get the discountable currency.
      */
-    public function getFormattedDiscount(): string
+    public function getDiscountableCurrency(): Currency
     {
-        return $this->shippable->getCurrency()->format($this->getDiscount());
+        return $this->shippable->getCurrency();
     }
 
     /**

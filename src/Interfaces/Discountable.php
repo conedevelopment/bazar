@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
@@ -64,4 +65,9 @@ interface Discountable
      * Get the applicable discount rules.
      */
     public function getApplicableDiscountRules(): Collection;
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency;
 }

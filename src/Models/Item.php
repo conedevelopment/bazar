@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
@@ -350,10 +351,10 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Get the formatted discount.
+     * Get the discountable currency.
      */
-    public function getFormattedDiscount(): string
+    public function getDiscountableCurrency(): Currency
     {
-        return $this->checkoutable->getCurrency()->format($this->getDiscount());
+        return $this->checkoutable->getCurrency();
     }
 }

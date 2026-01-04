@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Number;
 use Throwable;
 
 trait AsOrder
@@ -342,7 +341,6 @@ trait AsOrder
      */
     public function findItem(array $attributes): ?Item
     {
-
         $attributes = array_merge(['properties' => null], $attributes, [
             'checkoutable_id' => $this->getKey(),
             'checkoutable_type' => static::class,
@@ -459,19 +457,11 @@ trait AsOrder
     }
 
     /**
-     * Get the formatted discount.
+     * Get the discountable currency.
      */
-    public function getFormattedDiscount(): string
+    public function getDiscountableCurrency(): Currency
     {
-        return $this->getCurrency()->format($this->getDiscount());
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
+        return $this->getCurrency();
     }
 
     /**

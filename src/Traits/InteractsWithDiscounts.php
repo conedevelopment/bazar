@@ -110,4 +110,12 @@ trait InteractsWithDiscounts
 
         return $this->getDiscount();
     }
+
+    /**
+     * Get the formatted discount.
+     */
+    public function getFormattedDiscount(): string
+    {
+        return $this->getDiscountableCurrency()->format($this->getDiscount());
+    }
 }
