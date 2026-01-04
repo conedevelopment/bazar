@@ -28,6 +28,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/laravel": "^12.0",
+        "laravel/framework": "^12.30",
         "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^11.5",
         "laravel/pint": "^1.6",
