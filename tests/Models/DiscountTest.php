@@ -84,7 +84,7 @@ class DiscountTest extends TestCase
         $this->assertEquals(20.50, $discount->value);
     }
 
-    public function test_discount_has_timestamps(): void
+    public function test_discount_pivot_has_timestamps(): void
     {
         $this->cart->discounts()->attach($this->discountRule, ['value' => 10.00]);
 
