@@ -296,7 +296,7 @@ class Shipping extends Model implements Contract
      */
     public function getQuantity(): float
     {
-        return 1;
+        return 1.0;
     }
 
     /**
@@ -305,9 +305,9 @@ class Shipping extends Model implements Contract
     public function calculateFee(): float
     {
         try {
-            $this->fill([
-                'fee' => Manager::driver($this->driver)->calculate($this->shippable),
-            ])->save();
+           $fee = Manager::driver($this->driver)->calculate($this->shippable);
+
+            $this->fill(['fee' => $fee])->save();
         } catch (Throwable $exception) {
             //
         }
@@ -326,9 +326,7 @@ class Shipping extends Model implements Contract
             ->newQuery()
             ->applicableForShipping()
             ->get()
-            ->each(function (TaxRate $taxRate): void {
-                $taxRate->apply($this);
-            });
+            ->each(fn (TaxRate $taxRate): null => $taxRate->apply($this));
 
         return $this->getTaxTotal();
     }
@@ -339,7 +337,7 @@ class Shipping extends Model implements Contract
     public function getApplicableDiscountRules(): Collection
     {
         return $this->shippable->getApplicableDiscountRules()
-            ->where('discountable_type', $this->buyable_type);
+            ->where('discountable_type', $this->shippable_type);
     }
 
     /**
