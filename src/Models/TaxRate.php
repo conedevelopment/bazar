@@ -113,6 +113,18 @@ class TaxRate extends Model implements Contract
     }
 
     /**
+     * Apply the tax rate to the taxable model.
+     */
+    public function apply(Taxable $taxable): void
+    {
+        $value = $this->calculate($taxable);
+
+        $taxable->taxes()->syncWithoutDetaching([
+            $this->getKey() => ['value' => $value],
+        ]);
+    }
+
+    /**
      * Scope the query for the results that are applicable for shipping.
      */
     public function scopeApplicableForShipping(Builder $query): Builder

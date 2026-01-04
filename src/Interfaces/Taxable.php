@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Interfaces;
 
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 interface Taxable
 {
@@ -12,6 +13,11 @@ interface Taxable
      * Get the taxes for the model.
      */
     public function taxes(): MorphToMany;
+
+    /**
+     * Get the applied tax rates.
+     */
+    public function getAppliedTaxRates(): Collection;
 
     /**
      * Get the tax base.

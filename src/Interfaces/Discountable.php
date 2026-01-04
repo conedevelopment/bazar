@@ -4,8 +4,28 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
+use Cone\Bazar\Enums\Currency;
+use Cone\Bazar\Models\DiscountRule;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
+
 interface Discountable
 {
+    /**
+     * Get the discounts for the model.
+     */
+    public function discounts(): MorphToMany;
+
+    /**
+     * Apply a discount rule to the discountable model.
+     */
+    public function applyDiscount(DiscountRule $discountRule): bool;
+
+    /**
+     * Remove a discount rule from the discountable model.
+     */
+    public function removeDiscount(DiscountRule $discountRule): void;
+
     /**
      * Get the discount.
      */
@@ -30,4 +50,29 @@ interface Discountable
      * Calculate the discount.
      */
     public function calculateDiscount(): float;
+
+    /**
+     * Get the discount base.
+     */
+    public function getDiscountBase(): float;
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float;
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection;
+
+    /**
+     * Get the applied discount rules.
+     */
+    public function getAppliedDiscountRules(): Collection;
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency;
 }

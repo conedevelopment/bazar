@@ -19,8 +19,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 
 class Variant extends Model implements Contract
 {
@@ -87,11 +87,11 @@ class Variant extends Model implements Contract
     }
 
     /**
-     * Get the applicable tax rates.
+     * Get the tax rates for the product.
      */
-    public function getApplicableTaxRates(): Collection
+    public function taxRates(): MorphToMany
     {
-        return $this->product->getApplicableTaxRates();
+        return $this->product->taxRates();
     }
 
     /**
@@ -129,6 +129,14 @@ class Variant extends Model implements Contract
     }
 
     /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Get the price by the given type and currency.
      */
     public function getPrice(?Currency $currency = null): ?float
@@ -142,7 +150,7 @@ class Variant extends Model implements Contract
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item
     {
         return $this->items()->make(array_merge([
-            'name' => $this->name,
+            'name' => $this->getBuyableName(),
             'price' => $this->getPrice($checkoutable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);

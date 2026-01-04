@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Interfaces;
 
-interface LineItem extends Taxable
+interface LineItem extends Discountable, Taxable
 {
     /**
      * Get the price.

@@ -52,7 +52,18 @@ abstract class Driver
             $cart->user()->associate($request->user())->save();
         }
 
-        $cart->loadMissing(['items', 'items.buyable', 'coupons']);
+        $cart->loadMissing([
+            'coupons',
+            'discounts',
+            'items.buyable',
+            'items.discounts',
+            'items',
+            'shipping',
+            'shipping.discounts',
+        ]);
+
+        $cart->items->each->setRelation('checkoutable', $cart);
+        $cart->shipping->setRelation('shippable', $cart);
     }
 
     /**

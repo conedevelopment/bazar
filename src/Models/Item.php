@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -14,11 +16,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 
 class Item extends Model implements Contract
 {
     use HasFactory;
     use HasUuids;
+    use InteractsWithDiscounts;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
@@ -322,12 +326,35 @@ class Item extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
-        $taxes = $this->buyable->getApplicableTaxRates()->mapWithKeys(function (TaxRate $taxRate): array {
-            return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
-        });
+        $this->taxes()->detach();
 
-        $this->taxes()->sync($taxes);
+        $this->buyable->taxRates->each->apply($this);
 
         return $this->getTaxTotal();
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->getQuantity();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return $this->checkoutable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->buyable_type);
+    }
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency
+    {
+        return $this->checkoutable->getCurrency();
     }
 }

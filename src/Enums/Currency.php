@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Enums;
 
+use Cone\Root\Enums\Arrayable;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Number;
 
 enum Currency: string
 {
+    use Arrayable;
+
     case AED = 'AED';
     case ARS = 'ARS';
     case AUD = 'AUD';
@@ -59,6 +62,14 @@ enum Currency: string
     case UYU = 'UYU';
     case VND = 'VND';
     case ZAR = 'ZAR';
+
+    /**
+     * Get the label for the currency.
+     */
+    public function label(): string
+    {
+        return $this->value;
+    }
 
     /**
      * Get the symbol for the currency.

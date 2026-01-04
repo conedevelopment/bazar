@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
-use Illuminate\Support\Collection;
 
 class Product extends Model implements Contract
 {
@@ -103,19 +102,19 @@ class Product extends Model implements Contract
     }
 
     /**
-     * Get the applicable tax rates.
-     */
-    public function getApplicableTaxRates(): Collection
-    {
-        return $this->taxRates;
-    }
-
-    /**
      * Determine whether the buyable object is available for the checkoutable instance.
      */
     public function buyable(Checkoutable $model): bool
     {
         return true;
+    }
+
+    /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string
+    {
+        return $this->name;
     }
 
     /**
@@ -176,7 +175,7 @@ class Product extends Model implements Contract
         }
 
         return $this->items()->make(array_merge([
-            'name' => $this->name,
+            'name' => $this->getBuyableName(),
             'price' => $this->getPrice($checkoutable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);

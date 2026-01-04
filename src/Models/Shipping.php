@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
+use Cone\Bazar\Traits\InteractsWithDiscounts;
 use Cone\Bazar\Traits\InteractsWithTaxes;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class Shipping extends Model implements Contract
 {
     use Addressable;
     use HasFactory;
+    use InteractsWithDiscounts;
     use InteractsWithProxy;
     use InteractsWithTaxes;
 
@@ -292,7 +296,7 @@ class Shipping extends Model implements Contract
      */
     public function getQuantity(): float
     {
-        return 1;
+        return 1.0;
     }
 
     /**
@@ -301,9 +305,9 @@ class Shipping extends Model implements Contract
     public function calculateFee(): float
     {
         try {
-            $this->fill([
-                'fee' => Manager::driver($this->driver)->calculate($this->shippable),
-            ])->save();
+            $fee = Manager::driver($this->driver)->calculate($this->shippable);
+
+            $this->fill(['fee' => $fee])->save();
         } catch (Throwable $exception) {
             //
         }
@@ -316,17 +320,40 @@ class Shipping extends Model implements Contract
      */
     public function calculateTaxes(): float
     {
-        $taxes = TaxRate::proxy()
+        $this->taxes()->detach();
+
+        TaxRate::proxy()
             ->newQuery()
             ->applicableForShipping()
             ->get()
-            ->mapWithKeys(function (TaxRate $taxRate): array {
-                return [$taxRate->getKey() => ['value' => $taxRate->calculate($this)]];
-            });
-
-        $this->taxes()->sync($taxes);
+            ->each(fn (TaxRate $taxRate): null => $taxRate->apply($this));
 
         return $this->getTaxTotal();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return $this->shippable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->shippable_type);
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->getQuantity();
+    }
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency
+    {
+        return $this->shippable->getCurrency();
     }
 
     /**
