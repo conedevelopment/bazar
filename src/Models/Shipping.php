@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class Shipping extends Model implements Contract
@@ -332,11 +333,20 @@ class Shipping extends Model implements Contract
     }
 
     /**
-     * Calculate the discount.
+     * Get the applicable discount rules.
      */
-    public function calculateDiscount(): float
+    public function getApplicableDiscountRules(): Collection
     {
-        return 0.0;
+        return $this->shippable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->buyable_type);
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->getQuantity();
     }
 
     /**

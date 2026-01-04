@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Traits;
 
+use Cone\Bazar\Exceptions\DiscountException;
 use Cone\Bazar\Models\Discount;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -46,6 +47,8 @@ trait InteractsWithDiscounts
             $discountRule->apply($this);
 
             return true;
+        } catch (DiscountException $exception) {
+            //
         } catch (Throwable $exception) {
             $this->removeDiscount($discountRule);
         }
@@ -62,6 +65,14 @@ trait InteractsWithDiscounts
     }
 
     /**
+     * Get the discount base.
+     */
+    public function getDiscountBase(): float
+    {
+        return $this->getSubtotal();
+    }
+
+    /**
      * Get the discount.
      */
     public function getDiscount(): float
@@ -75,7 +86,7 @@ trait InteractsWithDiscounts
     public function getDiscountRate(): float
     {
         return (float) match (true) {
-            $this->getSubtotal() > 0 => round(($this->getDiscount() / $this->getSubtotal()) * 100, 2),
+            $this->getDiscountBase() > 0 => round(($this->getDiscount() / $this->getDiscountBase()) * 100, 2),
             default => 0,
         };
     }
@@ -86,5 +97,17 @@ trait InteractsWithDiscounts
     public function getFormattedDiscountRate(): string
     {
         return Number::percentage($this->getDiscountRate());
+    }
+
+    /**
+     * Calculate the discount.
+     */
+    public function calculateDiscount(): float
+    {
+        $this->getApplicableDiscountRules()->each(function (DiscountRule $rule): void {
+            $this->applyDiscount($rule);
+        });
+
+        return $this->getDiscount();
     }
 }

@@ -34,7 +34,9 @@ use Throwable;
 
 trait AsOrder
 {
-    use InteractsWithDiscounts;
+    use InteractsWithDiscounts {
+        InteractsWithDiscounts::calculateDiscount as protected __calculateDiscount;
+    }
 
     /**
      * Boot the trait.
@@ -458,21 +460,21 @@ trait AsOrder
     }
 
     /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        $value = $this->getSubtotal() > 0 ? $this->getDiscount() / $this->getSubtotal() : 0;
-
-        return round($value * 100, 2);
-    }
-
-    /**
      * Get the formatted discount rate.
      */
     public function getFormattedDiscountRate(): string
     {
         return Number::percentage($this->getDiscountRate());
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->items->sum(static function (Item $item): float {
+            return $item->getDiscountableQuantity();
+        });
     }
 
     /**
@@ -484,21 +486,27 @@ trait AsOrder
             $this->applyCoupon($coupon);
         });
 
-        $this->getApplicableDiscountRules()->each(function (DiscountRule $rule): void {
-            $this->applyDiscount($rule);
-            $this->getItems()->each(static function (Item $item) use ($rule): void {
-                $item->applyDiscount($rule);
-            });
-            $this->shipping->applyDiscount($rule);
+        $this->getItems()->each(static function (Item $item): void {
+            $item->calculateDiscount();
         });
 
-        return $this->getDiscount();
+        $this->shipping->calculateDiscount();
+
+        return $this->__calculateDiscount();
     }
 
     /**
      * Get the applicable discount rules.
      */
     public function getApplicableDiscountRules(): Collection
+    {
+        return once(fn (): Collection => $this->applicableDiscountRulesQuery()->get());
+    }
+
+    /**
+     * Get the applicable discount rules query.
+     */
+    protected function applicableDiscountRulesQuery(): Builder
     {
         return DiscountRule::proxy()
             ->newQuery()
@@ -507,20 +515,24 @@ trait AsOrder
                 return $query->whereIn(
                     $query->qualifyColumn('discountable_type'),
                     [Cart::getProxiedClass(), Shipping::getProxiedClass()]
-                );
+                )->orWhere(function (Builder $query): Builder {
+                    return $query->whereIn(
+                        $query->getModel()->getQualifiedKeyName(),
+                        Discountable::proxy()
+                            ->newQuery()
+                            ->select('bazar_discountables.discount_rule_id')
+                            ->whereRaw(sprintf(
+                                'concat(bazar_discountables.discountable_type, \':\', bazar_discountables.discountable_id) in (%s)',
+                                $this->items()->selectRaw('concat(bazar_items.buyable_type, \':\', bazar_items.buyable_id) as `type`')->toRawSql()
+                            ))
+                    );
+                });
             })
-            ->orWhere(function (Builder $query): Builder {
-                return $query->whereIn(
-                    $query->getModel()->getQualifiedKeyName(),
-                    Discountable::proxy()
-                        ->newQuery()
-                        ->select('bazar_discountables.discount_rule_id')
-                        ->whereRaw(sprintf(
-                            'concat(bazar_discountables.discountable_type, \':\', bazar_discountables.discountable_id) in (%s)',
-                            $this->items()->selectRaw('concat(bazar_items.buyable_type, \':\', bazar_items.buyable_id) as `type`')->toRawSql()
-                        ))
-                );
-            })
-            ->get();
+            ->where(function (Builder $query): Builder {
+                return $query->whereDoesntHave('users')
+                    ->orWhereHas('users', function (Builder $query): Builder {
+                        return $query->where($query->qualifyColumn('user_id'), $this->user_id);
+                    });
+            });
     }
 }

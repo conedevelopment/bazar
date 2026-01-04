@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 
 class Item extends Model implements Contract
 {
@@ -332,11 +333,20 @@ class Item extends Model implements Contract
     }
 
     /**
-     * Calculate the discount.
+     * Get the discountable quantity.
      */
-    public function calculateDiscount(): float
+    public function getDiscountableQuantity(): float
     {
-        return 0.0;
+        return $this->getQuantity();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return $this->checkoutable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->buyable_type);
     }
 
     /**
@@ -345,13 +355,5 @@ class Item extends Model implements Contract
     public function getFormattedDiscount(): string
     {
         return $this->checkoutable->getCurrency()->format($this->getDiscount());
-    }
-
-    /**
-     * Get the discount rate.
-     */
-    public function getDiscountRate(): float
-    {
-        return round($this->getSubtotal() > 0 ? ($this->getDiscount() / $this->getSubtotal()) * 100 : 0, 2);
     }
 }

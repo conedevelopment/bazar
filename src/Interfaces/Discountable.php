@@ -6,6 +6,7 @@ namespace Cone\Bazar\Interfaces;
 
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 interface Discountable
 {
@@ -48,4 +49,19 @@ interface Discountable
      * Calculate the discount.
      */
     public function calculateDiscount(): float;
+
+    /**
+     * Get the discount base.
+     */
+    public function getDiscountBase(): float;
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float;
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection;
 }

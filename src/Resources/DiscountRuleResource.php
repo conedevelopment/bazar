@@ -114,7 +114,7 @@ class DiscountRuleResource extends Resource
                 ->sortable()
                 ->rules(['required', 'string', Rule::in(array_column(DiscountRuleValueType::cases(), 'value'))]),
 
-            Repeater::make(__('Rules'), 'rules->conditions')
+            Repeater::make(__('Rules'), 'rules')
                 ->withFields(static function (): array {
                     return [
                         Number::make(__('Value'), 'value')

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Exceptions\DiscountException;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
-use Exception;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -131,7 +131,14 @@ class DiscountRule extends Model implements Contract
      */
     public function validate(Discountable $model): bool
     {
-        return true;
+        $type = match (true) {
+            $model instanceof Item => $model->buyable_type,
+            default => $model::class,
+        };
+
+        return $this->active
+            && in_array($type, static::getDiscountableTypes())
+            && $this->discountable_type === $type;
     }
 
     /**
@@ -148,7 +155,7 @@ class DiscountRule extends Model implements Contract
     public function apply(Discountable $model): void
     {
         if (! $this->validate($model)) {
-            throw new Exception('The discount rule is not valid for this discountable model.');
+            throw new DiscountException('The discount rule is not valid for this discountable model.');
         }
 
         $value = $this->calculate($model);
