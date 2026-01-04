@@ -9,6 +9,7 @@ use Cone\Bazar\Models\TaxRate;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 trait InteractsWithTaxes
 {
@@ -34,6 +35,14 @@ trait InteractsWithTaxes
             ->using(Tax::getProxiedClass())
             ->withPivot('value')
             ->withTimestamps();
+    }
+
+    /**
+     * Get the applied tax rates.
+     */
+    public function getAppliedTaxRates(): Collection
+    {
+        return $this->taxes;
     }
 
     /**

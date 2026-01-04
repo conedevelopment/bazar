@@ -67,6 +67,11 @@ interface Discountable
     public function getApplicableDiscountRules(): Collection;
 
     /**
+     * Get the applied discount rules.
+     */
+    public function getAppliedDiscountRules(): Collection;
+
+    /**
      * Get the discountable currency.
      */
     public function getDiscountableCurrency(): Currency;

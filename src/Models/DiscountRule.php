@@ -155,7 +155,8 @@ class DiscountRule extends Model implements Contract
 
         return $this->active
             && in_array($type, static::getDiscountableTypes())
-            && $this->discountable_type === $type;
+            && $this->discountable_type === $type
+            && ($this->stackable || $model->getAppliedDiscountRules()->isEmpty());
     }
 
     /**

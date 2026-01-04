@@ -9,6 +9,7 @@ use Cone\Bazar\Models\Discount;
 use Cone\Bazar\Models\DiscountRule;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 use Throwable;
 
@@ -36,6 +37,14 @@ trait InteractsWithDiscounts
             ->using(Discount::getProxiedClass())
             ->withPivot(['value'])
             ->withTimestamps();
+    }
+
+    /**
+     * Get the applied discounts.
+     */
+    public function getAppliedDiscountRules(): Collection
+    {
+        return $this->discounts;
     }
 
     /**
