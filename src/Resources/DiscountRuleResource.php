@@ -85,10 +85,10 @@ class DiscountRuleResource extends Resource
 
             Select::make(__('Discountable Type'), 'discountable_type')
                 ->options(array_combine(
-                    DiscountRule::getDiscountableTypes(),
+                    $this->getModel()::getDiscountableTypes(),
                     array_map(static function (string $type): string {
                         return __(Str::of($type)->classBasename()->value());
-                    }, DiscountRule::getDiscountableTypes()),
+                    }, $this->getModel()::getDiscountableTypes()),
                 ))
                 ->sortable()
                 ->rules(['required', 'string'])
