@@ -9,6 +9,8 @@ use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
 use Cone\Root\Models\User;
 use Cone\Root\Traits\InteractsWithProxy;
 use Exception;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -115,13 +117,13 @@ class DiscountRule extends Model implements Contract
      */
     public function discountables(): MorphToMany
     {
-        return $this->morphToMany(
+        return $this->morphedByMany(
             $this->discountable_type ?: static::getDiscountableTypes()[0],
             'discountable',
             'bazar_discountables',
             'discount_rule_id',
             'discountable_id'
-        );
+        )->using(Discountable::class);
     }
 
     /**
@@ -154,5 +156,14 @@ class DiscountRule extends Model implements Contract
         $model->discounts()->syncWithoutDetaching([
             $this->getKey() => ['value' => $value],
         ]);
+    }
+
+    /**
+     * Scope a query to only include active discount rules.
+     */
+    #[Scope]
+    protected function active(Builder $query, bool $value = true): Builder
+    {
+        return $query->where($query->qualifyColumn('active'), $value);
     }
 }

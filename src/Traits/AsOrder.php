@@ -10,11 +10,15 @@ use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\AppliedCoupon;
+use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Coupon;
+use Cone\Bazar\Models\Discountable;
+use Cone\Bazar\Models\DiscountRule;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -484,5 +488,34 @@ trait AsOrder
         // calculate item level discount
 
         return $this->getDiscount();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return DiscountRule::proxy()
+            ->newQuery()
+            ->active()
+            ->where(static function (Builder $query): Builder {
+                return $query->whereIn(
+                    $query->qualifyColumn('discountable_type'),
+                    [Cart::getProxiedClass(), Shipping::getProxiedClass()]
+                );
+            })
+            ->orWhere(function (Builder $query): Builder {
+                return $query->whereIn(
+                    $query->getModel()->getQualifiedKeyName(),
+                    Discountable::proxy()
+                        ->newQuery()
+                        ->select('bazar_discountables.discount_rule_id')
+                        ->whereRaw(sprintf(
+                            'concat(bazar_discountables.discountable_type, \':\', bazar_discountables.discountable_id) in (%s)',
+                            $this->items()->selectRaw('concat(bazar_items.buyable_type, \':\', bazar_items.buyable_id) as `type`')->toRawSql()
+                        ))
+                );
+            })
+            ->get();
     }
 }
