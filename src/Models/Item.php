@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ItemFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Buyable;
 use Cone\Bazar\Interfaces\Models\Item as Contract;
 use Cone\Bazar\Traits\InteractsWithDiscounts;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 
 class Item extends Model implements Contract
 {
@@ -329,5 +331,30 @@ class Item extends Model implements Contract
         $this->buyable->taxRates->each->apply($this);
 
         return $this->getTaxTotal();
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->getQuantity();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return $this->checkoutable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->buyable_type);
+    }
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency
+    {
+        return $this->checkoutable->getCurrency();
     }
 }

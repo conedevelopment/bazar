@@ -10,11 +10,15 @@ use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Interfaces\LineItem;
 use Cone\Bazar\Interfaces\Taxable;
 use Cone\Bazar\Models\AppliedCoupon;
+use Cone\Bazar\Models\Cart;
 use Cone\Bazar\Models\Coupon;
+use Cone\Bazar\Models\Discountable;
+use Cone\Bazar\Models\DiscountRule;
 use Cone\Bazar\Models\Item;
 use Cone\Bazar\Models\Shipping;
 use Cone\Bazar\Support\Facades\Shipping as ShippingManager;
 use Cone\Root\Interfaces\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,12 +29,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Number;
 use Throwable;
 
 trait AsOrder
 {
-    use InteractsWithDiscounts;
+    use InteractsWithDiscounts {
+        InteractsWithDiscounts::calculateDiscount as protected __calculateDiscount;
+    }
 
     /**
      * Boot the trait.
@@ -336,7 +341,6 @@ trait AsOrder
      */
     public function findItem(array $attributes): ?Item
     {
-
         $attributes = array_merge(['properties' => null], $attributes, [
             'checkoutable_id' => $this->getKey(),
             'checkoutable_type' => static::class,
@@ -414,7 +418,7 @@ trait AsOrder
         } catch (ModelNotFoundException $exception) {
             //
         } catch (Throwable $exception) {
-            $this->coupons()->detach([$coupon->getKey()]);
+            $this->removeCoupon($coupon);
         }
 
         return false;
@@ -442,33 +446,32 @@ trait AsOrder
      */
     public function getDiscount(): float
     {
-        return $this->coupons->sum('coupon.value');
+        $value = $this->coupons->sum('coupon.value');
+        $value += $this->discounts->sum('discount.value');
+        $value += ($this->needsShipping() ? $this->shipping->getDiscount() : 0);
+        $value += $this->items->sum(static function (Item $item): float {
+            return $item->getDiscount();
+        });
+
+        return $value;
     }
 
     /**
-     * Get the formatted discount.
+     * Get the discountable currency.
      */
-    public function getFormattedDiscount(): string
+    public function getDiscountableCurrency(): Currency
     {
-        return $this->getCurrency()->format($this->getDiscount());
+        return $this->getCurrency();
     }
 
     /**
-     * Get the discount rate.
+     * Get the discountable quantity.
      */
-    public function getDiscountRate(): float
+    public function getDiscountableQuantity(): float
     {
-        $value = $this->getSubtotal() > 0 ? $this->getDiscount() / $this->getSubtotal() : 0;
-
-        return round($value * 100, 2);
-    }
-
-    /**
-     * Get the formatted discount rate.
-     */
-    public function getFormattedDiscountRate(): string
-    {
-        return Number::percentage($this->getDiscountRate());
+        return $this->items->sum(static function (Item $item): float {
+            return $item->getDiscountableQuantity();
+        });
     }
 
     /**
@@ -480,6 +483,53 @@ trait AsOrder
             $this->applyCoupon($coupon);
         });
 
-        return $this->getDiscount();
+        $this->getItems()->each(static function (Item $item): void {
+            $item->calculateDiscount();
+        });
+
+        $this->shipping->calculateDiscount();
+
+        return $this->__calculateDiscount();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return once(fn (): Collection => $this->applicableDiscountRulesQuery()->get());
+    }
+
+    /**
+     * Get the applicable discount rules query.
+     */
+    protected function applicableDiscountRulesQuery(): Builder
+    {
+        return DiscountRule::proxy()
+            ->newQuery()
+            ->active()
+            ->where(function (Builder $query): Builder {
+                return $query->whereIn(
+                    $query->qualifyColumn('discountable_type'),
+                    [Cart::getProxiedClass(), Shipping::getProxiedClass()]
+                )->orWhere(function (Builder $query): Builder {
+                    return $query->whereIn(
+                        $query->getModel()->getQualifiedKeyName(),
+                        Discountable::proxy()
+                            ->newQuery()
+                            ->select('bazar_discountables.discount_rule_id')
+                            ->whereRaw(sprintf(
+                                'concat(bazar_discountables.discountable_type, \':\', bazar_discountables.discountable_id) in (%s)',
+                                $this->items()->selectRaw('concat(bazar_items.buyable_type, \':\', bazar_items.buyable_id) as `type`')->toRawSql()
+                            ))
+                    );
+                });
+            })
+            ->where(function (Builder $query): Builder {
+                return $query->whereDoesntHave('users')
+                    ->orWhereHas('users', function (Builder $query): Builder {
+                        return $query->where($query->getModel()->getQualifiedKeyName(), $this->user_id);
+                    });
+            });
     }
 }

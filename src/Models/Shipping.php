@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Models;
 
 use Cone\Bazar\Database\Factories\ShippingFactory;
+use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Models\Shipping as Contract;
 use Cone\Bazar\Support\Facades\Shipping as Manager;
 use Cone\Bazar\Traits\Addressable;
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Collection;
 use Throwable;
 
 class Shipping extends Model implements Contract
@@ -294,7 +296,7 @@ class Shipping extends Model implements Contract
      */
     public function getQuantity(): float
     {
-        return 1;
+        return 1.0;
     }
 
     /**
@@ -303,9 +305,9 @@ class Shipping extends Model implements Contract
     public function calculateFee(): float
     {
         try {
-            $this->fill([
-                'fee' => Manager::driver($this->driver)->calculate($this->shippable),
-            ])->save();
+            $fee = Manager::driver($this->driver)->calculate($this->shippable);
+
+            $this->fill(['fee' => $fee])->save();
         } catch (Throwable $exception) {
             //
         }
@@ -320,15 +322,38 @@ class Shipping extends Model implements Contract
     {
         $this->taxes()->detach();
 
-        $taxes = TaxRate::proxy()
+        TaxRate::proxy()
             ->newQuery()
             ->applicableForShipping()
             ->get()
-            ->each(function (TaxRate $taxRate): void {
-                $taxRate->apply($this);
-            });
+            ->each(fn (TaxRate $taxRate): null => $taxRate->apply($this));
 
         return $this->getTaxTotal();
+    }
+
+    /**
+     * Get the applicable discount rules.
+     */
+    public function getApplicableDiscountRules(): Collection
+    {
+        return $this->shippable->getApplicableDiscountRules()
+            ->where('discountable_type', $this->shippable_type);
+    }
+
+    /**
+     * Get the discountable quantity.
+     */
+    public function getDiscountableQuantity(): float
+    {
+        return $this->getQuantity();
+    }
+
+    /**
+     * Get the discountable currency.
+     */
+    public function getDiscountableCurrency(): Currency
+    {
+        return $this->shippable->getCurrency();
     }
 
     /**

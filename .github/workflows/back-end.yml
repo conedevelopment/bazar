@@ -1,59 +1,184 @@
-name: Back-end
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
+name: "Back-end"
 
 on:
-  push:
-    branches:
-      - master
-  pull_request: null
+    pull_request: null
+    push:
+        branches:
+        - "master"
+# Add [skip ci] to commit message to skip CI.
+
+permissions:
+    contents: "read"
+
+concurrency:
+    group: "${{ github.workflow }}-${{ github.ref }}"
+    cancel-in-progress: true
 
 jobs:
-  unit_tests:
+    syntax_errors:
+        name: "1️⃣ Syntax errors"
+        runs-on: "ubuntu-24.04"
+        timeout-minutes: 5
+        steps:
+        -
+            name: "Set up PHP"
+            uses: "shivammathur/setup-php@v2"
+            with:
+                php-version: "8.4"
+                extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+                coverage: "none"
+                tools: "parallel-lint"
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v4"
+        -
+            name: "Search for invalid complex curly syntax 🐌"
+            run: |
+                ! git grep -e '\${[A-Z_a-z]' -- '*.php' '*.scss'
+        -
+            name: "Check source code for syntax errors"
+            run: "composer exec --no-interaction -- parallel-lint src/ tests/"
 
-    strategy:
-      fail-fast: true
-      matrix:
-        os: ["ubuntu-24.04"]
-        php: ["8.3", "8.4"]
-        laravel: ["^12.0"]
-        dependency-version: ["highest"]
+    unit_tests:
+        name: "2️⃣ Unit and functional tests"
+        needs:
+        - "syntax_errors"
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version:
+                - "8.4"
+                - "8.5"
+                dependencies:
+                - "lowest"
+                - "locked"
+                - "highest"
+                include:
+                -
+                    php-version: "8.4"
+                    dependencies: "locked"
+                    coverage: true
+        runs-on: "ubuntu-24.04"
+        timeout-minutes: 5
+        steps:
+        -
+            name: "Set up PHP"
+            uses: "shivammathur/setup-php@v2"
+            with:
+                php-version: "${{ matrix.php-version }}"
+                extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+        -
+            name: "Setup problem matcher for PHPUnit"
+            run: |
+                echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v4"
+        -
+            name: "Install dependencies"
+            uses: "ramsey/composer-install@v3"
+            with:
+                dependency-versions: "${{ matrix.dependencies }}"
+        -
+            name: "Execute unit tests"
+            run: "composer exec -- phpunit"
+        -
+            name: "Tests have failed: upload logs"
+            if: "${{ failure() }}"
+            uses: "actions/upload-artifact@v4"
+            with:
+                path: "storage/logs/"
+                name: "laravel-logs-${{ matrix.php-version }}-${{ matrix.dependencies }}"
+        -
+            name: "Send coverage to Coveralls"
+            env:
+                COVERALLS_REPO_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+            if: "${{ env.COVERALLS_REPO_TOKEN && matrix.coverage }}"
+            uses: "coverallsapp/github-action@v2"
+            with:
+                github-token: "${{ env.COVERALLS_REPO_TOKEN }}"
+                flag-name: "Unit"
+                allow-empty: false
 
-    name: "Unit - PHP ${{ matrix.php }} - L ${{ matrix.laravel }} - ${{ matrix.dependency-version }}"
+    static_analysis:
+        name: "3️⃣ Static Analysis"
+        needs:
+        - "syntax_errors"
+        runs-on: "ubuntu-24.04"
+        timeout-minutes: 5
+        steps:
+        -
+            name: "Set up PHP"
+            uses: "shivammathur/setup-php@v2"
+            with:
+                php-version: "8.4"
+                extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+                coverage: "none"
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v4"
+        -
+            name: "Check JSON files"
+            run: |
+                git ls-files --cached -z -- '*.json' \
+                    | xargs -t --null -L 1 -- \
+                        php -r 'json_decode(file_get_contents($argv[1]), null, 512, JSON_THROW_ON_ERROR);'
+        -
+            name: "Validate Composer configuration"
+            run: "composer validate --no-interaction --strict"
+        -
+            name: "Install dependencies"
+            uses: "ramsey/composer-install@v3"
+            with:
+                dependency-versions: "locked"
+        -
+            name: "Check PSR-4 mapping 🐌"
+            run: "composer dump-autoload --dev --optimize --strict-psr"
+        -
+            # https://github.com/phpstan/phpstan/issues/9475
+            name: "Search for $this->$this typo 🐌"
+            run: |
+                ! git grep --line-number -e '\$this\s*->\s*\$this' -- ':!:*/back-end\.yml'
+        -
+            name: "Install orchestra/testbench"
+            run: "composer require --dev --update-with-all-dependencies orchestra/testbench"
+        -
+            name: "Perform static analysis"
+            run: "composer exec -- phpstan || true 'Annotate only'"
 
-    runs-on: "${{ matrix.os }}"
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif
-          tools: composer:v2
-          coverage: xdebug3
-
-      - name: Check Composer configuration
-        run: composer validate --no-interaction # @dev --strict
-
-      - name: Install dependencies
-        if: ${{ matrix.dependency-version == 'highest' }}
-        run: composer update --no-interaction --no-progress --prefer-dist --with="laravel/framework:${{ matrix.laravel }}"
-
-      - name: Install locked dependencies
-        if: ${{ matrix.dependency-version == 'locked' }}
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Check for PSR-4 mapping errors
-        run: composer dump-autoload --optimize --strict-psr
-
-      - name: Execute tests
-        run: composer exec -- phpunit
-
-      - name: Send coverage to Coveralls
-        if: ${{ matrix.os == 'ubuntu-24.04' && matrix.php == '8.3' && matrix.laravel == '^12.0' }}
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          wget "https://github.com/php-coveralls/php-coveralls/releases/download/v2.7.0/php-coveralls.phar"
-          php ./php-coveralls.phar -v
+    coding_standards:
+        name: "4️⃣ Coding Standards"
+        needs:
+        - "syntax_errors"
+        runs-on: "ubuntu-24.04"
+        timeout-minutes: 5
+        steps:
+        -
+            name: "Set up PHP"
+            uses: "shivammathur/setup-php@v2"
+            with:
+                php-version: "8.4"
+                extensions: "dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd, fileinfo, exif"
+                coverage: "none"
+                tools: "phpcs,cs2pr"
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v4"
+        -
+            name: "Install dependencies"
+            uses: "ramsey/composer-install@v3"
+            with:
+                dependency-versions: "locked"
+        #-
+        #    name: "Detect coding standards violations"
+        #    run: "composer exec -- phpcs -q --report=checkstyle --standard=PSR12 src/ | cs2pr"
+        -
+            name: "Detect coding standards violations"
+            id: "pint"
+            run: "composer exec -- pint --verbose --test"
+        -
+            name: "Annotate Pint results"
+            if: "${{ failure() && steps.pint.outcome == 'failure' }}"
+            run: "composer exec -- pint --test --format=checkstyle | cs2pr"

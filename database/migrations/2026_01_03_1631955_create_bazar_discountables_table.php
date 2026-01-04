@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bazar_discounts', static function (Blueprint $table): void {
+        Schema::create('bazar_discountables', static function (Blueprint $table): void {
             $table->id();
             $table->foreignId('discount_rule_id')->constrained('bazar_discount_rules')->cascadeOnDelete();
             $table->uuidMorphs('discountable');
-            $table->decimal('value', 10, 2);
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bazar_discountable_discount_rule');
+        Schema::dropIfExists('bazar_discountables');
     }
 };

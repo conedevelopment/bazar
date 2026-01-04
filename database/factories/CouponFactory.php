@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Database\Factories;
 
-use Cone\Bazar\Enums\CouponType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Models\Coupon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -38,7 +38,7 @@ class CouponFactory extends Factory
             'expires_at' => null,
             'rules' => [],
             'stackable' => false,
-            'type' => CouponType::FIX,
+            'type' => DiscountType::FIX,
             'value' => mt_rand(5, 50),
             'code' => Str::upper(Str::random(8)),
         ];

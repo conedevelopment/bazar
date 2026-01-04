@@ -110,6 +110,14 @@ class Product extends Model implements Contract
     }
 
     /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * Scope the query only to the models that are out of stock.
      */
     public function scopeOutOfStock(Builder $query): Builder
@@ -167,7 +175,7 @@ class Product extends Model implements Contract
         }
 
         return $this->items()->make(array_merge([
-            'name' => $this->name,
+            'name' => $this->getBuyableName(),
             'price' => $this->getPrice($checkoutable->getCurrency()),
             'quantity' => 1,
         ], $attributes))->setRelation('buyable', $this);

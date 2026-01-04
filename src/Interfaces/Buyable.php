@@ -15,14 +15,14 @@ interface Buyable
     public function taxRates(): MorphToMany;
 
     /**
-     * Get the discount rules for the product.
-     */
-    public function discountRules(): MorphToMany;
-
-    /**
      * Determine whether the buyable object is available for the checkoutable instance.
      */
     public function buyable(Checkoutable $checkoutable): bool;
+
+    /**
+     * Get the name of the buyable instance.
+     */
+    public function getBuyableName(): string;
 
     /**
      * Get the item representation of the buyable instance.
