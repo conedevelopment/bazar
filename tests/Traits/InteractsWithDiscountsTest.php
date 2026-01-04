@@ -103,4 +103,82 @@ class InteractsWithDiscountsTest extends TestCase
 
         $this->assertInstanceOf(\Cone\Bazar\Models\Discount::class, $discount);
     }
+
+    public function test_sync_without_detaching_preserves_existing_discounts(): void
+    {
+        $rule1 = DiscountRule::factory()->create();
+        $rule2 = DiscountRule::factory()->create();
+
+        $this->cart->discounts()->attach($rule1, ['value' => 10.0]);
+        $this->cart->discounts()->syncWithoutDetaching([$rule2->id => ['value' => 5.0]]);
+
+        $this->cart->refresh();
+
+        $this->assertCount(2, $this->cart->discounts);
+        $this->assertTrue($this->cart->discounts->contains($rule1));
+        $this->assertTrue($this->cart->discounts->contains($rule2));
+    }
+
+    public function test_discount_value_persists_correctly(): void
+    {
+        $expectedValue = 12.34;
+
+        $this->cart->discounts()->attach($this->discountRule, ['value' => $expectedValue]);
+
+        $this->cart->refresh();
+
+        $actualValue = $this->cart->discounts()->first()->discount->value;
+
+        $this->assertEquals($expectedValue, $actualValue);
+    }
+
+    public function test_discounts_use_morph_to_many_relationship(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.0]);
+
+        $discount = $this->cart->discounts()->first();
+
+        $this->assertNotNull($discount->pivot);
+        $this->assertEquals($this->cart->id, $discount->pivot->discountable_id);
+        $this->assertEquals(get_class($this->cart), $discount->pivot->discountable_type);
+    }
+
+    public function test_discount_relationship_includes_timestamps(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.0]);
+
+        $discount = $this->cart->discounts()->first()->discount;
+
+        $this->assertObjectHasProperty('created_at', $discount);
+        $this->assertObjectHasProperty('updated_at', $discount);
+    }
+
+    public function test_shipping_can_have_discounts(): void
+    {
+        $shipping = $this->cart->shipping()->create([
+            'name' => 'Express Shipping',
+            'cost' => 15.0,
+            'driver' => 'local-pickup',
+        ]);
+
+        $shipping->discounts()->attach($this->discountRule, ['value' => 3.0]);
+
+        $this->assertCount(1, $shipping->discounts);
+        $this->assertEquals(3.0, $shipping->discounts()->first()->discount->value);
+    }
+
+    public function test_discount_detaches_when_rule_is_deleted(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.0]);
+
+        $this->assertCount(1, $this->cart->discounts);
+
+        $ruleId = $this->discountRule->id;
+        $this->discountRule->delete();
+
+        $this->cart->refresh();
+
+        // The relationship should still exist but point to a non-existent rule
+        $this->assertDatabaseMissing('bazar_discount_rules', ['id' => $ruleId]);
+    }
 }

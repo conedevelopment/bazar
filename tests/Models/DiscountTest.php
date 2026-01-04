@@ -73,4 +73,61 @@ class DiscountTest extends TestCase
 
         $this->assertIsString($discount->formatted_value);
     }
+
+    public function test_discount_value_is_cast_to_float(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => '20.50']);
+
+        $discount = $this->cart->discounts()->first()->discount;
+
+        $this->assertIsFloat($discount->value);
+        $this->assertEquals(20.50, $discount->value);
+    }
+
+    public function test_discount_has_timestamps(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.00]);
+
+        $discount = $this->cart->discounts()->first()->discount;
+
+        $this->assertNotNull($discount->created_at);
+        $this->assertNotNull($discount->updated_at);
+    }
+
+    public function test_discount_uses_correct_table(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 5.00]);
+
+        $this->assertDatabaseHas('bazar_discounts', [
+            'discount_rule_id' => $this->discountRule->id,
+            'discountable_id' => $this->cart->id,
+            'value' => 5.00,
+        ]);
+    }
+
+    public function test_multiple_discounts_on_same_model(): void
+    {
+        $rule1 = DiscountRule::factory()->create();
+        $rule2 = DiscountRule::factory()->create();
+
+        $this->cart->discounts()->attach($rule1, ['value' => 10.00]);
+        $this->cart->discounts()->attach($rule2, ['value' => 5.00]);
+
+        $discounts = $this->cart->discounts;
+
+        $this->assertCount(2, $discounts);
+        $this->assertEquals(10.00, $discounts->where('id', $rule1->id)->first()->discount->value);
+        $this->assertEquals(5.00, $discounts->where('id', $rule2->id)->first()->discount->value);
+    }
+
+    public function test_discount_can_be_updated(): void
+    {
+        $this->cart->discounts()->attach($this->discountRule, ['value' => 10.00]);
+
+        $this->cart->discounts()->updateExistingPivot($this->discountRule->id, ['value' => 20.00]);
+
+        $discount = $this->cart->discounts()->first()->discount;
+
+        $this->assertEquals(20.00, $discount->value);
+    }
 }

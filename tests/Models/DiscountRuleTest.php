@@ -122,4 +122,64 @@ class DiscountRuleTest extends TestCase
         $this->assertEquals(DiscountRuleType::BUYABLE, $buyableRule->type);
         $this->assertEquals(DiscountRuleType::SHIPPING, $shippingRule->type);
     }
+
+    public function test_discount_rule_applies_to_shipping(): void
+    {
+        $shipping = $this->cart->shipping()->create([
+            'name' => 'Standard Shipping',
+            'cost' => 10.0,
+            'driver' => 'local-pickup',
+        ]);
+
+        $this->assertCount(0, $shipping->discounts);
+
+        $this->discountRule->apply($shipping);
+
+        $shipping->refresh();
+
+        $this->assertCount(1, $shipping->discounts);
+        $this->assertTrue($shipping->discounts->contains($this->discountRule));
+    }
+
+    public function test_multiple_discount_rules_can_be_applied(): void
+    {
+        $rule1 = DiscountRule::factory()->create(['stackable' => true]);
+        $rule2 = DiscountRule::factory()->create(['stackable' => true]);
+
+        $rule1->apply($this->cart);
+        $rule2->apply($this->cart);
+
+        $this->cart->refresh();
+
+        $this->assertCount(2, $this->cart->discounts);
+        $this->assertTrue($this->cart->discounts->contains($rule1));
+        $this->assertTrue($this->cart->discounts->contains($rule2));
+    }
+
+    public function test_discount_rule_can_be_inactive(): void
+    {
+        $inactiveRule = DiscountRule::factory()->create(['active' => false]);
+
+        $this->assertFalse($inactiveRule->active);
+    }
+
+    public function test_discount_rule_stackable_attribute(): void
+    {
+        $stackableRule = DiscountRule::factory()->create(['stackable' => true]);
+        $nonStackableRule = DiscountRule::factory()->create(['stackable' => false]);
+
+        $this->assertTrue($stackableRule->stackable);
+        $this->assertFalse($nonStackableRule->stackable);
+    }
+
+    public function test_discount_rule_relationship_uses_correct_table(): void
+    {
+        $this->discountRule->apply($this->cart);
+
+        $this->assertDatabaseHas('bazar_discounts', [
+            'discount_rule_id' => $this->discountRule->id,
+            'discountable_id' => $this->cart->id,
+            'discountable_type' => get_class($this->cart),
+        ]);
+    }
 }
