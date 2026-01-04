@@ -118,6 +118,7 @@ class DiscountRuleResource extends Resource
                 ->withFields(static function (): array {
                     return [
                         Number::make(__('Value'), 'value')
+                            ->required()
                             ->rules(['required', 'numeric', 'min:0']),
 
                         Select::make(__('Type'), 'type')
@@ -126,11 +127,15 @@ class DiscountRuleResource extends Resource
                             ->rules(['required', Rule::in(array_column(DiscountType::cases(), 'value'))]),
 
                         Number::make(__('Discount'), 'discount')
+                            ->required()
                             ->rules(['required', 'numeric', 'min:0']),
 
                         Select::make(__('Currency'), 'currency')
                             ->nullable()
-                            ->options(array_column(Bazar::getCurrencies(), 'name', 'value')),
+                            ->options(array_column(Bazar::getCurrencies(), 'name', 'value'))
+                            ->format(static function (Request $request, Model $model, ?string $value): string {
+                                return (string) ($value ?: '*');
+                            }),
                     ];
                 }),
         ];

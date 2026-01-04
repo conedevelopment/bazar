@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Cone\Bazar\Models;
 
+use Cone\Bazar\Enums\DiscountRuleValueType;
+use Cone\Bazar\Enums\DiscountType;
 use Cone\Bazar\Exceptions\DiscountException;
 use Cone\Bazar\Interfaces\Discountable;
 use Cone\Bazar\Interfaces\Models\DiscountRule as Contract;
@@ -15,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Collection;
 
 class DiscountRule extends Model implements Contract
 {
@@ -37,6 +40,7 @@ class DiscountRule extends Model implements Contract
         'discountable_type' => null,
         'rules' => '[]',
         'stackable' => false,
+        'value_type' => DiscountRuleValueType::TOTAL,
     ];
 
     /**
@@ -97,6 +101,7 @@ class DiscountRule extends Model implements Contract
             'active' => 'boolean',
             'rules' => 'json',
             'stackable' => 'boolean',
+            'value_type' => DiscountRuleValueType::class,
         ];
     }
 
@@ -147,7 +152,35 @@ class DiscountRule extends Model implements Contract
      */
     public function calculate(Discountable $model): float
     {
-        return 0.0;
+        $value = match ($this->value_type) {
+            DiscountRuleValueType::TOTAL => $model->getDiscountBase(),
+            DiscountRuleValueType::QUANTITY => $model->getDiscountableQuantity(),
+            default => 0,
+        };
+
+        if ($value <= 0) {
+            return 0.0;
+        }
+
+        $rule = Collection::make($this->rules)
+            ->filter(static function (array $rule) use ($model): bool {
+                return is_null($rule['currency'] ?? null)
+                    || $rule['currency'] === $model->getDiscountableCurrency()->value;
+            })
+            ->sortByDesc('value')
+            ->first(static function (array $rule) use ($value): bool {
+                return $value >= ($rule['value'] ?? 0);
+            });
+
+        if (is_null($rule)) {
+            return 0.0;
+        }
+
+        return (float) match ($rule['type'] ?? null) {
+            DiscountType::FIX->value => ($rule['discount'] ?? 0),
+            DiscountType::PERCENT->value => ($model->getDiscountBase() * ((float) ($rule['discount'] ?? 0) / 100)),
+            default => 0.0,
+        };
     }
 
     /**
@@ -160,6 +193,10 @@ class DiscountRule extends Model implements Contract
         }
 
         $value = $this->calculate($model);
+
+        if ($value <= 0) {
+            throw new DiscountException('The discount rule is not valid for this discountable model.');
+        }
 
         $model->discounts()->syncWithoutDetaching([
             $this->getKey() => ['value' => $value],
