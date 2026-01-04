@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Cone\Bazar\Enums\CouponType;
+use Cone\Bazar\Enums\DiscountType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->float('value', 10, 2)->unsigned();
-            $table->enum('type', CouponType::cases())->default(CouponType::FIX->value);
+            $table->string('type')->default(DiscountType::FIX->value);
             $table->json('rules')->nullable();
             $table->boolean('active')->default(true);
             $table->boolean('stackable')->default(false);
