@@ -95,6 +95,7 @@ class DiscountRuleResource extends Resource
                 ->hydratesOnChange(),
 
             MorphToMany::make(__('Discountables'), 'discountables')
+                ->hiddenOn(['index'])
                 ->withRelatableQuery(static function (Request $request, Builder $query, Model $model): Builder {
                     return match (true) {
                         $query->getModel() instanceof Product,
