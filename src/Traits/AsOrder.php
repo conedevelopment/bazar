@@ -484,8 +484,13 @@ trait AsOrder
             $this->applyCoupon($coupon);
         });
 
-        // calculate cart levet discount
-        // calculate item level discount
+        $this->getApplicableDiscountRules()->each(function (DiscountRule $rule): void {
+            $this->applyDiscount($rule);
+            $this->getItems()->each(static function (Item $item) use ($rule): void {
+                $item->applyDiscount($rule);
+            });
+            $this->shipping->applyDiscount($rule);
+        });
 
         return $this->getDiscount();
     }
