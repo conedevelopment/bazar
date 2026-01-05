@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool isNotEmpty()
  * @method static bool validate()
  * @method static void sync()
+ * @method static void destroy()
  * @method static bool applyCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
  * @method static void removeCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
  * @method static \Cone\Bazar\Gateway\Response checkout(string $driver)
