@@ -286,9 +286,7 @@ abstract class Driver
      */
     public function validate(): bool
     {
-        return $this->isNotEmpty()
-            && $this->getBilling()->validate()
-            && ($this->needsShipping() ? $this->getShipping()->validate() : true);
+        return $this->getModel()->validate();
     }
 
     /**

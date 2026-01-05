@@ -149,6 +149,16 @@ class Cart extends Model implements Contract
     }
 
     /**
+     * Validate the cart.
+     */
+    public function validate(): bool
+    {
+        return $this->getItems()->isNotEmpty()
+            && $this->address->validate()
+            && ($this->needsShipping() ? $this->shipping->validate() : true);
+    }
+
+    /**
      * Scope a query to only include the locked carts.
      */
     #[Scope]

@@ -24,4 +24,9 @@ interface Cart extends Checkoutable, Discountable
      * Unlock the cart.
      */
     public function unlock(): void;
+
+    /**
+     * Validate the cart.
+     */
+    public function validate(): bool;
 }
