@@ -3,31 +3,33 @@
 
 ## {{ __('Thank you for your order!') }}
 
-Your order has been received and now being processed. Your orders are shown below for your reference:
-**Order #{{ $order->getKey() }}**
+{{ __('Your order has been received and now being processed.') }}
+{{ __('Your orders are shown below for your reference: #:order', ['order' => $order->getKey()]) }}
 
-# Order details
+# {{ __('Order details') }}
 
 <x-mail::table>
-| Product | Quantity | Tax | Price |
-|:--------|:--------:|:---:|:-----:|
+| {{ __('Product') }} | {{ __('Quantity') }} | {{ __('Price') }} |
+|:--------|:--------:|:-----:|
 @foreach ($order->items as $item)
-| {{ $item->name }} | {{ $item->quantity }} | {{ $item->formattedTax }} | {{ $item->formattedPrice }} |
+| {{ $item->getName() }} | {{ $item->getQuantity() }} | {{ $item->getFormattedPrice() }} |
 @endforeach
-| **Subtotal** ||| {{ $order->formattedSubtotal }} |
+| **{{ __('Subtotal') }}** || {{ $order->getFormattedSubtotal() }} |
 </x-mail::table>
 
-**Discount**: {{ $order->formattedDiscount }}
+**{{ __('Discount') }}**: {{ $order->getFormattedTotalDiscount() }}
 
-**Shipping** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
+@if($order->needsShipping())
+**{{ __('Shipping') }}** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
+@endif
 
-**Tax**: {{ $order->formattedTax }}
+**{{ __('Tax') }}**: {{ $order->getFormattedTax() }}
 
-**Subtotal**: {{ $order->formattedSubtotal }}
+**{{ __('Subtotal') }}**: {{ $order->getFormattedSubtotal() }}
 
-**Gross Total**: {{ $order->formattedTotal }}
+**{{ __('Gross Total') }}**: {{ $order->getFormattedTotal() }}
 
-# Billing details
+# {{ __('Billing details') }}
 
 {{ $order->address->name }}<br>
 {{ $order->address->phone }}<br>
