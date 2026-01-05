@@ -35,6 +35,7 @@ trait AsOrder
 {
     use InteractsWithDiscounts {
         InteractsWithDiscounts::calculateDiscount as protected __calculateDiscount;
+        InteractsWithDiscounts::getDiscount as protected __getDiscount;
     }
 
     /**
@@ -446,8 +447,8 @@ trait AsOrder
      */
     public function getDiscount(): float
     {
-        $value = $this->coupons->sum('coupon.value');
-        $value += $this->discounts->sum('discount.value');
+        $value = $this->__getDiscount();
+        $value += $this->coupons->sum('coupon.value');
         $value += ($this->needsShipping() ? $this->shipping->getDiscount() : 0);
         $value += $this->items->sum(static function (Item $item): float {
             return $item->getDiscount();

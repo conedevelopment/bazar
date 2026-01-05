@@ -242,11 +242,14 @@ abstract class Driver
      */
     public function empty(): void
     {
+        $this->getModel()->discounts()->detach();
+
         $this->getModel()->items->each->delete();
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
         $this->getShipping()->update(['fee' => 0]);
         $this->getShipping()->taxes()->delete();
+        $this->getShipping()->discounts()->detach();
 
         $this->getModel()->calculateDiscount();
     }
