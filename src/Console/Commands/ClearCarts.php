@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Cone\Bazar\Console\Commands;
 
 use Cone\Bazar\Models\Cart;
-use Cone\Bazar\Models\Item;
-use Cone\Bazar\Models\Shipping;
 use Illuminate\Console\Command;
 
 class ClearCarts extends Command
@@ -31,25 +29,15 @@ class ClearCarts extends Command
     public function handle(): void
     {
         if ($this->option('all')) {
-            Cart::proxy()->newQuery()->truncate();
-            Item::proxy()->newQuery()->where('checkoutable_type', Cart::getProxiedClass())->delete();
-            Shipping::proxy()->newQuery()->where('shippable_type', Cart::getProxiedClass())->delete();
+            Cart::proxy()->newQuery()->cursor()->each(static function (Cart $cart): void {
+                $cart->delete();
+            });
 
             $this->info('All carts have been deleted.');
         } else {
-            Item::proxy()
-                ->newQuery()
-                ->where('checkoutable_type', Cart::getProxiedClass())
-                ->whereIn('checkoutable_id', Cart::proxy()->newQuery()->expired()->select('id'))
-                ->delete();
-
-            Shipping::proxy()
-                ->newQuery()
-                ->where('shippable_type', Cart::getProxiedClass())
-                ->whereIn('shippable_id', Cart::proxy()->newQuery()->expired()->select('id'))
-                ->delete();
-
-            Cart::proxy()->newQuery()->expired()->delete();
+            Cart::proxy()->newQuery()->expired()->cursor()->each(static function (Cart $cart): void {
+                $cart->delete();
+            });
 
             $this->info('Expired carts have been deleted.');
         }
