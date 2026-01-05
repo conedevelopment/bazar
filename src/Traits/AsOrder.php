@@ -561,7 +561,6 @@ trait AsOrder
                                 '(`bazar_discountables`.`discountable_type` || \':\' || `bazar_discountables`.`discountable_id`) in (%s)',
                                 $this->items()->selectRaw('(`bazar_items`.`buyable_type` || \':\' || `bazar_items`.`buyable_id`) as `type`')->toRawSql()
                             ))
-                            ->ddRawSql()
                     );
                 });
             })
