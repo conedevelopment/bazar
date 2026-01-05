@@ -558,9 +558,10 @@ trait AsOrder
                             ->newQuery()
                             ->select('bazar_discountables.discount_rule_id')
                             ->whereRaw(sprintf(
-                                'concat(bazar_discountables.discountable_type, \':\', bazar_discountables.discountable_id) in (%s)',
-                                $this->items()->selectRaw('concat(bazar_items.buyable_type, \':\', bazar_items.buyable_id) as `type`')->toRawSql()
+                                '(`bazar_discountables`.`discountable_type` || \':\' || `bazar_discountables`.`discountable_id`) in (%s)',
+                                $this->items()->selectRaw('(`bazar_items`.`buyable_type` || \':\' || `bazar_items`.`buyable_id`) as `type`')->toRawSql()
                             ))
+                            ->ddRawSql()
                     );
                 });
             })
