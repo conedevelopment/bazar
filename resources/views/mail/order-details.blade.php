@@ -9,25 +9,19 @@
 # {{ __('Order details') }}
 
 <x-mail::table>
-| {{ __('Product') }} | {{ __('Quantity') }} | {{ __('Price') }} |
+| {{ __('Product') }} | {{ __('Quantity') }} | {{ __('Amount') }} |
 |:--------|:--------:|:-----:|
-@foreach ($order->items as $item)
+@foreach ($order->getItems() as $item)
 | {{ $item->getName() }} | {{ $item->getQuantity() }} | {{ $item->getFormattedPrice() }} |
 @endforeach
-| **{{ __('Subtotal') }}** || {{ $order->getFormattedSubtotal() }} |
-</x-mail::table>
-
-**{{ __('Discount') }}**: {{ $order->getFormattedTotalDiscount() }}
-
 @if($order->needsShipping())
-**{{ __('Shipping') }}** ({{ $order->shipping->driverName }}): {{ $order->shipping->formattedTotal }}
+| {{ $order->shipping->driverName }} || {{ $order->shipping->getFormattedSubtotal() }} |
 @endif
-
-**{{ __('Tax') }}**: {{ $order->getFormattedTax() }}
-
-**{{ __('Subtotal') }}**: {{ $order->getFormattedSubtotal() }}
-
-**{{ __('Gross Total') }}**: {{ $order->getFormattedTotal() }}
+| **{{ __('Subtotal') }}** || {{ $order->getFormattedSubtotal() }} |
+| **{{ __('Tax') }}** || {{ $order->getFormattedTax() }} |
+| **{{ __('Discount') }}** || {{ $order->getFormattedDiscountTotal() }} |
+| **{{ __('Total') }}** || {{ $order->getFormattedTotal() }} |
+</x-mail::table>
 
 # {{ __('Billing details') }}
 

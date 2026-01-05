@@ -6,6 +6,7 @@ namespace Cone\Bazar\Resources;
 
 use Cone\Bazar\Actions\SendOrderDetails;
 use Cone\Bazar\Bazar;
+use Cone\Bazar\Fields\Address;
 use Cone\Bazar\Fields\Items;
 use Cone\Bazar\Fields\OrderStatus;
 use Cone\Bazar\Fields\Transactions;
@@ -35,6 +36,14 @@ class OrderResource extends Resource
      * The relations to eager load on every query.
      */
     protected array $with = [
+        'coupons',
+        'discounts',
+        'items.buyable.metaData',
+        'items.buyable',
+        'items.discounts',
+        'items.taxes',
+        'items',
+        'transactions',
         'user',
     ];
 
@@ -56,11 +65,9 @@ class OrderResource extends Resource
 
             BelongsTo::make(__('Customer'), 'user')
                 ->display('name')
-                ->sortable(column: 'name'),
-
-            Text::make(__('Total'), static function (Request $request, Order $model): string {
-                return $model->formattedTotal;
-            }),
+                ->async()
+                ->sortable(column: 'name')
+                ->searchable(columns: ['name', 'email']),
 
             Select::make(__('Currency'), 'currency')
                 ->options(static function (Request $request, Order $model): array {
@@ -71,7 +78,22 @@ class OrderResource extends Resource
                 })
                 ->hiddenOn(['index']),
 
+            Text::make(__('Tax'), static function (Request $request, Order $model): string {
+                return $model->getFormattedTax();
+            }),
+
+            Text::make(__('Discount'), static function (Request $request, Order $model): string {
+                return $model->getFormattedDiscountTotal();
+            }),
+
+            Text::make(__('Total'), static function (Request $request, Order $model): string {
+                return $model->getFormattedTotal();
+            }),
+
             OrderStatus::make(),
+
+            Address::make(__('Billing Details'))
+                ->hiddenOn('index'),
 
             Date::make(__('Created At'), 'created_at')
                 ->withTime()
