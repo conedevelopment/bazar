@@ -183,7 +183,7 @@ class Cart extends Model implements Contract
     {
         $this->getLineItems()->each(function (Item $item): void {
             if (! $item->buyable->buyable($this->order)) {
-                throw new CartException(sprintf('Unable to add [%s] item to the order.', get_class($item->buyable)));
+                throw new CartException(sprintf('Unable to add [%s] item to the order.', $item->buyable_type));
             }
         });
 
@@ -215,6 +215,8 @@ class Cart extends Model implements Contract
         } catch (Throwable $exception) {
             //
         }
+
+        $this->order->refresh();
 
         return $this->order;
     }
