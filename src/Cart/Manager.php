@@ -36,4 +36,14 @@ class Manager extends BaseManager implements Contract
             $this->config->get('bazar.cart.drivers.session', [])
         );
     }
+
+    /**
+     * Create the null driver.
+     */
+    public function createNullDriver(): NullDriver
+    {
+        return new NullDriver(
+            $this->config->get('bazar.cart.drivers.null', [])
+        );
+    }
 }

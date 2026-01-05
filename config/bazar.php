@@ -40,6 +40,7 @@ return [
                 'expiration' => 4320,
             ],
             'session' => [],
+            'null' => [],
         ],
     ],
 

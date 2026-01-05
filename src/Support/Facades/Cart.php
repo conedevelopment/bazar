@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool applyCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
  * @method static void removeCoupon(string|\Cone\Bazar\Models\Coupon $coupon)
  * @method static \Cone\Bazar\Gateway\Response checkout(string $driver)
+ * @method static \Cone\Bazar\Cart\Driver driver(?string $driver = null)
  *
  * @see \Cone\Bazar\Cart\Driver
  */

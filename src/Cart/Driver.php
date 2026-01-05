@@ -85,7 +85,8 @@ abstract class Driver
                 $cart->syncItems();
                 $cart->shipping->calculateFee();
                 $cart->shipping->calculateTaxes();
-                $cart->getModel()->calculateDiscount();
+                $cart->calculateTax();
+                $cart->calculateDiscount();
             }
         });
     }
@@ -248,10 +249,20 @@ abstract class Driver
         $this->getModel()->setRelation('items', $this->getModel()->items()->getRelated()->newCollection());
 
         $this->getShipping()->update(['fee' => 0]);
-        $this->getShipping()->taxes()->delete();
+        $this->getShipping()->taxes()->detach();
         $this->getShipping()->discounts()->detach();
 
         $this->getModel()->calculateDiscount();
+    }
+
+    /**
+     * Delete the cart.
+     */
+    public function destroy(): void
+    {
+        $this->getModel()->items->each->delete();
+        $this->getShipping()->delete();
+        $this->getModel()->delete();
     }
 
     /**
