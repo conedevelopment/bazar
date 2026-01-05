@@ -248,7 +248,7 @@ class Shipping extends Model implements Contract
      */
     public function getTotal(): float
     {
-        return $this->getGrossPrice() * $this->getQuantity();
+        return ($this->getGrossPrice() * $this->getQuantity()) - $this->getDiscount();
     }
 
     /**

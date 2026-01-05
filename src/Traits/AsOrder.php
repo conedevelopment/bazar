@@ -449,12 +449,30 @@ trait AsOrder
     {
         $value = $this->__getDiscount();
         $value += $this->coupons->sum('coupon.value');
+
+        return $value;
+    }
+
+    /**
+     * Get the discount total.
+     */
+    public function getDiscountTotal(): float
+    {
+        $value = $this->getDiscount();
         $value += ($this->needsShipping() ? $this->shipping->getDiscount() : 0);
         $value += $this->items->sum(static function (Item $item): float {
             return $item->getDiscount();
         });
 
         return $value;
+    }
+
+    /**
+     * Get the formatted discount total.
+     */
+    public function getFormattedDiscountTotal(): string
+    {
+        return $this->getCurrency()->format($this->getDiscountTotal());
     }
 
     /**

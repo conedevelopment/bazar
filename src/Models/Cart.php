@@ -209,6 +209,7 @@ class Cart extends Model implements Contract
                     $this->order->applyCoupon($coupon);
                 });
 
+                $this->order->calculateDiscount();
                 $this->order->calculateTax();
             });
         } catch (Throwable $exception) {

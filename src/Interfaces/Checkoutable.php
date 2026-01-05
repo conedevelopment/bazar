@@ -133,4 +133,14 @@ interface Checkoutable extends Shippable
      * Get the applicable discount rules.
      */
     public function getApplicableDiscountRules(): Collection;
+
+    /**
+     * Get the discount total.
+     */
+    public function getDiscountTotal(): float;
+
+    /**
+     * Get the formatted discount total.
+     */
+    public function getFormattedDiscountTotal(): string;
 }
