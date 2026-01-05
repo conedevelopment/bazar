@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Number;
 use Throwable;
 
 trait AsOrder
@@ -473,6 +474,25 @@ trait AsOrder
     public function getFormattedDiscountTotal(): string
     {
         return $this->getCurrency()->format($this->getDiscountTotal());
+    }
+
+    /**
+     * Get the discount rate.
+     */
+    public function getDiscountTotalRate(): float
+    {
+        return (float) match (true) {
+            $this->getDiscountBase() > 0 => round(($this->getDiscountTotal() / $this->getDiscountBase()) * 100, 2),
+            default => 0,
+        };
+    }
+
+    /**
+     * Get the formatted discount rate.
+     */
+    public function getFormattedDiscountTotalRate(): string
+    {
+        return Number::percentage($this->getDiscountRate());
     }
 
     /**
