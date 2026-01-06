@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
@@ -557,10 +558,10 @@ trait AsOrder
                         Discountable::proxy()
                             ->newQuery()
                             ->select('bazar_discountables.discount_rule_id')
-                            ->whereRaw(sprintf(
-                                '(`bazar_discountables`.`discountable_type` || \':\' || `bazar_discountables`.`discountable_id`) in (%s)',
-                                $this->items()->selectRaw('(`bazar_items`.`buyable_type` || \':\' || `bazar_items`.`buyable_id`) as `type`')->toRawSql()
-                            ))
+                            ->joinSub($this->items()->getQuery(), 'bazar_items', static function (JoinClause $join): void {
+                                $join->on('bazar_discountables.discountable_id', '=', 'bazar_items.buyable_id')
+                                    ->on('bazar_discountables.discountable_type', '=', 'bazar_items.buyable_type');
+                            })
                     );
                 });
             })
