@@ -553,6 +553,14 @@ trait AsOrder
                     $query->qualifyColumn('discountable_type'),
                     [Cart::getProxiedClass(), Shipping::getProxiedClass()]
                 )->orWhere(function (Builder $query): Builder {
+                    return $query->whereNotIn(
+                        $query->qualifyColumn('discountable_type'),
+                        [Cart::getProxiedClass(), Shipping::getProxiedClass()]
+                    )->whereNotIn(
+                        $query->getModel()->getQualifiedKeyName(),
+                        Discountable::proxy()->newQuery()->select('bazar_discountables.discount_rule_id')
+                    );
+                })->orWhere(function (Builder $query): Builder {
                     return $query->whereIn(
                         $query->getModel()->getQualifiedKeyName(),
                         Discountable::proxy()
