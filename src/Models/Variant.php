@@ -123,7 +123,7 @@ class Variant extends Model implements Contract
      */
     public function getBuyableName(): string
     {
-        return $this->alias;
+        return $this->product->getBuyableName();
     }
 
     /**
