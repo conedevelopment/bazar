@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Cone\Bazar\Interfaces\Models;
 
 use Cone\Bazar\Interfaces\Buyable;
-use Cone\Bazar\Interfaces\Stockable;
+use Cone\Bazar\Interfaces\Inventoryable;
 use Cone\Bazar\Models\Variant;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-interface Product extends Buyable, Stockable
+interface Product extends Buyable, Inventoryable
 {
     /**
      * Get the items for the product.

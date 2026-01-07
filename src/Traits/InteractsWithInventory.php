@@ -6,7 +6,7 @@ namespace Cone\Bazar\Traits;
 
 use Illuminate\Support\Facades\Config;
 
-trait InteractsWithStock
+trait InteractsWithInventory
 {
     /**
      * Get the formatted dimensions.
@@ -37,7 +37,7 @@ trait InteractsWithStock
     }
 
     /**
-     * Determine if the stockable model is virtual.
+     * Determine if the model is virtual.
      */
     public function isVirtual(): bool
     {
@@ -47,7 +47,7 @@ trait InteractsWithStock
     }
 
     /**
-     * Determine if the stockable model is physical.
+     * Determine if the model is physical.
      */
     public function isPhysical(): bool
     {
@@ -55,7 +55,7 @@ trait InteractsWithStock
     }
 
     /**
-     * Determine if the stockable model is downloadable.
+     * Determine if the model is downloadable.
      */
     public function isDownloadable(): bool
     {
@@ -65,7 +65,7 @@ trait InteractsWithStock
     }
 
     /**
-     * Determine if the stockable model tracks quantity.
+     * Determine if the model tracks quantity.
      */
     public function tracksQuantity(): bool
     {
@@ -75,7 +75,7 @@ trait InteractsWithStock
     }
 
     /**
-     * Determine if the stockable model is available.
+     * Determine if the model is available.
      */
     public function isAvailable(float $quantity = 1): bool
     {

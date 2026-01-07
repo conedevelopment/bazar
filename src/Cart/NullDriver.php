@@ -14,6 +14,9 @@ class NullDriver extends Driver
      */
     public function resolve(Request $request): Cart
     {
-        return Cart::proxy()->newInstance();
+        return Cart::proxy()
+            ->newInstance()
+            ->user()
+            ->associate($request->user());
     }
 }

@@ -14,7 +14,7 @@
     <server name="APP_KEY" value="base64:ybq4vTLI2AtF1xqSRZ8A52CtU9dUXu1yAcClXsNKGq4="/>
     <server name="APP_ENV" value="testing"/>
     <server name="BCRYPT_ROUNDS" value="4"/>
-    <server name="CACHE_DRIVER" value="array"/>
+    <server name="CACHE_STORE" value="array"/>
     <server name="DB_CONNECTION" value="sqlite"/>
     <server name="DB_DATABASE" value=":memory:"/>
     <server name="MAIL_MAILER" value="array"/>

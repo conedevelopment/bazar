@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cone\Bazar\Interfaces;
 
 use Cone\Bazar\Enums\Currency;
+use Illuminate\Support\HtmlString;
 
 interface Priceable
 {
@@ -19,7 +20,12 @@ interface Priceable
     public function getFormattedPrice(?Currency $currency = null): ?string;
 
     /**
-     * Determine if the stockable model is free.
+     * Get the price HTML representation.
+     */
+    public function getPriceHtml(?Currency $currency = null): HtmlString;
+
+    /**
+     * Determine if the model is free.
      */
     public function isFree(): bool;
 }

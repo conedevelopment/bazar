@@ -8,10 +8,11 @@ use Cone\Bazar\Database\Factories\VariantFactory;
 use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Variant as Contract;
+use Cone\Bazar\Traits\HasApplicableTaxRatesAsBuyable;
 use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithCheckoutables;
-use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Bazar\Traits\InteractsWithInventory;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMetaData;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -24,16 +25,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variant extends Model implements Contract
 {
+    use HasApplicableTaxRatesAsBuyable;
     use HasFactory;
     use HasMedia;
     use HasMetaData;
     use HasPrices {
-        HasPrices::getPrice as __getPrice;
+        HasPrices::getPrice as protected __getPrice;
     }
     use HasProperties;
     use InteractsWithCheckoutables;
+    use InteractsWithInventory;
     use InteractsWithProxy;
-    use InteractsWithStock;
     use SoftDeletes;
 
     /**
@@ -92,18 +94,6 @@ class Variant extends Model implements Contract
     public function taxRates(): MorphToMany
     {
         return $this->product->taxRates();
-    }
-
-    /**
-     * Get the name attribute.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
-     */
-    protected function name(): Attribute
-    {
-        return new Attribute(
-            get: fn (): string => sprintf('%s - %s', $this->product->name, $this->alias)
-        );
     }
 
     /**

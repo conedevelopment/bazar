@@ -9,6 +9,7 @@ use Cone\Bazar\Enums\Currency;
 use Cone\Bazar\Models\Price;
 use Cone\Bazar\Relations\Prices;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\HtmlString;
 
 trait HasPrices
 {
@@ -21,7 +22,13 @@ trait HasPrices
 
         [$type, $id] = $this->getMorphs('metable', null, null);
 
-        return new Prices($query, $this, $query->qualifyColumn($type), $query->qualifyColumn($id), $this->getKeyName());
+        return new Prices(
+            $query,
+            $this,
+            $query->qualifyColumn($type),
+            $query->qualifyColumn($id),
+            $this->getKeyName()
+        );
     }
 
     /**
@@ -73,11 +80,22 @@ trait HasPrices
     }
 
     /**
+     * Get the price HTML representation.
+     */
+    public function getPriceHtml(?Currency $currency = null): HtmlString
+    {
+        return match (true) {
+            $this->isFree($currency) => new HtmlString(__('Free')),
+            default => new HtmlString($this->getFormattedPrice($currency)),
+        };
+    }
+
+    /**
      * Determine if the stockable model is free.
      */
-    public function isFree(): bool
+    public function isFree(?Currency $currency = null): bool
     {
-        $price = $this->getPrice();
+        $price = $this->getPrice($currency);
 
         return is_null($price) || $price === 0.0;
     }

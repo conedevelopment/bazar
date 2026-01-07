@@ -7,10 +7,11 @@ namespace Cone\Bazar\Models;
 use Cone\Bazar\Database\Factories\ProductFactory;
 use Cone\Bazar\Interfaces\Checkoutable;
 use Cone\Bazar\Interfaces\Models\Product as Contract;
+use Cone\Bazar\Traits\HasApplicableTaxRatesAsBuyable;
 use Cone\Bazar\Traits\HasPrices;
 use Cone\Bazar\Traits\HasProperties;
 use Cone\Bazar\Traits\InteractsWithCheckoutables;
-use Cone\Bazar\Traits\InteractsWithStock;
+use Cone\Bazar\Traits\InteractsWithInventory;
 use Cone\Root\Traits\HasMedia;
 use Cone\Root\Traits\HasMetaData;
 use Cone\Root\Traits\InteractsWithProxy;
@@ -19,20 +20,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class Product extends Model implements Contract
 {
+    use HasApplicableTaxRatesAsBuyable;
     use HasFactory;
     use HasMedia;
     use HasMetaData;
     use HasPrices;
     use HasProperties;
     use InteractsWithCheckoutables;
+    use InteractsWithInventory;
     use InteractsWithProxy;
-    use InteractsWithStock;
     use SoftDeletes;
 
     /**
@@ -91,14 +92,6 @@ class Product extends Model implements Contract
     public function variants(): HasMany
     {
         return $this->hasMany(Variant::getProxiedClass());
-    }
-
-    /**
-     * Get the tax rates for the product.
-     */
-    public function taxRates(): MorphToMany
-    {
-        return $this->morphToMany(TaxRate::getProxiedClass(), 'buyable', 'bazar_buyable_tax_rate');
     }
 
     /**
@@ -170,7 +163,7 @@ class Product extends Model implements Contract
      */
     public function toItem(Checkoutable $checkoutable, array $attributes = []): Item
     {
-        if ($variant = $this->toVariant($attributes['properties'] ?? [])) {
+        if (! empty($attributes['properties']) && $variant = $this->toVariant($attributes['properties'])) {
             return $variant->toItem($checkoutable, $attributes);
         }
 

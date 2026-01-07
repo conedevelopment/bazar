@@ -17,27 +17,27 @@ interface Inventoryable
     public function getFormattedWeight(): ?string;
 
     /**
-     * Determine if the stockable model is virtual.
+     * Determine if the model is virtual.
      */
     public function isVirtual(): bool;
 
     /**
-     * Determine if the stockable model is physical.
+     * Determine if the model is physical.
      */
     public function isPhysical(): bool;
 
     /**
-     * Determine if the stockable model is downloadable.
+     * Determine if the model is downloadable.
      */
     public function isDownloadable(): bool;
 
     /**
-     * Determine if the stockable model tracks quantity.
+     * Determine if the model tracks quantity.
      */
     public function tracksQuantity(): bool;
 
     /**
-     * Determine if the stockable model is available.
+     * Determine if the model is available.
      */
     public function isAvailable(float $quantity = 1): bool;
 
