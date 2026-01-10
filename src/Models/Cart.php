@@ -164,6 +164,9 @@ class Cart extends Model implements Contract
     public function validate(): bool
     {
         return $this->getItems()->isNotEmpty()
+            && $this->getItems()->every(function (Item $item): bool {
+                return $item->buyable->buyable($this);
+            })
             && $this->address->validate()
             && ($this->needsShipping() ? $this->shipping->validate() : true);
     }
