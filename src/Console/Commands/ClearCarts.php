@@ -33,6 +33,8 @@ class ClearCarts extends Command
                 $cart->delete();
             });
 
+            Cart::proxy()->newQuery()->truncate();
+
             $this->info('All carts have been deleted.');
         } else {
             Cart::proxy()->newQuery()->expired()->cursor()->each(static function (Cart $cart): void {
