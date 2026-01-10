@@ -16,7 +16,7 @@ class SessionDriver extends Driver
     {
         return Cart::proxy()
             ->newQuery()
-            ->firstOrNew(['id' => $request->session()->get('cart_id')]);
+            ->firstOrNew(['uuid' => $request->session()->get('cart_id')]);
     }
 
     /**
@@ -26,6 +26,6 @@ class SessionDriver extends Driver
     {
         parent::resolved($request, $cart);
 
-        $request->session()->put('cart_id', $cart->getKey());
+        $request->session()->put('cart_id', $cart->uuid);
     }
 }

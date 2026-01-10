@@ -48,7 +48,7 @@ abstract class Driver
      */
     protected function resolved(Request $request, Cart $cart): void
     {
-        if (! $cart->exists || ($request->user() && $cart->user_id !== $request->user()->getKey())) {
+        if (! $cart->exists || ($request->user() && is_null($cart->user_id))) {
             $cart->user()->associate($request->user())->save();
         }
 

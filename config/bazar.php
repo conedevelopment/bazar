@@ -29,7 +29,7 @@ return [
     | In this section, you can specify all the available cart drivers and
     | their configuration.
     |
-    | Supported drivers: "cookie", "session"
+    | Supported drivers: "cookie", "session", "null", "query-string"
     |
     */
 
@@ -41,6 +41,9 @@ return [
             ],
             'session' => [],
             'null' => [],
+            'query-string' => [
+                'key' => 'cart',
+            ],
         ],
     ],
 

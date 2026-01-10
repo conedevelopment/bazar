@@ -17,7 +17,7 @@ class CookieDriver extends Driver
     {
         return Cart::proxy()
             ->newQuery()
-            ->firstOrNew(['id' => $request->cookie('cart_id')]);
+            ->firstOrNew(['uuid' => $request->cookie('cart_id')]);
     }
 
     /**
@@ -27,6 +27,6 @@ class CookieDriver extends Driver
     {
         parent::resolved($request, $cart);
 
-        Cookie::queue('cart_id', $cart->getKey(), $this->config['expiration'] ?? 4320);
+        Cookie::queue('cart_id', $cart->uuid, $this->config['expiration'] ?? 4320);
     }
 }

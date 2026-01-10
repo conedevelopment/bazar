@@ -14,6 +14,7 @@ use Cone\Bazar\Traits\AsOrder;
 use Cone\Root\Traits\InteractsWithProxy;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +28,7 @@ class Cart extends Model implements Contract
     use Addressable;
     use AsOrder;
     use HasFactory;
+    use HasUuids;
     use InteractsWithProxy;
 
     /**
@@ -102,6 +104,14 @@ class Cart extends Model implements Contract
             'currency' => Currency::class,
             'locked' => 'bool',
         ];
+    }
+
+    /**
+     * Get the columns that should receive a unique identifier.
+     */
+    public function uniqueIds(): array
+    {
+        return ['uuid'];
     }
 
     /**

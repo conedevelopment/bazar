@@ -46,4 +46,14 @@ class Manager extends BaseManager implements Contract
             $this->config->get('bazar.cart.drivers.null', [])
         );
     }
+
+    /**
+     * Create the query-string driver.
+     */
+    public function createQueryStringDriver(): QueryStringDriver
+    {
+        return new QueryStringDriver(
+            $this->config->get('bazar.cart.drivers.query-string', [])
+        );
+    }
 }
