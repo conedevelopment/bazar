@@ -333,7 +333,7 @@ abstract class Countries
     /**
      * Get all the countries grouped by their continent.
      */
-    public static function allByContient(): array
+    public static function allByContinent(): array
     {
         return [
             __('Africa') => static::africa(),
